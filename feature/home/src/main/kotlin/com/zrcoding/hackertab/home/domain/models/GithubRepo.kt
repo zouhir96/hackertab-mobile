@@ -7,7 +7,7 @@ data class GithubRepo(
     val owner: String,
     val url: String,
     val programmingLanguage: String,
-    val stars: String,
-    val starsInDateRange: String,
-    val forks: String
+    val stars: Int,
+    val starsInDateRange: Int,
+    val forks: Int
 ) : BaseModel()

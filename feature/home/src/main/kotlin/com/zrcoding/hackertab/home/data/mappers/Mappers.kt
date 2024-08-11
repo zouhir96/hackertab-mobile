@@ -11,22 +11,27 @@ import com.zrcoding.hackertab.home.domain.models.Lobster
 import com.zrcoding.hackertab.home.domain.models.Medium
 import com.zrcoding.hackertab.home.domain.models.ProductHunt
 import com.zrcoding.hackertab.home.domain.models.Reddit
-import com.zrcoding.hackertab.home.domain.utils.orEmpty
-import com.zrcoding.hackertab.home.domain.utils.toDate
-import com.zrcoding.hackertab.home.domain.utils.toZonedLocalDate
 import com.zrcoding.hackertab.network.dtos.ArticleDto
 import com.zrcoding.hackertab.network.dtos.ConferenceDto
 import com.zrcoding.hackertab.network.dtos.GithubDto
 import com.zrcoding.hackertab.network.dtos.IndieHackersDto
 import com.zrcoding.hackertab.network.dtos.ProductHuntDto
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import java.util.UUID
+
+fun Long.toZonedLocalDate() : LocalDateTime = Instant.fromEpochMilliseconds(this)
+    .toLocalDateTime(TimeZone.currentSystemDefault())
+
+fun Long?.orEmpty() = this ?: 0
 
 fun ArticleDto.toFreeCodeCamp() = FreeCodeCamp(
     id = id,
     title = title,
-    creator = source,
-    link = url,
-    isoDate = publishedAt.toDate(),
+    url = url,
+    isoDate = publishedAt.toZonedLocalDate(),
     categories = tags.orEmpty()
 )
 
@@ -37,16 +42,16 @@ fun GithubDto.toGithubRepo() = GithubRepo(
     owner = owner,
     url = url,
     programmingLanguage = programmingLanguage,
-    stars = stars,
-    starsInDateRange = starsInDateRange,
-    forks = forks
+    stars = stars.toInt(),
+    starsInDateRange = starsInDateRange.toInt(),
+    forks = forks.toInt()
 )
 
 fun ArticleDto.toHackerNews() = HackerNews(
     id = id,
     title = title,
     url = url,
-    time = publishedAt,
+    time = publishedAt.toZonedLocalDate(),
     descendants = comments?.toLong().orEmpty(),
     score = reactions?.toLong().orEmpty(),
 )
@@ -58,7 +63,7 @@ fun ArticleDto.toReddit() = Reddit(
     url = url,
     score = reactions?.toLong().orEmpty(),
     commentsCount = comments?.toLong().orEmpty(),
-    date = publishedAt
+    date = publishedAt.toZonedLocalDate()
 )
 
 fun ConferenceDto.toConference() = Conference(
@@ -76,7 +81,7 @@ fun ConferenceDto.toConference() = Conference(
 fun ArticleDto.toDevto() = Devto(
     id = id,
     title = title,
-    date = publishedAt.toDate(),
+    date = publishedAt.toZonedLocalDate(),
     commentsCount = comments?.toLong().orEmpty(),
     reactions = reactions?.toLong().orEmpty(),
     url = url,
@@ -86,7 +91,7 @@ fun ArticleDto.toDevto() = Devto(
 fun ArticleDto.toHashnode() = Hashnode(
     id = id,
     title = title,
-    date = publishedAt.toDate(),
+    date = publishedAt.toZonedLocalDate(),
     commentsCount = comments?.toLong().orEmpty(),
     reactions = reactions?.toLong().orEmpty(),
     url = url,
@@ -107,7 +112,7 @@ fun ProductHuntDto.toProductHunt() = ProductHunt(
 fun IndieHackersDto.toIndieHackers() = IndieHackers(
     id = id ?: UUID.randomUUID().toString(),
     title = title,
-    date = publishedAt.toDate(),
+    date = publishedAt.toZonedLocalDate(),
     commentsCount = comments?.toLongOrNull().orEmpty(),
     reactions = reactions?.toLongOrNull().orEmpty(),
     url = url,
@@ -116,7 +121,7 @@ fun IndieHackersDto.toIndieHackers() = IndieHackers(
 fun ArticleDto.toLobster() = Lobster(
     id = id,
     title = title,
-    date = publishedAt.toDate(),
+    date = publishedAt.toZonedLocalDate(),
     commentsCount = comments?.toLong().orEmpty(),
     reactions = reactions?.toLong().orEmpty(),
     url = url,
@@ -126,7 +131,7 @@ fun ArticleDto.toLobster() = Lobster(
 fun ArticleDto.toMedium() = Medium(
     id = id,
     title = title,
-    date = publishedAt.toDate(),
+    date = publishedAt.toZonedLocalDate(),
     commentsCount = comments?.toLong().orEmpty(),
     claps = reactions?.toLong().orEmpty(),
     url = url,

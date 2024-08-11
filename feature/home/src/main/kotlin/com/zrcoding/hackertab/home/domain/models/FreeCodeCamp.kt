@@ -1,10 +1,11 @@
 package com.zrcoding.hackertab.home.domain.models
 
+import kotlinx.datetime.LocalDateTime
+
 data class FreeCodeCamp(
     override val id: String,
     val title: String,
-    val creator: String,
-    val link: String,
-    val isoDate: String,
+    val url: String,
+    val isoDate: LocalDateTime,
     val categories: List<String>,
 ): BaseModel()

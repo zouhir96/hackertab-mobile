@@ -1,8 +1,7 @@
 package com.zrcoding.hackertab.home.domain.usecases
 
 import com.zrcoding.hackertab.home.domain.models.Conference
-import java.time.LocalDate
-import java.time.format.TextStyle
+import kotlinx.datetime.LocalDateTime
 import java.util.Locale
 
 object BuildConferenceDisplayedDateUseCase {
@@ -23,8 +22,10 @@ object BuildConferenceDisplayedDateUseCase {
         }
     }
 
-    private fun toMonthWithDay(date: LocalDate): String {
-        val month = date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
+    private fun toMonthWithDay(date: LocalDateTime): String {
+        val month = date.month.name.lowercase().replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+        }
         return "$month ${date.dayOfMonth}"
     }
 }

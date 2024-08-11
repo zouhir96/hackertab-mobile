@@ -1,13 +1,13 @@
 package com.zrcoding.hackertab.home.domain.models
 
-import java.time.LocalDate
+import kotlinx.datetime.LocalDateTime
 
 data class Conference(
     override val id: String,
     val url: String,
     val title: String,
-    val startDate: LocalDate?,
-    val endDate: LocalDate?,
+    val startDate: LocalDateTime?,
+    val endDate: LocalDateTime?,
     val tag: String,
     val online: Boolean,
     val city: String?,

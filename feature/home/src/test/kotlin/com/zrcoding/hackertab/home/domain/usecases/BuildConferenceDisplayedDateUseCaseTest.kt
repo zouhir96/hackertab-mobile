@@ -2,12 +2,10 @@ package com.zrcoding.hackertab.home.domain.usecases
 
 import com.zrcoding.hackertab.home.domain.models.Conference
 import junit.framework.TestCase.assertEquals
+import kotlinx.datetime.LocalDateTime
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import java.time.LocalDate
-import java.time.format.TextStyle
-import java.util.Locale
 
 @RunWith(JUnit4::class)
 class BuildConferenceDisplayedDateUseCaseTest {
@@ -39,100 +37,69 @@ class BuildConferenceDisplayedDateUseCaseTest {
     @Test
     fun emptyEndDate() {
         // GIVEN
-        val startDate = LocalDate.now()
-        val conf = testConference.copy(
-            startDate = startDate,
-            endDate = null
-        )
+        val startDate = LocalDateTime(2024, 8,11,0,0)
+        val conf = testConference.copy(startDate = startDate, endDate = null)
 
         // WHEN
         val result = BuildConferenceDisplayedDateUseCase(conf)
 
         // THEN
-        assertEquals(
-            result,
-            "${
-                startDate.month.getDisplayName(
-                    TextStyle.FULL,
-                    Locale.getDefault()
-                )
-            } ${startDate.dayOfMonth}"
-        )
+        assertEquals("August 11", result)
     }
 
     @Test
     fun sameDates() {
         // GIVEN
-        val startDate = LocalDate.now()
-        val endDate = LocalDate.now()
-        val conf = testConference.copy(
-            startDate = startDate,
-            endDate = endDate
-        )
+        val startDate =  LocalDateTime(2024, 8,11,0,0)
+        val endDate =  LocalDateTime(2024, 8,11,0,0)
+        val conf = testConference.copy(startDate = startDate, endDate = endDate)
 
         // WHEN
         val result = BuildConferenceDisplayedDateUseCase(conf)
 
         // THEN
-        assertEquals(
-            result,
-            "${
-                startDate.month.getDisplayName(
-                    TextStyle.FULL,
-                    Locale.getDefault()
-                )
-            } ${startDate.dayOfMonth}"
-        )
+        assertEquals("August 11", result)
     }
 
     @Test
     fun sameMonthWithDiffDays() {
         // GIVEN
-        val startDate = LocalDate.parse("2024-04-20")
-        val endDate = LocalDate.parse("2024-04-22")
-        val conf = testConference.copy(
-            startDate = startDate,
-            endDate = endDate
-        )
+        val startDate = LocalDateTime(2024, 4,20, 0,0)
+        val endDate = LocalDateTime(2024, 4,22, 0,0)
+        val conf = testConference.copy(startDate = startDate, endDate = endDate)
 
         // WHEN
         val result = BuildConferenceDisplayedDateUseCase(conf)
 
         // THEN
-        assertEquals(result, "April 20 - 22")
+        assertEquals("April 20 - 22",result)
     }
 
     @Test
     fun diffMonthWithDiffDays() {
         // GIVEN
-        val startDate = LocalDate.parse("2024-03-20")
-        val endDate = LocalDate.parse("2024-04-01")
-        val conf = testConference.copy(
-            startDate = startDate,
-            endDate = endDate
-        )
+        val startDate = LocalDateTime(2024, 3,20, 0,0)
+        val endDate = LocalDateTime(2024, 4,1, 0,0)
+        val conf = testConference.copy(startDate = startDate, endDate = endDate)
 
         // WHEN
         val result = BuildConferenceDisplayedDateUseCase(conf)
 
         // THEN
-        assertEquals(result, "March 20 - April 1")
+        assertEquals("March 20 - April 1",result)
     }
 
     @Test
     fun diffYearsSameMonthWithDiffDays() {
         // GIVEN
-        val startDate = LocalDate.parse("2023-04-20")
-        val endDate = LocalDate.parse("2024-04-22")
-        val conf = testConference.copy(
-            startDate = startDate,
-            endDate = endDate
-        )
+        val startDate = LocalDateTime(2024, 4,20, 0,0)
+        val endDate = LocalDateTime(2024, 4,22, 0,0)
+        val conf = testConference.copy(startDate = startDate, endDate = endDate)
 
         // WHEN
         val result = BuildConferenceDisplayedDateUseCase(conf)
 
         // THEN
-        assertEquals(result, "April 20 - 22")
+        assertEquals("April 20 - 22",result)
     }
 }
