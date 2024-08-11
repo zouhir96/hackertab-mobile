@@ -4,9 +4,6 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="status_bar_color">#eff6fe</color>
-    <color name="cart_header_background">#F9FAFE</color>
     <color name="splash_screen_text_color">@color/black</color>
     <color name="splash_screen_background">@color/white</color>
-    <color name="icons_background">@color/black</color>
-    <color name="icons_tint">#3C5065</color>
 </resources>
