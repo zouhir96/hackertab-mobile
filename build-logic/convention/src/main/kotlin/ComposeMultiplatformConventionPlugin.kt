@@ -17,10 +17,12 @@ class ComposeMultiplatformConventionPlugin : Plugin<Project> {
         extensions.configure<KotlinMultiplatformExtension> {
             sourceSets.commonMain.dependencies {
                 implementation(composeDeps.runtime)
-                implementation(composeDeps.ui)
                 implementation(composeDeps.foundation)
-                implementation(composeDeps.materialIconsExtended)
                 implementation(composeDeps.material)
+                implementation(composeDeps.ui)
+                implementation(composeDeps.components.resources)
+                implementation(composeDeps.components.uiToolingPreview)
+                implementation(composeDeps.materialIconsExtended)
 
                 implementation(versionCatalog().findLibrary("io.coil.compose").get())
                 implementation(versionCatalog().findLibrary("io.coil.gif").get())
