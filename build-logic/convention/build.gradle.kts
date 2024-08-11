@@ -25,34 +25,6 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("androidApplicationCompose") {
-            id = "hackertab.android.application.compose"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
-        }
-        register("androidApplication") {
-            id = "hackertab.android.application"
-            implementationClass = "AndroidApplicationConventionPlugin"
-        }
-        register("androidLibraryCompose") {
-            id = "hackertab.android.library.compose"
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
-        }
-        register("androidLibrary") {
-            id = "hackertab.android.library"
-            implementationClass = "AndroidLibraryConventionPlugin"
-        }
-        register("androidKoin") {
-            id = "hackertab.android.koin"
-            implementationClass = "AndroidKoinConventionPlugin"
-        }
-        register("androidFeature") {
-            id = "hackertab.android.feature"
-            implementationClass = "AndroidFeatureConventionPlugin"
-        }
-        register("jvmLibrary") {
-            id = "hackertab.android.jvmLibrary"
-            implementationClass = "JvmLibraryConventionPlugin"
-        }
         register("kotlinMultiplatformLibrary"){
             id = "hackertab.kmp.library"
             implementationClass = "KotlinMultiplatformLibraryConventionPlugin"

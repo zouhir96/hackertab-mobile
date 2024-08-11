@@ -1,23 +1,44 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    id("hackertab.android.application")
-    id("hackertab.android.application.compose")
-    id("hackertab.android.koin")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.kotlin)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.zrcoding.hackertab"
 
+    compileSdk = Integer.parseInt(libs.versions.compileSdk.get())
     defaultConfig {
         applicationId = "com.zrcoding.hackertab"
         // The CI will take care of incrementing this using the build number.
         versionCode = 3
         versionName = libs.versions.versionName.get()
+
+
+        minSdk = Integer.parseInt(libs.versions.minSdk.get())
+        targetSdk = Integer.parseInt(libs.versions.targetSdk.get())
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
     }
 
     buildFeatures {
         buildConfig = true
+        compose = true
     }
     packaging {
         resources {
