@@ -1,3 +1,7 @@
 plugins {
-    id("hackertab.android.jvmLibrary")
+    id("hackertab.kmp.library")
+}
+
+android {
+    namespace = "com.zrcoding.hackertab.network"
 }
