@@ -2,7 +2,6 @@ package com.zrcoding.hackertab.network
 
 import com.zrcoding.hackertab.network.api.ArticlesNetworkDataSource
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -17,7 +16,7 @@ const val BASE_URL = "https://api.hackertab.dev/data/v2/"
 
 val networkModule = module {
     factory<HttpClient> {
-        HttpClient(OkHttp) {
+        HttpClient {
             defaultRequest {
                 url(BASE_URL)
             }
