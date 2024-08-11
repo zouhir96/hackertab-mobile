@@ -11,7 +11,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             // Ktor
-            implementation(libs.ktor.core)
+            api(libs.ktor.core)
             implementation(libs.ktor.contentNegotiation)
             implementation(libs.ktor.serialization)
             implementation(libs.ktor.loggingInterceptor)

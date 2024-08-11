@@ -13,10 +13,9 @@ composePlugin = "1.6.11"
 
 activity = "1.9.0"
 coreSplashscreen = "1.0.1"
-composeBom = "2024.06.00"
-coil = "2.6.0"
-lifecycleRuntimeKtx = "2.8.3"
-lifecycleExt = "2.8.3"
+kamel = "0.9.3"
+
+moko = "0.16.1"
 navigationCompose = "2.7.7"
 koin = "3.5.6"
 koinCompose = "1.1.5"
@@ -26,7 +25,6 @@ room = "2.6.1"
 kotlinxSerializationJson = "1.7.1"
 kotlinxDatetime = "0.6.0"
 firebaseBom = "33.1.1"
-junit = "4.13.2"
 
 [libraries]
 
@@ -34,29 +32,19 @@ junit = "4.13.2"
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 
 #ui
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-compose-material = { group = "androidx.compose.material", name = "material" }
-androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-materialWindow = { module = "androidx.compose.material3:material3-window-size-class" }
-io-coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-io-coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }
+kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 
 #activity
 androidx-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
 
-#lifeCycle
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleExt" }
+# Moko
+moko-mvvm-core = { module = "dev.icerock.moko:mvvm-core", version.ref = "moko" }
+moko-mvvm-compose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "moko" }
 
 #navigation
 androidx-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
-#tools
-test-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
 #koin
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
