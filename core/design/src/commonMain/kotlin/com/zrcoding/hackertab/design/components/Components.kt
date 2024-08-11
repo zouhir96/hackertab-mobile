@@ -1,8 +1,5 @@
 package com.zrcoding.hackertab.design.components
 
-import android.content.res.Configuration
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,23 +28,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.zrcoding.hackertab.design.R
+import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.common_retry
+import com.zrcoding.hackertab.design.resources.failed_to_load_source
+import com.zrcoding.hackertab.design.resources.ic_ellipse
+import com.zrcoding.hackertab.design.resources.ic_freecodecamp
+import com.zrcoding.hackertab.design.resources.ic_github
+import com.zrcoding.hackertab.design.resources.ic_reddit
+import com.zrcoding.hackertab.design.resources.loading
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.TextLink
 import com.zrcoding.hackertab.design.theme.dimension
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 data class ChipData(
     val id: String,
     val name: String,
-    @DrawableRes val image: Int? = null,
+    val image: DrawableResource? = null,
     val selected: Boolean = false
 )
 
@@ -72,7 +78,7 @@ fun Chip(
                     modifier = Modifier
                         .padding(end = MaterialTheme.dimension.medium)
                         .size(MaterialTheme.dimension.big),
-                    painter = painterResource(id = it),
+                    painter = painterResource(it),
                     contentDescription = null,
                     tint = if (isSelected) {
                         MaterialTheme.colors.surface
@@ -114,11 +120,7 @@ fun ChipGroup(
     }
 }
 
-@Preview(
-    showSystemUi = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
-    showBackground = true
-)
+@Preview()
 @Composable
 fun ChipGroupPreview() {
     val chips =  remember {
@@ -126,19 +128,19 @@ fun ChipGroupPreview() {
             ChipData(id = "1", name = "chip 1"),
             ChipData(id = "2", name = "chip 2"),
             ChipData(id = "3", name = "chip 3"),
-            ChipData(id = "2", name = "Reddit", R.drawable.ic_reddit),
+            ChipData(id = "2", name = "Reddit", Res.drawable.ic_reddit),
             ChipData(id = "4", name = "chip 4"),
             ChipData(id = "5", name = "chip 4", selected = true),
             ChipData(id = "6", name = "chip 4"),
             ChipData(id = "7", name = "chip 4"),
             ChipData(id = "8", name = "chip 4"),
-            ChipData(id = "1", name = "Github repositories", image = R.drawable.ic_github),
+            ChipData(id = "1", name = "Github repositories", image = Res.drawable.ic_github),
             ChipData(id = "9", name = "chip 4"),
             ChipData(id = "42", name = "chip 4"),
             ChipData(
                 id = "3",
                 name = "FreeCodeCamo",
-                R.drawable.ic_freecodecamp,
+                Res.drawable.ic_freecodecamp,
                 selected = true
             ),
         )
@@ -161,7 +163,7 @@ fun TextWithStartIcon(
     textColor: Color = Color.Gray,
     textStyle: TextStyle = MaterialTheme.typography.caption,
     textDecoration: TextDecoration = TextDecoration.None,
-    icon: Int,
+    icon: DrawableResource,
     tint: Color = Color.Gray
 ) {
     Row(
@@ -169,11 +171,11 @@ fun TextWithStartIcon(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val iconSize = if (icon == R.drawable.ic_ellipse) {
+        val iconSize = if (icon == Res.drawable.ic_ellipse) {
             MaterialTheme.dimension.medium
         } else MaterialTheme.dimension.default
         Icon(
-            painter = painterResource(id = icon),
+            painter = painterResource(icon),
             contentDescription = "",
             tint = tint,
             modifier = Modifier.size(iconSize)
@@ -189,20 +191,20 @@ fun TextWithStartIcon(
     }
 }
 
-@Preview(showBackground = true)
+@Preview()
 @Composable
 private fun TextWithStartIconPreview() {
     HackertabTheme {
         TextWithStartIcon(
             text = "Some text",
-            icon = R.drawable.ic_github
+            icon = Res.drawable.ic_github
         )
     }
 }
 
 @Composable
 fun FullScreenViewWithCenterText(
-    @StringRes text: Int,
+    text: StringResource,
     vararg args: Any,
     textStyle: TextStyle = MaterialTheme.typography.body1
 ) {
@@ -219,12 +221,12 @@ fun FullScreenViewWithCenterText(
     }
 }
 
-@Preview(showBackground = true)
+@Preview()
 @Composable
 private fun FullScreenViewWithCenterTextPreview() {
     HackertabTheme {
         FullScreenViewWithCenterText(
-            R.string.failed_to_load_source,
+            Res.string.failed_to_load_source,
             "github",
             textStyle = MaterialTheme.typography.body1
         )
@@ -233,9 +235,9 @@ private fun FullScreenViewWithCenterTextPreview() {
 
 @Composable
 fun ErrorMsgWithBtn(
-    @StringRes text: Int,
+    text: StringResource,
     vararg args: String,
-    @StringRes btnText: Int,
+    btnText: StringResource,
     onBtnClicked: () -> Unit
 ) {
     Column(
@@ -269,20 +271,20 @@ fun ErrorMsgWithBtn(
     }
 }
 
-@Preview(showBackground = true)
+@Preview()
 @Composable
 private fun ErrorMsgWithBtnPreview() {
     HackertabTheme {
         ErrorMsgWithBtn(
-            text = R.string.failed_to_load_source,
+            text = Res.string.failed_to_load_source,
             "github",
-            btnText = R.string.common_retry
+            btnText = Res.string.common_retry
         ){}
     }
 }
 
 @Composable
-fun Loading(title: String = stringResource(R.string.loading)) {
+fun Loading(title: String = stringResource(Res.string.loading)) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -301,11 +303,11 @@ fun Loading(title: String = stringResource(R.string.loading)) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview()
 @Composable
 fun LoadingPreview() {
     HackertabTheme {
-        Loading(stringResource(R.string.loading))
+        Loading(stringResource(Res.string.loading))
     }
 }
 
