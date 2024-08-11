@@ -10,7 +10,6 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-private const val USER_PREFERENCES = "user_preferences"
 
 val settingsModule = module {
     includes(platformDataStoreModule)

@@ -36,6 +36,15 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = libs.versions.jvmTarget.get()
+    }
+
     buildFeatures {
         buildConfig = true
         compose = true
@@ -48,6 +57,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":shared"))
+
     implementation(project(":feature:home"))
     implementation(project(":feature:settings"))
     implementation(project(":core:network"))
@@ -57,7 +68,8 @@ dependencies {
     implementation(libs.androidx.activity)
 
     implementation(libs.androidx.compose.materialWindow)
-    implementation(libs.androidx.navigation)
+
+    implementation(libs.koin.core)
 
     implementation(platform(libs.com.google.firebase.bom))
     implementation(libs.com.google.firebase.analytics)

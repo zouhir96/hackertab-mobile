@@ -1,13 +1,14 @@
 package com.zrcoding.convention
 
 import org.gradle.api.Project
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal fun Project.configureKotlinMultiplatform(
     extension: KotlinMultiplatformExtension
 ) = extension.apply {
 
-    jvmToolchain(versionCatalog().findVersion("jvmTarget").get().toString().toInt())
+    jvmToolchain(JavaLanguageVersion.of(17).asInt())
 
     // targets
     androidTarget()

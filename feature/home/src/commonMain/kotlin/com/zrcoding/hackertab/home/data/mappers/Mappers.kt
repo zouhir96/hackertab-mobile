@@ -16,6 +16,7 @@ import com.zrcoding.hackertab.network.dtos.ConferenceDto
 import com.zrcoding.hackertab.network.dtos.GithubDto
 import com.zrcoding.hackertab.network.dtos.IndieHackersDto
 import com.zrcoding.hackertab.network.dtos.ProductHuntDto
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -108,7 +109,7 @@ fun ProductHuntDto.toProductHunt() = ProductHunt(
 )
 
 fun IndieHackersDto.toIndieHackers() = IndieHackers(
-    id = id ?: UUID.randomUUID().toString(),
+    id = id ?: Clock.System.now().toEpochMilliseconds().toString(),
     title = title,
     date = publishedAt.toZonedLocalDate(),
     commentsCount = comments?.toLongOrNull().orEmpty(),

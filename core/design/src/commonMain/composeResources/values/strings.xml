@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Hackertab</string>
     <string name="app_title">Hackertab.android</string>
     <!--    sources names-->
     <string name="hacker_news">hackernews</string>

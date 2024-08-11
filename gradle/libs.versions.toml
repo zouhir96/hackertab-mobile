@@ -13,10 +13,11 @@ composePlugin = "1.6.11"
 
 activity = "1.9.0"
 coreSplashscreen = "1.0.1"
+material3VersionHack = "1.1.2"
 kamel = "0.9.3"
 
 moko = "0.16.1"
-navigationCompose = "2.7.7"
+voyager = "1.1.0-beta02"
 koin = "3.5.6"
 koinCompose = "1.1.5"
 datastore = '1.1.1'
@@ -32,7 +33,7 @@ firebaseBom = "33.1.1"
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 
 #ui
-androidx-compose-materialWindow = { module = "androidx.compose.material3:material3-window-size-class" }
+androidx-compose-materialWindow = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3VersionHack"}
 kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 
 #activity
@@ -43,8 +44,7 @@ moko-mvvm-core = { module = "dev.icerock.moko:mvvm-core", version.ref = "moko" }
 moko-mvvm-compose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "moko" }
 
 #navigation
-androidx-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-
+voyager = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
 
 #koin
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }

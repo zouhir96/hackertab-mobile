@@ -29,4 +29,4 @@ fun getDataStore(producePath: () -> String): DataStore<Preferences> =
         }
     }
 
-internal const val dataStoreFileName = "user_preferences"
+internal const val dataStoreFileName = "hackertab_settings.preferences_pb"

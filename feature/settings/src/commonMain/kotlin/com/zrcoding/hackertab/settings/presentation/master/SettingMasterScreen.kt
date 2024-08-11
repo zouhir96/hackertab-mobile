@@ -40,7 +40,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun SettingMasterScreen(
+fun SettingMasterRoute(
     modifier: Modifier = Modifier,
     showSelectedItem: Boolean,
     onNavigateToTopics: () -> Unit,
@@ -105,13 +105,12 @@ fun SettingMasterScreen(
 @Composable
 fun SettingMasterScreenPreview() {
     HackertabTheme {
-        SettingMasterScreen(
+        SettingMasterRoute(
             showSelectedItem = false,
             onNavigateToTopics = {},
             onNavigateToSources = {})
     }
 }
-
 
 @Composable
 fun SettingItemsContainer(

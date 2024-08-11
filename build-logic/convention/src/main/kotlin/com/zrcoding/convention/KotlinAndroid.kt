@@ -24,12 +24,11 @@ internal fun Project.configureKotlinAndroid(commonExtension: LibraryExtension) {
             sourceCompatibility = JavaVersion.VERSION_17
             targetCompatibility = JavaVersion.VERSION_17
         }
+
         dependencies {
             add("implementation", versionCatalog().findLibrary("kotlinx.datetime").get())
         }
     }
-
-    configureKotlin()
 }
 
 /**

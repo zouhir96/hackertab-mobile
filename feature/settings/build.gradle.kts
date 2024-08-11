@@ -10,6 +10,8 @@ kotlin {
         implementation(libs.androidx.datastore.preferences.core)
 
         implementation(libs.kotlinx.serialization.json)
+
+        implementation("org.jetbrains.kotlinx:atomicfu:0.24.0")
     }
 }
 
