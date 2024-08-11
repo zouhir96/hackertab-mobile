@@ -1,7 +1,5 @@
 package com.zrcoding.hackertab.settings.presentation.common
 
-import android.content.res.Configuration
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,16 +10,19 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.setting_topics_screen_description
+import com.zrcoding.hackertab.design.resources.setting_topics_screen_title
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
-import com.zrcoding.hackertab.settings.R
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SettingScreen(
-    @StringRes title: Int,
-    @StringRes description: Int,
+    title: StringResource,
+    description: StringResource,
     content: @Composable () -> Unit
 ) {
     Column(
@@ -32,13 +33,13 @@ fun SettingScreen(
             .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal)
     ) {
         Text(
-            text = stringResource(id = title),
+            text = stringResource(title),
             style = MaterialTheme.typography.h5,
             color = MaterialTheme.colors.onBackground
         )
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.medium))
         Text(
-            text = stringResource(id = description),
+            text = stringResource(description),
             style = MaterialTheme.typography.caption,
             color = MaterialTheme.colors.onBackground
         )
@@ -47,13 +48,13 @@ fun SettingScreen(
     }
 }
 
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview()
 @Composable
 fun SettingScreenPreview() {
     HackertabTheme {
         SettingScreen(
-            title = R.string.setting_topics_screen_title,
-            description = R.string.setting_topics_screen_description
+            title = Res.string.setting_topics_screen_title,
+            description = Res.string.setting_topics_screen_description
         ) {
             Text(text = "some content here :)")
         }

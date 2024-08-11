@@ -1,8 +1,5 @@
 package com.zrcoding.hackertab.settings.domain.models
 
-import androidx.annotation.Keep
-
-@Keep
 data class Source(
     val name: SourceName,
     val label: String,
@@ -12,7 +9,6 @@ data class Source(
     val badge: String? = null // Optional badge
 )
 
-@Keep
 enum class SourceName(val value: String) {
     GITHUB("github"),
     HACKER_NEWS("hackernews"),
