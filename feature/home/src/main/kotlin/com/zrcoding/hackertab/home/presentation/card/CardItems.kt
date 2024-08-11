@@ -49,8 +49,12 @@ import com.zrcoding.hackertab.home.domain.models.Medium
 import com.zrcoding.hackertab.home.domain.models.ProductHunt
 import com.zrcoding.hackertab.home.domain.models.Reddit
 import com.zrcoding.hackertab.home.domain.usecases.BuildConferenceDisplayedDateUseCase
-import com.zrcoding.hackertab.home.domain.utils.toDate
+import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import com.zrcoding.hackertab.settings.domain.models.SourceName
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import java.util.UUID
 
 @Composable
@@ -94,6 +98,25 @@ fun GithubItem(post: GithubRepo) {
     )
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun GithubItemPreview() {
+    HackertabTheme {
+        GithubItem(
+            post = GithubRepo(
+                id = "habeo",
+                name = "Jetpack compose",
+                description = "This is a fake repo for preview",
+                owner = "Celina Wells",
+                url = "https://www.google.com/#q=propriae",
+                programmingLanguage = "Kotlin",
+                stars = 20,
+                forks = 15
+            )
+        )
+    }
+}
+
 @Composable
 fun HackerNewsItem(new: HackerNews) {
     SourceItemTemplate(
@@ -107,7 +130,7 @@ fun HackerNewsItem(new: HackerNews) {
             )
             TextWithStartIcon(
                 icon = R.drawable.ic_time_24,
-                text = new.time.toDate()
+                text = new.time.timeAgo()
             )
             TextWithStartIcon(
                 text = stringResource(id = R.string.comments, new.descendants),
@@ -125,11 +148,11 @@ fun HackerNewsItemPreview() {
         HackerNewsItem(
             new = HackerNews(
                 id = UUID.randomUUID().toString(),
-                "React is the best web framework ever React is the best web framework ever",
-                "url",
-                1234,
-                1234,
-                1234
+                title = "React is the best web framework ever React is the best web framework ever",
+                url = "https://www.google.com/#q=propriae",
+                time = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                descendants = 1234,
+                score = 1234
             )
         )
     }
@@ -142,7 +165,7 @@ fun RedditItem(reddit: Reddit) {
         primaryInfoSection = {
             TextWithStartIcon(
                 icon = R.drawable.ic_time_24,
-                text = reddit.date.toDate()
+                text = reddit.date.timeAgo()
             )
             TextWithStartIcon(
                 text = stringResource(id = R.string.score, reddit.score),
@@ -166,13 +189,13 @@ fun RedditItemPreview() {
     HackertabTheme {
         RedditItem(
             reddit = Reddit(
-                id = "",
-                "React is the best web framework ever React is the best web framework ever",
-                "reactDevs",
-                "Url",
-                118,
-                30,
-                1123711
+                id = "similique",
+                title = "React is the best web framework ever React is the best web framework ever",
+                subreddit = "reactDevs",
+                url = "https://www.google.com/#q=propriae",
+                score = 118,
+                commentsCount = 30,
+                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
             )
         )
     }
@@ -186,12 +209,28 @@ fun FreeCodeCampItem(post: FreeCodeCamp) {
         primaryInfoSection = {
             TextWithStartIcon(
                 icon = R.drawable.ic_time_24,
-                text = post.isoDate.toDate()
+                text = post.isoDate.timeAgo()
             )
         },
-        url = post.link,
+        url = post.url,
         tags = post.categories,
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun FreeCodeCampItemPreview() {
+    HackertabTheme {
+        FreeCodeCampItem(
+            post = FreeCodeCamp(
+                id = "similique",
+                title = "React is the best web framework ever React is the best web framework ever",
+                url = "https://www.google.com/#q=propriae",
+                isoDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                categories = listOf()
+            )
+        )
+    }
 }
 
 @Composable
@@ -220,6 +259,26 @@ fun ConferenceItem(conf: Conference) {
     )
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun ConferenceItemPreview() {
+    HackertabTheme {
+        ConferenceItem(
+            conf = Conference(
+                id = "aliquam",
+                url = "https://www.google.com/#q=metus",
+                title = "KotlinConf",
+                startDate = LocalDateTime(2025, 10, 13, 0, 0, 0),
+                endDate = LocalDateTime(2025, 10, 15, 0, 0, 0),
+                tag = "Kotlin",
+                online = true,
+                city = "Berlin",
+                country = "Germany"
+            )
+        )
+    }
+}
+
 @Composable
 fun DevtoItem(devto: Devto) {
     with(devto) {
@@ -228,7 +287,7 @@ fun DevtoItem(devto: Devto) {
             description = null,
             primaryInfoSection = {
                 TextWithStartIcon(
-                    text = date,
+                    text = date.timeAgo(),
                     icon = R.drawable.ic_time_24,
                 )
                 TextWithStartIcon(
@@ -246,6 +305,24 @@ fun DevtoItem(devto: Devto) {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun DevtoItemPreview() {
+    HackertabTheme {
+        DevtoItem(
+            devto = Devto(
+                id = "convenire",
+                title = "Jetpack compose is the best",
+                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                commentsCount = 7527,
+                reactions = 6147,
+                url = "https://search.yahoo.com/search?p=mnesarchum",
+                tags = listOf("Kotlin")
+            )
+        )
+    }
+}
+
 @Composable
 fun HashnodeItem(hashnode: Hashnode) {
     with(hashnode) {
@@ -254,7 +331,7 @@ fun HashnodeItem(hashnode: Hashnode) {
             description = null,
             primaryInfoSection = {
                 TextWithStartIcon(
-                    text = date,
+                    text = date.timeAgo(),
                     icon = R.drawable.ic_time_24,
                 )
                 TextWithStartIcon(
@@ -268,6 +345,24 @@ fun HashnodeItem(hashnode: Hashnode) {
             },
             url = url,
             tags = tags,
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HashnodeItemPreview() {
+    HackertabTheme {
+        HashnodeItem(
+            hashnode = Hashnode(
+                id = "reque",
+                title = "Just migrate your app to jetpack compose",
+                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                commentsCount = 4459,
+                reactions = 4022,
+                url = "http://www.bing.com/search?q=vocent",
+                tags = listOf("Kotlin")
+            )
         )
     }
 }
@@ -356,6 +451,25 @@ fun createImageLoader(context: Context): ImageLoader {
         }.build()
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun ProductHuntItemPreview() {
+    HackertabTheme {
+        ProductHuntItem(
+            product = ProductHunt(
+                id = "elementum",
+                title = "Hackertab = All sources in one app",
+                description = "Hackertab is the best product ranking",
+                imageUrl = "http://www.bing.com/search?q=maecenas",
+                commentsCount = 7250,
+                reactions = 4827,
+                url = "https://www.google.com/#q=vivendo",
+                tags = listOf("Kotlin")
+            )
+        )
+    }
+}
+
 @Composable
 fun IndieHackersItem(indieHackers: IndieHackers) {
     with(indieHackers) {
@@ -370,7 +484,7 @@ fun IndieHackersItem(indieHackers: IndieHackers) {
                     tint = Color(0xFF4799eb)
                 )
                 TextWithStartIcon(
-                    text = date,
+                    text = date.timeAgo(),
                     icon = R.drawable.ic_time_24,
                 )
                 TextWithStartIcon(
@@ -378,6 +492,23 @@ fun IndieHackersItem(indieHackers: IndieHackers) {
                     icon = R.drawable.ic_comment,
                 )
             }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun IndieHackersItemPreview() {
+    HackertabTheme {
+        IndieHackersItem(
+            indieHackers = IndieHackers(
+                id = "fastidii",
+                title = "Hackertab will pay someday",
+                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                commentsCount = 1349,
+                reactions = 1634,
+                url = "http://www.bing.com/search?q=dicam"
+            )
         )
     }
 }
@@ -397,7 +528,7 @@ fun LobstersItem(lobster: Lobster) {
                     tint = Flamingo
                 )
                 TextWithStartIcon(
-                    text = date,
+                    text = date.timeAgo(),
                     icon = R.drawable.ic_time_24,
                 )
                 TextWithStartIcon(
@@ -411,6 +542,24 @@ fun LobstersItem(lobster: Lobster) {
                     tint = Color(0xFF4799eb)
                 )
             }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LobstersItemPreview() {
+    HackertabTheme {
+        LobstersItem(
+            lobster = Lobster(
+                id = "feugiat",
+                title = "XML based apps are worst",
+                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                commentsCount = 4849,
+                reactions = 8948,
+                url = "https://search.yahoo.com/search?p=habitasse",
+                commentsUrl = "http://www.bing.com/search?q=brute"
+            )
         )
     }
 }
@@ -432,10 +581,27 @@ fun MediumItem(medium: Medium) {
                     icon = R.drawable.ic_comment,
                 )
                 TextWithStartIcon(
-                    text = date,
+                    text = date.timeAgo(),
                     icon = R.drawable.ic_time_24,
                 )
             }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MediumItemPreview() {
+    HackertabTheme {
+        MediumItem(
+            medium = Medium(
+                id = "porttitor",
+                title = "Coroutines explained in a simple way",
+                date =Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                commentsCount = 9783,
+                claps = 9145,
+                url = "https://duckduckgo.com/?q=minim"
+            )
         )
     }
 }

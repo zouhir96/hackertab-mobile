@@ -8,6 +8,5 @@ data class GithubRepo(
     val url: String,
     val programmingLanguage: String,
     val stars: Int,
-    val starsInDateRange: Int,
     val forks: Int
 ) : BaseModel()

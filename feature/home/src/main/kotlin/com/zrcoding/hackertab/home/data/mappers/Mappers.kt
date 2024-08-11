@@ -43,7 +43,6 @@ fun GithubDto.toGithubRepo() = GithubRepo(
     url = url,
     programmingLanguage = programmingLanguage,
     stars = stars.toInt(),
-    starsInDateRange = starsInDateRange.toInt(),
     forks = forks.toInt()
 )
 
