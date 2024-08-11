@@ -22,6 +22,7 @@ datastore = '1.1.1'
 ktor = "2.0.1"
 room = "2.6.1"
 kotlinxSerializationJson = "1.7.1"
+kotlinxDatetime = "0.6.0"
 firebaseBom = "33.1.1"
 junit = "4.13.2"
 
@@ -69,6 +70,7 @@ androidx-room-paging = { group = "androidx.room", name = "room-paging", version.
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson"  }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
