@@ -223,28 +223,32 @@ fun HomeScreenCardsPager(
                 )
             }
         }
-        RoundedIconButton(
-            modifier = Modifier
-                .alpha(0.6f)
-                .padding(end = MaterialTheme.dimension.default)
-                .align(Alignment.CenterStart),
-            size = if (isExpandedScree) 80.dp else 48.dp,
-            icon = Res.drawable.ic_baseline_arrow_back_ios
-        ) {
-            scope.launch {
-                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+        if(pagerState.currentPage > 0) {
+            RoundedIconButton(
+                modifier = Modifier
+                    .alpha(0.6f)
+                    .padding(end = MaterialTheme.dimension.default)
+                    .align(Alignment.CenterStart),
+                size = if (isExpandedScree) 80.dp else 48.dp,
+                icon = Res.drawable.ic_baseline_arrow_back_ios
+            ) {
+                scope.launch {
+                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                }
             }
         }
-        RoundedIconButton(
-            modifier = Modifier
-                .alpha(0.6f)
-                .padding(end = MaterialTheme.dimension.default)
-                .align(Alignment.CenterEnd),
-            size = if (isExpandedScree) 80.dp else 48.dp,
-            icon = Res.drawable.ic_baseline_arrow_forward
-        ) {
-            scope.launch {
-                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+        if(pagerState.currentPage < pagerState.pageCount - 1) {
+            RoundedIconButton(
+                modifier = Modifier
+                    .alpha(0.6f)
+                    .padding(end = MaterialTheme.dimension.default)
+                    .align(Alignment.CenterEnd),
+                size = if (isExpandedScree) 80.dp else 48.dp,
+                icon = Res.drawable.ic_baseline_arrow_forward
+            ) {
+                scope.launch {
+                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                }
             }
         }
     }
