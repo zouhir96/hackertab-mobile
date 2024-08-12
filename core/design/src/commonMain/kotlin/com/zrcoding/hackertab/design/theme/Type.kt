@@ -7,7 +7,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.zrcoding.hackertab.design.resources.Res
-import com.zrcoding.hackertab.design.resources.nunito_bold
 import com.zrcoding.hackertab.design.resources.nunito_medium
 import com.zrcoding.hackertab.design.resources.nunito_regular
 import org.jetbrains.compose.resources.Font
@@ -15,13 +14,13 @@ import org.jetbrains.compose.resources.Font
 val Typography: Typography
     @Composable get() = Typography(
         h4 = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_bold)),
-            fontWeight = FontWeight.W600,
+            fontFamily = FontFamily(Font(Res.font.nunito_medium)),
+            fontWeight = FontWeight.W900,
             fontSize = 30.sp
         ),
         h5 = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_bold)),
-            fontWeight = FontWeight.W600,
+            fontFamily = FontFamily(Font(Res.font.nunito_regular)),
+            fontWeight = FontWeight.W900,
             fontSize = 24.sp,
         ),
         h6 = TextStyle(
@@ -30,8 +29,8 @@ val Typography: Typography
             fontSize = 20.sp
         ),
         subtitle1 = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_medium)),
-            fontWeight = FontWeight.W600,
+            fontFamily = FontFamily(Font(Res.font.nunito_regular)),
+            fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
             letterSpacing = 0.15.sp
         ),

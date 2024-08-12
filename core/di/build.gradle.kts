@@ -1,8 +1,12 @@
+import com.zrcoding.convention.setFrameworkBaseName
+
 plugins {
     id("hackertab.kmp.library")
 }
 
 kotlin {
+
+    setFrameworkBaseName("di")
 
     sourceSets {
         commonMain.dependencies {

@@ -1,6 +1,12 @@
+import com.zrcoding.convention.setFrameworkBaseName
+
 plugins {
     id("hackertab.kmp.library")
     id("hackertab.kmp.compose")
+}
+
+kotlin {
+    setFrameworkBaseName("design")
 }
 
 android {

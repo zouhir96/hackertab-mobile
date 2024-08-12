@@ -26,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.components.ErrorMsgWithBtn
 import com.zrcoding.hackertab.design.components.FullScreenViewWithCenterText
@@ -45,7 +46,6 @@ import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.home.domain.models.BaseModel
 import com.zrcoding.hackertab.home.presentation.CardViewState
-import com.zrcoding.hackertab.home.presentation.utils.openUrlInBrowser
 import com.zrcoding.hackertab.settings.domain.models.SourceName
 import com.zrcoding.hackertab.settings.presentation.common.icon
 import org.jetbrains.compose.resources.DrawableResource
@@ -145,11 +145,12 @@ fun SourceItemTemplate(
     url: String? = null,
     tags: List<String>? = null,
 ) {
+    val localUriHandler = LocalUriHandler.current
     Column(
         modifier = modifier
             .clickable {
                 url?.let {
-                    openUrlInBrowser(url = it)
+                    localUriHandler.openUri(it)
                 }
             }
             .fillMaxWidth()

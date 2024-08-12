@@ -1,3 +1,5 @@
+import com.zrcoding.convention.setFrameworkBaseName
+
 plugins {
     id("hackertab.kmp.library")
     alias(libs.plugins.jetbrains.kotlinx.serialization)
@@ -8,6 +10,8 @@ android {
 }
 
 kotlin {
+    setFrameworkBaseName("network")
+
     sourceSets {
         commonMain.dependencies {
             // Ktor

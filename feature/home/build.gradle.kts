@@ -1,3 +1,4 @@
+import com.zrcoding.convention.setFrameworkBaseName
 
 plugins {
     id("hackertab.kmp.feature")
@@ -8,6 +9,7 @@ android {
 }
 
 kotlin {
+    setFrameworkBaseName("home")
     sourceSets.commonMain.dependencies {
         implementation(project(":feature:settings"))
     }

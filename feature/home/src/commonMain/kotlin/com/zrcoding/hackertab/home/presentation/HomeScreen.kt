@@ -161,7 +161,7 @@ fun HomeScreenTopAppBar(
             Icon(
                 painter = painterResource(Res.drawable.ic_refresh),
                 contentDescription = "refresh button",
-                tint = MaterialTheme.colors.primary
+                tint = MaterialTheme.colors.onBackground
             )
         }
         Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
@@ -177,7 +177,7 @@ fun HomeScreenTopAppBar(
             Icon(
                 painter = painterResource(Res.drawable.ic_settings),
                 contentDescription = "settings button",
-                tint = MaterialTheme.colors.primary
+                tint = MaterialTheme.colors.onBackground
             )
         }
     }

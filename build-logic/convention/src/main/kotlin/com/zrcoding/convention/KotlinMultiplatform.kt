@@ -12,9 +12,6 @@ internal fun Project.configureKotlinMultiplatform(
 
     // targets
     androidTarget()
-    iosArm64()
-    iosX64()
-    iosSimulatorArm64()
 
     applyDefaultHierarchyTemplate()
 

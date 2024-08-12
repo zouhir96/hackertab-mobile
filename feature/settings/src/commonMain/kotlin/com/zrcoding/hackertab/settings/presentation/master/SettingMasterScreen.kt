@@ -48,6 +48,7 @@ fun SettingMasterRoute(
 ) {
     Box(
         modifier = modifier
+            .background(MaterialTheme.colors.background)
             .padding(
                 top = MaterialTheme.dimension.extraBig,
                 bottom = MaterialTheme.dimension.default

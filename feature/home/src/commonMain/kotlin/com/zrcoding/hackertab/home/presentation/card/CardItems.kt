@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -54,7 +55,6 @@ import com.zrcoding.hackertab.home.domain.models.Medium
 import com.zrcoding.hackertab.home.domain.models.ProductHunt
 import com.zrcoding.hackertab.home.domain.models.Reddit
 import com.zrcoding.hackertab.home.domain.usecases.BuildConferenceDisplayedDateUseCase
-import com.zrcoding.hackertab.home.presentation.utils.openUrlInBrowser
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import com.zrcoding.hackertab.settings.domain.models.SourceName
 import io.kamel.image.KamelImage
@@ -379,10 +379,11 @@ private fun HashnodeItemPreview() {
 
 @Composable
 fun ProductHuntItem(product: ProductHunt) {
+    val uriHandler = LocalUriHandler.current
     Row(
         modifier = Modifier
             .clickable {
-                openUrlInBrowser(url = product.url)
+                uriHandler.openUri(product.url)
             }
             .fillMaxWidth()
             .padding(
@@ -524,9 +525,10 @@ fun LobstersItem(lobster: Lobster) {
                     text = date.timeAgo(),
                     icon = Res.drawable.ic_time_24,
                 )
+                val localUriHandler = LocalUriHandler.current
                 TextWithStartIcon(
                     modifier = Modifier.clickable {
-                        openUrlInBrowser(commentsUrl)
+                        localUriHandler.openUri(commentsUrl)
                     },
                     text = stringResource( Res.string.comments, commentsCount),
                     textColor = Color(0xFF4799eb),
