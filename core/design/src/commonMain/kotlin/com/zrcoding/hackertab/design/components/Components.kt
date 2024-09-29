@@ -91,7 +91,7 @@ fun Chip(
                 text = chipData.name,
                 style = MaterialTheme.typography.body2,
                 color = if (isSelected) {
-                    MaterialTheme.colors.surface
+                    Color.White
                 } else MaterialTheme.colors.onBackground
             )
         }
