@@ -34,15 +34,13 @@
 
     <!-- contact us form -->
     <string name="support_email">rajdaouizouhir.pro@gmail.com</string>
-    <string name="support_email_subject">Suggestions pour Hackertab team</string>
-    <string name="support_customer_service_no_apps_title">Aucun client de messagerie</string>
-    <string name="support_customer_service_no_apps_message">Aucune application de messagerie n\'est configur\u00e9e</string>
-    <string name="support_support_footer_message">Veuillez ne pas supprimer cette information, elle nous permettra de mieux r\u00e9pondre \u00e0 vos demandes.  </string>
-    <string name="support_device_os_version">-Android version: </string>
-    <string name="support_device_model">-Mod\u00e8le: </string>
-    <string name="support_application_version">-Version de l\'application: </string>
-    <string name="support_no_apps_title">Aucun client de messagerie</string>
-    <string name="support_no_apps_description">Aucune application de messagerie n\'est configur\u00e9e</string>
+    <string name="support_email_subject">Suggestions for Hackertab team</string>
+    <string name="support_support_footer_message">Please do not delete this information, it will help us better respond to your requests.</string>
+    <string name="support_device_os_version">-Os version: </string>
+    <string name="support_device_model">-Device Model: </string>
+    <string name="support_application_version">-Application Version: </string>
+    <string name="support_no_apps_title">No email client</string>
+    <string name="support_no_apps_description">No messaging application is configured</string>
 
     <string name="setting_topics_screen_title">Topics</string>
     <string name="setting_topics_screen_description">Your feed will be tailored by following the technologies you are interested in.</string>

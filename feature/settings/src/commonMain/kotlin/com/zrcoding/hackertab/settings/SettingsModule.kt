@@ -12,7 +12,7 @@ import org.koin.dsl.module
 
 
 val settingsModule = module {
-    includes(platformDataStoreModule)
+    includes(platformModule)
     singleOf(::SettingRepositoryImpl) bind SettingRepository::class
     viewModelDefinition { SettingSourcesScreenViewModel(get()) }
     viewModelDefinition { SettingTopicsScreenViewModel(get()) }
@@ -21,4 +21,4 @@ val settingsModule = module {
 /**
  * Provides the platform-specific dependencies.
  */
-internal expect val platformDataStoreModule: Module
+internal expect val platformModule: Module

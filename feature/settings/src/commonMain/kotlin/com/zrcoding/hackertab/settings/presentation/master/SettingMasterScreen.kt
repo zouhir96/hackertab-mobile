@@ -27,17 +27,26 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.common_ok
 import com.zrcoding.hackertab.design.resources.ic_baseline_arrow_forward
 import com.zrcoding.hackertab.design.resources.setting_master_screen_contact_us
 import com.zrcoding.hackertab.design.resources.setting_master_screen_sources
 import com.zrcoding.hackertab.design.resources.setting_master_screen_topics
 import com.zrcoding.hackertab.design.resources.setting_master_screen_version_name
+import com.zrcoding.hackertab.design.resources.support_device_model
+import com.zrcoding.hackertab.design.resources.support_device_os_version
+import com.zrcoding.hackertab.design.resources.support_email
+import com.zrcoding.hackertab.design.resources.support_email_subject
+import com.zrcoding.hackertab.design.resources.support_no_apps_description
+import com.zrcoding.hackertab.design.resources.support_no_apps_title
+import com.zrcoding.hackertab.design.resources.support_support_footer_message
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 
 @Composable
 fun SettingMasterRoute(
@@ -46,6 +55,18 @@ fun SettingMasterRoute(
     onNavigateToTopics: () -> Unit,
     onNavigateToSources: () -> Unit
 ) {
+    val contactSupport: ContactSupport = koinInject()
+    val contactSupportData = ContactSupportData(
+        email = stringResource(Res.string.support_email),
+        subject = stringResource(Res.string.support_email_subject),
+        footerMessage = stringResource(Res.string.support_support_footer_message),
+        osVersion = stringResource(Res.string.support_device_os_version),
+        deviceModel = stringResource(Res.string.support_device_model),
+        appVersion = "",
+        noAppFoundTitle = stringResource(Res.string.support_no_apps_title),
+        noAppFoundDescription = stringResource(Res.string.support_no_apps_description),
+        noAppFoundOk = stringResource(Res.string.common_ok),
+    )
     Box(
         modifier = modifier
             .background(MaterialTheme.colors.background)
@@ -93,7 +114,7 @@ fun SettingMasterRoute(
                 SettingItem(
                     text = Res.string.setting_master_screen_contact_us,
                     selected = false,
-                    onClick = { contactSupport() }
+                    onClick = { contactSupport.invoke(data = contactSupportData) }
                 )
             }
         }
@@ -200,5 +221,3 @@ fun AppVersionName(modifier: Modifier = Modifier) {
         style = MaterialTheme.typography.subtitle1
     )
 }
-
-expect fun contactSupport()
