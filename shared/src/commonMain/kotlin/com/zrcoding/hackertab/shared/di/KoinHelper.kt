@@ -10,7 +10,11 @@ import org.koin.dsl.module
 /**
  * Initializes the Koin modules.
  */
-fun initKoin() = initKoin(module { })
+fun initKoin() = initKoin(
+    module {
+        includes(platformModule)
+    }
+)
 
 /**
  * Initializes the Koin modules.
@@ -19,7 +23,7 @@ fun initKoin() = initKoin(module { })
  */
 fun initKoin(appModule: Module = module { }) {
     startKoin {
-        modules(appModules + appModule)
+        modules(appModules + appModule + platformModule)
     }
 }
 
@@ -28,3 +32,5 @@ internal val appModules = listOf(
     settingsModule,
     networkModule
 )
+
+expect val platformModule: Module

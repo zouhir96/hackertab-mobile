@@ -30,7 +30,7 @@
     <string name="setting_master_screen_topics">Topics</string>
     <string name="setting_master_screen_sources">Sources</string>
     <string name="setting_master_screen_contact_us">Contact us</string>
-    <string name="setting_master_screen_version_name">Version(%s)</string>
+    <string name="setting_master_screen_version_name">Version(%1$s)</string>
 
     <!-- contact us form -->
     <string name="support_email">rajdaouizouhir.pro@gmail.com</string>

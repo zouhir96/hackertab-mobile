@@ -42,6 +42,7 @@ import com.zrcoding.hackertab.design.resources.support_no_apps_title
 import com.zrcoding.hackertab.design.resources.support_support_footer_message
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
+import com.zrcoding.hackertab.settings.presentation.common.AppConfig
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -56,13 +57,14 @@ fun SettingMasterRoute(
     onNavigateToSources: () -> Unit
 ) {
     val contactSupport: ContactSupport = koinInject()
+    val appConfig: AppConfig = koinInject()
     val contactSupportData = ContactSupportData(
         email = stringResource(Res.string.support_email),
         subject = stringResource(Res.string.support_email_subject),
         footerMessage = stringResource(Res.string.support_support_footer_message),
         osVersion = stringResource(Res.string.support_device_os_version),
         deviceModel = stringResource(Res.string.support_device_model),
-        appVersion = "",
+        appVersion = appConfig.versionName,
         noAppFoundTitle = stringResource(Res.string.support_no_apps_title),
         noAppFoundDescription = stringResource(Res.string.support_no_apps_description),
         noAppFoundOk = stringResource(Res.string.common_ok),
@@ -118,7 +120,10 @@ fun SettingMasterRoute(
                 )
             }
         }
-        AppVersionName(modifier = Modifier.align(Alignment.BottomCenter))
+        AppVersionName(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            versionName = appConfig.versionName
+        )
     }
 }
 
@@ -212,8 +217,7 @@ fun SettingItemPreview() {
 }
 
 @Composable
-fun AppVersionName(modifier: Modifier = Modifier) {
-    val versionName = ""
+fun AppVersionName(modifier: Modifier = Modifier, versionName: String) {
     Text(
         modifier = modifier,
         text = stringResource(Res.string.setting_master_screen_version_name, versionName),
