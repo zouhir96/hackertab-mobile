@@ -47,7 +47,6 @@ android {
 
     buildFeatures {
         buildConfig = true
-        compose = true
     }
     packaging {
         resources {

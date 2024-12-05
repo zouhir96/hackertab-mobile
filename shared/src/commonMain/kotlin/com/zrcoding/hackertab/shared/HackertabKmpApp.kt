@@ -8,9 +8,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import com.zrcoding.hackertab.design.theme.HackertabTheme
-import com.zrcoding.hackertab.shared.navigation.HomeScreen
-import com.zrcoding.hackertab.shared.navigation.MainNavigator
+import com.zrcoding.hackertab.shared.navigation.MainNavHost
 
 @Composable
 fun HackertabKmpApp(
@@ -22,8 +22,9 @@ fun HackertabKmpApp(
                .background(MaterialTheme.colors.background)
                .windowInsetsPadding(WindowInsets.statusBars)
         ) {
-            MainNavigator(
-                startDestination = HomeScreen(),
+            val navController = rememberNavController()
+            MainNavHost(
+                navController = navController,
                 isExpandedScree = isExpanded
             )
         }

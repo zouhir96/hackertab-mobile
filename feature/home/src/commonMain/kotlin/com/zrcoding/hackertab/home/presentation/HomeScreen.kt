@@ -52,23 +52,24 @@ import org.koin.compose.koinInject
 @Composable
 fun HomeRoute(
     viewModel: HomeScreenViewModel = koinInject(),
-    isExpandedScree: Boolean,
+    isExpandedScreen: Boolean,
     onNavigateToSettings: () -> Unit
 ) {
     val viewState = viewModel.viewState.collectAsState().value
     HomeScreen(
         modifier = Modifier,
-        isExpandedScree = isExpandedScree,
+        isExpandedScreen = isExpandedScreen,
         viewState = viewState,
         onRefreshBtnClick = viewModel::loadData,
         onSettingBtnClick = onNavigateToSettings
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(
+private fun HomeScreen(
     modifier: Modifier = Modifier,
-    isExpandedScree: Boolean,
+    isExpandedScreen: Boolean,
     viewState: HomeScreenViewState,
     onRefreshBtnClick: () -> Unit,
     onSettingBtnClick: () -> Unit,
@@ -98,7 +99,7 @@ fun HomeScreen(
             } else {
                 HomeScreenCardsPager(
                     modifier = Modifier.padding(it),
-                    isExpandedScree = isExpandedScree,
+                    pageSize = if (isExpandedScreen) PageSize.Fixed(400.dp) else PageSize.Fill,
                     cardViewStates = viewState.cardViewStates,
                     onRefreshBtnClick = onRefreshBtnClick
                 )
@@ -109,10 +110,10 @@ fun HomeScreen(
 
 @Preview
 @Composable
-fun HomeScreenLoadingPreview() {
+private fun HomeScreenLoadingPreview() {
     HackertabTheme {
         HomeScreen(
-            isExpandedScree = false,
+            isExpandedScreen = false,
             viewState = HomeScreenViewState.Loading,
             onRefreshBtnClick = {},
             onSettingBtnClick = {}
@@ -122,10 +123,10 @@ fun HomeScreenLoadingPreview() {
 
 @Preview
 @Composable
-fun HomeScreenEmptyPreview() {
+private fun HomeScreenEmptyPreview() {
     HackertabTheme {
         HomeScreen(
-            isExpandedScree = false,
+            isExpandedScreen = false,
             viewState = HomeScreenViewState.Cards(emptyList()),
             onRefreshBtnClick = {},
             onSettingBtnClick = {}
@@ -134,7 +135,7 @@ fun HomeScreenEmptyPreview() {
 }
 
 @Composable
-fun HomeScreenTopAppBar(
+private fun HomeScreenTopAppBar(
     onRefreshBtnClick: () -> Unit,
     onSettingBtnClick: () -> Unit,
 ) {
@@ -185,7 +186,7 @@ fun HomeScreenTopAppBar(
 
 @Preview()
 @Composable
-fun HomeScreenTopAppBarPreview() {
+private fun HomeScreenTopAppBarPreview() {
     HackertabTheme {
         HomeScreenTopAppBar({}, {})
     }
@@ -193,9 +194,9 @@ fun HomeScreenTopAppBarPreview() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreenCardsPager(
+private fun HomeScreenCardsPager(
     modifier: Modifier = Modifier,
-    isExpandedScree: Boolean,
+    pageSize: PageSize,
     cardViewStates: List<CardViewState>,
     onRefreshBtnClick: () -> Unit
 ) {
@@ -211,7 +212,7 @@ fun HomeScreenCardsPager(
                 start = MaterialTheme.dimension.default,
                 end = MaterialTheme.dimension.medium
             ),
-            pageSize = if (isExpandedScree) PageSize.Fixed(400.dp) else PageSize.Fill
+            pageSize = pageSize
         ) { page ->
             cardViewStates.getOrNull(page)?.let { state ->
                 CardTemplate(
@@ -229,7 +230,7 @@ fun HomeScreenCardsPager(
                     .alpha(0.6f)
                     .padding(end = MaterialTheme.dimension.default)
                     .align(Alignment.CenterStart),
-                size = if (isExpandedScree) 80.dp else 48.dp,
+                size = 60.dp,
                 icon = Res.drawable.ic_baseline_arrow_back_ios
             ) {
                 scope.launch {
@@ -243,7 +244,7 @@ fun HomeScreenCardsPager(
                     .alpha(0.6f)
                     .padding(end = MaterialTheme.dimension.default)
                     .align(Alignment.CenterEnd),
-                size = if (isExpandedScree) 80.dp else 48.dp,
+                size = 60.dp,
                 icon = Res.drawable.ic_baseline_arrow_forward
             ) {
                 scope.launch {

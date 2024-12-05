@@ -9,7 +9,7 @@ kotlin = "2.0.0"
 agp = "8.3.2"
 googleServices = "4.4.2"
 ksp = "2.0.0-1.0.21"
-composePlugin = "1.6.11"
+composePlugin = "1.7.0"
 
 activity = "1.9.0"
 coreSplashscreen = "1.0.1"
@@ -17,7 +17,7 @@ material3VersionHack = "1.1.2"
 kamel = "0.9.3"
 
 moko = "0.16.1"
-voyager = "1.1.0-beta02"
+navigation = "2.8.0-alpha10"
 koin = "3.5.6"
 koinCompose = "1.1.5"
 datastore = '1.1.1'
@@ -45,7 +45,7 @@ moko-mvvm-core = { module = "dev.icerock.moko:mvvm-core", version.ref = "moko" }
 moko-mvvm-compose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "moko" }
 
 #navigation
-voyager = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
+androidx-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 
 #koin
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
