@@ -11,6 +11,29 @@
     "id": "android"
   },
   {
+    "confsValues": ["java"],
+    "hashnodeValues": ["java"],
+    "freecodecampValues": ["java"],
+    "devtoValues": ["java"],
+    "githubValues": ["java"],
+    "label": "Java",
+    "stackoverflowValues": ["java"],
+    "redditValues": ["java"],
+    "mediumValues": ["java"],
+    "id": "java"
+  },
+  {
+    "devtoValues": ["kotlin"],
+    "hashnodeValues": ["kotlin"],
+    "freecodecampValues": ["kotlin"],
+    "githubValues": ["kotlin"],
+    "label": "Kotlin",
+    "stackoverflowValues": ["kotlin"],
+    "redditValues": ["kotlin"],
+    "mediumValues": ["kotlin"],
+    "id": "kotlin"
+  },
+  {
     "devtoValues": ["ai"],
     "hashnodeValues": ["artificial-intelligence"],
     "freecodecampValues": ["artificial-intelligence"],
@@ -121,18 +144,6 @@
     "id": "go"
   },
   {
-    "confsValues": ["java"],
-    "hashnodeValues": ["java"],
-    "freecodecampValues": ["java"],
-    "devtoValues": ["java"],
-    "githubValues": ["java"],
-    "label": "Java",
-    "stackoverflowValues": ["java"],
-    "redditValues": ["java"],
-    "mediumValues": ["java"],
-    "id": "java"
-  },
-  {
     "confsValues": ["javascript"],
     "hashnodeValues": ["javascript"],
     "freecodecampValues": ["javascript"],
@@ -143,17 +154,6 @@
     "redditValues": ["javascript"],
     "mediumValues": ["javascript"],
     "id": "javascript"
-  },
-  {
-    "devtoValues": ["kotlin"],
-    "hashnodeValues": ["kotlin"],
-    "freecodecampValues": ["kotlin"],
-    "githubValues": ["kotlin"],
-    "label": "Kotlin",
-    "stackoverflowValues": ["kotlin"],
-    "redditValues": ["kotlin"],
-    "mediumValues": ["kotlin"],
-    "id": "kotlin"
   },
   {
     "devtoValues": ["machinelearning"],

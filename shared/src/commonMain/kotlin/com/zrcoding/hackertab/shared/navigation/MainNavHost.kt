@@ -5,9 +5,18 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,6 +28,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.home.presentation.HomeRoute
 import com.zrcoding.hackertab.settings.presentation.master.SettingMasterRoute
 import com.zrcoding.hackertab.settings.presentation.sources.SettingSourcesRoute
@@ -61,41 +71,56 @@ fun MainNavHost(
         }
         if (isExpandedScree) {
             composable<Settings> {
-                SettingsTwoPanNavigation()
+                SettingsTwoPanNavigation(rootNavHostController = navController)
             }
         } else {
-            settingsOnePanNavigation(navController)
+            this.settingsOnePanNavigation(navController)
         }
     }
 }
 
 fun NavGraphBuilder.settingsOnePanNavigation(navController: NavHostController) {
     navigation<Settings>(startDestination = SettingsMasterScreen) {
-        composableWithAnimation<SettingsMasterScreen>{
-            SettingMasterRoute(
-                showSelectedItem = false,
-                onNavigateToTopics = {
-                    navController.navigate(SettingsTopicsScreen)
-                },
-                onNavigateToSources = {
-                    navController.navigate(SettingsSourcesScreen)
+        composableWithAnimation<SettingsMasterScreen> {
+            ScreenWithBackButton(
+                navController = navController,
+                screen = {
+                    SettingMasterRoute(
+                        showSelectedItem = false,
+                        onNavigateToTopics = {
+                            navController.navigate(SettingsTopicsScreen)
+                        },
+                        onNavigateToSources = {
+                            navController.navigate(SettingsSourcesScreen)
+                        }
+                    )
                 }
             )
         }
         composableWithAnimation<SettingsTopicsScreen> {
-            SettingTopicsRoute()
+            ScreenWithBackButton(
+                navController = navController,
+                screen = {
+                    SettingTopicsRoute()
+                }
+            )
         }
         composableWithAnimation<SettingsSourcesScreen> {
-            SettingSourcesRoute()
+            ScreenWithBackButton(
+                navController = navController,
+                screen = {
+                    SettingSourcesRoute()
+                }
+            )
         }
     }
 }
 
 @Composable
-fun SettingsTwoPanNavigation() {
-    val navController = rememberNavController()
+fun SettingsTwoPanNavigation(rootNavHostController: NavHostController) {
+    val nestedNavController = rememberNavController()
     fun navigateWithPopUpToTopics(route: Any) {
-        navController.navigate(
+        nestedNavController.navigate(
             route = route,
             navOptions = navOptions {
                 // Pop up to the start destination of the graph to
@@ -113,42 +138,47 @@ fun SettingsTwoPanNavigation() {
         )
     }
 
-    Row(modifier = Modifier.fillMaxWidth()) {
-        SettingMasterRoute(
-            modifier = Modifier.width(400.dp),
-            showSelectedItem = true,
-            onNavigateToTopics = {
-                navigateWithPopUpToTopics(SettingsTopicsScreen)
-            },
-            onNavigateToSources = {
-                navigateWithPopUpToTopics(SettingsSourcesScreen)
-            }
-        )
+    ScreenWithBackButton(
+        navController = rootNavHostController,
+        screen = {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                SettingMasterRoute(
+                    modifier = Modifier.width(400.dp),
+                    showSelectedItem = true,
+                    onNavigateToTopics = {
+                        navigateWithPopUpToTopics(SettingsTopicsScreen)
+                    },
+                    onNavigateToSources = {
+                        navigateWithPopUpToTopics(SettingsSourcesScreen)
+                    }
+                )
 
-        NavHost(
-            modifier = Modifier
-                .width(0.dp)
-                .weight(1f),
-            navController = navController,
-            startDestination = SettingsTopicsScreen
-        ) {
-            composable<SettingsTopicsScreen>(
-                enterTransition = { fadeIn() },
-                exitTransition = { fadeOut() }
-            ) {
-                SettingTopicsRoute()
-            }
-            composable<SettingsSourcesScreen>(
-                enterTransition = { fadeIn() },
-                exitTransition = { fadeOut() }
-            ) {
-                SettingSourcesRoute()
+                NavHost(
+                    modifier = Modifier
+                        .width(0.dp)
+                        .weight(1f),
+                    navController = nestedNavController,
+                    startDestination = SettingsTopicsScreen
+                ) {
+                    composable<SettingsTopicsScreen>(
+                        enterTransition = { fadeIn() },
+                        exitTransition = { fadeOut() }
+                    ) {
+                        SettingTopicsRoute()
+                    }
+                    composable<SettingsSourcesScreen>(
+                        enterTransition = { fadeIn() },
+                        exitTransition = { fadeOut() }
+                    ) {
+                        SettingSourcesRoute()
+                    }
+                }
             }
         }
-    }
+    )
 }
 
-private inline fun <reified T: Any> NavGraphBuilder.composableWithAnimation(
+private inline fun <reified T : Any> NavGraphBuilder.composableWithAnimation(
     duration: Int = 700,
     noinline composable: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
 ) {
@@ -179,5 +209,35 @@ private inline fun <reified T: Any> NavGraphBuilder.composableWithAnimation(
         }
     ) {
         composable(it)
+    }
+}
+
+@Composable
+private fun ScreenWithBackButton(
+    navController: NavHostController,
+    screen: @Composable () -> Unit
+) {
+    Scaffold(topBar = {
+        TopAppBar(
+            navigationIcon = {
+                IconButton(
+                    modifier = Modifier.background(
+                        color = MaterialTheme.colors.secondaryVariant,
+                        shape = CircleShape
+                    ),
+                    onClick = { navController.popBackStack() },
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back button",
+                        tint = MaterialTheme.colors.onBackground
+                    )
+                }
+            },
+            title = {},
+            elevation = MaterialTheme.dimension.none
+        )
+    }) {
+        screen()
     }
 }

@@ -83,6 +83,8 @@ fun SettingMasterRoute(
             modifier = Modifier.align(Alignment.TopCenter),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.large)
         ) {
+            // TODO Waiting for compose multiplatform to support BackHandler
+            //  so we can change the selectedItem to 0 when the user clicks on the Tablet back button and the selected item is 0.
             var selectedItem by remember {
                 mutableIntStateOf(
                     if (showSelectedItem) {

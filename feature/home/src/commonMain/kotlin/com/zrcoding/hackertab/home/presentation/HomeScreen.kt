@@ -192,7 +192,6 @@ private fun HomeScreenTopAppBarPreview() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HomeScreenCardsPager(
     modifier: Modifier = Modifier,
