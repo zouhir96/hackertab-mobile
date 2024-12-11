@@ -1,21 +1,20 @@
+import com.zrcoding.convention.setFrameworkBaseName
+
 plugins {
-    id("hackertab.android.library")
-    id("hackertab.android.library.compose")
+    id("hackertab.kmp.library")
+    id("hackertab.kmp.compose")
+}
+
+kotlin {
+    setFrameworkBaseName("design")
 }
 
 android {
     namespace = "com.zrcoding.hackertab.design"
 }
 
-dependencies {
-    // UI
-    api(platform(libs.androidx.compose.bom))
-    api(libs.androidx.compose.ui)
-    api(libs.androidx.compose.ui.tooling.preview)
-    api(libs.androidx.compose.material)
-    api(libs.io.coil.compose)
-    api(libs.io.coil.gif)
-
-    // Tools
-    debugApi(libs.androidx.compose.ui.tooling)
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "com.zrcoding.hackertab.design.resources"
+    generateResClass = always
 }

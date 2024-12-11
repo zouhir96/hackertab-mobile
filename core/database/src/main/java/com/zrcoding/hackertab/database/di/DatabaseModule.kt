@@ -3,27 +3,17 @@ package com.zrcoding.hackertab.database.di
 import android.content.Context
 import androidx.room.Room
 import com.zrcoding.hackertab.database.HackertabDatabase
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-class DatabaseModule {
+private const val DATABASE_NAME = "hackertab-db"
 
-    companion object {
-        private const val DATABASE_NAME = "hackertab-db"
-    }
-
-    @Provides
-    @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): HackertabDatabase = Room
-        .databaseBuilder(
+val databaseModule = module {
+    single<HackertabDatabase> {
+        val context: Context = get()
+        Room.databaseBuilder(
             context,
             HackertabDatabase::class.java,
             DATABASE_NAME
         ).build()
+    }
 }

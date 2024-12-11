@@ -1,3 +1,13 @@
+import com.zrcoding.convention.setFrameworkBaseName
+
 plugins {
-    id("hackertab.android.jvmLibrary")
+    id("hackertab.kmp.library")
+}
+
+kotlin {
+    setFrameworkBaseName("domain")
+}
+
+android {
+    namespace = "com.zrcoding.hackertab.network"
 }

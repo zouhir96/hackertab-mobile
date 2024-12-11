@@ -1,16 +1,16 @@
+import com.zrcoding.convention.setFrameworkBaseName
+
 plugins {
-    id("hackertab.android.library")
-    id("hackertab.android.library.compose")
-    id("hackertab.android.feature")
+    id("hackertab.kmp.feature")
 }
 
 android {
     namespace = "com.zrcoding.hackertab.home"
 }
 
-dependencies {
-    implementation(project(":feature:settings"))
-
-    // Test
-    testImplementation(libs.test.junit)
+kotlin {
+    setFrameworkBaseName("home")
+    sourceSets.commonMain.dependencies {
+        implementation(project(":feature:settings"))
+    }
 }

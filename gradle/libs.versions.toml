@@ -9,77 +9,65 @@ kotlin = "2.0.0"
 agp = "8.3.2"
 googleServices = "4.4.2"
 ksp = "2.0.0-1.0.21"
-
-desugarJdkLibs = "2.0.4"
-coreKtx = "1.13.1"
+composePlugin = "1.7.0"
 
 activity = "1.9.0"
 coreSplashscreen = "1.0.1"
-composeBom = "2024.06.00"
-coil = "2.6.0"
-lifecycleRuntimeKtx = "2.8.3"
-lifecycleExt = "2.8.3"
-navigationCompose = "2.7.7"
-hiltNavigationCompose = "1.2.0"
-junit = "4.13.2"
-hilt = "2.51.1"
+material3VersionHack = "1.1.2"
+kamel = "0.9.3"
+
+moko = "0.16.1"
+navigation = "2.8.0-alpha10"
+koin = "3.5.6"
+koinCompose = "1.1.5"
 datastore = '1.1.1'
-retrofit = "2.9.0"
-loggingInterceptor = "4.12.0"
+ktor = "2.0.1"
 room = "2.6.1"
-gson = "2.10.1"
+kotlinxSerializationJson = "1.7.1"
+kotlinxDatetime = "0.6.0"
+atomicfu = "0.24.0"
 firebaseBom = "33.1.1"
 
 [libraries]
 
-#desugar
-android-desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdkLibs" }
-
 #core
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 
 #ui
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-compose-material = { group = "androidx.compose.material", name = "material" }
-androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-compose-materialWindow = { module = "androidx.compose.material3:material3-window-size-class" }
-io-coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-io-coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }
+androidx-compose-materialWindow = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3VersionHack"}
+kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 
 #activity
 androidx-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
 
-#lifeCycle
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleExt" }
+# Moko
+moko-mvvm-core = { module = "dev.icerock.moko:mvvm-core", version.ref = "moko" }
+moko-mvvm-compose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "moko" }
 
 #navigation
-androidx-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 
-#tools
-test-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-
-#hilt
-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+#koin
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koinCompose" }
 
 #data
-squareup-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-squareup-retrofit-converter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
-squareup-okhttp3 = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
+ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-loggingInterceptor = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 
 #firebase
 com-google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
@@ -89,14 +77,17 @@ com-google-firebase-crashlytics = { group = "com.google.firebase", name = "fireb
 # Dependencies of the included build-logic
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+compose-gradlePlugin = { module = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin", version.ref = "composePlugin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "composePlugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+jetbrains-kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

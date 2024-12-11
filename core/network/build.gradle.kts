@@ -1,15 +1,30 @@
+import com.zrcoding.convention.setFrameworkBaseName
+
 plugins {
-    id("hackertab.android.library")
-    id("hackertab.android.hilt")
+    id("hackertab.kmp.library")
+    alias(libs.plugins.jetbrains.kotlinx.serialization)
 }
 
 android {
     namespace = "com.zrcoding.hackertab.network"
 }
 
-dependencies {
-    // Retrofit
-    implementation(libs.squareup.retrofit)
-    implementation(libs.squareup.retrofit.converter)
-    implementation(libs.squareup.okhttp3)
+kotlin {
+    setFrameworkBaseName("network")
+
+    sourceSets {
+        commonMain.dependencies {
+            // Ktor
+            api(libs.ktor.core)
+            implementation(libs.ktor.contentNegotiation)
+            implementation(libs.ktor.serialization)
+            implementation(libs.ktor.loggingInterceptor)
+        }
+        androidMain.dependencies {
+            implementation(libs.ktor.okhttp)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.darwin)
+        }
+    }
 }

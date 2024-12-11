@@ -28,9 +28,9 @@ You can check the [releases](https://github.com/zouhir96/hackertab-android/relea
 - Jetpack compose
 - Clean architecture / MVVM
 - Multi-Module architecture
-- Dependency injection - Hilt
+- Dependency injection - Koin
 - Version catalog & Convention plugins
-- REST API / Retrofit2
+- REST API / Ktor client
 - Datastore-preferences
 - Github actions: Run tests, deploy to google play
 -
