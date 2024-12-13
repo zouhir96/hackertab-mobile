@@ -1,40 +1,46 @@
-# hackertab-android
+# hackertab-mobile
 
 <table align="center">
 <tr>
 <td>
-<img src="./imgs/preview.png" alt="Preview image" /> 
+<img src="imgs/preview.png" alt="Preview image" /> 
 </td>
 </tr>
 </table>
 
 ## 📝 About
 
-Hackertab brings the latest news, libraries, tech events, jobs... related to your profile (back-end,
-mobile, full stack, data scientist...) and visualize them in a proper way so you don't have to waste
-time jumping between different data sources.
+Cross-platform (Android/iOS) application built with Kotlin Multiplatform and Compose Multiplatform.
+Hackertab brings the latest news, repositories, libraries, tech events... related to your profile (
+mobile, back-end, full stack, data scientist...) and visualize them in a proper way so you don't
+have to waste time jumping between different data sources.
+It aggregates data from 11 sources, including GitHub, HackerNews, Dev.to, and Medium, with
+customizable source preferences. Follow 26+ topics like Android, Kotlin, Java, JavaScript, and
+TypeScript all visualized in an intuitive interface.
 
-This is the Android version of [hackertab.dev](https://hackertab.dev) extension brought to your
+This is the Mobile(Non official) version of [hackertab.dev](https://hackertab.dev) extension brought to your
 phone now so you stay always posted even if you’re not on your pc.
 
 ## ⬇️ Download
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="90"/>](https://play.google.com/store/apps/details?id=com.zrcoding.hackertab)<br>
-You can check the [releases](https://github.com/zouhir96/hackertab-android/releases/latest) page for details.
+You can check the [releases](https://github.com/zouhir96/hackertab-android/releases/latest) page for
+details.
 
 ## 🔨 Stack
 
 - Kotlin(2.0.0), coroutines
-- Jetpack compose
+- Kotlin multi-platform & Compose multi-platform
 - Clean architecture / MVVM
 - Multi-Module architecture
-- Dependency injection - Hilt
+- Dependency injection - Koin
 - Version catalog & Convention plugins
-- REST API / Retrofit2
+- REST API / Ktor client
 - Datastore-preferences
 - Github actions: Run tests, deploy to google play
--
-Figma: [Design file](https://www.figma.com/file/IMFz1yU7jLCIQL1ZM0X8t7/Hackertab?type=design&node-id=0-1&mode=design&t=7yYklSUnlheLkOaN-0)
+
+## 🛠️ Resources
+- Figma: [Design file](https://www.figma.com/file/IMFz1yU7jLCIQL1ZM0X8t7/Hackertab?type=design&node-id=0-1&mode=design&t=7yYklSUnlheLkOaN-0)
 - Trello: [Project board](https://trello.com/b/OaxWzI96/hackertab)
 
 ### Features
@@ -42,10 +48,10 @@ Figma: [Design file](https://www.figma.com/file/IMFz1yU7jLCIQL1ZM0X8t7/Hackertab
 - [x] 11 sources of news: Github, Hackernews, Conferences, Devto, Producthunt, Reddit, Lobsters,
   Hashnode, Freecodecamp, IndieHackers and Medium.
 - [x] 26 Topics to follow: Android, Kotlin, Java, JavaScript, TypeScript ...
-- [x] Possibility to configure which sources to show.
-- [x] Possibility to configure which topics to show.
+- [x] Possibility to configure which sources to follow.
+- [x] Possibility to configure which topics to follow.
 - [x] Contact support by email.
-- [x] Support large screens.
+- [x] Support large screens (Tablet and Ipad).
 - [x] System light/dark mode support.
 
 ### Development

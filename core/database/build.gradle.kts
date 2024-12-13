@@ -1,6 +1,6 @@
 plugins {
     id("hackertab.android.library")
-    id("hackertab.android.hilt")
+    id("hackertab.android.koin")
     alias(libs.plugins.google.devtools.ksp)
 }
 
