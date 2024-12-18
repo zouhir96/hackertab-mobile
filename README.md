@@ -3,7 +3,7 @@
 <table align="center">
 <tr>
 <td>
-<img src="imgs/preview.png" alt="Preview image" /> 
+<img src="imgs/preview.svg" alt="Preview image" /> 
 </td>
 </tr>
 </table>
