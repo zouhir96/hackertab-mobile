@@ -21,6 +21,16 @@ TypeScript all visualized in an intuitive interface.
 This is the Mobile(Non official) version of [hackertab.dev](https://hackertab.dev) extension brought to your
 phone now so you stay always posted even if you’re not on your pc.
 
+## Demo
+
+<table align="center">
+<tr>
+<td>
+<img src="imgs/demo.gif" alt="Hackertab Android & IOS" /> 
+</td>
+</tr>
+</table>
+
 ## ⬇️ Download
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="90"/>](https://play.google.com/store/apps/details?id=com.zrcoding.hackertab)<br>
