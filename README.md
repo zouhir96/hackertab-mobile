@@ -53,12 +53,12 @@ details.
 - [x] Contact support by email.
 - [x] Support large screens (Tablet and Ipad).
 - [x] System light/dark mode support.
+- [x] Migrate to Kotlin multiplatform and compose multiplatform.
 
 ### Development
 
 - [ ] Add offline first support
 - [ ] Add onboarding and app install setup
-- [ ] Migrate to kmp/cmp
 
 ## 🧩 Requirements
 
