@@ -21,7 +21,7 @@ kotlin {
             implementation(libs.ktor.loggingInterceptor)
         }
         androidMain.dependencies {
-            implementation(libs.ktor.okhttp)
+            implementation(libs.ktor.cio)
         }
         iosMain.dependencies {
             implementation(libs.ktor.darwin)
