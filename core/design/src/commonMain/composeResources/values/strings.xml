@@ -7,16 +7,16 @@
     <string name="github">github</string>
 
 
-    <string name="score">%d points</string>
-    <string name="comments">%d comments</string>
-    <string name="reactions">%d reactions</string>
-    <string name="stars">%s stars</string>
-    <string name="forks">%s forks</string>
-    <string name="claps">%s claps</string>
-    <string name="subreddit">r/ %s</string>
+    <string name="score">%1$s points</string>
+    <string name="comments">%1$s comments</string>
+    <string name="reactions">%1$s reactions</string>
+    <string name="stars">%1$s stars</string>
+    <string name="forks">%1$s forks</string>
+    <string name="claps">%1$s claps</string>
+    <string name="subreddit">r/ %1$s</string>
     <string name="loading">Loading …</string>
-    <string name="empty_source_msg">No articles found for %s !!</string>
-    <string name="failed_to_load_source">Failed to load articles found for %s !!</string>
+    <string name="empty_source_msg">No articles found for %1$s !!</string>
+    <string name="failed_to_load_source">Failed to load articles found for %1$s !!</string>
     <string name="no_internet_connect">Please verify you internet connection and !!</string>
     <string name="no_source_selected">You didn\'t select any source yet!!\n you can enable sources in settings -> sources</string>
     <string name="common_retry">Retry</string>
