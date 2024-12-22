@@ -20,8 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# Keep class names of Hilt injected ViewModels since their name are used as a multibinding map key.
--keepnames @dagger.hilt.android.lifecycle.HiltViewModel class * extends androidx.lifecycle.ViewModel
 
 -keepattributes *Annotation*
 -keepclassmembers enum androidx.lifecycle.Lifecycle$Event {
@@ -46,14 +44,7 @@
 -keep class * extends com.google.protobuf.GeneratedMessageLite { *; }
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
-## Rules for Gson
-# For using GSON @Expose annotation
--keepattributes Signature
--keepattributes *Annotation*
-# Gson specific classes
--keep class com.google.gson.stream.** { *; }
--keep class com.google.gson.reflect.TypeToken { *; }
--keep class * extends com.google.gson.reflect.TypeToken
-
--keep class com.zrcoding.hackertab.database.entities.** {*;}
+-keep class com.zrcoding.database.data.local.entities.** {*;}
 -keep class com.zrcoding.hackertab.network.dtos.** {*;}
+
+-dontwarn org.slf4j.impl.StaticLoggerBinder

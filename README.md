@@ -3,7 +3,7 @@
 <table align="center">
 <tr>
 <td>
-<img src="imgs/preview.png" alt="Preview image" /> 
+<img src="imgs/preview.svg" alt="Preview image" /> 
 </td>
 </tr>
 </table>
@@ -20,6 +20,16 @@ TypeScript all visualized in an intuitive interface.
 
 This is the Mobile(Non official) version of [hackertab.dev](https://hackertab.dev) extension brought to your
 phone now so you stay always posted even if you’re not on your pc.
+
+## Demo
+
+<table align="center">
+<tr>
+<td>
+<img src="imgs/demo.gif" alt="Hackertab Android & IOS" /> 
+</td>
+</tr>
+</table>
 
 ## ⬇️ Download
 
@@ -53,12 +63,12 @@ details.
 - [x] Contact support by email.
 - [x] Support large screens (Tablet and Ipad).
 - [x] System light/dark mode support.
+- [x] Migrate to Kotlin multiplatform and compose multiplatform.
 
 ### Development
 
 - [ ] Add offline first support
 - [ ] Add onboarding and app install setup
-- [ ] Migrate to kmp/cmp
 
 ## 🧩 Requirements
 
