@@ -1,4 +1,4 @@
-name: Publish
+name: Deploy to google play
 
 on:
   push:
@@ -71,4 +71,3 @@ jobs:
           track: internal
           status: 'completed'
           whatsNewDirectory: whatsNewDirectory/
-          changesNotSentForReview: true
