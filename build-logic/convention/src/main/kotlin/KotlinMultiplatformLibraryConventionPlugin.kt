@@ -12,6 +12,7 @@ class KotlinMultiplatformLibraryConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply(versionCatalog().findPlugin("kotlin-multiplatform").get().get().pluginId)
                 apply(versionCatalog().findPlugin("android-library").get().get().pluginId)
+                apply(versionCatalog().findPlugin("jetbrains-kotlinx-serialization").get().get().pluginId)
             }
             extensions.configure(
                 KotlinMultiplatformExtension::class.java,

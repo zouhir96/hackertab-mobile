@@ -3,7 +3,6 @@ package com.zrcoding.convention
 import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -23,10 +22,6 @@ internal fun Project.configureKotlinAndroid(commonExtension: LibraryExtension) {
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_17
             targetCompatibility = JavaVersion.VERSION_17
-        }
-
-        dependencies {
-            add("implementation", versionCatalog().findLibrary("kotlinx.datetime").get())
         }
     }
 }
