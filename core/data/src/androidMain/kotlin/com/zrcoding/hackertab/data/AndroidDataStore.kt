@@ -1,9 +1,10 @@
-package com.zrcoding.hackertab.settings
+package com.zrcoding.hackertab.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.zrcoding.hackertab.settings.data.datastore.dataStoreFileName
+import com.zrcoding.hackertab.data.datastore.dataStoreFileName
+import com.zrcoding.hackertab.data.datastore.getDataStore
 
 /**
  * Android implementation of [DataStore].
@@ -16,7 +17,7 @@ internal class AndroidDataStore(private val context: Context) {
      *
      * @return the [DataStore] instance
      */
-    fun getDataStore(): DataStore<Preferences> = com.zrcoding.hackertab.settings.data.datastore.getDataStore(
+    fun create(): DataStore<Preferences> = getDataStore(
         producePath = { context.filesDir.resolve("datastore/$dataStoreFileName").absolutePath },
     )
 }

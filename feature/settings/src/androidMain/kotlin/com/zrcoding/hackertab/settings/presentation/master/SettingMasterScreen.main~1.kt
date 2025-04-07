@@ -1,13 +1,13 @@
 package com.zrcoding.hackertab.settings.presentation.master
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 
-class AndroidContactSupport(private val context: Context) : ContactSupport{
+class AndroidContactSupport(private val context: Activity) : ContactSupport{
 
     override fun invoke(data: ContactSupportData) {
         try {
@@ -18,6 +18,7 @@ class AndroidContactSupport(private val context: Context) : ContactSupport{
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         } catch (e: ActivityNotFoundException) {
+            // TODO Replace by composable alert.
             AlertDialog.Builder(context)
                 .setTitle(data.noAppFoundTitle)
                 .setMessage(data.noAppFoundDescription)

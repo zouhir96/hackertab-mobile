@@ -11,6 +11,7 @@ kotlin {
     sourceSets.commonMain.dependencies {
         implementation(project(":core:design"))
         implementation(project(":core:network"))
+        implementation(project(":core:data"))
 
         implementation(project(":feature:home"))
         implementation(project(":feature:settings"))

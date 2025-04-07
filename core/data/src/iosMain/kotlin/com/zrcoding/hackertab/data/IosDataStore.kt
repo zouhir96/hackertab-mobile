@@ -1,8 +1,9 @@
-package com.zrcoding.hackertab.settings
+package com.zrcoding.hackertab.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.zrcoding.hackertab.settings.data.datastore.dataStoreFileName
+import com.zrcoding.hackertab.data.datastore.dataStoreFileName
+import com.zrcoding.hackertab.data.datastore.getDataStore
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
@@ -20,7 +21,7 @@ internal class IosDataStore {
      * @return the [DataStore] instance
      */
     @OptIn(ExperimentalForeignApi::class)
-    fun getDataStore(): DataStore<Preferences> = com.zrcoding.hackertab.settings.data.datastore.getDataStore(
+    fun create(): DataStore<Preferences> = getDataStore(
         producePath = {
             val documentDirectory: NSURL? = NSFileManager.defaultManager.URLForDirectory(
                 directory = NSDocumentDirectory,

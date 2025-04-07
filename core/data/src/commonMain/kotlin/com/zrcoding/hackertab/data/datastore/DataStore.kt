@@ -1,4 +1,4 @@
-package com.zrcoding.hackertab.settings.data.datastore
+package com.zrcoding.hackertab.data.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory

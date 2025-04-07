@@ -1,4 +1,4 @@
-package com.zrcoding.hackertab.settings.data.dtos
+package com.zrcoding.hackertab.data.datastore.dtos
 
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.SourceName

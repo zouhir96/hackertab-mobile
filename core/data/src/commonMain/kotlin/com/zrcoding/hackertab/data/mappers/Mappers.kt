@@ -1,4 +1,4 @@
-package com.zrcoding.hackertab.home.data.mappers
+package com.zrcoding.hackertab.data.mappers
 
 import com.zrcoding.hackertab.domain.models.Conference
 import com.zrcoding.hackertab.domain.models.Devto

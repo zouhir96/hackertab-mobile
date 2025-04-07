@@ -6,14 +6,6 @@ plugins {
 
 kotlin {
     setFrameworkBaseName("settings")
-    sourceSets.commonMain.dependencies {
-        // Datastore
-        implementation(libs.androidx.datastore.preferences)
-        implementation(libs.androidx.datastore.preferences.core)
-
-        implementation(libs.kotlinx.serialization.json)
-        implementation(libs.kotlinx.atomicfu)
-    }
 }
 
 android {

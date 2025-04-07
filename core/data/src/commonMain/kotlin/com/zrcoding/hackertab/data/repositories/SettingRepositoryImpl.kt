@@ -1,15 +1,15 @@
-package com.zrcoding.hackertab.settings.data.repositories
+package com.zrcoding.hackertab.data.repositories
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.data.datastore.dtos.SourceDto
+import com.zrcoding.hackertab.data.resources.Res
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.SourceName
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
-import com.zrcoding.hackertab.settings.data.dtos.SourceDto
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

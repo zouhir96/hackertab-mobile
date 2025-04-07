@@ -1,0 +1,79 @@
+[
+  {
+    "name": "GITHUB",
+    "label": "Github repositories",
+    "type": "supported",
+    "link": "https://github.com/",
+    "analyticsTag": "github"
+  },
+  {
+    "name": "HACKER_NEWS",
+    "label": "Hackernews",
+    "type": "supported",
+    "link": "https://news.ycombinator.com/",
+    "analyticsTag": "hackernews"
+  },
+  {
+    "name": "CONFERENCES",
+    "label": "Upcoming events",
+    "type": "supported",
+    "link": "https://confs.tech/",
+    "analyticsTag": "events"
+  },
+  {
+    "name": "DEVTO",
+    "label": "DevTo",
+    "type": "supported",
+    "link": "https://dev.to/",
+    "analyticsTag": "devto"
+  },
+  {
+    "name": "PRODUCTHUNT",
+    "label": "Product Hunt",
+    "type": "supported",
+    "link": "https://producthunt.com/",
+    "analyticsTag": "producthunt"
+  },
+  {
+    "name": "REDDIT",
+    "label": "Reddit",
+    "type": "supported",
+    "link": "https://reddit.com/",
+    "analyticsTag": "reddit"
+  },
+  {
+    "name": "LOBSTERS",
+    "label": "Lobsters",
+    "type": "supported",
+    "link": "https://lobste.rs/",
+    "analyticsTag": "lobsters"
+  },
+  {
+    "name": "HASH_NODE",
+    "label": "Hashnode",
+    "type": "supported",
+    "link": "https://hashnode.com/",
+    "analyticsTag": "hashnode"
+  },
+  {
+    "name": "FREE_CODE_CAMP",
+    "label": "FreeCodeCamp",
+    "type": "supported",
+    "link": "https://freecodecamp.com/news",
+    "analyticsTag": "freecodecamp"
+  },
+  {
+    "name": "INDIE_HACKERS",
+    "label": "IndieHackers",
+    "type": "supported",
+    "link": "https://indiehackers.com/",
+    "analyticsTag": "indiehackers"
+  },
+  {
+    "name": "MEDIUM",
+    "label": "Medium",
+    "type": "supported",
+    "link": "https://medium.com/",
+    "analyticsTag": "medium"
+  }
+]

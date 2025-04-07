@@ -1,5 +1,16 @@
-package com.zrcoding.hackertab.home.data.repositories
+package com.zrcoding.hackertab.data.repositories
 
+import com.zrcoding.hackertab.data.mappers.toConference
+import com.zrcoding.hackertab.data.mappers.toDevto
+import com.zrcoding.hackertab.data.mappers.toFreeCodeCamp
+import com.zrcoding.hackertab.data.mappers.toGithubRepo
+import com.zrcoding.hackertab.data.mappers.toHackerNews
+import com.zrcoding.hackertab.data.mappers.toHashnode
+import com.zrcoding.hackertab.data.mappers.toIndieHackers
+import com.zrcoding.hackertab.data.mappers.toLobster
+import com.zrcoding.hackertab.data.mappers.toMedium
+import com.zrcoding.hackertab.data.mappers.toProductHunt
+import com.zrcoding.hackertab.data.mappers.toReddit
 import com.zrcoding.hackertab.domain.models.Conference
 import com.zrcoding.hackertab.domain.models.Devto
 import com.zrcoding.hackertab.domain.models.FreeCodeCamp
@@ -14,17 +25,6 @@ import com.zrcoding.hackertab.domain.models.ProductHunt
 import com.zrcoding.hackertab.domain.models.Reddit
 import com.zrcoding.hackertab.domain.models.Resource
 import com.zrcoding.hackertab.domain.repositories.ArticleRepository
-import com.zrcoding.hackertab.home.data.mappers.toConference
-import com.zrcoding.hackertab.home.data.mappers.toDevto
-import com.zrcoding.hackertab.home.data.mappers.toFreeCodeCamp
-import com.zrcoding.hackertab.home.data.mappers.toGithubRepo
-import com.zrcoding.hackertab.home.data.mappers.toHackerNews
-import com.zrcoding.hackertab.home.data.mappers.toHashnode
-import com.zrcoding.hackertab.home.data.mappers.toIndieHackers
-import com.zrcoding.hackertab.home.data.mappers.toLobster
-import com.zrcoding.hackertab.home.data.mappers.toMedium
-import com.zrcoding.hackertab.home.data.mappers.toProductHunt
-import com.zrcoding.hackertab.home.data.mappers.toReddit
 import com.zrcoding.hackertab.network.api.ArticlesNetworkDataSource
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.utils.io.errors.IOException
