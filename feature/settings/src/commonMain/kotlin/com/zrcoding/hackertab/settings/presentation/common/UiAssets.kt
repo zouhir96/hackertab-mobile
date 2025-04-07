@@ -12,8 +12,8 @@ import com.zrcoding.hackertab.design.resources.ic_lobsters
 import com.zrcoding.hackertab.design.resources.ic_medium
 import com.zrcoding.hackertab.design.resources.ic_product_hunt
 import com.zrcoding.hackertab.design.resources.ic_reddit
-import com.zrcoding.hackertab.settings.domain.models.Source
-import com.zrcoding.hackertab.settings.domain.models.SourceName
+import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.domain.models.SourceName
 
 val Source.icon
     get() = when(name) {

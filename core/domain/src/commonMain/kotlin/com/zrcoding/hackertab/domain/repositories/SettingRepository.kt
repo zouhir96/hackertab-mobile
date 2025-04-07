@@ -1,8 +1,8 @@
-package com.zrcoding.hackertab.settings.domain.repositories
+package com.zrcoding.hackertab.domain.repositories
 
-import com.zrcoding.hackertab.settings.domain.models.Source
-import com.zrcoding.hackertab.settings.domain.models.SourceName
-import com.zrcoding.hackertab.settings.domain.models.Topic
+import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.domain.models.SourceName
+import com.zrcoding.hackertab.domain.models.Topic
 import kotlinx.coroutines.flow.Flow
 
 

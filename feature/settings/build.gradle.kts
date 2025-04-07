@@ -2,7 +2,6 @@ import com.zrcoding.convention.setFrameworkBaseName
 
 plugins {
     id("hackertab.kmp.feature")
-    alias(libs.plugins.jetbrains.kotlinx.serialization)
 }
 
 kotlin {

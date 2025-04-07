@@ -44,9 +44,9 @@ import com.zrcoding.hackertab.design.resources.loading
 import com.zrcoding.hackertab.design.resources.no_internet_connect
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
-import com.zrcoding.hackertab.home.domain.models.BaseModel
+import com.zrcoding.hackertab.domain.models.BaseModel
+import com.zrcoding.hackertab.domain.models.SourceName
 import com.zrcoding.hackertab.home.presentation.CardViewState
-import com.zrcoding.hackertab.settings.domain.models.SourceName
 import com.zrcoding.hackertab.settings.presentation.common.icon
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource

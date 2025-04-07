@@ -1,6 +1,7 @@
 package com.zrcoding.hackertab.home.domain.usecases
 
-import com.zrcoding.hackertab.home.domain.models.Conference
+import com.zrcoding.hackertab.domain.models.Conference
+import com.zrcoding.hackertab.domain.usecases.BuildConferenceDisplayedDateUseCase
 import kotlinx.datetime.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals

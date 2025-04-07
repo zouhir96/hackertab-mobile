@@ -1,16 +1,16 @@
 package com.zrcoding.hackertab.home.data.mappers
 
-import com.zrcoding.hackertab.home.domain.models.Conference
-import com.zrcoding.hackertab.home.domain.models.Devto
-import com.zrcoding.hackertab.home.domain.models.FreeCodeCamp
-import com.zrcoding.hackertab.home.domain.models.GithubRepo
-import com.zrcoding.hackertab.home.domain.models.HackerNews
-import com.zrcoding.hackertab.home.domain.models.Hashnode
-import com.zrcoding.hackertab.home.domain.models.IndieHackers
-import com.zrcoding.hackertab.home.domain.models.Lobster
-import com.zrcoding.hackertab.home.domain.models.Medium
-import com.zrcoding.hackertab.home.domain.models.ProductHunt
-import com.zrcoding.hackertab.home.domain.models.Reddit
+import com.zrcoding.hackertab.domain.models.Conference
+import com.zrcoding.hackertab.domain.models.Devto
+import com.zrcoding.hackertab.domain.models.FreeCodeCamp
+import com.zrcoding.hackertab.domain.models.GithubRepo
+import com.zrcoding.hackertab.domain.models.HackerNews
+import com.zrcoding.hackertab.domain.models.Hashnode
+import com.zrcoding.hackertab.domain.models.IndieHackers
+import com.zrcoding.hackertab.domain.models.Lobster
+import com.zrcoding.hackertab.domain.models.Medium
+import com.zrcoding.hackertab.domain.models.ProductHunt
+import com.zrcoding.hackertab.domain.models.Reddit
 import com.zrcoding.hackertab.network.dtos.ArticleDto
 import com.zrcoding.hackertab.network.dtos.ConferenceDto
 import com.zrcoding.hackertab.network.dtos.GithubDto

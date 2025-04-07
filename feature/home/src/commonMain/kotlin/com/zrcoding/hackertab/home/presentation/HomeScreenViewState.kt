@@ -1,8 +1,8 @@
 package com.zrcoding.hackertab.home.presentation
 
 import androidx.compose.runtime.Stable
-import com.zrcoding.hackertab.home.domain.models.BaseModel
-import com.zrcoding.hackertab.settings.domain.models.Source
+import com.zrcoding.hackertab.domain.models.BaseModel
+import com.zrcoding.hackertab.domain.models.Source
 import kotlinx.coroutines.flow.Flow
 
 @Stable

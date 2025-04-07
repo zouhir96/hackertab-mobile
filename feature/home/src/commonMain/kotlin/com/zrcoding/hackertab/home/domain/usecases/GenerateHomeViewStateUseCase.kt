@@ -1,14 +1,14 @@
 package com.zrcoding.hackertab.home.domain.usecases
 
+import com.zrcoding.hackertab.domain.models.BaseModel
 import com.zrcoding.hackertab.domain.models.NetworkErrors
 import com.zrcoding.hackertab.domain.models.Resource
-import com.zrcoding.hackertab.home.domain.models.BaseModel
-import com.zrcoding.hackertab.home.domain.repositories.ArticleRepository
+import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.domain.models.SourceName
+import com.zrcoding.hackertab.domain.models.Topic
+import com.zrcoding.hackertab.domain.repositories.ArticleRepository
+import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import com.zrcoding.hackertab.home.presentation.CardViewState
-import com.zrcoding.hackertab.settings.domain.models.Source
-import com.zrcoding.hackertab.settings.domain.models.SourceName
-import com.zrcoding.hackertab.settings.domain.models.Topic
-import com.zrcoding.hackertab.settings.domain.repositories.SettingRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -20,7 +20,7 @@ class GenerateHomeViewStateUseCase(
     private val articleRepository: ArticleRepository
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    suspend operator fun invoke(): Flow<List<CardViewState>> {
+    operator fun invoke(): Flow<List<CardViewState>> {
         return combine(
             flow = settingRepository.observeSelectedTopics(),
             flow2 = settingRepository.observeSelectedSources(),

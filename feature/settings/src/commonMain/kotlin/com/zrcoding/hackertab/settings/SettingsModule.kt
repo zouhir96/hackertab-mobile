@@ -1,8 +1,8 @@
 package com.zrcoding.hackertab.settings
 
 import com.zrcoding.hackertab.di.viewModelDefinition
+import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import com.zrcoding.hackertab.settings.data.repositories.SettingRepositoryImpl
-import com.zrcoding.hackertab.settings.domain.repositories.SettingRepository
 import com.zrcoding.hackertab.settings.presentation.sources.SettingSourcesScreenViewModel
 import com.zrcoding.hackertab.settings.presentation.topics.SettingTopicsScreenViewModel
 import org.koin.core.module.Module

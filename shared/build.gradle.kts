@@ -3,7 +3,6 @@ import com.zrcoding.convention.setFrameworkBaseName
 plugins {
     id("hackertab.kmp.library")
     id("hackertab.kmp.compose")
-    alias(libs.plugins.jetbrains.kotlinx.serialization)
 }
 
 kotlin {
@@ -16,7 +15,6 @@ kotlin {
         implementation(project(":feature:home"))
         implementation(project(":feature:settings"))
 
-        implementation(libs.kotlinx.serialization.json)
         implementation(libs.androidx.navigation)
     }
 }

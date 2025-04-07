@@ -1,7 +1,7 @@
 package com.zrcoding.hackertab.settings.presentation.sources
 
 import com.zrcoding.hackertab.design.components.ChipData
-import com.zrcoding.hackertab.settings.domain.repositories.SettingRepository
+import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import com.zrcoding.hackertab.settings.presentation.common.icon
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

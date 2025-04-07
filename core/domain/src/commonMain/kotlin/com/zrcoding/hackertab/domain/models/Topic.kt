@@ -1,4 +1,4 @@
-package com.zrcoding.hackertab.settings.domain.models
+package com.zrcoding.hackertab.domain.models
 
 import kotlinx.serialization.Serializable
 

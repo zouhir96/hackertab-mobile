@@ -1,7 +1,7 @@
 package com.zrcoding.hackertab.settings.data.dtos
 
-import com.zrcoding.hackertab.settings.domain.models.Source
-import com.zrcoding.hackertab.settings.domain.models.SourceName
+import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.domain.models.SourceName
 import kotlinx.serialization.Serializable
 
 @Serializable

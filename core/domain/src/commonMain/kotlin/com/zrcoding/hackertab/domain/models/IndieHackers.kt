@@ -1,13 +1,12 @@
-package com.zrcoding.hackertab.home.domain.models
+package com.zrcoding.hackertab.domain.models
 
 import kotlinx.datetime.LocalDateTime
 
-data class Hashnode(
+data class IndieHackers(
     override val id: String,
     val title: String,
     val date: LocalDateTime,
     val commentsCount: Long,
     val reactions: Long,
     val url: String,
-    val tags: List<String>
 ) : BaseModel()

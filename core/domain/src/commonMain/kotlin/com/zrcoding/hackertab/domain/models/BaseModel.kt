@@ -1,4 +1,4 @@
-package com.zrcoding.hackertab.home.domain.models
+package com.zrcoding.hackertab.domain.models
 
 abstract class BaseModel {
     abstract val id: String
