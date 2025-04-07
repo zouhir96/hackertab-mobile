@@ -4,7 +4,6 @@ import com.zrcoding.hackertab.domain.models.BaseModel
 import com.zrcoding.hackertab.domain.models.NetworkErrors
 import com.zrcoding.hackertab.domain.models.Resource
 import com.zrcoding.hackertab.domain.models.Source
-import com.zrcoding.hackertab.domain.models.SourceName
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.ArticleRepository
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
@@ -23,13 +22,13 @@ class GenerateHomeViewStateUseCase(
     operator fun invoke(): Flow<List<CardViewState>> {
         return combine(
             flow = settingRepository.observeSelectedTopics(),
-            flow2 = settingRepository.observeSelectedSources(),
+            flow2 = settingRepository.observeSavedSources(),
             transform = ::Pair
         ).mapLatest { pair ->
             val topics = pair.first.ifEmpty { listOf(Topic.global) }
             pair.second.map { source ->
-                when (source.name) {
-                    SourceName.GITHUB -> CardViewState(
+                when (source) {
+                    Source.GITHUB -> CardViewState(
                         source = source,
                         state = createCardFlow(
                             source = source,
@@ -39,7 +38,7 @@ class GenerateHomeViewStateUseCase(
                         )
                     )
 
-                    SourceName.HACKER_NEWS -> CardViewState(
+                    Source.HACKER_NEWS -> CardViewState(
                         source = source,
                         state = createCardFlow(
                             source = source,
@@ -50,7 +49,7 @@ class GenerateHomeViewStateUseCase(
                         )
                     )
 
-                    SourceName.REDDIT -> CardViewState(
+                    Source.REDDIT -> CardViewState(
                         source = source,
                         state = createCardFlow(
                             source = source,
@@ -60,7 +59,7 @@ class GenerateHomeViewStateUseCase(
                         )
                     )
 
-                    SourceName.FREE_CODE_CAMP -> CardViewState(
+                    Source.FREE_CODE_CAMP -> CardViewState(
                         source = source,
                         state = createCardFlow(
                             source = source,
@@ -70,7 +69,7 @@ class GenerateHomeViewStateUseCase(
                         )
                     )
 
-                    SourceName.CONFERENCES -> CardViewState(
+                    Source.CONFERENCES -> CardViewState(
                         source = source,
                         state = createCardFlow(
                             source = source,
@@ -80,7 +79,7 @@ class GenerateHomeViewStateUseCase(
                         )
                     )
 
-                    SourceName.DEVTO -> CardViewState(
+                    Source.DEVTO -> CardViewState(
                         source = source,
                         state = createCardFlow(
                             source = source,
@@ -90,7 +89,7 @@ class GenerateHomeViewStateUseCase(
                         )
                     )
 
-                    SourceName.HASH_NODE -> CardViewState(
+                    Source.HASH_NODE -> CardViewState(
                         source = source,
                         state = createCardFlow(
                             source = source,
@@ -100,7 +99,7 @@ class GenerateHomeViewStateUseCase(
                         )
                     )
 
-                    SourceName.PRODUCTHUNT -> CardViewState(
+                    Source.PRODUCTHUNT -> CardViewState(
                         source = source,
                         state = createCardFlow(
                             source = source,
@@ -111,7 +110,7 @@ class GenerateHomeViewStateUseCase(
                         )
                     )
 
-                    SourceName.INDIE_HACKERS -> CardViewState(
+                    Source.INDIE_HACKERS -> CardViewState(
                         source = source,
                         state = createCardFlow(
                             source = source,
@@ -122,7 +121,7 @@ class GenerateHomeViewStateUseCase(
                         )
                     )
 
-                    SourceName.LOBSTERS -> CardViewState(
+                    Source.LOBSTERS -> CardViewState(
                         source = source,
                         state = createCardFlow(
                             source = source,
@@ -133,7 +132,7 @@ class GenerateHomeViewStateUseCase(
                         )
                     )
 
-                    SourceName.MEDIUM -> CardViewState(
+                    Source.MEDIUM -> CardViewState(
                         source = source,
                         state = createCardFlow(
                             source = source,
@@ -158,7 +157,7 @@ class GenerateHomeViewStateUseCase(
         if (supportTags.not()) {
             when (val result = getArticles("")) {
                 is Resource.Success -> emit(CardViewState.State.Success(result.data))
-                is Resource.Failure -> emit(result.error.toStateError(source.name.value))
+                is Resource.Failure -> emit(result.error.toStateError(source.label))
             }
             return@flow
         }
@@ -178,7 +177,7 @@ class GenerateHomeViewStateUseCase(
             }
         }
         if (articles.isEmpty() && failedToLoad) {
-            emit(CardViewState.State.Error("Failed to load ${source.name.value} articles"))
+            emit(CardViewState.State.Error("Failed to load ${source.label} articles"))
         } else if (articles.isEmpty() && noInternet) {
             emit(CardViewState.State.VerifyConnectionAndRefresh)
         } else emit(CardViewState.State.Success(articles.distinctBy { it.id }))

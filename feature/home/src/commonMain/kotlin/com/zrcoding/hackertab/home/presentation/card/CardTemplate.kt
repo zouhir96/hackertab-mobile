@@ -45,7 +45,7 @@ import com.zrcoding.hackertab.design.resources.no_internet_connect
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.BaseModel
-import com.zrcoding.hackertab.domain.models.SourceName
+import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.home.presentation.CardViewState
 import com.zrcoding.hackertab.settings.presentation.common.icon
 import org.jetbrains.compose.resources.DrawableResource
@@ -58,7 +58,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun CardTemplate(
     modifier: Modifier = Modifier,
     cardUiState: CardViewState,
-    cardItem: @Composable (SourceName, BaseModel) -> Unit,
+    cardItem: @Composable (Source, BaseModel) -> Unit,
     onRetryBtnClick: () -> Unit
 ) {
     Card(
@@ -87,7 +87,7 @@ fun CardTemplate(
 
                 is CardViewState.State.Success -> {
                     if (state.articles.isEmpty()) {
-                        FullScreenViewWithCenterText(Res.string.empty_source_msg, cardUiState.source.name.value)
+                        FullScreenViewWithCenterText(Res.string.empty_source_msg, cardUiState.source.id)
                     } else LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.large),
                         contentPadding = PaddingValues(bottom = MaterialTheme.dimension.extraBig)
@@ -98,7 +98,7 @@ fun CardTemplate(
                                 item.id
                             }
                         ) { item ->
-                            cardItem(cardUiState.source.name, item)
+                            cardItem(cardUiState.source, item)
                             Divider(modifier = Modifier.padding(horizontal = MaterialTheme.dimension.large))
                         }
                     }
@@ -106,7 +106,7 @@ fun CardTemplate(
 
                 is CardViewState.State.Error -> FullScreenViewWithCenterText(
                     Res.string.failed_to_load_source,
-                    cardUiState.source.name.value
+                    cardUiState.source.name
                 )
 
                 CardViewState.State.VerifyConnectionAndRefresh -> ErrorMsgWithBtn(

@@ -13,19 +13,18 @@ import com.zrcoding.hackertab.design.resources.ic_medium
 import com.zrcoding.hackertab.design.resources.ic_product_hunt
 import com.zrcoding.hackertab.design.resources.ic_reddit
 import com.zrcoding.hackertab.domain.models.Source
-import com.zrcoding.hackertab.domain.models.SourceName
 
 val Source.icon
-    get() = when(name) {
-        SourceName.GITHUB -> Res.drawable.ic_github
-        SourceName.HACKER_NEWS -> Res.drawable.ic_hackernews
-        SourceName.CONFERENCES -> Res.drawable.ic_conferences
-        SourceName.DEVTO -> Res.drawable.ic_devto
-        SourceName.PRODUCTHUNT -> Res.drawable.ic_product_hunt
-        SourceName.REDDIT -> Res.drawable.ic_reddit
-        SourceName.LOBSTERS -> Res.drawable.ic_lobsters
-        SourceName.HASH_NODE -> Res.drawable.ic_hashnode
-        SourceName.FREE_CODE_CAMP -> Res.drawable.ic_freecodecamp
-        SourceName.INDIE_HACKERS -> Res.drawable.ic_indie_hackers
-        SourceName.MEDIUM -> Res.drawable.ic_medium
+    get() = when(this) {
+        Source.GITHUB -> Res.drawable.ic_github
+        Source.HACKER_NEWS -> Res.drawable.ic_hackernews
+        Source.CONFERENCES -> Res.drawable.ic_conferences
+        Source.DEVTO -> Res.drawable.ic_devto
+        Source.PRODUCTHUNT -> Res.drawable.ic_product_hunt
+        Source.REDDIT -> Res.drawable.ic_reddit
+        Source.LOBSTERS -> Res.drawable.ic_lobsters
+        Source.HASH_NODE -> Res.drawable.ic_hashnode
+        Source.FREE_CODE_CAMP -> Res.drawable.ic_freecodecamp
+        Source.INDIE_HACKERS -> Res.drawable.ic_indie_hackers
+        Source.MEDIUM -> Res.drawable.ic_medium
     }

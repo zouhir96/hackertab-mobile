@@ -1,6 +1,7 @@
 package com.zrcoding.hackertab.settings.presentation.sources
 
 import com.zrcoding.hackertab.design.components.ChipData
+import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import com.zrcoding.hackertab.settings.presentation.common.icon
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -19,16 +20,16 @@ class SettingSourcesScreenViewModel(
 
     init {
         viewModelScope.launch {
-            val sources = settingRepository.getSources()
-            settingRepository.getSavedSourcesNames().collectLatest { ids->
+            val sources = Source.entries
+            settingRepository.observeSavedSources().collectLatest { ids->
                 _viewState.update {
                     SettingSourcesScreenViewState(
                         sources = sources.map {
                             ChipData(
-                                id = it.name.value,
+                                id = it.id,
                                 name = it.label,
                                 image = it.icon,
-                                selected = it.name in ids
+                                selected = it in ids
                             )
                         }
                     )

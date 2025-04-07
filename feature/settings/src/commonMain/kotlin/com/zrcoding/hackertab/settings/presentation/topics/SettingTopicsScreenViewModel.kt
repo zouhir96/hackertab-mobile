@@ -19,7 +19,7 @@ class SettingTopicsScreenViewModel(
     init {
         viewModelScope.launch {
             val topics = settingRepository.getTopics()
-            settingRepository.getSavedTopicsIds().collectLatest { savedTopicsIds ->
+            settingRepository.observeSavedTopicsIds().collectLatest { savedTopicsIds ->
                 _viewState.update {
                     SettingTopicsScreenViewState(
                         topics = topics.map {

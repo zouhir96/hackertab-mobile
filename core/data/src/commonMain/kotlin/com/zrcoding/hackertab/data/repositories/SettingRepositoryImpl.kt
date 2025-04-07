@@ -4,10 +4,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.zrcoding.hackertab.data.datastore.dtos.SourceDto
 import com.zrcoding.hackertab.data.resources.Res
 import com.zrcoding.hackertab.domain.models.Source
-import com.zrcoding.hackertab.domain.models.SourceName
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,7 +18,6 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 private const val TOPICS_RES_PATH = "files/topics.json"
 private val KEY_SAVED_TOPICS = stringPreferencesKey("saved_topics")
-private const val SOURCES_RES_PATH = "files/sources.json"
 private val KEY_SAVED_SOURCES = stringPreferencesKey("saved_sources")
 
 class SettingRepositoryImpl(
@@ -31,14 +28,22 @@ class SettingRepositoryImpl(
     override suspend fun getTopics(): List<Topic> {
         if (topicsMemoryCache.isNotEmpty()) return topicsMemoryCache
 
+        // TODO Replace this by firebase remote config
         val topicsJson = Res.readBytes(TOPICS_RES_PATH).decodeToString()
         val topics: List<Topic> = Json.decodeFromString<List<Topic>>(topicsJson)
         topicsMemoryCache = topics
         return topics
     }
 
-    override fun getSavedTopicsIds(): Flow<List<String>> {
+    override fun observeSavedTopicsIds(): Flow<List<String>> {
         return getSavedIds(KEY_SAVED_TOPICS)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun observeSelectedTopics(): Flow<List<Topic>> {
+        return observeSavedTopicsIds().mapLatest { savedTopicsIds ->
+            getTopics().filter { it.id in savedTopicsIds }
+        }
     }
 
     override suspend fun saveTopic(id: String) {
@@ -49,30 +54,11 @@ class SettingRepositoryImpl(
         removeId(id, KEY_SAVED_TOPICS)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun observeSelectedTopics(): Flow<List<Topic>> {
-        return getSavedTopicsIds().mapLatest { savedTopicsIds ->
-            getTopics().filter { it.id in savedTopicsIds }
-        }
-    }
-
-    @OptIn(ExperimentalResourceApi::class)
-    override suspend fun getSources(): List<Source> {
-        if (sourcesMemoryCash.isNotEmpty()) return sourcesMemoryCash
-
-        val sourcesJson = Res.readBytes(SOURCES_RES_PATH).decodeToString()
-        val sources: List<Source> = Json.decodeFromString<List<SourceDto>>(
-            sourcesJson
-        ).map { it.toSource() }
-        sourcesMemoryCash = sources
-        return sources
-    }
-
-    override fun getSavedSourcesNames(): Flow<List<SourceName>> {
+    override fun observeSavedSources(): Flow<List<Source>> {
         return getSavedIds(KEY_SAVED_SOURCES).map { names ->
             names.mapNotNull { name ->
-                SourceName.entries.firstOrNull {
-                    it.value == name
+                Source.entries.firstOrNull {
+                    it.id == name
                 }
             }
         }
@@ -84,13 +70,6 @@ class SettingRepositoryImpl(
 
     override suspend fun removeSource(id: String) {
         removeId(id, KEY_SAVED_SOURCES)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun observeSelectedSources(): Flow<List<Source>> {
-        return getSavedSourcesNames().mapLatest { sourceNames ->
-            getSources().filter { it.name in sourceNames }
-        }
     }
 
     private fun getSavedIds(key: Preferences.Key<String>): Flow<List<String>> {
@@ -118,6 +97,5 @@ class SettingRepositoryImpl(
 
     companion object {
         private var topicsMemoryCache = emptyList<Topic>()
-        private var sourcesMemoryCash = emptyList<Source>()
     }
 }

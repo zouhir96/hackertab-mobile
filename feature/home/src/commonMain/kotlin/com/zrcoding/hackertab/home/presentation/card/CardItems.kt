@@ -54,7 +54,7 @@ import com.zrcoding.hackertab.domain.models.Lobster
 import com.zrcoding.hackertab.domain.models.Medium
 import com.zrcoding.hackertab.domain.models.ProductHunt
 import com.zrcoding.hackertab.domain.models.Reddit
-import com.zrcoding.hackertab.domain.models.SourceName
+import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.usecases.BuildConferenceDisplayedDateUseCase
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import io.kamel.image.KamelImage
@@ -68,18 +68,18 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun SourceName.ToCardItem(model: BaseModel) = when (this) {
-    SourceName.GITHUB -> GithubItem(post = model as GithubRepo)
-    SourceName.HACKER_NEWS -> HackerNewsItem(new = model as HackerNews)
-    SourceName.REDDIT -> RedditItem(reddit = model as Reddit)
-    SourceName.FREE_CODE_CAMP -> FreeCodeCampItem(post = model as FreeCodeCamp)
-    SourceName.CONFERENCES -> ConferenceItem(conf = model as Conference)
-    SourceName.DEVTO -> DevtoItem(devto = model as Devto)
-    SourceName.HASH_NODE -> HashnodeItem(hashnode = model as Hashnode)
-    SourceName.PRODUCTHUNT -> ProductHuntItem(product = model as ProductHunt)
-    SourceName.INDIE_HACKERS -> IndieHackersItem(indieHackers = model as IndieHackers)
-    SourceName.LOBSTERS -> LobstersItem(lobster = model as Lobster)
-    SourceName.MEDIUM -> MediumItem(medium = model as Medium)
+fun Source.ToCardItem(model: BaseModel) = when (this) {
+    Source.GITHUB -> GithubItem(post = model as GithubRepo)
+    Source.HACKER_NEWS -> HackerNewsItem(new = model as HackerNews)
+    Source.REDDIT -> RedditItem(reddit = model as Reddit)
+    Source.FREE_CODE_CAMP -> FreeCodeCampItem(post = model as FreeCodeCamp)
+    Source.CONFERENCES -> ConferenceItem(conf = model as Conference)
+    Source.DEVTO -> DevtoItem(devto = model as Devto)
+    Source.HASH_NODE -> HashnodeItem(hashnode = model as Hashnode)
+    Source.PRODUCTHUNT -> ProductHuntItem(product = model as ProductHunt)
+    Source.INDIE_HACKERS -> IndieHackersItem(indieHackers = model as IndieHackers)
+    Source.LOBSTERS -> LobstersItem(lobster = model as Lobster)
+    Source.MEDIUM -> MediumItem(medium = model as Medium)
 }
 
 @Composable
