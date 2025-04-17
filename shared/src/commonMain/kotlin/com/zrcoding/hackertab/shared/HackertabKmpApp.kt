@@ -2,10 +2,11 @@ package com.zrcoding.hackertab.shared
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
@@ -17,13 +18,14 @@ fun HackertabKmpApp(
     isExpanded: Boolean
 ) {
     HackertabTheme {
-        Surface(
-           modifier = Modifier
-               .background(MaterialTheme.colors.background)
-               .windowInsetsPadding(WindowInsets.statusBars)
+        Scaffold(
+            modifier = Modifier
+                .background(MaterialTheme.colors.background)
+                .windowInsetsPadding(WindowInsets.statusBars),
         ) {
             val navController = rememberNavController()
             MainNavHost(
+                modifier = Modifier.padding(it),
                 navController = navController,
                 isExpandedScree = isExpanded
             )

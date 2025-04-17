@@ -8,15 +8,18 @@ plugins {
 kotlin {
     setFrameworkBaseName("shared")
 
-    sourceSets.commonMain.dependencies {
-        implementation(project(":core:design"))
-        implementation(project(":core:network"))
-        implementation(project(":core:data"))
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":core:design"))
+            implementation(project(":core:domain"))
+            implementation(project(":core:network"))
+            implementation(project(":core:data"))
 
-        implementation(project(":feature:home"))
-        implementation(project(":feature:settings"))
+            implementation(project(":feature:home"))
+            implementation(project(":feature:settings"))
 
-        implementation(libs.androidx.navigation)
+            implementation(libs.androidx.navigation)
+        }
     }
 }
 

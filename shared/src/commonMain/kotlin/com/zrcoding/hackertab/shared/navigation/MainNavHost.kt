@@ -74,7 +74,7 @@ fun MainNavHost(
                 SettingsTwoPanNavigation(rootNavHostController = navController)
             }
         } else {
-            this.settingsOnePanNavigation(navController)
+            settingsOnePanNavigation(navController)
         }
     }
 }
@@ -83,7 +83,7 @@ fun NavGraphBuilder.settingsOnePanNavigation(navController: NavHostController) {
     navigation<Settings>(startDestination = SettingsMasterScreen) {
         composableWithAnimation<SettingsMasterScreen> {
             ScreenWithBackButton(
-                navController = navController,
+                onBackClick = { navController.navigateUp() },
                 screen = {
                     SettingMasterRoute(
                         showSelectedItem = false,
@@ -99,7 +99,7 @@ fun NavGraphBuilder.settingsOnePanNavigation(navController: NavHostController) {
         }
         composableWithAnimation<SettingsTopicsScreen> {
             ScreenWithBackButton(
-                navController = navController,
+                onBackClick = { navController.navigateUp() },
                 screen = {
                     SettingTopicsRoute()
                 }
@@ -107,7 +107,7 @@ fun NavGraphBuilder.settingsOnePanNavigation(navController: NavHostController) {
         }
         composableWithAnimation<SettingsSourcesScreen> {
             ScreenWithBackButton(
-                navController = navController,
+                onBackClick = { navController.navigateUp() },
                 screen = {
                     SettingSourcesRoute()
                 }
@@ -139,7 +139,7 @@ fun SettingsTwoPanNavigation(rootNavHostController: NavHostController) {
     }
 
     ScreenWithBackButton(
-        navController = rootNavHostController,
+        onBackClick = { rootNavHostController.navigateUp() },
         screen = {
             Row(modifier = Modifier.fillMaxWidth()) {
                 SettingMasterRoute(
@@ -214,7 +214,7 @@ private inline fun <reified T : Any> NavGraphBuilder.composableWithAnimation(
 
 @Composable
 private fun ScreenWithBackButton(
-    navController: NavHostController,
+    onBackClick: () -> Unit,
     screen: @Composable () -> Unit
 ) {
     Scaffold(topBar = {
@@ -225,7 +225,7 @@ private fun ScreenWithBackButton(
                         color = MaterialTheme.colors.secondaryVariant,
                         shape = CircleShape
                     ),
-                    onClick = { navController.popBackStack() },
+                    onClick = onBackClick,
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
