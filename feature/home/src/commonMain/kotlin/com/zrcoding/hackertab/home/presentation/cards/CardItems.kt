@@ -1,4 +1,4 @@
-package com.zrcoding.hackertab.home.presentation.card
+package com.zrcoding.hackertab.home.presentation.cards
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,14 +20,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.components.TextWithStartIcon
-import com.zrcoding.hackertab.design.components.getTagColor
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.claps
 import com.zrcoding.hackertab.design.resources.comments
-import com.zrcoding.hackertab.design.resources.forks
 import com.zrcoding.hackertab.design.resources.ic_arrow_drop_up
-import com.zrcoding.hackertab.design.resources.ic_baseline_fork
-import com.zrcoding.hackertab.design.resources.ic_baseline_star
 import com.zrcoding.hackertab.design.resources.ic_claps
 import com.zrcoding.hackertab.design.resources.ic_comment
 import com.zrcoding.hackertab.design.resources.ic_ellipse
@@ -36,17 +32,13 @@ import com.zrcoding.hackertab.design.resources.ic_location
 import com.zrcoding.hackertab.design.resources.ic_time_24
 import com.zrcoding.hackertab.design.resources.reactions
 import com.zrcoding.hackertab.design.resources.score
-import com.zrcoding.hackertab.design.resources.stars
 import com.zrcoding.hackertab.design.resources.subreddit
 import com.zrcoding.hackertab.design.theme.Flamingo
 import com.zrcoding.hackertab.design.theme.HackertabTheme
-import com.zrcoding.hackertab.design.theme.TextLink
 import com.zrcoding.hackertab.design.theme.dimension
-import com.zrcoding.hackertab.domain.models.BaseModel
 import com.zrcoding.hackertab.domain.models.Conference
 import com.zrcoding.hackertab.domain.models.Devto
 import com.zrcoding.hackertab.domain.models.FreeCodeCamp
-import com.zrcoding.hackertab.domain.models.GithubRepo
 import com.zrcoding.hackertab.domain.models.HackerNews
 import com.zrcoding.hackertab.domain.models.Hashnode
 import com.zrcoding.hackertab.domain.models.IndieHackers
@@ -54,7 +46,6 @@ import com.zrcoding.hackertab.domain.models.Lobster
 import com.zrcoding.hackertab.domain.models.Medium
 import com.zrcoding.hackertab.domain.models.ProductHunt
 import com.zrcoding.hackertab.domain.models.Reddit
-import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.usecases.BuildConferenceDisplayedDateUseCase
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import io.kamel.image.KamelImage
@@ -66,66 +57,6 @@ import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
-@Composable
-fun Source.ToCardItem(model: BaseModel) = when (this) {
-    Source.GITHUB -> GithubItem(post = model as GithubRepo)
-    Source.HACKER_NEWS -> HackerNewsItem(new = model as HackerNews)
-    Source.REDDIT -> RedditItem(reddit = model as Reddit)
-    Source.FREE_CODE_CAMP -> FreeCodeCampItem(post = model as FreeCodeCamp)
-    Source.CONFERENCES -> ConferenceItem(conf = model as Conference)
-    Source.DEVTO -> DevtoItem(devto = model as Devto)
-    Source.HASH_NODE -> HashnodeItem(hashnode = model as Hashnode)
-    Source.PRODUCTHUNT -> ProductHuntItem(product = model as ProductHunt)
-    Source.INDIE_HACKERS -> IndieHackersItem(indieHackers = model as IndieHackers)
-    Source.LOBSTERS -> LobstersItem(lobster = model as Lobster)
-    Source.MEDIUM -> MediumItem(medium = model as Medium)
-}
-
-@Composable
-fun GithubItem(post: GithubRepo) {
-    SourceItemTemplate(
-        title = "${post.owner}/${post.name}",
-        description = post.description.trim().ifEmpty { null },
-        primaryInfoSection = {
-            TextWithStartIcon(
-                icon = Res.drawable.ic_ellipse,
-                tint = post.programmingLanguage.getTagColor(),
-                text = post.programmingLanguage
-            )
-            TextWithStartIcon(
-                icon = Res.drawable.ic_baseline_star,
-                text = stringResource(Res.string.stars, post.stars)
-            )
-
-            TextWithStartIcon(
-                icon = Res.drawable.ic_baseline_fork,
-                text = stringResource(Res.string.forks, post.forks)
-            )
-        },
-        url = post.url,
-        titleColor = TextLink,
-    )
-}
-
-@Preview()
-@Composable
-private fun GithubItemPreview() {
-    HackertabTheme {
-        GithubItem(
-            post = GithubRepo(
-                id = "habeo",
-                name = "Jetpack compose",
-                description = "This is a fake repo for preview",
-                owner = "Celina Wells",
-                url = "https://www.google.com/#q=propriae",
-                programmingLanguage = "Kotlin",
-                stars = 20,
-                forks = 15
-            )
-        )
-    }
-}
 
 @Composable
 fun HackerNewsItem(new: HackerNews) {

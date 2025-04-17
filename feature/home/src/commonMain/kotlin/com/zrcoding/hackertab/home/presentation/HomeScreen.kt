@@ -1,60 +1,63 @@
 package com.zrcoding.hackertab.home.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.DrawerValue
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowRight
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.rememberDrawerState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.zrcoding.hackertab.design.components.ErrorMsgWithBtn
-import com.zrcoding.hackertab.design.components.Loading
-import com.zrcoding.hackertab.design.components.RoundedIconButton
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.zrcoding.hackertab.design.components.icon
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.app_title
-import com.zrcoding.hackertab.design.resources.common_settings
-import com.zrcoding.hackertab.design.resources.ic_baseline_arrow_back_ios
-import com.zrcoding.hackertab.design.resources.ic_baseline_arrow_forward
-import com.zrcoding.hackertab.design.resources.ic_refresh
-import com.zrcoding.hackertab.design.resources.ic_settings
-import com.zrcoding.hackertab.design.resources.no_source_selected
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
-import com.zrcoding.hackertab.home.presentation.card.CardTemplate
-import com.zrcoding.hackertab.home.presentation.card.ToCardItem
+import com.zrcoding.hackertab.domain.models.Source
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeRoute(
-    viewModel: HomeScreenViewModel = koinInject(),
+    viewModel: HomeScreenViewModel = koinViewModel(),
     isExpandedScreen: Boolean,
     onNavigateToSettings: () -> Unit
 ) {
-    val viewState = viewModel.viewState.collectAsState().value
+    val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
     HomeScreen(
         modifier = Modifier,
         isExpandedScreen = isExpandedScreen,
@@ -72,36 +75,115 @@ private fun HomeScreen(
     onRefreshBtnClick: () -> Unit,
     onSettingBtnClick: () -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scaffoldState = rememberScaffoldState(drawerState = drawerState)
+    val navController = rememberNavController()
     Scaffold(
         modifier = modifier,
+        scaffoldState = scaffoldState,
         topBar = {
-            TopAppBar(
-                backgroundColor = MaterialTheme.colors.primary,
-                elevation = MaterialTheme.dimension.none
-            ) {
-                HomeScreenTopAppBar(
-                    onRefreshBtnClick = onRefreshBtnClick,
-                    onSettingBtnClick = onSettingBtnClick
-                )
-            }
+            HomeScreenTopAppBar(
+                onNavigationBtnClick = {
+                    scope.launch { drawerState.open() }
+                },
+                onRefreshBtnClick = onRefreshBtnClick,
+                onSettingBtnClick = onSettingBtnClick
+            )
         },
+        drawerContent = {
+            val currentRoute =
+                navController.currentBackStackEntryAsState().value?.destination?.route
+            HomeScreenDrawer(
+                enabledSources = viewState.enabledSources,
+                currentRoute = currentRoute,
+                onItemClick = {
+                    scope.launch { drawerState.close() }
+                    navController.navigate(it) {
+                        popUpTo(viewState.enabledSources.first().id)
+                        launchSingleTop = true
+                    }
+                }
+            )
+        },
+        drawerShape = RoundedCornerShape(
+            topEnd = MaterialTheme.dimension.medium,
+            bottomEnd = MaterialTheme.dimension.medium
+        )
     ) {
-        when (viewState) {
-            HomeScreenViewState.Loading -> Loading()
-            is HomeScreenViewState.Cards -> if (viewState.cardViewStates.isEmpty()) {
-                ErrorMsgWithBtn(
-                    text = Res.string.no_source_selected,
-                    btnText = Res.string.common_settings,
-                    onBtnClicked = onSettingBtnClick
-                )
-            } else {
-                HomeScreenCardsPager(
-                    modifier = Modifier.padding(it),
-                    pageSize = if (isExpandedScreen) PageSize.Fixed(400.dp) else PageSize.Fill,
-                    cardViewStates = viewState.cardViewStates,
-                    onRefreshBtnClick = onRefreshBtnClick
+        HomeScreenNavHost(
+            navController = navController,
+            enabledSourcesIds = viewState.enabledSources.map { it.id }
+        )
+    }
+}
+
+@Composable
+private fun HomeScreenDrawer(
+    enabledSources: List<Source>,
+    currentRoute: String?,
+    onItemClick: (String) -> Unit,
+) {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(MaterialTheme.dimension.big),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.large)
+    ) {
+        Text(text = "Hackertab", style = MaterialTheme.typography.h5)
+        Divider()
+        Column {
+            enabledSources.forEach {
+                HomeScreenDrawerItem(
+                    icon = it.icon,
+                    title = it.label,
+                    selected = currentRoute == it.id,
+                    onClick = { onItemClick(it.id) }
                 )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun HomeScreenDrawerItem(
+    icon: DrawableResource,
+    title: String,
+    selected: Boolean,
+    onClick: () -> Unit = {}
+) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.medium,
+        backgroundColor = if (selected) MaterialTheme.colors.primary else MaterialTheme.colors.secondary,
+        elevation = 0.4.dp
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(MaterialTheme.dimension.medium)
+        ) {
+            Icon(
+                modifier = Modifier.size(MaterialTheme.dimension.bigger),
+                painter = painterResource(icon),
+                contentDescription = "Source icon",
+                tint = MaterialTheme.colors.onBackground
+            )
+            Spacer(modifier = Modifier.width(MaterialTheme.dimension.large))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colors.onBackground
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                modifier = Modifier.size(MaterialTheme.dimension.bigger),
+                imageVector = Icons.AutoMirrored.Default.ArrowRight,
+                contentDescription = "Arrow forward",
+                tint = MaterialTheme.colors.onBackground
+            )
         }
     }
 }
@@ -112,7 +194,7 @@ private fun HomeScreenLoadingPreview() {
     HackertabTheme {
         HomeScreen(
             isExpandedScreen = false,
-            viewState = HomeScreenViewState.Loading,
+            viewState = HomeScreenViewState(isLoading = true),
             onRefreshBtnClick = {},
             onSettingBtnClick = {}
         )
@@ -125,130 +207,80 @@ private fun HomeScreenEmptyPreview() {
     HackertabTheme {
         HomeScreen(
             isExpandedScreen = false,
-            viewState = HomeScreenViewState.Cards(emptyList()),
+            viewState = HomeScreenViewState(emptyList()),
             onRefreshBtnClick = {},
             onSettingBtnClick = {}
         )
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun HomeScreenTopAppBar(
+    onNavigationBtnClick: () -> Unit,
     onRefreshBtnClick: () -> Unit,
     onSettingBtnClick: () -> Unit,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.padding(start = MaterialTheme.dimension.large),
-    ) {
-        Text(
-            text = stringResource(Res.string.app_title),
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.h5
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Button(
-            onClick = { onRefreshBtnClick() },
-            modifier = Modifier.size(50.dp),
-            shape = CircleShape,
-            contentPadding = PaddingValues(MaterialTheme.dimension.none),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = MaterialTheme.colors.primaryVariant
+    TopAppBar(
+        title = {
+            Text(
+                text = stringResource(Res.string.app_title),
+                color = MaterialTheme.colors.onBackground,
+                style = MaterialTheme.typography.h5,
+                overflow = TextOverflow.Visible,
+                maxLines = 1
             )
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.ic_refresh),
-                contentDescription = "refresh button",
-                tint = MaterialTheme.colors.onBackground
-            )
-        }
-        Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
-        Button(
-            onClick = { onSettingBtnClick() },
-            modifier = Modifier.size(50.dp),
-            shape = CircleShape,
-            contentPadding = PaddingValues(MaterialTheme.dimension.none),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = MaterialTheme.colors.primaryVariant
-            )
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.ic_settings),
-                contentDescription = "settings button",
-                tint = MaterialTheme.colors.onBackground
-            )
-        }
-    }
+        },
+        navigationIcon = {
+            Card(
+                onClick = onNavigationBtnClick,
+                shape = CircleShape,
+                elevation = 4.dp
+            ) {
+                IconButton(
+                    onClick = onNavigationBtnClick,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = "refresh button",
+                        tint = MaterialTheme.colors.onBackground
+                    )
+                }
+            }
+        },
+        actions = {
+            IconButton(
+                modifier = Modifier.background(MaterialTheme.colors.secondaryVariant, CircleShape),
+                onClick = onRefreshBtnClick,
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = "refresh button",
+                    tint = MaterialTheme.colors.onBackground
+                )
+            }
+            Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
+            IconButton(
+                modifier = Modifier.background(MaterialTheme.colors.secondaryVariant, CircleShape),
+                onClick = onSettingBtnClick,
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = "settings button",
+                    tint = MaterialTheme.colors.onBackground
+                )
+            }
+        },
+        backgroundColor = MaterialTheme.colors.primary,
+        elevation = MaterialTheme.dimension.none
+    )
 }
 
-@Preview()
+@Preview
 @Composable
 private fun HomeScreenTopAppBarPreview() {
     HackertabTheme {
-        HomeScreenTopAppBar({}, {})
-    }
-}
-
-@Composable
-private fun HomeScreenCardsPager(
-    modifier: Modifier = Modifier,
-    pageSize: PageSize,
-    cardViewStates: List<CardViewState>,
-    onRefreshBtnClick: () -> Unit
-) {
-    val scope = rememberCoroutineScope()
-    val pagerState = rememberPagerState { cardViewStates.size }
-    Box(
-        modifier = modifier.fillMaxSize(),
-    ) {
-        HorizontalPager(
-            modifier = Modifier.fillMaxSize(),
-            state = pagerState,
-            contentPadding = PaddingValues(
-                start = MaterialTheme.dimension.default,
-                end = MaterialTheme.dimension.medium
-            ),
-            pageSize = pageSize
-        ) { page ->
-            cardViewStates.getOrNull(page)?.let { state ->
-                CardTemplate(
-                    cardUiState = state,
-                    cardItem = { sourceName, model ->
-                        sourceName.ToCardItem(model = model)
-                    },
-                    onRetryBtnClick = onRefreshBtnClick
-                )
-            }
-        }
-        if(pagerState.currentPage > 0) {
-            RoundedIconButton(
-                modifier = Modifier
-                    .alpha(0.6f)
-                    .padding(end = MaterialTheme.dimension.default)
-                    .align(Alignment.CenterStart),
-                size = 60.dp,
-                icon = Res.drawable.ic_baseline_arrow_back_ios
-            ) {
-                scope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                }
-            }
-        }
-        if(pagerState.currentPage < pagerState.pageCount - 1) {
-            RoundedIconButton(
-                modifier = Modifier
-                    .alpha(0.6f)
-                    .padding(end = MaterialTheme.dimension.default)
-                    .align(Alignment.CenterEnd),
-                size = 60.dp,
-                icon = Res.drawable.ic_baseline_arrow_forward
-            ) {
-                scope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                }
-            }
-        }
+        HomeScreenTopAppBar({}, {}, {})
     }
 }
 

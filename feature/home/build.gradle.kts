@@ -10,7 +10,10 @@ android {
 
 kotlin {
     setFrameworkBaseName("home")
-    sourceSets.commonMain.dependencies {
-        implementation(project(":feature:settings"))
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.androidx.navigation)
+        }
     }
 }

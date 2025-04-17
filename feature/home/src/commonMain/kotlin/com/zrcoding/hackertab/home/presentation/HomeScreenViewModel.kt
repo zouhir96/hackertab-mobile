@@ -1,7 +1,8 @@
 package com.zrcoding.hackertab.home.presentation
 
-import com.zrcoding.hackertab.home.domain.usecases.GenerateHomeViewStateUseCase
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -9,10 +10,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeScreenViewModel(
-    private val generateHomeViewStateUseCase: GenerateHomeViewStateUseCase
+    private val settingRepository: SettingRepository
 ) : ViewModel() {
 
-    private val _viewState = MutableStateFlow<HomeScreenViewState>(HomeScreenViewState.Loading)
+    private val _viewState = MutableStateFlow(HomeScreenViewState())
     val viewState = _viewState.asStateFlow()
 
     init {
@@ -21,8 +22,8 @@ class HomeScreenViewModel(
 
     fun loadData() {
         viewModelScope.launch {
-            generateHomeViewStateUseCase().collectLatest { cards ->
-                _viewState.update { HomeScreenViewState.Cards(cards) }
+            settingRepository.observeSavedSources().collectLatest { cards ->
+                _viewState.update { HomeScreenViewState(cards) }
             }
         }
     }
