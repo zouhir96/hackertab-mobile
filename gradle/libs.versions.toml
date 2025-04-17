@@ -11,15 +11,15 @@ googleServices = "4.4.2"
 ksp = "2.0.0-1.0.21"
 composePlugin = "1.7.0"
 
-activity = "1.9.0"
 coreSplashscreen = "1.0.1"
+activity = "1.9.0"
 material3VersionHack = "1.1.2"
+navigation = "2.8.0-alpha10"
+lifecycle = "2.8.2"
 kamel = "0.9.3"
 
-moko = "0.16.1"
-navigation = "2.8.0-alpha10"
-koin = "3.5.6"
-koinCompose = "1.1.5"
+koinBom = "4.0.0-RC1"
+
 datastore = '1.1.1'
 ktor = "2.0.1"
 room = "2.6.1"
@@ -31,27 +31,20 @@ coroutines = "1.10.1"
 
 [libraries]
 
-#core
+#presentation
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
-
-#ui
+androidx-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
 androidx-compose-materialWindow = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3VersionHack"}
+androidx-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+androidx-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 
-#activity
-androidx-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
-
-# Moko
-moko-mvvm-core = { module = "dev.icerock.moko:mvvm-core", version.ref = "moko" }
-moko-mvvm-compose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "moko" }
-
-#navigation
-androidx-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
-
 #koin
-koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
-koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
-koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koinCompose" }
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBom" }
+koin-core = { group = "io.insert-koin", name = "koin-core" }
+koin-android = { group = "io.insert-koin", name = "koin-android" }
+koin-compose = { group = "io.insert-koin", name = "koin-compose" }
+koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel" }
 
 #data
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }

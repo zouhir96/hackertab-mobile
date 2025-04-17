@@ -16,9 +16,10 @@ class KotlinMultiplatformFeatureConventionPlugin : Plugin<Project> {
                     implementation(project(":core:design"))
                     implementation(project(":core:domain"))
                     implementation(project(":core:network"))
-                    implementation(project(":core:di"))
 
+                    implementation(project.dependencies.platform(versionCatalog().findLibrary("koin.bom").get()))
                     implementation(versionCatalog().findLibrary("koin.compose").get())
+                    implementation(versionCatalog().findLibrary("koin.compose.viewmodel").get())
                 }
             }
         }

@@ -1,11 +1,11 @@
 package com.zrcoding.hackertab.settings.presentation.topics
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.design.components.ChipData
 import com.zrcoding.hackertab.design.components.ChipGroup
 import com.zrcoding.hackertab.design.resources.Res
@@ -14,13 +14,13 @@ import com.zrcoding.hackertab.design.resources.setting_topics_screen_title
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.settings.presentation.common.SettingScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SettingTopicsRoute(
-    viewModel: SettingTopicsScreenViewModel = koinInject(),
+    viewModel: SettingTopicsScreenViewModel = koinViewModel(),
 ) {
-    val state = viewModel.viewState.collectAsState().value
+    val state = viewModel.viewState.collectAsStateWithLifecycle().value
     SettingTopicsScreen(state, viewModel::onChipClicked)
 }
 

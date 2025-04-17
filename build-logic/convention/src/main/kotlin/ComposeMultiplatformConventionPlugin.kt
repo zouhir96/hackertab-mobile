@@ -25,8 +25,7 @@ class ComposeMultiplatformConventionPlugin : Plugin<Project> {
                 implementation(composeDeps.materialIconsExtended)
 
                 implementation(versionCatalog().findLibrary("kamel-image").get())
-                implementation(versionCatalog().findLibrary("moko-mvvm-core").get())
-                implementation(versionCatalog().findLibrary("moko-mvvm-compose").get())
+                implementation(versionCatalog().findLibrary("androidx-viewmodel").get())
             }
         }
     }

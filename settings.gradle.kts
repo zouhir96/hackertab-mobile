@@ -17,7 +17,6 @@ rootProject.name = "hackertab"
 include(":app")
 include(":core:design")
 include(":core:network")
-include(":core:di")
 include(":feature:settings")
 include(":feature:home")
 include(":core:domain")
