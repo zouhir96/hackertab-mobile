@@ -204,8 +204,7 @@ private fun TextWithStartIconPreview() {
 
 @Composable
 fun FullScreenViewWithCenterText(
-    text: StringResource,
-    vararg args: Any,
+    text: String,
     textStyle: TextStyle = MaterialTheme.typography.body1
 ) {
     Column(
@@ -214,7 +213,7 @@ fun FullScreenViewWithCenterText(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = stringResource(text, args),
+            text = text,
             style = textStyle,
             textAlign = TextAlign.Center
         )
@@ -226,8 +225,7 @@ fun FullScreenViewWithCenterText(
 private fun FullScreenViewWithCenterTextPreview() {
     HackertabTheme {
         FullScreenViewWithCenterText(
-            Res.string.failed_to_load_source,
-            "github",
+            text = "github",
             textStyle = MaterialTheme.typography.body1
         )
     }
@@ -310,31 +308,6 @@ fun LoadingPreview() {
         Loading(stringResource(Res.string.loading))
     }
 }
-
-val tags = mapOf(
-    "python" to Color((0XFF3572A5)),
-    "javascript" to Color((0XFFF1E05A)),
-    "cplusplus" to Color((0XFFF34B7D)),
-    "java" to Color((0XFFB07219)),
-    "swift" to Color((0XFFFFAC45)),
-    "go" to Color((0XFF00ADD8)),
-    "kotlin" to Color((0XFFF18E33)),
-    "ruby" to Color((0XFF701516)),
-    "php" to Color((0XFF4F5E95)),
-    "typescript" to Color((0XFF2B7489)),
-    "objective-c" to Color((0XFF438EFF)),
-    "django" to Color((0XFF0C4B33)),
-    "node" to Color((0XFF5B9853)),
-    "angular" to Color((0XFFDE0032)),
-    "react" to Color((0XFF61DBFB)),
-    "postgres" to Color((0XFF346792)),
-    "mongodb" to Color((0XFF14AA52)),
-    "vue" to Color((0XFF41B884)),
-    "ruby-on-rails" to Color((0XFFCC0000)),
-    "android" to Color((0XFF30D880)),
-    "flutter" to Color((0XFF67B1F1)),
-    "dart" to Color((0XFF045797)),
-)
 
 fun String.getTagColor(): Color {
     for ((tag, color) in tags) {
