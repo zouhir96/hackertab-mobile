@@ -26,6 +26,7 @@ class ComposeMultiplatformConventionPlugin : Plugin<Project> {
 
                 implementation(versionCatalog().findLibrary("kamel-image").get())
                 implementation(versionCatalog().findLibrary("androidx-viewmodel").get())
+                implementation(versionCatalog().findLibrary("kotlinx.collections.immutable").get())
             }
         }
     }
