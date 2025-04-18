@@ -5,7 +5,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.home.presentation.cards.conferences.ConferencesCard
+import com.zrcoding.hackertab.home.presentation.cards.devto.DevtoCard
+import com.zrcoding.hackertab.home.presentation.cards.freecodecamp.FreeCodeCampCard
 import com.zrcoding.hackertab.home.presentation.cards.github.GithubCard
+import com.zrcoding.hackertab.home.presentation.cards.hackernews.HackerNewsCard
+import com.zrcoding.hackertab.home.presentation.cards.hashnode.HashnodeCard
+import com.zrcoding.hackertab.home.presentation.cards.indiehackers.IndieHackersCard
+import com.zrcoding.hackertab.home.presentation.cards.lobsters.LobstersCard
+import com.zrcoding.hackertab.home.presentation.cards.mediun.MediumCard
+import com.zrcoding.hackertab.home.presentation.cards.producthunt.ProductHuntCard
+import com.zrcoding.hackertab.home.presentation.cards.reddit.RedditCard
 
 @Composable
 fun HomeScreenNavHost(
@@ -21,43 +31,43 @@ fun HomeScreenNavHost(
                     }
 
                     Source.HACKER_NEWS.id -> composable(route = sourceId) {
-                        GithubCard()
+                        HackerNewsCard()
                     }
 
                     Source.CONFERENCES.id -> composable(route = sourceId) {
-                        GithubCard()
+                        ConferencesCard()
                     }
 
                     Source.DEVTO.id -> composable(route = sourceId) {
-                        GithubCard()
+                        DevtoCard()
                     }
 
                     Source.PRODUCTHUNT.id -> composable(route = sourceId) {
-                        GithubCard()
+                        ProductHuntCard()
                     }
 
                     Source.REDDIT.id -> composable(route = sourceId) {
-                        GithubCard()
+                        RedditCard()
                     }
 
                     Source.LOBSTERS.id -> composable(route = sourceId) {
-                        GithubCard()
+                        LobstersCard()
                     }
 
                     Source.HASH_NODE.id -> composable(route = sourceId) {
-                        GithubCard()
+                        HashnodeCard()
                     }
 
                     Source.FREE_CODE_CAMP.id -> composable(route = sourceId) {
-                        GithubCard()
+                        FreeCodeCampCard()
                     }
 
                     Source.INDIE_HACKERS.id -> composable(route = sourceId) {
-                        GithubCard()
+                        IndieHackersCard()
                     }
 
                     Source.MEDIUM.id -> composable(route = sourceId) {
-                        GithubCard()
+                        MediumCard()
                     }
                 }
             }
