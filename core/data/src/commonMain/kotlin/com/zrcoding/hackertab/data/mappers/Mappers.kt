@@ -94,7 +94,7 @@ fun ArticleDto.toHashnode() = Hashnode(
     commentsCount = comments?.toLong().orEmpty(),
     reactions = reactions?.toLong().orEmpty(),
     url = url,
-    tags = tags.orEmpty()
+    tags = tags.orEmpty().take(3)
 )
 
 fun ProductHuntDto.toProductHunt() = ProductHunt(
