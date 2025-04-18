@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.home.presentation.cards.github
 
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -16,8 +17,8 @@ import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.TextLink
 import com.zrcoding.hackertab.domain.models.GithubRepo
 import com.zrcoding.hackertab.domain.models.Source
-import com.zrcoding.hackertab.home.presentation.cards.CardTemplate
-import com.zrcoding.hackertab.home.presentation.cards.CardUiEvents
+import com.zrcoding.hackertab.home.presentation.cards.CardWithTopicFilterTemplate
+import com.zrcoding.hackertab.home.presentation.cards.CardWithTopicFilterUiEvents
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -29,7 +30,7 @@ fun GithubCard(
     viewModel: GithubCardViewModel = koinViewModel()
 ) {
     val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
-    CardTemplate(
+    CardWithTopicFilterTemplate(
         modifier = modifier,
         cardUiState = viewState,
         sourceName = Source.GITHUB.label,
@@ -37,11 +38,12 @@ fun GithubCard(
         cardItem = { model ->
             GithubItem(post = model)
         },
-        onRetryBtnClick = { viewModel.onUiEvent(CardUiEvents.Refresh) },
-        onTopicClick = { viewModel.onUiEvent(CardUiEvents.TopicClick(topic = it)) }
+        onRetryBtnClick = { viewModel.onUiEvent(CardWithTopicFilterUiEvents.Refresh) },
+        onTopicClick = { viewModel.onUiEvent(CardWithTopicFilterUiEvents.TopicClick(topic = it)) }
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun GithubItem(post: GithubRepo) {
     SourceItemTemplate(
