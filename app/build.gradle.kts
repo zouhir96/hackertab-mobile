@@ -34,6 +34,12 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        debug {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            applicationIdSuffix = ".debug"
+        }
     }
 
     compileOptions {
@@ -68,6 +74,7 @@ dependencies {
 
     implementation(libs.androidx.compose.materialWindow)
 
+    implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)
 
     implementation(platform(libs.com.google.firebase.bom))
