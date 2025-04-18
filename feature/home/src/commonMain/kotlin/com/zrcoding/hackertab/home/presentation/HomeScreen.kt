@@ -1,6 +1,5 @@
 package com.zrcoding.hackertab.home.presentation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -235,40 +234,47 @@ private fun HomeScreenTopAppBar(
             Card(
                 onClick = onNavigationBtnClick,
                 shape = CircleShape,
-                elevation = 4.dp
             ) {
                 IconButton(
                     onClick = onNavigationBtnClick,
                 ) {
                     Icon(
                         imageVector = Icons.Default.Menu,
-                        contentDescription = "refresh button",
+                        contentDescription = "Navigation button to show drawer",
                         tint = MaterialTheme.colors.onBackground
                     )
                 }
             }
         },
         actions = {
-            IconButton(
-                modifier = Modifier.background(MaterialTheme.colors.secondaryVariant, CircleShape),
+            Card(
                 onClick = onRefreshBtnClick,
+                shape = CircleShape,
             ) {
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "refresh button",
-                    tint = MaterialTheme.colors.onBackground
-                )
+                IconButton(
+                    onClick = onNavigationBtnClick,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = "refresh button to refresh data",
+                        tint = MaterialTheme.colors.onBackground
+                    )
+                }
             }
-            Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
-            IconButton(
-                modifier = Modifier.background(MaterialTheme.colors.secondaryVariant, CircleShape),
+            Spacer(modifier = Modifier.width(MaterialTheme.dimension.medium))
+            Card(
                 onClick = onSettingBtnClick,
+                shape = CircleShape,
             ) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "settings button",
-                    tint = MaterialTheme.colors.onBackground
-                )
+                IconButton(
+                    onClick = onSettingBtnClick,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "settings button to open settings",
+                        tint = MaterialTheme.colors.onBackground
+                    )
+                }
             }
         },
         backgroundColor = MaterialTheme.colors.primary,

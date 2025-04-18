@@ -17,6 +17,7 @@ import com.zrcoding.hackertab.design.theme.TextLink
 import com.zrcoding.hackertab.domain.models.GithubRepo
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.home.presentation.cards.CardTemplate
+import com.zrcoding.hackertab.home.presentation.cards.CardUiEvents
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -31,12 +32,13 @@ fun GithubCard(
     CardTemplate(
         modifier = modifier,
         cardUiState = viewState,
-        sourceName = Source.GITHUB.name,
+        sourceName = Source.GITHUB.label,
         sourceIcon = Source.GITHUB.icon,
-        cardItem = {  model ->
+        cardItem = { model ->
             GithubItem(post = model)
         },
-        onRetryBtnClick = {  }
+        onRetryBtnClick = { viewModel.onUiEvent(CardUiEvents.Refresh) },
+        onTopicClick = { viewModel.onUiEvent(CardUiEvents.TopicClick(topic = it)) }
     )
 }
 

@@ -35,7 +35,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.common_retry
-import com.zrcoding.hackertab.design.resources.failed_to_load_source
 import com.zrcoding.hackertab.design.resources.ic_ellipse
 import com.zrcoding.hackertab.design.resources.ic_freecodecamp
 import com.zrcoding.hackertab.design.resources.ic_github
@@ -217,6 +216,7 @@ fun FullScreenViewWithCenterText(
             style = textStyle,
             textAlign = TextAlign.Center
         )
+
     }
 }
 
@@ -233,9 +233,8 @@ private fun FullScreenViewWithCenterTextPreview() {
 
 @Composable
 fun ErrorMsgWithBtn(
-    text: StringResource,
-    vararg args: String,
-    btnText: StringResource,
+    text: String,
+    btnText: StringResource?,
     onBtnClicked: () -> Unit
 ) {
     Column(
@@ -246,25 +245,27 @@ fun ErrorMsgWithBtn(
             .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal)
     ) {
         Text(
-            text = stringResource(text, args),
+            text = text,
             style = MaterialTheme.typography.body1,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colors.onBackground
         )
-        OutlinedButton(
-            modifier = Modifier.padding(horizontal = MaterialTheme.dimension.big),
-            onClick = onBtnClicked,
-            shape = CircleShape,
-            border = BorderStroke(1.dp, MaterialTheme.colors.onBackground),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = MaterialTheme.colors.onBackground
-            ),
-        ) {
-            Text(
-                text = stringResource(btnText),
-                style = MaterialTheme.typography.button,
-                textAlign = TextAlign.Center,
-            )
+        if (btnText != null) {
+            OutlinedButton(
+                modifier = Modifier.padding(horizontal = MaterialTheme.dimension.big),
+                onClick = onBtnClicked,
+                shape = CircleShape,
+                border = BorderStroke(1.dp, MaterialTheme.colors.onBackground),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colors.onBackground
+                ),
+            ) {
+                Text(
+                    text = stringResource(btnText),
+                    style = MaterialTheme.typography.button,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
     }
 }
@@ -274,8 +275,7 @@ fun ErrorMsgWithBtn(
 private fun ErrorMsgWithBtnPreview() {
     HackertabTheme {
         ErrorMsgWithBtn(
-            text = Res.string.failed_to_load_source,
-            "github",
+            text = "Failed to load articles found for Github !!",
             btnText = Res.string.common_retry
         ){}
     }
