@@ -6,13 +6,13 @@ import com.zrcoding.hackertab.domain.models.Resource
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.ArticleRepository
-import com.zrcoding.hackertab.domain.repositories.SettingRepository
+import com.zrcoding.hackertab.domain.usecases.ObserveSelectedTopicsUseCase
 import com.zrcoding.hackertab.home.presentation.cards.CardWithTopicFilterViewModel
 
 class RedditCardViewModel(
     articleRepository: ArticleRepository,
-    settingRepository: SettingRepository
-) : CardWithTopicFilterViewModel<Reddit>(articleRepository, settingRepository) {
+    observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase
+) : CardWithTopicFilterViewModel<Reddit>(articleRepository, observeSelectedTopicsUseCase) {
 
     override val source: Source
         get() = Source.REDDIT

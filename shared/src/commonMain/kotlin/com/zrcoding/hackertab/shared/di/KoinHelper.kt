@@ -1,6 +1,7 @@
 package com.zrcoding.hackertab.shared.di
 
 import com.zrcoding.hackertab.data.dataModule
+import com.zrcoding.hackertab.domain.domainModule
 import com.zrcoding.hackertab.home.homeModule
 import com.zrcoding.hackertab.network.networkModule
 import com.zrcoding.hackertab.settings.settingsModule
@@ -32,7 +33,8 @@ internal val appModules = listOf(
     homeModule,
     settingsModule,
     networkModule,
-    dataModule
+    dataModule,
+    domainModule
 )
 
 expect val platformModule: Module

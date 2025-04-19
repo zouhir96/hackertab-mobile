@@ -8,7 +8,7 @@ import com.zrcoding.hackertab.domain.models.Resource
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.ArticleRepository
-import com.zrcoding.hackertab.domain.repositories.SettingRepository
+import com.zrcoding.hackertab.domain.usecases.ObserveSelectedTopicsUseCase
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 abstract class CardWithTopicFilterViewModel<out T : BaseModel>(
     private val articleRepository: ArticleRepository,
-    private val settingRepository: SettingRepository
+    private val observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase
 ) : ViewModel() {
 
     abstract val source: Source
@@ -34,7 +34,7 @@ abstract class CardWithTopicFilterViewModel<out T : BaseModel>(
 
     init {
         viewModelScope.launch {
-            settingRepository.observeSelectedTopics().collectLatest { topics ->
+            observeSelectedTopicsUseCase().collectLatest { topics ->
                 _viewState.update { state ->
                     state.copy(
                         topics = topics.map { it.toCardHeaderTopic() }

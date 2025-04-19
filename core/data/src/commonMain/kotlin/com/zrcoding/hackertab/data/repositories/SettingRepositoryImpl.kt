@@ -5,13 +5,10 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.zrcoding.hackertab.data.resources.Res
-import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -39,13 +36,6 @@ class SettingRepositoryImpl(
         return getSavedIds(KEY_SAVED_TOPICS)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun observeSelectedTopics(): Flow<List<Topic>> {
-        return observeSavedTopicsIds().mapLatest { savedTopicsIds ->
-            getTopics().filter { it.id in savedTopicsIds }
-        }
-    }
-
     override suspend fun saveTopic(id: String) {
         saveId(id, KEY_SAVED_TOPICS)
     }
@@ -54,14 +44,8 @@ class SettingRepositoryImpl(
         removeId(id, KEY_SAVED_TOPICS)
     }
 
-    override fun observeSavedSources(): Flow<List<Source>> {
-        return getSavedIds(KEY_SAVED_SOURCES).map { names ->
-            names.mapNotNull { name ->
-                Source.entries.firstOrNull {
-                    it.id == name
-                }
-            }
-        }
+    override fun observeSavedSourcesIds(): Flow<List<String>> {
+        return getSavedIds(KEY_SAVED_SOURCES)
     }
 
     override suspend fun saveSource(id: String) {

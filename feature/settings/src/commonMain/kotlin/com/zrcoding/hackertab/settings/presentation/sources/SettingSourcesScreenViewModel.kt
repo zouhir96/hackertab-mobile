@@ -6,6 +6,7 @@ import com.zrcoding.hackertab.design.components.ChipData
 import com.zrcoding.hackertab.design.components.icon
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
+import com.zrcoding.hackertab.domain.usecases.ObserveSavedSourcesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -13,7 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SettingSourcesScreenViewModel(
-    private val settingRepository: SettingRepository
+    private val settingRepository: SettingRepository,
+    private val observeSavedSourcesUseCase: ObserveSavedSourcesUseCase
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(SettingSourcesScreenViewState())
@@ -22,7 +24,7 @@ class SettingSourcesScreenViewModel(
     init {
         viewModelScope.launch {
             val sources = Source.entries
-            settingRepository.observeSavedSources().collectLatest { ids->
+            observeSavedSourcesUseCase().collectLatest { ids->
                 _viewState.update {
                     SettingSourcesScreenViewState(
                         sources = sources.map {

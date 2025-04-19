@@ -2,7 +2,7 @@ package com.zrcoding.hackertab.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zrcoding.hackertab.domain.repositories.SettingRepository
+import com.zrcoding.hackertab.domain.usecases.ObserveSavedSourcesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeScreenViewModel(
-    private val settingRepository: SettingRepository
+    private val observeSavedSourcesUseCase: ObserveSavedSourcesUseCase
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(HomeScreenViewState())
@@ -18,7 +18,7 @@ class HomeScreenViewModel(
 
     init {
         viewModelScope.launch {
-            settingRepository.observeSavedSources().collectLatest { cards ->
+            observeSavedSourcesUseCase().collectLatest { cards ->
                 _viewState.update { HomeScreenViewState(cards) }
             }
         }

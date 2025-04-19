@@ -1,6 +1,5 @@
 package com.zrcoding.hackertab.domain.repositories
 
-import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.Topic
 import kotlinx.coroutines.flow.Flow
 
@@ -10,15 +9,11 @@ interface SettingRepository {
 
     fun observeSavedTopicsIds(): Flow<List<String>>
 
-    // TODO Extract this as a use case
-    fun observeSelectedTopics(): Flow<List<Topic>>
-
     suspend fun saveTopic(id: String)
 
     suspend fun removeTopic(id: String)
 
-    // TODO Extract this as a use case
-    fun observeSavedSources(): Flow<List<Source>>
+    fun observeSavedSourcesIds(): Flow<List<String>>
 
     suspend fun saveSource(id: String)
 

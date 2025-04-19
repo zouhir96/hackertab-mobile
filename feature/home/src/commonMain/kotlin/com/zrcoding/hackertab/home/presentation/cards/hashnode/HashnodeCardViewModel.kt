@@ -6,13 +6,13 @@ import com.zrcoding.hackertab.domain.models.Resource
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.ArticleRepository
-import com.zrcoding.hackertab.domain.repositories.SettingRepository
+import com.zrcoding.hackertab.domain.usecases.ObserveSelectedTopicsUseCase
 import com.zrcoding.hackertab.home.presentation.cards.CardWithTopicFilterViewModel
 
 class HashnodeCardViewModel(
     articleRepository: ArticleRepository,
-    settingRepository: SettingRepository
-) : CardWithTopicFilterViewModel<Hashnode>(articleRepository, settingRepository) {
+    observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase
+) : CardWithTopicFilterViewModel<Hashnode>(articleRepository, observeSelectedTopicsUseCase) {
 
     override val source: Source
         get() = Source.HASH_NODE
