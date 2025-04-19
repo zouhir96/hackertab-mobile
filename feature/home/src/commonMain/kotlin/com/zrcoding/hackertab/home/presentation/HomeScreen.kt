@@ -24,7 +24,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
@@ -61,7 +60,6 @@ fun HomeRoute(
         modifier = Modifier,
         isExpandedScreen = isExpandedScreen,
         viewState = viewState,
-        onRefreshBtnClick = viewModel::loadData,
         onSettingBtnClick = onNavigateToSettings
     )
 }
@@ -71,7 +69,6 @@ private fun HomeScreen(
     modifier: Modifier = Modifier,
     isExpandedScreen: Boolean,
     viewState: HomeScreenViewState,
-    onRefreshBtnClick: () -> Unit,
     onSettingBtnClick: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -86,7 +83,6 @@ private fun HomeScreen(
                 onNavigationBtnClick = {
                     scope.launch { drawerState.open() }
                 },
-                onRefreshBtnClick = onRefreshBtnClick,
                 onSettingBtnClick = onSettingBtnClick
             )
         },
@@ -114,6 +110,67 @@ private fun HomeScreen(
             navController = navController,
             enabledSourcesIds = viewState.enabledSources.map { it.id }
         )
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun HomeScreenTopAppBar(
+    onNavigationBtnClick: () -> Unit,
+    onSettingBtnClick: () -> Unit,
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = stringResource(Res.string.app_title),
+                color = MaterialTheme.colors.onBackground,
+                style = MaterialTheme.typography.h5,
+                overflow = TextOverflow.Visible,
+                maxLines = 1
+            )
+        },
+        navigationIcon = {
+            Card(
+                onClick = onNavigationBtnClick,
+                shape = CircleShape,
+            ) {
+                IconButton(
+                    onClick = onNavigationBtnClick,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = "Navigation button to show drawer",
+                        tint = MaterialTheme.colors.onBackground
+                    )
+                }
+            }
+        },
+        actions = {
+            Card(
+                onClick = onSettingBtnClick,
+                shape = CircleShape,
+            ) {
+                IconButton(
+                    onClick = onSettingBtnClick,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "settings button to open settings",
+                        tint = MaterialTheme.colors.onBackground
+                    )
+                }
+            }
+        },
+        backgroundColor = MaterialTheme.colors.primary,
+        elevation = MaterialTheme.dimension.none
+    )
+}
+
+@Preview
+@Composable
+private fun HomeScreenTopAppBarPreview() {
+    HackertabTheme {
+        HomeScreenTopAppBar({}, {})
     }
 }
 
@@ -194,7 +251,6 @@ private fun HomeScreenLoadingPreview() {
         HomeScreen(
             isExpandedScreen = false,
             viewState = HomeScreenViewState(isLoading = true),
-            onRefreshBtnClick = {},
             onSettingBtnClick = {}
         )
     }
@@ -207,86 +263,8 @@ private fun HomeScreenEmptyPreview() {
         HomeScreen(
             isExpandedScreen = false,
             viewState = HomeScreenViewState(emptyList()),
-            onRefreshBtnClick = {},
             onSettingBtnClick = {}
         )
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun HomeScreenTopAppBar(
-    onNavigationBtnClick: () -> Unit,
-    onRefreshBtnClick: () -> Unit,
-    onSettingBtnClick: () -> Unit,
-) {
-    TopAppBar(
-        title = {
-            Text(
-                text = stringResource(Res.string.app_title),
-                color = MaterialTheme.colors.onBackground,
-                style = MaterialTheme.typography.h5,
-                overflow = TextOverflow.Visible,
-                maxLines = 1
-            )
-        },
-        navigationIcon = {
-            Card(
-                onClick = onNavigationBtnClick,
-                shape = CircleShape,
-            ) {
-                IconButton(
-                    onClick = onNavigationBtnClick,
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = "Navigation button to show drawer",
-                        tint = MaterialTheme.colors.onBackground
-                    )
-                }
-            }
-        },
-        actions = {
-            Card(
-                onClick = onRefreshBtnClick,
-                shape = CircleShape,
-            ) {
-                IconButton(
-                    onClick = onNavigationBtnClick,
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = "refresh button to refresh data",
-                        tint = MaterialTheme.colors.onBackground
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.width(MaterialTheme.dimension.medium))
-            Card(
-                onClick = onSettingBtnClick,
-                shape = CircleShape,
-            ) {
-                IconButton(
-                    onClick = onSettingBtnClick,
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "settings button to open settings",
-                        tint = MaterialTheme.colors.onBackground
-                    )
-                }
-            }
-        },
-        backgroundColor = MaterialTheme.colors.primary,
-        elevation = MaterialTheme.dimension.none
-    )
-}
-
-@Preview
-@Composable
-private fun HomeScreenTopAppBarPreview() {
-    HackertabTheme {
-        HomeScreenTopAppBar({}, {}, {})
     }
 }
 

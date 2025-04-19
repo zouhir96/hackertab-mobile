@@ -17,10 +17,6 @@ class HomeScreenViewModel(
     val viewState = _viewState.asStateFlow()
 
     init {
-        loadData()
-    }
-
-    fun loadData() {
         viewModelScope.launch {
             settingRepository.observeSavedSources().collectLatest { cards ->
                 _viewState.update { HomeScreenViewState(cards) }
