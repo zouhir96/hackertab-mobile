@@ -1,6 +1,5 @@
 package com.zrcoding.hackertab.home.presentation
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -237,10 +236,11 @@ private fun HomeScreenDrawerItem(
                 .fillMaxWidth()
                 .padding(MaterialTheme.dimension.medium)
         ) {
-            Image(
+            Icon(
                 modifier = Modifier.size(MaterialTheme.dimension.bigger),
                 painter = painterResource(icon),
                 contentDescription = "Source icon",
+                tint = MaterialTheme.colors.onBackground
             )
             Spacer(modifier = Modifier.width(MaterialTheme.dimension.large))
             Text(

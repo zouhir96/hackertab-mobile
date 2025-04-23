@@ -45,7 +45,7 @@ fun SetupProfileRoute(
     ) {
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.extraBig))
         Text(
-            text = "Hi, \uD83D\uDC4B Welcome" + if(state.newUser) "" else "back" + " to Hackertab mobile",
+            text = "Hi, \uD83D\uDC4B Welcome%s to Hackertab mobile".replace("%s", if(state.newUser) "" else " again" ),
             color = MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.h5
         )
