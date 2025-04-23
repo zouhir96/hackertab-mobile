@@ -29,7 +29,10 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.zrcoding.hackertab.design.theme.dimension
+import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase
 import com.zrcoding.hackertab.home.presentation.HomeRoute
+import com.zrcoding.hackertab.onboarding.OnboardingScreen
+import com.zrcoding.hackertab.onboarding.onboardingNavGraph
 import com.zrcoding.hackertab.settings.presentation.master.SettingMasterRoute
 import com.zrcoding.hackertab.settings.presentation.sources.SettingSourcesRoute
 import com.zrcoding.hackertab.settings.presentation.topics.SettingTopicsRoute
@@ -54,18 +57,40 @@ object SettingsSourcesScreen
 fun MainNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    startDestination: GetStartDestinationUseCase.Result,
     isExpandedScree: Boolean
 ) {
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = HomeScreen
+        startDestination = if (startDestination == GetStartDestinationUseCase.Result.COMPLETED) {
+            HomeScreen
+        } else OnboardingScreen
     ) {
+        if (startDestination is GetStartDestinationUseCase.Result.NotCompleted && startDestination.screens.isNotEmpty()) {
+            onboardingNavGraph(
+                screensToComplete = startDestination.screens,
+                navController = navController,
+                navigateToHome = {
+                    navController.navigate(
+                        HomeScreen,
+                        navOptions {
+                            popUpTo(it) {
+                                inclusive = true
+                            }
+                        }
+                    )
+                }
+            )
+        }
         composable<HomeScreen> {
             HomeRoute(
                 isExpandedScreen = isExpandedScree,
                 onNavigateToSettings = {
                     navController.navigate(Settings)
+                },
+                onNavigateToSourcesSettings = {
+                    navController.navigate(SettingsSourcesScreen)
                 }
             )
         }

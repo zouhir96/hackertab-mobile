@@ -1,8 +1,7 @@
 import com.zrcoding.convention.setFrameworkBaseName
 
 plugins {
-    id("hackertab.kmp.library")
-    id("hackertab.kmp.compose")
+    id("hackertab.kmp.feature")
 }
 
 kotlin {
@@ -15,10 +14,9 @@ kotlin {
             implementation(project(":core:network"))
             implementation(project(":core:data"))
 
+            implementation(project(":feature:onboarding"))
             implementation(project(":feature:home"))
             implementation(project(":feature:settings"))
-
-            implementation(libs.androidx.navigation)
         }
     }
 }
