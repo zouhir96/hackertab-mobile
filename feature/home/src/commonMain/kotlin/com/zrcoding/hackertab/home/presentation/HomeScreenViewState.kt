@@ -6,5 +6,5 @@ import com.zrcoding.hackertab.domain.models.Source
 @Stable
 data class HomeScreenViewState(
     val enabledSources: List<Source> = emptyList(),
-    val isLoading: Boolean = false
+    val isLoading: Boolean = true
 )

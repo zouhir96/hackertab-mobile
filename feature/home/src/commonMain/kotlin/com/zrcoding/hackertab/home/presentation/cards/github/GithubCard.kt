@@ -13,8 +13,8 @@ import com.zrcoding.hackertab.design.resources.ic_baseline_fork
 import com.zrcoding.hackertab.design.resources.ic_baseline_star
 import com.zrcoding.hackertab.design.resources.ic_ellipse
 import com.zrcoding.hackertab.design.resources.stars
+import com.zrcoding.hackertab.design.theme.Blue
 import com.zrcoding.hackertab.design.theme.HackertabTheme
-import com.zrcoding.hackertab.design.theme.TextLink
 import com.zrcoding.hackertab.domain.models.GithubRepo
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.home.presentation.cards.CardWithTopicFilterTemplate
@@ -66,7 +66,7 @@ fun GithubItem(post: GithubRepo) {
             )
         },
         url = post.url,
-        titleColor = TextLink,
+        titleColor = Blue,
     )
 }
 

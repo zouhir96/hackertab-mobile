@@ -20,10 +20,11 @@ import com.zrcoding.hackertab.home.presentation.cards.reddit.RedditCard
 @Composable
 fun HomeScreenNavHost(
     navController: NavHostController,
+    startDestination: String,
     enabledSourcesIds: List<String>
 ) {
     if (enabledSourcesIds.isNotEmpty()) {
-        NavHost(navController = navController, startDestination = Source.GITHUB.id) {
+        NavHost(navController = navController, startDestination = startDestination) {
             enabledSourcesIds.forEach { sourceId ->
                 when (sourceId) {
                     Source.GITHUB.id -> composable(route = sourceId) {

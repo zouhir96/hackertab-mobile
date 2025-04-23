@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.home.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,9 +37,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.zrcoding.hackertab.design.components.ErrorMsgWithBtn
 import com.zrcoding.hackertab.design.components.icon
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.app_title
+import com.zrcoding.hackertab.design.resources.common_settings
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Source
@@ -53,14 +56,16 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomeRoute(
     viewModel: HomeScreenViewModel = koinViewModel(),
     isExpandedScreen: Boolean,
-    onNavigateToSettings: () -> Unit
+    onNavigateToSettings: () -> Unit,
+    onNavigateToSourcesSettings: () -> Unit,
 ) {
     val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
     HomeScreen(
         modifier = Modifier,
         isExpandedScreen = isExpandedScreen,
         viewState = viewState,
-        onSettingBtnClick = onNavigateToSettings
+        onSettingBtnClick = onNavigateToSettings,
+        onNavigateToSourcesSettings = onNavigateToSourcesSettings
     )
 }
 
@@ -70,6 +75,7 @@ private fun HomeScreen(
     isExpandedScreen: Boolean,
     viewState: HomeScreenViewState,
     onSettingBtnClick: () -> Unit,
+    onNavigateToSourcesSettings: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -106,10 +112,20 @@ private fun HomeScreen(
             bottomEnd = MaterialTheme.dimension.medium
         )
     ) {
-        HomeScreenNavHost(
-            navController = navController,
-            enabledSourcesIds = viewState.enabledSources.map { it.id }
-        )
+        val startDestination = viewState.enabledSources.firstOrNull()?.id
+        if (startDestination != null) {
+            HomeScreenNavHost(
+                navController = navController,
+                startDestination = startDestination,
+                enabledSourcesIds = viewState.enabledSources.map { it.id }
+            )
+        } else if (viewState.isLoading.not()) {
+            ErrorMsgWithBtn(
+                text = "You didn't follow any source, you can follow your favorite sources in settings !!",
+                btnText = Res.string.common_settings,
+                onBtnClicked = onNavigateToSourcesSettings
+            )
+        }
     }
 }
 
@@ -124,7 +140,7 @@ private fun HomeScreenTopAppBar(
             Text(
                 text = stringResource(Res.string.app_title),
                 color = MaterialTheme.colors.onBackground,
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.h6,
                 overflow = TextOverflow.Visible,
                 maxLines = 1
             )
@@ -221,11 +237,10 @@ private fun HomeScreenDrawerItem(
                 .fillMaxWidth()
                 .padding(MaterialTheme.dimension.medium)
         ) {
-            Icon(
+            Image(
                 modifier = Modifier.size(MaterialTheme.dimension.bigger),
                 painter = painterResource(icon),
                 contentDescription = "Source icon",
-                tint = MaterialTheme.colors.onBackground
             )
             Spacer(modifier = Modifier.width(MaterialTheme.dimension.large))
             Text(
@@ -251,7 +266,8 @@ private fun HomeScreenLoadingPreview() {
         HomeScreen(
             isExpandedScreen = false,
             viewState = HomeScreenViewState(isLoading = true),
-            onSettingBtnClick = {}
+            onSettingBtnClick = {},
+            onNavigateToSourcesSettings = {}
         )
     }
 }
@@ -263,7 +279,8 @@ private fun HomeScreenEmptyPreview() {
         HomeScreen(
             isExpandedScreen = false,
             viewState = HomeScreenViewState(emptyList()),
-            onSettingBtnClick = {}
+            onSettingBtnClick = {},
+            onNavigateToSourcesSettings = {}
         )
     }
 }

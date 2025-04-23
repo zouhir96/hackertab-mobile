@@ -1,6 +1,7 @@
 package com.zrcoding.hackertab.design.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,9 +41,11 @@ import com.zrcoding.hackertab.design.resources.ic_freecodecamp
 import com.zrcoding.hackertab.design.resources.ic_github
 import com.zrcoding.hackertab.design.resources.ic_reddit
 import com.zrcoding.hackertab.design.resources.loading
+import com.zrcoding.hackertab.design.theme.Blue
 import com.zrcoding.hackertab.design.theme.HackertabTheme
-import com.zrcoding.hackertab.design.theme.TextLink
 import com.zrcoding.hackertab.design.theme.dimension
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
@@ -56,6 +59,38 @@ data class ChipData(
     val selected: Boolean = false
 )
 
+object ChipStateHandler {
+
+    fun handleMonoSelect(
+        currentState: PersistentList<ChipData>,
+        clickedChip: ChipData
+    ): PersistentList<ChipData> {
+        return currentState.map {
+            if (it != clickedChip) {
+                it.copy(selected = false)
+            } else {
+                it.copy(selected = !it.selected)
+            }
+        }.toPersistentList()
+    }
+
+    fun handleMultiSelect(
+        currentState: PersistentList<ChipData>,
+        clickedChip: ChipData
+    ): PersistentList<ChipData> {
+        val indexOfItem = currentState.indexOf(clickedChip)
+        if (indexOfItem == -1) throw IllegalArgumentException("Item doesn't exist in the list")
+
+        return currentState.toMutableList()
+            .apply {
+                val oldChip = get(indexOfItem)
+                val newChip = oldChip.copy(selected = !oldChip.selected)
+                set(indexOfItem, newChip)
+            }
+            .toPersistentList()
+    }
+}
+
 @Composable
 fun Chip(
     chipData: ChipData,
@@ -64,7 +99,7 @@ fun Chip(
 ) {
     Card(
         shape = RoundedCornerShape(MaterialTheme.dimension.big),
-        backgroundColor = if (isSelected) TextLink else MaterialTheme.colors.surface
+        backgroundColor = if (isSelected) Blue else MaterialTheme.colors.surface
     ) {
         Row(
             modifier = Modifier
@@ -73,15 +108,12 @@ fun Chip(
             verticalAlignment = Alignment.CenterVertically
         ) {
             chipData.image?.let {
-                Icon(
+                Image(
                     modifier = Modifier
                         .padding(end = MaterialTheme.dimension.medium)
                         .size(MaterialTheme.dimension.big),
                     painter = painterResource(it),
                     contentDescription = null,
-                    tint = if (isSelected) {
-                        MaterialTheme.colors.surface
-                    } else MaterialTheme.colors.onBackground
                 )
             }
 

@@ -19,7 +19,7 @@ class HomeScreenViewModel(
     init {
         viewModelScope.launch {
             observeSavedSourcesUseCase().collectLatest { cards ->
-                _viewState.update { HomeScreenViewState(cards) }
+                _viewState.update { HomeScreenViewState(enabledSources = cards, isLoading = false) }
             }
         }
     }
