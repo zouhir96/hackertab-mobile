@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.domain.repositories
 
+import com.zrcoding.hackertab.domain.models.Profile
 import com.zrcoding.hackertab.domain.models.Topic
 import kotlinx.coroutines.flow.Flow
 
@@ -9,7 +10,9 @@ interface SettingRepository {
 
     fun observeSavedTopicsIds(): Flow<List<String>>
 
-    suspend fun saveTopic(id: String)
+    suspend fun saveTopics(id: String)
+
+    suspend fun saveTopics(ids: List<String>)
 
     suspend fun removeTopic(id: String)
 
@@ -17,5 +20,13 @@ interface SettingRepository {
 
     suspend fun saveSource(id: String)
 
+    suspend fun saveSource(ids: List<String>)
+
     suspend fun removeSource(id: String)
+
+    suspend fun getSavedProfile(): Profile?
+
+    suspend fun getProfiles(): List<Profile>
+
+    suspend fun saveProfile(profile: Profile)
 }
