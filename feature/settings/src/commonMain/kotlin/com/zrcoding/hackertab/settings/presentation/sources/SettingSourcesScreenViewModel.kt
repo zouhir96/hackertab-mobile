@@ -7,6 +7,9 @@ import com.zrcoding.hackertab.design.components.icon
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import com.zrcoding.hackertab.domain.usecases.ObserveSavedSourcesUseCase
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -18,7 +21,7 @@ class SettingSourcesScreenViewModel(
     private val observeSavedSourcesUseCase: ObserveSavedSourcesUseCase
 ) : ViewModel() {
 
-    private val _viewState = MutableStateFlow(SettingSourcesScreenViewState())
+    private val _viewState = MutableStateFlow<PersistentList<ChipData>>(persistentListOf())
     val viewState = _viewState.asStateFlow()
 
     init {
@@ -26,16 +29,14 @@ class SettingSourcesScreenViewModel(
             val sources = Source.entries
             observeSavedSourcesUseCase().collectLatest { ids->
                 _viewState.update {
-                    SettingSourcesScreenViewState(
-                        sources = sources.map {
-                            ChipData(
-                                id = it.id,
-                                name = it.label,
-                                image = it.icon,
-                                selected = it in ids
-                            )
-                        }
-                    )
+                    sources.map {
+                        ChipData(
+                            id = it.id,
+                            name = it.label,
+                            image = it.icon,
+                            selected = it in ids
+                        )
+                    }.toPersistentList()
                 }
             }
         }
