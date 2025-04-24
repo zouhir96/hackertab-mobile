@@ -15,7 +15,7 @@ class KotlinMultiplatformFeatureConventionPlugin : Plugin<Project> {
                 sourceSets.commonMain.dependencies {
                     implementation(project(":core:design"))
                     implementation(project(":core:domain"))
-                    implementation(project(":core:network"))
+                    implementation(project(":core:analytics"))
 
                     implementation(project.dependencies.platform(versionCatalog().findLibrary("koin.bom").get()))
                     implementation(versionCatalog().findLibrary("koin.compose").get())
