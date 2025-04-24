@@ -8,6 +8,7 @@ versionName = "1.1.0"
 kotlin = "2.0.0"
 agp = "8.3.2"
 googleServices = "4.4.2"
+crashlytics = "2.9.9"
 ksp = "2.0.0-1.0.21"
 composePlugin = "1.7.0"
 
@@ -27,8 +28,10 @@ kotlinxSerializationJson = "1.7.1"
 kotlinxDatetime = "0.6.0"
 atomicfu = "0.24.0"
 firebaseBom = "33.1.1"
+gitlive = "2.1.0"
 coroutines = "1.8.0"
 collectionsImmutable = "0.3.8"
+napier = "2.7.1"
 
 [libraries]
 
@@ -67,9 +70,13 @@ ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", versi
 ktor-loggingInterceptor = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 
 #firebase
-com-google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
-com-google-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
-com-google-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+gitlive-analytics = { group = "dev.gitlive", name = "firebase-analytics", version.ref = "gitlive" }
+gitlive-crashlytics = { group = "dev.gitlive", name = "firebase-crashlytics", version.ref = "gitlive" }
+
+napier = { group = "io.github.aakira", name = "napier", version.ref = "napier" }
 
 # Dependencies of the included build-logic
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -85,6 +92,7 @@ jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "composePlugin
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 jetbrains-kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

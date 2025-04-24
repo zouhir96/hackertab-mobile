@@ -15,6 +15,8 @@ fun KotlinMultiplatformExtension.setFrameworkBaseName(name: String) {
     ).forEach {
         it.binaries.framework {
             baseName = name
+            isStatic = true
+            binaryOption("bundleId", "com.zrcoding.$name")
         }
     }
 }

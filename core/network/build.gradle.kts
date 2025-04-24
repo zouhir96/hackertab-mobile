@@ -4,10 +4,6 @@ plugins {
     id("hackertab.kmp.library")
 }
 
-android {
-    namespace = "com.zrcoding.hackertab.network"
-}
-
 kotlin {
     setFrameworkBaseName("network")
 
@@ -26,4 +22,8 @@ kotlin {
             implementation(libs.ktor.darwin)
         }
     }
+}
+
+android {
+    namespace = "com.zrcoding.hackertab.network"
 }

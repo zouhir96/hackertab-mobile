@@ -9,5 +9,5 @@ kotlin {
 }
 
 android {
-    namespace = "com.zrcoding.hackertab.network"
+    namespace = "com.zrcoding.hackertab.domain"
 }

@@ -2,6 +2,7 @@ package com.zrcoding.hackertab
 
 import android.app.Application
 import android.content.Context
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.zrcoding.hackertab.settings.presentation.common.AppConfig
 import com.zrcoding.hackertab.shared.di.initKoin
 import org.koin.core.module.dsl.singleOf
@@ -18,6 +19,7 @@ class Hackertab : Application() {
                 singleOf(::AppConfigImpl) bind AppConfig::class
             },
         )
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
     }
 }
 

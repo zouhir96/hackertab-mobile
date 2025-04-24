@@ -5,12 +5,9 @@ plugins {
     id("hackertab.kmp.compose")
 }
 
-android {
-    namespace = "com.zrcoding.hackertab.data"
-}
 
 kotlin {
-    setFrameworkBaseName("network")
+    setFrameworkBaseName("data")
 
     sourceSets {
         commonMain.dependencies {
@@ -26,6 +23,10 @@ kotlin {
             implementation(compose.components.resources)
         }
     }
+}
+
+android {
+    namespace = "com.zrcoding.hackertab.data"
 }
 
 compose.resources {
