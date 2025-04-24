@@ -13,10 +13,14 @@ kotlin {
             implementation(project(":core:domain"))
             implementation(project(":core:network"))
             implementation(project(":core:data"))
+            implementation(project(":core:analytics"))
 
             implementation(project(":feature:onboarding"))
             implementation(project(":feature:home"))
             implementation(project(":feature:settings"))
+
+            implementation(libs.gitlive.crashlytics)
+            implementation(libs.gitlive.analytics)
         }
     }
 }
