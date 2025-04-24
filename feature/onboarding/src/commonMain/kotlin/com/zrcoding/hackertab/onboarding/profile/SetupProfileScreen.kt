@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.components.PrimaryButton
 import com.zrcoding.hackertab.design.theme.Blue
 import com.zrcoding.hackertab.design.theme.dimension
@@ -106,4 +108,5 @@ fun SetupProfileRoute(
             navigateToNextScreen()
         }
     }
+    TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.SETUP_PROFILE)
 }

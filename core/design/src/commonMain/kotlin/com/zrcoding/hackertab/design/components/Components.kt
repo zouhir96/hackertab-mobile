@@ -24,7 +24,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,13 +36,13 @@ import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.common_retry
 import com.zrcoding.hackertab.design.resources.ic_ellipse
-import com.zrcoding.hackertab.design.resources.ic_freecodecamp
 import com.zrcoding.hackertab.design.resources.ic_github
-import com.zrcoding.hackertab.design.resources.ic_reddit
 import com.zrcoding.hackertab.design.resources.loading
 import com.zrcoding.hackertab.design.theme.Blue
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
+import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.domain.models.Topic
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.DrawableResource
@@ -55,8 +54,25 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 data class ChipData(
     val id: String,
     val name: String,
+    val analyticsTag: String,
     val image: DrawableResource? = null,
     val selected: Boolean = false
+)
+
+fun Source.toChipData(selected: Boolean = false) = ChipData(
+    id = id,
+    name = label,
+    analyticsTag = analyticsTag,
+    image = icon,
+    selected = selected
+)
+
+fun Topic.toChipData(selected: Boolean = false) = ChipData(
+    id = id,
+    name = label,
+    analyticsTag = id,
+    image = null,
+    selected = selected
 )
 
 object ChipStateHandler {
@@ -154,27 +170,8 @@ fun ChipGroup(
 @Preview()
 @Composable
 fun ChipGroupPreview() {
-    val chips =  remember {
-        mutableStateListOf(
-            ChipData(id = "1", name = "chip 1"),
-            ChipData(id = "2", name = "chip 2"),
-            ChipData(id = "3", name = "chip 3"),
-            ChipData(id = "2", name = "Reddit", Res.drawable.ic_reddit),
-            ChipData(id = "4", name = "chip 4"),
-            ChipData(id = "5", name = "chip 4", selected = true),
-            ChipData(id = "6", name = "chip 4"),
-            ChipData(id = "7", name = "chip 4"),
-            ChipData(id = "8", name = "chip 4"),
-            ChipData(id = "1", name = "Github repositories", image = Res.drawable.ic_github),
-            ChipData(id = "9", name = "chip 4"),
-            ChipData(id = "42", name = "chip 4"),
-            ChipData(
-                id = "3",
-                name = "FreeCodeCamo",
-                Res.drawable.ic_freecodecamp,
-                selected = true
-            ),
-        )
+    val chips = remember {
+        Source.entries.map { it.toChipData() }.toPersistentList()
     }
 
     HackertabTheme {
@@ -309,7 +306,7 @@ private fun ErrorMsgWithBtnPreview() {
         ErrorMsgWithBtn(
             text = "Failed to load articles found for Github !!",
             btnText = Res.string.common_retry
-        ){}
+        ) {}
     }
 }
 

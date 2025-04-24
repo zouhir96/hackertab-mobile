@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.home.presentation.cards.hashnode
 
+import com.zrcoding.hackertab.analytics.AnalyticsHelper
 import com.zrcoding.hackertab.domain.models.Hashnode
 import com.zrcoding.hackertab.domain.models.NetworkErrors
 import com.zrcoding.hackertab.domain.models.Resource
@@ -11,8 +12,13 @@ import com.zrcoding.hackertab.home.presentation.cards.CardWithTopicFilterViewMod
 
 class HashnodeCardViewModel(
     articleRepository: ArticleRepository,
-    observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase
-) : CardWithTopicFilterViewModel<Hashnode>(articleRepository, observeSelectedTopicsUseCase) {
+    observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase,
+    analyticsHelper: AnalyticsHelper
+) : CardWithTopicFilterViewModel<Hashnode>(
+    articleRepository,
+    observeSelectedTopicsUseCase,
+    analyticsHelper
+) {
 
     override val source: Source
         get() = Source.HASH_NODE

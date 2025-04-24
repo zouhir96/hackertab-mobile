@@ -2,8 +2,11 @@ package com.zrcoding.hackertab.settings.presentation.sources
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zrcoding.hackertab.analytics.AnalyticsHelper
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.analytics.models.Param
 import com.zrcoding.hackertab.design.components.ChipData
-import com.zrcoding.hackertab.design.components.icon
+import com.zrcoding.hackertab.design.components.toChipData
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import com.zrcoding.hackertab.domain.usecases.ObserveSavedSourcesUseCase
@@ -18,7 +21,8 @@ import kotlinx.coroutines.launch
 
 class SettingSourcesScreenViewModel(
     private val settingRepository: SettingRepository,
-    private val observeSavedSourcesUseCase: ObserveSavedSourcesUseCase
+    private val observeSavedSourcesUseCase: ObserveSavedSourcesUseCase,
+    private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow<PersistentList<ChipData>>(persistentListOf())
@@ -29,24 +33,34 @@ class SettingSourcesScreenViewModel(
             val sources = Source.entries
             observeSavedSourcesUseCase().collectLatest { ids->
                 _viewState.update {
-                    sources.map {
-                        ChipData(
-                            id = it.id,
-                            name = it.label,
-                            image = it.icon,
-                            selected = it in ids
-                        )
-                    }.toPersistentList()
+                    sources.map { it.toChipData(selected = it in ids) }.toPersistentList()
                 }
             }
         }
     }
 
-    fun onChipClicked(chipData: ChipData) {
+    fun onChipClicked(source: ChipData) {
         viewModelScope.launch {
-            if (chipData.selected) {
-                settingRepository.removeSource(chipData.id)
-            } else settingRepository.saveSource(chipData.id)
+            if (source.selected) {
+                settingRepository.removeSource(source.id)
+            } else {
+                settingRepository.saveSource(source.id)
+            }
+            trackSourceSelectionChanged(source)
         }
+    }
+
+    fun trackSourceSelectionChanged(source: ChipData) {
+        analyticsHelper.logEvent(
+            event = AnalyticsEvent(
+                name = AnalyticsEvent.Types.SOURCE_SELECTION_CHANGED,
+                properties = setOf(
+                    Param(
+                        key = AnalyticsEvent.ParamKeys.VALUE,
+                        value = source.selected.toString()
+                    )
+                )
+            )
+        )
     }
 }

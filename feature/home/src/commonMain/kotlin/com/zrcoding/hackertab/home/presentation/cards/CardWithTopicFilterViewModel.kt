@@ -2,6 +2,9 @@ package com.zrcoding.hackertab.home.presentation.cards
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zrcoding.hackertab.analytics.AnalyticsHelper
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.analytics.models.Param
 import com.zrcoding.hackertab.domain.models.BaseModel
 import com.zrcoding.hackertab.domain.models.NetworkErrors
 import com.zrcoding.hackertab.domain.models.Resource
@@ -19,7 +22,8 @@ import kotlinx.coroutines.launch
 
 abstract class CardWithTopicFilterViewModel<out T : BaseModel>(
     private val articleRepository: ArticleRepository,
-    private val observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase
+    private val observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase,
+    private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
 
     abstract val source: Source
@@ -93,12 +97,27 @@ abstract class CardWithTopicFilterViewModel<out T : BaseModel>(
                     )
                 }
             }
+            trackFilterSelected(_viewState.value.selectedTopic)
         }
     }
 
-    fun Topic.toCardHeaderTopic() = CardWithTopicFilterHeaderTopic(
+    private fun Topic.toCardHeaderTopic() = CardWithTopicFilterHeaderTopic(
         id = id,
         name = label,
-        sourceTag = sourceTag(this)
+        sourceTag = sourceTag(this),
     )
+
+    private fun trackFilterSelected(topic: CardWithTopicFilterHeaderTopic) {
+        analyticsHelper.logEvent(
+            event = AnalyticsEvent(
+                name = AnalyticsEvent.Types.TOPIC_FILTER_CHANGED,
+                properties = setOf(
+                    Param(
+                        key = AnalyticsEvent.ParamKeys.VALUE,
+                        value = topic.id
+                    )
+                )
+            )
+        )
+    }
 }

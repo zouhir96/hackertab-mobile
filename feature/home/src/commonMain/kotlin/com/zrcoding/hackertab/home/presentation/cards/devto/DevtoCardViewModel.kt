@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.home.presentation.cards.devto
 
+import com.zrcoding.hackertab.analytics.AnalyticsHelper
 import com.zrcoding.hackertab.domain.models.Devto
 import com.zrcoding.hackertab.domain.models.NetworkErrors
 import com.zrcoding.hackertab.domain.models.Resource
@@ -11,8 +12,13 @@ import com.zrcoding.hackertab.home.presentation.cards.CardWithTopicFilterViewMod
 
 class DevtoCardViewModel(
     articleRepository: ArticleRepository,
-    observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase
-) : CardWithTopicFilterViewModel<Devto>(articleRepository, observeSelectedTopicsUseCase) {
+    observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase,
+    analyticsHelper: AnalyticsHelper
+) : CardWithTopicFilterViewModel<Devto>(
+    articleRepository,
+    observeSelectedTopicsUseCase,
+    analyticsHelper
+) {
 
     override val source: Source
         get() = Source.DEVTO

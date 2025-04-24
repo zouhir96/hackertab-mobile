@@ -2,6 +2,9 @@ package com.zrcoding.hackertab.onboarding.sources
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zrcoding.hackertab.analytics.AnalyticsHelper
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.analytics.models.Param
 import com.zrcoding.hackertab.design.components.ChipData
 import com.zrcoding.hackertab.design.components.ChipStateHandler
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
@@ -13,7 +16,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SetupSourcesViewModel(
-    private val settingRepository: SettingRepository
+    private val settingRepository: SettingRepository,
+    private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(SetupSourcesViewState())
@@ -34,10 +38,25 @@ class SetupSourcesViewModel(
     }
 
     fun onContinueClicked() {
-        val sourcesIds = _viewState.value.sources.filter { it.selected }.map { it.id }
+        val selectedSources = _viewState.value.sources.filter { it.selected }
         viewModelScope.launch {
-            settingRepository.saveSource(ids = sourcesIds)
+            settingRepository.saveSource(ids = selectedSources.map { it.id })
+            trackSourcesSelected(selectedSources)
             _goToNextPage.emit(Unit)
         }
+    }
+
+    private fun trackSourcesSelected(selectedSources: List<ChipData>) {
+        analyticsHelper.logEvent(
+            event = AnalyticsEvent(
+                name = AnalyticsEvent.Types.SOURCES_SELECTED,
+                properties = setOf(
+                    Param(
+                        key = AnalyticsEvent.ParamKeys.VALUE,
+                        value = selectedSources.map { it.analyticsTag }.toString()
+                    )
+                )
+            )
+        )
     }
 }

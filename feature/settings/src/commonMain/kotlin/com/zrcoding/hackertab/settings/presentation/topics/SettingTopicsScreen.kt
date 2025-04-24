@@ -2,6 +2,8 @@ package com.zrcoding.hackertab.settings.presentation.topics
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.components.ChipGroup
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.setting_topics_screen_description
@@ -23,4 +25,5 @@ fun SettingTopicsRoute(
             onChipClicked = viewModel::onChipClicked
         )
     }
+    TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.SETTINGS_TOPICS)
 }

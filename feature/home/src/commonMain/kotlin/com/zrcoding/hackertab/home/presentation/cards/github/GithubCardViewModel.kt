@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.home.presentation.cards.github
 
+import com.zrcoding.hackertab.analytics.AnalyticsHelper
 import com.zrcoding.hackertab.domain.models.GithubRepo
 import com.zrcoding.hackertab.domain.models.NetworkErrors
 import com.zrcoding.hackertab.domain.models.Resource
@@ -11,8 +12,13 @@ import com.zrcoding.hackertab.home.presentation.cards.CardWithTopicFilterViewMod
 
 class GithubCardViewModel(
     articleRepository: ArticleRepository,
-    observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase
-) : CardWithTopicFilterViewModel<GithubRepo>(articleRepository, observeSelectedTopicsUseCase) {
+    observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase,
+    analyticsHelper: AnalyticsHelper
+) : CardWithTopicFilterViewModel<GithubRepo>(
+    articleRepository,
+    observeSelectedTopicsUseCase,
+    analyticsHelper
+) {
 
     override val source: Source
         get() = Source.GITHUB

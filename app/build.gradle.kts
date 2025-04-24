@@ -66,9 +66,9 @@ android {
 dependencies {
     implementation(project(":shared"))
 
+    implementation(project(":core:domain"))
     implementation(project(":feature:home"))
     implementation(project(":feature:settings"))
-    implementation(project(":core:network"))
 
     // Activity
     implementation(libs.androidx.core.splashscreen)
@@ -82,6 +82,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
+
+    implementation(libs.napier)
 }
 
 tasks.withType<Test> {

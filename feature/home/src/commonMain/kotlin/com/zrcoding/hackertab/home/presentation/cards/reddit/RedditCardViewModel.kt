@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.home.presentation.cards.reddit
 
+import com.zrcoding.hackertab.analytics.AnalyticsHelper
 import com.zrcoding.hackertab.domain.models.NetworkErrors
 import com.zrcoding.hackertab.domain.models.Reddit
 import com.zrcoding.hackertab.domain.models.Resource
@@ -11,8 +12,13 @@ import com.zrcoding.hackertab.home.presentation.cards.CardWithTopicFilterViewMod
 
 class RedditCardViewModel(
     articleRepository: ArticleRepository,
-    observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase
-) : CardWithTopicFilterViewModel<Reddit>(articleRepository, observeSelectedTopicsUseCase) {
+    observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase,
+    analyticsHelper: AnalyticsHelper
+) : CardWithTopicFilterViewModel<Reddit>(
+    articleRepository,
+    observeSelectedTopicsUseCase,
+    analyticsHelper
+) {
 
     override val source: Source
         get() = Source.REDDIT

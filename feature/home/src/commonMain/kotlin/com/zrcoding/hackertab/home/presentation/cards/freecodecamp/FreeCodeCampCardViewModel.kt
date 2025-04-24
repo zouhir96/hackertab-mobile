@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.home.presentation.cards.freecodecamp
 
+import com.zrcoding.hackertab.analytics.AnalyticsHelper
 import com.zrcoding.hackertab.domain.models.FreeCodeCamp
 import com.zrcoding.hackertab.domain.models.NetworkErrors
 import com.zrcoding.hackertab.domain.models.Resource
@@ -11,8 +12,13 @@ import com.zrcoding.hackertab.home.presentation.cards.CardWithTopicFilterViewMod
 
 class FreeCodeCampCardViewModel(
     articleRepository: ArticleRepository,
-    observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase
-) : CardWithTopicFilterViewModel<FreeCodeCamp>(articleRepository, observeSelectedTopicsUseCase) {
+    observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase,
+    analyticsHelper: AnalyticsHelper
+) : CardWithTopicFilterViewModel<FreeCodeCamp>(
+    articleRepository,
+    observeSelectedTopicsUseCase,
+    analyticsHelper
+) {
 
     override val source: Source
         get() = Source.FREE_CODE_CAMP

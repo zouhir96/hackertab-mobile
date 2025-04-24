@@ -37,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.components.ErrorMsgWithBtn
 import com.zrcoding.hackertab.design.components.icon
 import com.zrcoding.hackertab.design.resources.Res
@@ -67,7 +68,7 @@ fun HomeRoute(
         onSettingBtnClick = onNavigateToSettings,
         onNavigateToSourcesSettings = onNavigateToSourcesSettings
     )
-    TrackScreenViewEvent(screenName = "Home")
+    TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.HOME)
 }
 
 @Composable

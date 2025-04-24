@@ -25,7 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.common_ok
 import com.zrcoding.hackertab.design.resources.ic_baseline_arrow_forward
@@ -42,7 +45,7 @@ import com.zrcoding.hackertab.design.resources.support_no_apps_title
 import com.zrcoding.hackertab.design.resources.support_support_footer_message
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
-import com.zrcoding.hackertab.settings.presentation.common.AppConfig
+import com.zrcoding.hackertab.domain.common.AppConfig
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -74,7 +77,7 @@ fun SettingMasterRoute(
             .background(MaterialTheme.colors.background)
             .padding(
                 top = MaterialTheme.dimension.extraBig,
-                bottom = MaterialTheme.dimension.default
+                bottom = MaterialTheme.dimension.bigger
             )
             .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal)
             .fillMaxSize(),
@@ -127,6 +130,7 @@ fun SettingMasterRoute(
             versionName = appConfig.versionName
         )
     }
+    TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.SETTINGS_MASTER)
 }
 
 @Preview
@@ -224,6 +228,7 @@ fun AppVersionName(modifier: Modifier = Modifier, versionName: String) {
         modifier = modifier,
         text = stringResource(Res.string.setting_master_screen_version_name, versionName),
         color = MaterialTheme.colors.onBackground,
-        style = MaterialTheme.typography.subtitle1
+        style = MaterialTheme.typography.subtitle1,
+        textAlign = TextAlign.Center
     )
 }

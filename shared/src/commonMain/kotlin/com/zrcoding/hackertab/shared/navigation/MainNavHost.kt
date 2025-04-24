@@ -28,6 +28,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.zrcoding.hackertab.analytics.LocalAnalyticsHelper
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase
 import com.zrcoding.hackertab.home.presentation.HomeRoute
@@ -60,6 +62,7 @@ fun MainNavHost(
     startDestination: GetStartDestinationUseCase.Result,
     isExpandedScree: Boolean
 ) {
+    val analyticsHelper = LocalAnalyticsHelper.current
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -72,6 +75,12 @@ fun MainNavHost(
                 screensToComplete = startDestination.screens,
                 navController = navController,
                 navigateToHome = {
+                    analyticsHelper.logEvent(
+                        event = AnalyticsEvent(
+                            name = AnalyticsEvent.Types.SETUP_COMPLETED,
+                            properties = emptySet()
+                        )
+                    )
                     navController.navigate(
                         HomeScreen,
                         navOptions {

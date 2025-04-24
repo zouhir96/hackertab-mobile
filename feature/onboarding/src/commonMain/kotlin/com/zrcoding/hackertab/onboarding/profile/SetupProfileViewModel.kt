@@ -4,6 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.zrcoding.hackertab.analytics.AnalyticsHelper
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.analytics.models.Param
 import com.zrcoding.hackertab.domain.models.Profile
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import com.zrcoding.hackertab.onboarding.SetupProfileScreen
@@ -17,6 +20,7 @@ import kotlinx.coroutines.launch
 
 class SetupProfileViewModel(
     private val settingsRepository: SettingRepository,
+    private val analyticsHelper: AnalyticsHelper,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -47,7 +51,22 @@ class SetupProfileViewModel(
         val profile = _viewState.value.selectedProfile ?: return
         viewModelScope.launch {
             settingsRepository.saveProfile(profile = profile)
+            trackProfileSelected(profile)
             _goToNextPage.emit(Unit)
         }
+    }
+
+    private fun trackProfileSelected(profile: Profile) {
+        analyticsHelper.logEvent(
+            event = AnalyticsEvent(
+                name = AnalyticsEvent.Types.PROFILE_SELECTED,
+                properties = setOf(
+                    Param(
+                        key = AnalyticsEvent.ParamKeys.VALUE,
+                        value = profile.analyticsTag
+                    )
+                )
+            )
+        )
     }
 }

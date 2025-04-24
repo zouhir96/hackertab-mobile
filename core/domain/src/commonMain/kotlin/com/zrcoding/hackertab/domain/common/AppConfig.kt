@@ -1,4 +1,4 @@
-package com.zrcoding.hackertab.settings.presentation.common
+package com.zrcoding.hackertab.domain.common
 
 /**
  * `AppConfig` provides the application configuration details common to
@@ -28,4 +28,5 @@ package com.zrcoding.hackertab.settings.presentation.common
  */
 interface AppConfig {
     val versionName: String
+    val isDebug: Boolean
 }
