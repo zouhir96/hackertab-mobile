@@ -15,13 +15,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.napier)
-        }
-        androidMain.dependencies {
-            // Firebase
-            implementation(project.dependencies.platform(libs.firebase.bom))
-            implementation(libs.firebase.analytics)
-        }
-        iosMain.dependencies {
             // Firebase
             implementation(libs.gitlive.analytics)
         }

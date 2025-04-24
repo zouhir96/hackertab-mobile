@@ -11,7 +11,7 @@ import dev.gitlive.firebase.analytics.FirebaseAnalytics
  *
  * @property firebaseAnalytics The Firebase Analytics instance for logging events and user properties.
  */
-internal class AnalyticsHelperIosImpl(
+internal class AnalyticsHelperImpl(
     private val firebaseAnalytics: FirebaseAnalytics,
 ) : AnalyticsHelper {
 
@@ -23,19 +23,14 @@ internal class AnalyticsHelperIosImpl(
     }
 
     override fun identify(userId: String) {
-        firebaseAnalytics.setUserId(userId)
+
     }
 
     override fun setUserProperties(properties: UserProperties) {
-        firebaseAnalytics.setUserProperty(AnalyticsEvent.ParamKeys.NAME, properties.name)
-        firebaseAnalytics.setUserProperty(AnalyticsEvent.ParamKeys.EMAIL, properties.email)
-        firebaseAnalytics.setUserProperty(AnalyticsEvent.ParamKeys.PHONE, properties.phone)
+
     }
 
     override fun clearUserData() {
-        firebaseAnalytics.setUserId(null)
-        firebaseAnalytics.setUserProperty(AnalyticsEvent.ParamKeys.NAME, "")
-        firebaseAnalytics.setUserProperty(AnalyticsEvent.ParamKeys.EMAIL, "")
-        firebaseAnalytics.setUserProperty(AnalyticsEvent.ParamKeys.PHONE, "")
+
     }
 }

@@ -7,6 +7,7 @@ import com.zrcoding.hackertab.analytics.impl.AnalyticsHelperStubImpl
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.analytics.models.Param
 import com.zrcoding.hackertab.analytics.models.UserProperties
+import dev.gitlive.firebase.analytics.FirebaseAnalyticsEvents
 
 /**
  * Interface for handling analytics events and user identification in an application.
@@ -76,7 +77,7 @@ fun TrackScreenViewEvent(
     analyticsHelper: AnalyticsHelper = LocalAnalyticsHelper.current,
 ) = DisposableEffect(Unit) {
     val events = AnalyticsEvent(
-        name = AnalyticsEvent.Types.SCREEN_VIEW,
+        name = FirebaseAnalyticsEvents.SCREEN_VIEW,
         properties = setOf(
             Param(AnalyticsEvent.ParamKeys.SCREEN_NAME, screenName),
         ) + properties
