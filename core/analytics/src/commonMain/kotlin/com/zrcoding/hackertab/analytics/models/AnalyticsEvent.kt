@@ -29,6 +29,8 @@ data class AnalyticsEvent(
      */
     object ParamKeys {
         const val SCREEN_NAME = "screen_name"
+        const val SOURCE_ID = "source_id"
+        const val TOPIC_ID = "topic_id"
         const val VALUE = "value"
         // Add more standard parameter keys here
     }

@@ -56,8 +56,12 @@ class SettingSourcesScreenViewModel(
                 name = AnalyticsEvent.Types.SOURCE_SELECTION_CHANGED,
                 properties = setOf(
                     Param(
+                        key = AnalyticsEvent.ParamKeys.SOURCE_ID,
+                        value = source.id
+                    ),
+                    Param(
                         key = AnalyticsEvent.ParamKeys.VALUE,
-                        value = source.selected.toString()
+                        value = source.selected.not().toString()
                     )
                 )
             )

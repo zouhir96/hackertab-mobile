@@ -55,8 +55,12 @@ class SettingTopicsScreenViewModel(
                 name = AnalyticsEvent.Types.TOPIC_SELECTION_CHANGED,
                 properties = setOf(
                     Param(
+                        key = AnalyticsEvent.ParamKeys.TOPIC_ID,
+                        value = topic.id
+                    ),
+                    Param(
                         key = AnalyticsEvent.ParamKeys.VALUE,
-                        value = topic.selected.toString()
+                        value = topic.selected.not().toString()
                     )
                 )
             )
