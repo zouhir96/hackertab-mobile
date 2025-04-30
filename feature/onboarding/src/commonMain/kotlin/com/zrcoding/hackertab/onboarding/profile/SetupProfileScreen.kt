@@ -97,7 +97,7 @@ fun SetupProfileRoute(
         Spacer(modifier = Modifier.weight(1f))
         PrimaryButton(
             modifier = Modifier.fillMaxWidth(),
-            text = "Validate",
+            text = if (state.newUser) "Next" else "Validate",
             enabled = state.canContinue(),
             trailingIcon = Icons.AutoMirrored.Default.ArrowRight,
             onClick = viewModel::onContinueClicked
