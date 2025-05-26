@@ -1,21 +1,22 @@
 [versions]
 jvmTarget = "17"
-compileSdk = "34"
-targetSdk = "34"
+compileSdk = "35"
+targetSdk = "35"
 minSdk = "21"
 versionName = "1.1.0"
 
-kotlin = "2.0.0"
+kotlin = "2.1.20"
 agp = "8.3.2"
 googleServices = "4.4.2"
 crashlytics = "2.9.9"
 ksp = "2.0.0-1.0.21"
+jbCompose = "1.8.0"
 composePlugin = "1.7.0"
 
 coreSplashscreen = "1.0.1"
 activity = "1.9.0"
 material3VersionHack = "1.1.2"
-navigation = "2.8.0-alpha10"
+navigation = "2.8.0-alpha13"
 lifecycle = "2.8.2"
 kamel = "0.9.3"
 
@@ -88,7 +89,7 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "composePlugin" }
+jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "jbCompose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
