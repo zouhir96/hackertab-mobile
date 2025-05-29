@@ -1,4 +1,4 @@
-package com.zrcoding.hackertab.settings.presentation.master
+package com.zrcoding.hackertab.home.presentation.utils
 
 import android.app.Activity
 import android.app.AlertDialog

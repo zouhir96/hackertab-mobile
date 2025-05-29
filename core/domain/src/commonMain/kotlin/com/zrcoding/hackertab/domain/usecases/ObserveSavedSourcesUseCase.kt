@@ -11,12 +11,8 @@ class ObserveSavedSourcesUseCase(
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(): Flow<List<Source>> {
-        return settingRepository.observeSavedSourcesIds().mapLatest { names ->
-            names.mapNotNull { name ->
-                Source.entries.firstOrNull {
-                    it.id == name
-                }
-            }
+        return settingRepository.observeSavedSourcesIds().mapLatest { ids ->
+            Source.entries.filter { it.id in ids }
         }
     }
 }

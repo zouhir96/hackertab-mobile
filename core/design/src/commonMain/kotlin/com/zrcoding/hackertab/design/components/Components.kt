@@ -262,16 +262,17 @@ private fun FullScreenViewWithCenterTextPreview() {
 
 @Composable
 fun ErrorMsgWithBtn(
+    modifier: Modifier = Modifier,
     text: String,
     btnText: StringResource?,
     onBtnClicked: () -> Unit
 ) {
     Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal)
     ) {
         Text(
             text = text,

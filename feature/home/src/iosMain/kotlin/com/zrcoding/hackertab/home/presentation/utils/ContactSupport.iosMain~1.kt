@@ -1,4 +1,4 @@
-package com.zrcoding.hackertab.settings.presentation.master
+package com.zrcoding.hackertab.home.presentation.utils
 
 import platform.Foundation.NSError
 import platform.MessageUI.MFMailComposeResult

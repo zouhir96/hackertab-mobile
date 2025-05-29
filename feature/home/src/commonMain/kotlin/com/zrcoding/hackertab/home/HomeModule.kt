@@ -12,10 +12,12 @@ import com.zrcoding.hackertab.home.presentation.cards.lobsters.LobstersViewModel
 import com.zrcoding.hackertab.home.presentation.cards.mediun.MediumCardViewModel
 import com.zrcoding.hackertab.home.presentation.cards.producthunt.ProductHuntCardViewModel
 import com.zrcoding.hackertab.home.presentation.cards.reddit.RedditCardViewModel
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val homeModule = module {
+    includes(platformModule)
     viewModelOf(::HomeScreenViewModel)
     viewModelOf(::GithubCardViewModel)
     viewModelOf(::RedditCardViewModel)
@@ -29,3 +31,5 @@ val homeModule = module {
     viewModelOf(::IndieHackersCardViewModel)
     viewModelOf(::LobstersViewModel)
 }
+
+internal expect val platformModule: Module

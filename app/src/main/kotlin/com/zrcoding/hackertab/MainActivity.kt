@@ -5,8 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.zrcoding.hackertab.shared.HackertabKmpApp
@@ -30,8 +28,7 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
-            HackertabKmpApp(widthSizeClass == WindowWidthSizeClass.Expanded)
+            HackertabKmpApp()
         }
     }
 }

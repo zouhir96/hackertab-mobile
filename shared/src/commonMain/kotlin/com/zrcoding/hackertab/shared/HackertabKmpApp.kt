@@ -44,7 +44,6 @@ fun HackertabKmpApp(
                         modifier = Modifier.padding(it),
                         navController = navController,
                         startDestination = destination,
-                        isExpandedScree = isExpanded
                     )
                 }
             }
