@@ -21,18 +21,32 @@ import com.zrcoding.hackertab.analytics.LocalAnalyticsHelper
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase
 import com.zrcoding.hackertab.shared.navigation.MainNavHost
+import io.kamel.core.config.Core
+import io.kamel.core.config.KamelConfig
+import io.kamel.core.config.takeFrom
+import io.kamel.image.config.LocalKamelConfig
+import io.kamel.image.config.animatedImageDecoder
+import io.kamel.image.config.imageBitmapDecoder
 import org.koin.compose.koinInject
 
 @Composable
-fun HackertabKmpApp(
-    isExpanded: Boolean,
-) {
+fun HackertabKmpApp() {
     val startDestinationUseCase = koinInject<GetStartDestinationUseCase>()
     val analyticsHelper = koinInject<AnalyticsHelper>()
     var startDestination by remember { mutableStateOf<GetStartDestinationUseCase.Result?>(null) }
+    val customKamelConfig = remember {
+        KamelConfig {
+            takeFrom(KamelConfig.Core)
+            animatedImageDecoder()
+            imageBitmapDecoder()
+        }
+    }
 
     startDestination?.let { destination ->
-        CompositionLocalProvider(LocalAnalyticsHelper provides  analyticsHelper) {
+        CompositionLocalProvider(
+            LocalAnalyticsHelper provides  analyticsHelper,
+            LocalKamelConfig provides customKamelConfig
+        ) {
             HackertabTheme {
                 Scaffold(
                     modifier = Modifier

@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -72,10 +73,13 @@ fun ProductHuntItem(product: ProductHunt) {
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small)
     ) {
         with(product) {
-            KamelImage(
+
+            KamelImage({ asyncPainterResource(data = imageUrl) },
                 modifier = Modifier.size(52.dp),
-                resource = asyncPainterResource(imageUrl),
-                contentDescription = null
+                contentDescription = null,
+                alignment = Alignment.Center,
+                contentScale = ContentScale.Fit,
+                contentAlignment = Alignment.Center,
             )
             Column(
                 modifier = Modifier.weight(1f),
@@ -89,6 +93,7 @@ fun ProductHuntItem(product: ProductHunt) {
                 )
                 Text(
                     text = description,
+                    color = MaterialTheme.colors.onBackground,
                     style = MaterialTheme.typography.body2,
                     maxLines = 2
                 )

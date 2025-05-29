@@ -22,7 +22,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-fun Long.toZonedLocalDate() : LocalDateTime = Instant.fromEpochMilliseconds(this)
+fun Long.toZonedLocalDate(): LocalDateTime = Instant.fromEpochMilliseconds(this)
     .toLocalDateTime(TimeZone.currentSystemDefault())
 
 fun Long?.orEmpty() = this ?: 0
@@ -101,7 +101,7 @@ fun ProductHuntDto.toProductHunt() = ProductHunt(
     id = id,
     title = title,
     description = description.orEmpty(),
-    imageUrl = imageUrl.orEmpty(),
+    imageUrl = imageUrl?.split("?")?.firstOrNull().orEmpty(),
     commentsCount = comments?.toLong().orEmpty(),
     reactions = reactions?.toLong().orEmpty(),
     url = url,
