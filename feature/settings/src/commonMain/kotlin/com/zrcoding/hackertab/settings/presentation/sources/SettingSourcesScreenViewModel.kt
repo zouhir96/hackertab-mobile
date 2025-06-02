@@ -9,7 +9,7 @@ import com.zrcoding.hackertab.design.components.ChipData
 import com.zrcoding.hackertab.design.components.toChipData
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
-import com.zrcoding.hackertab.domain.usecases.ObserveSavedSourcesUseCase
+import com.zrcoding.hackertab.domain.usecases.ObserveSelectedSourcesUseCase
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class SettingSourcesScreenViewModel(
     private val settingRepository: SettingRepository,
-    private val observeSavedSourcesUseCase: ObserveSavedSourcesUseCase,
+    private val observeSelectedSourcesUseCase: ObserveSelectedSourcesUseCase,
     private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
 
@@ -31,7 +31,7 @@ class SettingSourcesScreenViewModel(
     init {
         viewModelScope.launch {
             val sources = Source.entries
-            observeSavedSourcesUseCase().collectLatest { ids->
+            observeSelectedSourcesUseCase().collectLatest { ids->
                 _viewState.update {
                     sources.map { it.toChipData(selected = it in ids) }.toPersistentList()
                 }
@@ -40,6 +40,7 @@ class SettingSourcesScreenViewModel(
     }
 
     fun onChipClicked(source: ChipData) {
+        if (_viewState.value.count { it.selected } <= 1 && source.selected) return
         viewModelScope.launch {
             if (source.selected) {
                 settingRepository.removeSource(source.id)

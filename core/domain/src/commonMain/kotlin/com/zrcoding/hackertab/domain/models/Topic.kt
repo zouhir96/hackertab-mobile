@@ -16,7 +16,7 @@ data class Topic(
     val stackoverflowValues: List<String>? = null
 ) {
     companion object {
-        val global = Topic(
+        val trending = Topic(
             id = "global",
             label = "Trending",
             confsValues = emptyList(),

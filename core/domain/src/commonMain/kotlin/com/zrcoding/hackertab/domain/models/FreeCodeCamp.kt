@@ -8,4 +8,4 @@ data class FreeCodeCamp(
     val url: String,
     val isoDate: LocalDateTime,
     val categories: List<String>,
-): BaseModel()
+): BaseArticle()

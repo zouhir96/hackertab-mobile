@@ -9,4 +9,4 @@ data class IndieHackers(
     val commentsCount: Long,
     val reactions: Long,
     val url: String,
-) : BaseModel()
+) : BaseArticle()

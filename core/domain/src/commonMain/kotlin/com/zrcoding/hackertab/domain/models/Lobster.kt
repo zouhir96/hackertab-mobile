@@ -10,4 +10,4 @@ data class Lobster(
     val reactions: Long,
     val url: String,
     val commentsUrl: String,
-) : BaseModel()
+) : BaseArticle()

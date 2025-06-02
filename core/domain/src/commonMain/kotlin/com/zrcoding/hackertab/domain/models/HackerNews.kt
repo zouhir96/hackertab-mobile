@@ -9,4 +9,4 @@ data class HackerNews(
     val time: LocalDateTime,
     val descendants: Long,
     val score: Long
-) : BaseModel()
+) : BaseArticle()

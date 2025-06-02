@@ -8,17 +8,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
@@ -37,8 +34,6 @@ import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.common_retry
 import com.zrcoding.hackertab.design.resources.ic_ellipse
 import com.zrcoding.hackertab.design.resources.ic_github
-import com.zrcoding.hackertab.design.resources.loading
-import com.zrcoding.hackertab.design.theme.Blue
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Source
@@ -115,7 +110,7 @@ fun Chip(
 ) {
     Card(
         shape = RoundedCornerShape(MaterialTheme.dimension.big),
-        backgroundColor = if (isSelected) Blue else MaterialTheme.colors.surface
+        backgroundColor = if (isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.surface
     ) {
         Row(
             modifier = Modifier
@@ -276,7 +271,7 @@ fun ErrorMsgWithBtn(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.body2,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colors.onBackground
         )
@@ -308,34 +303,6 @@ private fun ErrorMsgWithBtnPreview() {
             text = "Failed to load articles found for Github !!",
             btnText = Res.string.common_retry
         ) {}
-    }
-}
-
-@Composable
-fun Loading(title: String = stringResource(Res.string.loading)) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(MaterialTheme.dimension.bigger),
-            color = MaterialTheme.colors.onPrimary
-        )
-        Spacer(modifier = Modifier.width(MaterialTheme.dimension.medium))
-        Text(
-            text = title,
-            style = MaterialTheme.typography.body1
-        )
-    }
-}
-
-@Preview()
-@Composable
-fun LoadingPreview() {
-    HackertabTheme {
-        Loading(stringResource(Res.string.loading))
     }
 }
 

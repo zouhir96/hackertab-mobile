@@ -7,9 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.design.components.TextWithStartIcon
-import com.zrcoding.hackertab.design.components.icon
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.comments
 import com.zrcoding.hackertab.design.resources.ic_arrow_drop_up
@@ -19,8 +17,6 @@ import com.zrcoding.hackertab.design.resources.score
 import com.zrcoding.hackertab.design.theme.Flamingo
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.Lobster
-import com.zrcoding.hackertab.domain.models.Source
-import com.zrcoding.hackertab.home.presentation.cards.CardWithoutTopicFilterTemplate
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.Clock
@@ -28,25 +24,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.viewmodel.koinViewModel
-
-@Composable
-fun LobstersCard(
-    modifier: Modifier = Modifier,
-    viewModel: LobstersViewModel = koinViewModel()
-) {
-    val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
-    CardWithoutTopicFilterTemplate(
-        modifier = modifier,
-        cardUiState = viewState,
-        sourceName = Source.LOBSTERS.label,
-        sourceIcon = Source.LOBSTERS.icon,
-        cardItem = { model ->
-            LobstersItem(lobster = model)
-        },
-        onRetryBtnClick = viewModel::onRefresh
-    )
-}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

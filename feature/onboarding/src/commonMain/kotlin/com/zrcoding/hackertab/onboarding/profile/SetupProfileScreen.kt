@@ -27,7 +27,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.components.PrimaryButton
-import com.zrcoding.hackertab.design.theme.Blue
 import com.zrcoding.hackertab.design.theme.dimension
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
@@ -78,8 +77,8 @@ fun SetupProfileRoute(
                     },
                     backgroundColor = MaterialTheme.colors.background,
                     border = if (it == state.selectedProfile) {
-                        BorderStroke(MaterialTheme.dimension.tiny, Blue)
-                    } else BorderStroke(1.dp, MaterialTheme.colors.onBackground.copy(alpha = 0.1f)),
+                        BorderStroke(MaterialTheme.dimension.tiny, MaterialTheme.colors.primary)
+                    } else BorderStroke(1.dp, MaterialTheme.colors.primary.copy(alpha = 0.1f)),
                     elevation = if (it == state.selectedProfile) 1.dp else 0.dp
                 ) {
                     Text(

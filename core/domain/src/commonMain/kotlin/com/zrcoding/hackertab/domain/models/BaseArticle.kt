@@ -1,5 +1,5 @@
 package com.zrcoding.hackertab.domain.models
 
-abstract class BaseModel {
+abstract class BaseArticle {
     abstract val id: String
 }

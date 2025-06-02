@@ -10,4 +10,4 @@ data class Reddit(
     val score: Long,
     val commentsCount: Long,
     val date: LocalDateTime
-) : BaseModel()
+) : BaseArticle()

@@ -3,9 +3,6 @@ package com.zrcoding.hackertab.onboarding
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object OnboardingScreen
-
-@Serializable
 data class SetupProfileScreen(val newUser: Boolean)
 
 @Serializable

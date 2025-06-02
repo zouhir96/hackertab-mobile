@@ -12,4 +12,4 @@ data class Conference(
     val online: Boolean,
     val city: String?,
     val country: String?,
-): BaseModel()
+): BaseArticle()

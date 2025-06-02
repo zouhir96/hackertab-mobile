@@ -9,4 +9,4 @@ data class GithubRepo(
     val programmingLanguage: String,
     val stars: Int,
     val forks: Int
-) : BaseModel()
+) : BaseArticle()

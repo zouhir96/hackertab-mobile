@@ -9,4 +9,4 @@ data class ProductHunt(
     val reactions: Long,
     val url: String,
     val tags: List<String>
-) : BaseModel()
+) : BaseArticle()

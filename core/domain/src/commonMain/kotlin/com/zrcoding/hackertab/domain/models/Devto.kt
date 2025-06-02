@@ -10,4 +10,4 @@ data class Devto(
     val reactions: Long,
     val url: String,
     val tags: List<String>
-) : BaseModel()
+) : BaseArticle()

@@ -3,8 +3,6 @@ package com.zrcoding.hackertab.shared.navigation
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -203,13 +201,7 @@ private fun ScreenWithBackButton(
     Scaffold(topBar = {
         TopAppBar(
             navigationIcon = {
-                IconButton(
-                    modifier = Modifier.background(
-                        color = MaterialTheme.colors.secondaryVariant,
-                        shape = CircleShape
-                    ),
-                    onClick = onBackClick,
-                ) {
+                IconButton(onClick = onBackClick) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back button",
@@ -218,6 +210,7 @@ private fun ScreenWithBackButton(
                 }
             },
             title = {},
+            backgroundColor = MaterialTheme.colors.background,
             elevation = MaterialTheme.dimension.none
         )
     }) {

@@ -6,7 +6,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapLatest
 
-class ObserveSavedSourcesUseCase(
+class ObserveSelectedSourcesUseCase(
     private val settingRepository: SettingRepository
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)

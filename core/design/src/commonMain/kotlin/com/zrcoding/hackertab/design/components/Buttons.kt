@@ -10,7 +10,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.zrcoding.hackertab.design.theme.Blue
 import com.zrcoding.hackertab.design.theme.White600
 import com.zrcoding.hackertab.design.theme.dimension
 
@@ -30,9 +29,9 @@ fun PrimaryButton(
         elevation = null,
         shape = MaterialTheme.shapes.medium,
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Blue,
+            backgroundColor = MaterialTheme.colors.primary,
             contentColor = White600,
-            disabledBackgroundColor = Blue.copy(alpha = 0.5f),
+            disabledBackgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.5f),
             disabledContentColor = White600.copy(alpha = 0.5f)
         )
     ) {

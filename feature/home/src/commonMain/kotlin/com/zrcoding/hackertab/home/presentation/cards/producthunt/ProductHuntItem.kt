@@ -19,9 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.design.components.TextWithStartIcon
-import com.zrcoding.hackertab.design.components.icon
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.comments
 import com.zrcoding.hackertab.design.resources.ic_arrow_drop_up
@@ -29,33 +27,12 @@ import com.zrcoding.hackertab.design.resources.ic_comment
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ProductHunt
-import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.home.presentation.cards.CardItemTags
-import com.zrcoding.hackertab.home.presentation.cards.CardWithoutTopicFilterTemplate
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.viewmodel.koinViewModel
-
-@Composable
-fun ProductHuntCard(
-    modifier: Modifier = Modifier,
-    viewModel: ProductHuntCardViewModel = koinViewModel()
-) {
-    val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
-    CardWithoutTopicFilterTemplate(
-        modifier = modifier,
-        cardUiState = viewState,
-        sourceName = Source.PRODUCTHUNT.label,
-        sourceIcon = Source.PRODUCTHUNT.icon,
-        cardItem = { model ->
-            ProductHuntItem(product = model)
-        },
-        onRetryBtnClick = viewModel::onRefresh
-    )
-}
 
 @Composable
 fun ProductHuntItem(product: ProductHunt) {

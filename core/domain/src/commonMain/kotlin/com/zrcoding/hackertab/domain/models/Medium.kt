@@ -9,4 +9,4 @@ data class Medium(
     val commentsCount: Long,
     val claps: Long,
     val url: String,
-) : BaseModel()
+) : BaseArticle()
