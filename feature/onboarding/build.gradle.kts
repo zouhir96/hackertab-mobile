@@ -10,10 +10,4 @@ android {
 
 kotlin {
     setFrameworkBaseName("onboarding")
-
-    sourceSets {
-        commonMain.dependencies {
-            implementation(libs.androidx.navigation)
-        }
-    }
 }

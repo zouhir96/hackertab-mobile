@@ -27,7 +27,7 @@ import com.zrcoding.hackertab.domain.models.Resource
 import com.zrcoding.hackertab.domain.repositories.ArticleRepository
 import com.zrcoding.hackertab.network.api.ArticlesNetworkDataSource
 import io.ktor.client.network.sockets.SocketTimeoutException
-import io.ktor.utils.io.errors.IOException
+import kotlinx.io.IOException
 
 class ArticleRepositoryImpl(
     private val articlesNetworkDataSource: ArticlesNetworkDataSource,
