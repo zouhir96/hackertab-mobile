@@ -1,26 +1,20 @@
 package com.zrcoding.hackertab.home.presentation
 
 import androidx.compose.runtime.Stable
-import com.zrcoding.hackertab.home.domain.models.BaseModel
-import com.zrcoding.hackertab.settings.domain.models.Source
-import kotlinx.coroutines.flow.Flow
+import com.zrcoding.hackertab.domain.models.BaseArticle
+import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.domain.models.Topic
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 @Stable
-sealed interface HomeScreenViewState {
-    data object Loading : HomeScreenViewState
-    @Stable data class Cards(val cardViewStates: List<CardViewState>) : HomeScreenViewState
-}
-
-@Stable
-data class CardViewState(
-    val source: Source,
-    val state: Flow<State>
-) {
-    @Stable
-    sealed interface State {
-        data object Loading : State
-        data class Success(val articles: List<BaseModel>) : State
-        data class Error(val message: String) : State
-        data object VerifyConnectionAndRefresh: State
-    }
-}
+data class HomeScreenViewState(
+    val enabledSources: PersistentList<Source> = persistentListOf(),
+    val selectedSource: Source? = null,
+    val enabledTopics: PersistentList<Topic> = persistentListOf(),
+    val selectedTopic: Topic? = null,
+    val articles: PersistentList<BaseArticle> = persistentListOf(),
+    val isLoading: Boolean = true,
+    val error: String? = null,
+    val canRefresh: Boolean = false,
+)

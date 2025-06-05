@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.android.kotlin)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.crashlytics)
 }
 
 android {
@@ -34,6 +36,12 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        debug {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            applicationIdSuffix = ".debug"
+        }
     }
 
     compileOptions {
@@ -58,9 +66,9 @@ android {
 dependencies {
     implementation(project(":shared"))
 
+    implementation(project(":core:domain"))
     implementation(project(":feature:home"))
     implementation(project(":feature:settings"))
-    implementation(project(":core:network"))
 
     // Activity
     implementation(libs.androidx.core.splashscreen)
@@ -68,11 +76,14 @@ dependencies {
 
     implementation(libs.androidx.compose.materialWindow)
 
+    implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)
 
-    implementation(platform(libs.com.google.firebase.bom))
-    implementation(libs.com.google.firebase.analytics)
-    implementation(libs.com.google.firebase.crashlytics)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+
+    implementation(libs.napier)
 }
 
 tasks.withType<Test> {

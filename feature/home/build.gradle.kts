@@ -10,7 +10,4 @@ android {
 
 kotlin {
     setFrameworkBaseName("home")
-    sourceSets.commonMain.dependencies {
-        implementation(project(":feature:settings"))
-    }
 }

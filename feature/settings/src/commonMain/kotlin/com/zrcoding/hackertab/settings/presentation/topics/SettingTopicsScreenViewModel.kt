@@ -1,8 +1,16 @@
 package com.zrcoding.hackertab.settings.presentation.topics
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.zrcoding.hackertab.analytics.AnalyticsHelper
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.analytics.models.Param
 import com.zrcoding.hackertab.design.components.ChipData
-import com.zrcoding.hackertab.settings.domain.repositories.SettingRepository
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import com.zrcoding.hackertab.design.components.toChipData
+import com.zrcoding.hackertab.domain.repositories.SettingRepository
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -10,38 +18,53 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SettingTopicsScreenViewModel(
-    private val settingRepository: SettingRepository
+    private val settingRepository: SettingRepository,
+    private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
 
-    private val _viewState = MutableStateFlow(SettingTopicsScreenViewState())
+    private val _viewState = MutableStateFlow<PersistentList<ChipData>>(persistentListOf())
     val viewState = _viewState.asStateFlow()
 
     init {
         viewModelScope.launch {
             val topics = settingRepository.getTopics()
-            settingRepository.getSavedTopicsIds().collectLatest { savedTopicsIds ->
+            settingRepository.observeSavedTopicsIds().collectLatest { savedTopicsIds ->
                 _viewState.update {
-                    SettingTopicsScreenViewState(
-                        topics = topics.map {
-                            ChipData(
-                                id = it.id,
-                                name = it.label,
-                                selected = it.id in savedTopicsIds
-                            )
-                        }
-                    )
+                    topics.map {
+                        it.toChipData(selected = it.id in savedTopicsIds)
+                    }.toPersistentList()
                 }
             }
         }
     }
 
     fun onChipClicked(topic: ChipData) {
+        if (_viewState.value.count { it.selected } <= 1 && topic.selected) return
         viewModelScope.launch {
             if (topic.selected) {
-                settingRepository.removeTopic(topic.id)
+                settingRepository.removeTopic(id = topic.id)
             } else {
-                settingRepository.saveTopic(topic.id)
+                settingRepository.saveTopics(id = topic.id)
             }
+            trackTopicSelectionChanged(topic)
         }
+    }
+
+    fun trackTopicSelectionChanged(topic: ChipData) {
+        analyticsHelper.logEvent(
+            event = AnalyticsEvent(
+                name = AnalyticsEvent.Types.TOPIC_SELECTION_CHANGED,
+                properties = setOf(
+                    Param(
+                        key = AnalyticsEvent.ParamKeys.TOPIC_ID,
+                        value = topic.id
+                    ),
+                    Param(
+                        key = AnalyticsEvent.ParamKeys.VALUE,
+                        value = topic.selected.not().toString()
+                    )
+                )
+            )
+        )
     }
 }

@@ -7,6 +7,16 @@ plugins {
 
 kotlin {
     setFrameworkBaseName("design")
+
+    dependencies {
+        sourceSets {
+            commonMain {
+                dependencies {
+                    implementation(project(":core:domain"))
+                }
+            }
+        }
+    }
 }
 
 android {

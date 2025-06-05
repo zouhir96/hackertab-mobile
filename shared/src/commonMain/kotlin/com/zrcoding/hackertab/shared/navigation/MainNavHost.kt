@@ -3,13 +3,6 @@ package com.zrcoding.hackertab.shared.navigation
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -19,30 +12,36 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.zrcoding.hackertab.analytics.LocalAnalyticsHelper
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.theme.dimension
+import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase
+import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase.ScreenToComplete
 import com.zrcoding.hackertab.home.presentation.HomeRoute
-import com.zrcoding.hackertab.settings.presentation.master.SettingMasterRoute
+import com.zrcoding.hackertab.onboarding.SetupProfileScreen
+import com.zrcoding.hackertab.onboarding.SetupSourcesScreen
+import com.zrcoding.hackertab.onboarding.SetupTopicsScreen
+import com.zrcoding.hackertab.onboarding.profile.SetupProfileRoute
+import com.zrcoding.hackertab.onboarding.sources.SetupSourcesRoute
+import com.zrcoding.hackertab.onboarding.topics.SetupTopicsRoute
 import com.zrcoding.hackertab.settings.presentation.sources.SettingSourcesRoute
 import com.zrcoding.hackertab.settings.presentation.topics.SettingTopicsRoute
 import kotlinx.serialization.Serializable
 
+fun ScreenToComplete.toDestination(): Any = when (this) {
+    is ScreenToComplete.ProfileSetup -> SetupProfileScreen(newUser)
+    ScreenToComplete.TopicsSetup -> SetupTopicsScreen
+    ScreenToComplete.SourcesSetup -> SetupSourcesScreen
+}
+
 @Serializable
 object HomeScreen
-
-@Serializable
-object Settings
-
-@Serializable
-object SettingsMasterScreen
 
 @Serializable
 object SettingsTopicsScreen
@@ -54,52 +53,96 @@ object SettingsSourcesScreen
 fun MainNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    isExpandedScree: Boolean
+    startDestination: GetStartDestinationUseCase.Result,
 ) {
+    val analyticsHelper = LocalAnalyticsHelper.current
+    val screensToComplete =
+        if (startDestination is GetStartDestinationUseCase.Result.NotCompleted && startDestination.screens.isNotEmpty()) {
+            startDestination.screens
+        } else emptyList()
+    val setupProfileScreen = screensToComplete.firstOrNull {
+        it is ScreenToComplete.ProfileSetup
+    }?.toDestination()
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = HomeScreen
+        startDestination = setupProfileScreen ?: HomeScreen
     ) {
-        composable<HomeScreen> {
-            HomeRoute(
-                isExpandedScreen = isExpandedScree,
-                onNavigateToSettings = {
-                    navController.navigate(Settings)
-                }
-            )
-        }
-        if (isExpandedScree) {
-            composable<Settings> {
-                SettingsTwoPanNavigation(rootNavHostController = navController)
+        if (setupProfileScreen != null) {
+            val shouldSetupTopics = screensToComplete.contains(ScreenToComplete.TopicsSetup)
+            val shouldSetupSources = screensToComplete.contains(ScreenToComplete.SourcesSetup)
+            fun navigateToHome(popupTo: Any) {
+                analyticsHelper.logEvent(
+                    event = AnalyticsEvent(
+                        name = AnalyticsEvent.Types.SETUP_COMPLETED,
+                        properties = emptySet()
+                    )
+                )
+                navController.navigate(
+                    HomeScreen,
+                    navOptions {
+                        popUpTo(popupTo) {
+                            inclusive = true
+                        }
+                    }
+                )
             }
-        } else {
-            this.settingsOnePanNavigation(navController)
-        }
-    }
-}
-
-fun NavGraphBuilder.settingsOnePanNavigation(navController: NavHostController) {
-    navigation<Settings>(startDestination = SettingsMasterScreen) {
-        composableWithAnimation<SettingsMasterScreen> {
-            ScreenWithBackButton(
-                navController = navController,
-                screen = {
-                    SettingMasterRoute(
-                        showSelectedItem = false,
-                        onNavigateToTopics = {
-                            navController.navigate(SettingsTopicsScreen)
-                        },
-                        onNavigateToSources = {
-                            navController.navigate(SettingsSourcesScreen)
+            composable<SetupProfileScreen> {
+                ScreenWithBackButton(
+                    onBackClick = { navController.navigateUp() }
+                ) {
+                    SetupProfileRoute(
+                        navigateToNextScreen = { if (shouldSetupTopics) {
+                                navController.navigate(SetupTopicsScreen)
+                            } else if (shouldSetupSources) {
+                                navController.navigate(SetupSourcesScreen)
+                            } else {
+                                navigateToHome(setupProfileScreen)
+                            }
                         }
                     )
+                }
+            }
+            if (shouldSetupTopics) {
+                composable<SetupTopicsScreen> {
+                    ScreenWithBackButton(
+                        onBackClick = { navController.navigateUp() }
+                    ) {
+                        SetupTopicsRoute(
+                            navigateToNextScreen = {
+                                navController.navigate(SetupSourcesScreen)
+                            }
+                        )
+                    }
+                }
+            }
+            if (shouldSetupSources) {
+                composable<SetupSourcesScreen> {
+                    ScreenWithBackButton(
+                        onBackClick = { navController.navigateUp() }
+                    ) {
+                        SetupSourcesRoute(
+                            navigateToNextScreen = {
+                                navigateToHome(setupProfileScreen)
+                            }
+                        )
+                    }
+                }
+            }
+        }
+        composable<HomeScreen> {
+            HomeRoute(
+                onNavigateToTopicsSettings = {
+                    navController.navigate(SettingsTopicsScreen)
+                },
+                onNavigateToSourcesSettings = {
+                    navController.navigate(SettingsSourcesScreen)
                 }
             )
         }
         composableWithAnimation<SettingsTopicsScreen> {
             ScreenWithBackButton(
-                navController = navController,
+                onBackClick = { navController.navigateUp() },
                 screen = {
                     SettingTopicsRoute()
                 }
@@ -107,75 +150,13 @@ fun NavGraphBuilder.settingsOnePanNavigation(navController: NavHostController) {
         }
         composableWithAnimation<SettingsSourcesScreen> {
             ScreenWithBackButton(
-                navController = navController,
+                onBackClick = { navController.navigateUp() },
                 screen = {
                     SettingSourcesRoute()
                 }
             )
         }
     }
-}
-
-@Composable
-fun SettingsTwoPanNavigation(rootNavHostController: NavHostController) {
-    val nestedNavController = rememberNavController()
-    fun navigateWithPopUpToTopics(route: Any) {
-        nestedNavController.navigate(
-            route = route,
-            navOptions = navOptions {
-                // Pop up to the start destination of the graph to
-                // avoid building up a large stack of destinations
-                // on the back stack as users select items
-                popUpTo(SettingsTopicsScreen) {
-                    saveState = true
-                }
-                // Avoid multiple copies of the same destination when
-                // re selecting the same item
-                launchSingleTop = true
-                // Restore state when re selecting a previously selected item
-                restoreState = true
-            }
-        )
-    }
-
-    ScreenWithBackButton(
-        navController = rootNavHostController,
-        screen = {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                SettingMasterRoute(
-                    modifier = Modifier.width(400.dp),
-                    showSelectedItem = true,
-                    onNavigateToTopics = {
-                        navigateWithPopUpToTopics(SettingsTopicsScreen)
-                    },
-                    onNavigateToSources = {
-                        navigateWithPopUpToTopics(SettingsSourcesScreen)
-                    }
-                )
-
-                NavHost(
-                    modifier = Modifier
-                        .width(0.dp)
-                        .weight(1f),
-                    navController = nestedNavController,
-                    startDestination = SettingsTopicsScreen
-                ) {
-                    composable<SettingsTopicsScreen>(
-                        enterTransition = { fadeIn() },
-                        exitTransition = { fadeOut() }
-                    ) {
-                        SettingTopicsRoute()
-                    }
-                    composable<SettingsSourcesScreen>(
-                        enterTransition = { fadeIn() },
-                        exitTransition = { fadeOut() }
-                    ) {
-                        SettingSourcesRoute()
-                    }
-                }
-            }
-        }
-    )
 }
 
 private inline fun <reified T : Any> NavGraphBuilder.composableWithAnimation(
@@ -214,19 +195,13 @@ private inline fun <reified T : Any> NavGraphBuilder.composableWithAnimation(
 
 @Composable
 private fun ScreenWithBackButton(
-    navController: NavHostController,
+    onBackClick: () -> Unit,
     screen: @Composable () -> Unit
 ) {
     Scaffold(topBar = {
         TopAppBar(
             navigationIcon = {
-                IconButton(
-                    modifier = Modifier.background(
-                        color = MaterialTheme.colors.secondaryVariant,
-                        shape = CircleShape
-                    ),
-                    onClick = { navController.popBackStack() },
-                ) {
+                IconButton(onClick = onBackClick) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back button",
@@ -235,6 +210,7 @@ private fun ScreenWithBackButton(
                 }
             },
             title = {},
+            backgroundColor = MaterialTheme.colors.background,
             elevation = MaterialTheme.dimension.none
         )
     }) {

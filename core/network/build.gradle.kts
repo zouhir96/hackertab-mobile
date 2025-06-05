@@ -2,11 +2,6 @@ import com.zrcoding.convention.setFrameworkBaseName
 
 plugins {
     id("hackertab.kmp.library")
-    alias(libs.plugins.jetbrains.kotlinx.serialization)
-}
-
-android {
-    namespace = "com.zrcoding.hackertab.network"
 }
 
 kotlin {
@@ -27,4 +22,8 @@ kotlin {
             implementation(libs.ktor.darwin)
         }
     }
+}
+
+android {
+    namespace = "com.zrcoding.hackertab.network"
 }

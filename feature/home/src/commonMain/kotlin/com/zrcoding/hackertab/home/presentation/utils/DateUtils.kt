@@ -9,7 +9,7 @@ import kotlinx.datetime.toLocalDateTime
 fun LocalDateTime.timeAgo(): String {
     val timeZone = TimeZone.currentSystemDefault()
     val currentTime = Clock.System.now().toLocalDateTime(timeZone)
-    val duration = this.toInstant(timeZone).minus(currentTime.toInstant(timeZone))
+    val duration = currentTime.toInstant(timeZone).minus(this.toInstant(timeZone))
 
     return when {
         duration.inWholeDays > 0 -> "${duration.inWholeDays} day${if (duration.inWholeDays > 1) "s" else ""} ago"

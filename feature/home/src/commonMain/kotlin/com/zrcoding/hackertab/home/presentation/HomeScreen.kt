@@ -1,258 +1,418 @@
 package com.zrcoding.hackertab.home.presentation
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.ChipDefaults
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
+import androidx.compose.material.DrawerValue
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FilterChip
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowRight
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.rememberDrawerState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.components.ErrorMsgWithBtn
-import com.zrcoding.hackertab.design.components.Loading
-import com.zrcoding.hackertab.design.components.RoundedIconButton
+import com.zrcoding.hackertab.design.components.icon
 import com.zrcoding.hackertab.design.resources.Res
-import com.zrcoding.hackertab.design.resources.app_title
+import com.zrcoding.hackertab.design.resources.common_ok
+import com.zrcoding.hackertab.design.resources.common_retry
 import com.zrcoding.hackertab.design.resources.common_settings
-import com.zrcoding.hackertab.design.resources.ic_baseline_arrow_back_ios
-import com.zrcoding.hackertab.design.resources.ic_baseline_arrow_forward
-import com.zrcoding.hackertab.design.resources.ic_refresh
-import com.zrcoding.hackertab.design.resources.ic_settings
-import com.zrcoding.hackertab.design.resources.no_source_selected
-import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.resources.setting_master_screen_contact_us
+import com.zrcoding.hackertab.design.resources.setting_master_screen_sources
+import com.zrcoding.hackertab.design.resources.setting_master_screen_topics
+import com.zrcoding.hackertab.design.resources.setting_master_screen_version_name
+import com.zrcoding.hackertab.design.resources.support_device_model
+import com.zrcoding.hackertab.design.resources.support_device_os_version
+import com.zrcoding.hackertab.design.resources.support_email
+import com.zrcoding.hackertab.design.resources.support_email_subject
+import com.zrcoding.hackertab.design.resources.support_no_apps_description
+import com.zrcoding.hackertab.design.resources.support_no_apps_title
+import com.zrcoding.hackertab.design.resources.support_support_footer_message
+import com.zrcoding.hackertab.design.theme.White600
 import com.zrcoding.hackertab.design.theme.dimension
-import com.zrcoding.hackertab.home.presentation.card.CardTemplate
-import com.zrcoding.hackertab.home.presentation.card.ToCardItem
+import com.zrcoding.hackertab.domain.common.AppConfig
+import com.zrcoding.hackertab.domain.models.BaseArticle
+import com.zrcoding.hackertab.domain.models.Conference
+import com.zrcoding.hackertab.domain.models.Devto
+import com.zrcoding.hackertab.domain.models.FreeCodeCamp
+import com.zrcoding.hackertab.domain.models.GithubRepo
+import com.zrcoding.hackertab.domain.models.HackerNews
+import com.zrcoding.hackertab.domain.models.Hashnode
+import com.zrcoding.hackertab.domain.models.IndieHackers
+import com.zrcoding.hackertab.domain.models.Lobster
+import com.zrcoding.hackertab.domain.models.Medium
+import com.zrcoding.hackertab.domain.models.ProductHunt
+import com.zrcoding.hackertab.domain.models.Reddit
+import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.home.presentation.cards.conferences.ConferenceItem
+import com.zrcoding.hackertab.home.presentation.cards.devto.DevtoItem
+import com.zrcoding.hackertab.home.presentation.cards.freecodecamp.FreeCodeCampItem
+import com.zrcoding.hackertab.home.presentation.cards.github.GithubItem
+import com.zrcoding.hackertab.home.presentation.cards.hackernews.HackerNewsItem
+import com.zrcoding.hackertab.home.presentation.cards.hashnode.HashnodeItem
+import com.zrcoding.hackertab.home.presentation.cards.indiehackers.IndieHackersItem
+import com.zrcoding.hackertab.home.presentation.cards.lobsters.LobstersItem
+import com.zrcoding.hackertab.home.presentation.cards.mediun.MediumItem
+import com.zrcoding.hackertab.home.presentation.cards.producthunt.ProductHuntItem
+import com.zrcoding.hackertab.home.presentation.cards.reddit.RedditItem
+import com.zrcoding.hackertab.home.presentation.utils.ContactSupport
+import com.zrcoding.hackertab.home.presentation.utils.ContactSupportData
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeRoute(
-    viewModel: HomeScreenViewModel = koinInject(),
-    isExpandedScreen: Boolean,
-    onNavigateToSettings: () -> Unit
+    viewModel: HomeScreenViewModel = koinViewModel(),
+    onNavigateToTopicsSettings: () -> Unit,
+    onNavigateToSourcesSettings: () -> Unit,
 ) {
-    val viewState = viewModel.viewState.collectAsState().value
-    HomeScreen(
-        modifier = Modifier,
-        isExpandedScreen = isExpandedScreen,
-        viewState = viewState,
-        onRefreshBtnClick = viewModel::loadData,
-        onSettingBtnClick = onNavigateToSettings
-    )
+    val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
+    Scaffold(
+        scaffoldState = rememberScaffoldState(drawerState = drawerState),
+        topBar = {
+            HomeScreenTopAppBar(
+                enabledSources = viewState.enabledSources,
+                selectedSource = viewState.selectedSource?.label.orEmpty(),
+                onSourceSelected = viewModel::onSourceSelected,
+                onNavigationBtnClick = {
+                    scope.launch { drawerState.open() }
+                }
+            )
+        },
+        drawerContent = {
+            HomeScreenDrawer(
+                onNavigateToTopicsSettings = {
+                    scope.launch {
+                        drawerState.close()
+                        onNavigateToTopicsSettings()
+                    }
+                },
+                onNavigateToSourcesSettings = {
+                    scope.launch {
+                        drawerState.close()
+                        onNavigateToSourcesSettings()
+                    }
+                }
+            )
+        },
+        drawerShape = RoundedCornerShape(
+            topEnd = MaterialTheme.dimension.medium,
+            bottomEnd = MaterialTheme.dimension.medium
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(it),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (viewState.selectedSource?.supportsFilters == true && viewState.enabledTopics.isNotEmpty()) {
+                CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = MaterialTheme.dimension.large)
+                            .padding(bottom = MaterialTheme.dimension.small),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
+                    ) {
+                        items(viewState.enabledTopics) { topic ->
+                            val selected = viewState.selectedTopic == topic
+                            FilterChip(
+                                selected = selected,
+                                onClick = { viewModel.onTopicSelected(topic) },
+                                colors = if (selected) ChipDefaults.filterChipColors(
+                                    backgroundColor = MaterialTheme.colors.primary,
+                                    contentColor = White600
+                                ) else ChipDefaults.filterChipColors(),
+                            ) {
+                                Text(text = topic.label)
+                            }
+                        }
+                    }
+                }
+            }
+            if (viewState.isLoading) CircularProgressIndicator()
+            when {
+                viewState.articles.isNotEmpty() -> LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.large),
+                    contentPadding = PaddingValues(bottom = MaterialTheme.dimension.extraBig)
+                ) {
+                    items(
+                        items = viewState.articles,
+                        key = { item -> item.id }
+                    ) { item: BaseArticle ->
+                        when (item) {
+                            is GithubRepo -> GithubItem(item)
+                            is HackerNews -> HackerNewsItem(item)
+                            is Conference -> ConferenceItem(item)
+                            is Devto -> DevtoItem(item)
+                            is ProductHunt -> ProductHuntItem(item)
+                            is Reddit -> RedditItem(item)
+                            is Lobster -> LobstersItem(item)
+                            is Hashnode -> HashnodeItem(item)
+                            is FreeCodeCamp -> FreeCodeCampItem(item)
+                            is IndieHackers -> IndieHackersItem(item)
+                            is Medium -> MediumItem(item)
+                        }
+                        Divider(modifier = Modifier.padding(horizontal = MaterialTheme.dimension.large))
+                    }
+                }
+
+                viewState.error != null -> ErrorMsgWithBtn(
+                    modifier = Modifier.fillMaxSize(),
+                    text = viewState.error,
+                    btnText = if (viewState.canRefresh) Res.string.common_retry else null,
+                    onBtnClicked = viewModel::onRefreshBtnClick
+                )
+
+                viewState.enabledSources.isEmpty() && viewState.isLoading.not() -> ErrorMsgWithBtn(
+                    modifier = Modifier.fillMaxSize(),
+                    text = "You didn't follow any source, you can follow your favorite sources in settings !!",
+                    btnText = Res.string.common_settings,
+                    onBtnClicked = onNavigateToSourcesSettings
+                )
+            }
+        }
+    }
+    TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.HOME)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun HomeScreen(
-    modifier: Modifier = Modifier,
-    isExpandedScreen: Boolean,
-    viewState: HomeScreenViewState,
-    onRefreshBtnClick: () -> Unit,
-    onSettingBtnClick: () -> Unit,
+private fun HomeScreenTopAppBar(
+    enabledSources: ImmutableList<Source>,
+    selectedSource: String,
+    onSourceSelected: (Source) -> Unit,
+    onNavigationBtnClick: () -> Unit,
 ) {
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                backgroundColor = MaterialTheme.colors.primary,
-                elevation = MaterialTheme.dimension.none
+    var expanded by remember { mutableStateOf(false) }
+    TopAppBar(
+        modifier = Modifier.heightIn(56.dp),
+        title = {
+            if (enabledSources.isNotEmpty()) {
+                Box {
+                    Row(
+                        modifier = Modifier.clickable(
+                            onClick = { expanded = true },
+                            role = Role.DropdownList
+                        ),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = selectedSource,
+                            color = MaterialTheme.colors.onBackground,
+                            style = MaterialTheme.typography.h6,
+                            overflow = TextOverflow.Visible,
+                            maxLines = 1
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.ArrowDropDown,
+                            contentDescription = "Select source",
+                            tint = MaterialTheme.colors.onBackground
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                    ) {
+                        enabledSources.forEach { source ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    expanded = false
+                                    onSourceSelected(source)
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(source.icon),
+                                    contentDescription = "Select source",
+                                )
+                                Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
+                                Text(text = source.label)
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        navigationIcon = {
+            IconButton(
+                onClick = onNavigationBtnClick,
             ) {
-                HomeScreenTopAppBar(
-                    onRefreshBtnClick = onRefreshBtnClick,
-                    onSettingBtnClick = onSettingBtnClick
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = "Navigation button to show drawer",
+                    tint = MaterialTheme.colors.onBackground
                 )
             }
         },
-    ) {
-        when (viewState) {
-            HomeScreenViewState.Loading -> Loading()
-            is HomeScreenViewState.Cards -> if (viewState.cardViewStates.isEmpty()) {
-                ErrorMsgWithBtn(
-                    text = Res.string.no_source_selected,
-                    btnText = Res.string.common_settings,
-                    onBtnClicked = onSettingBtnClick
-                )
-            } else {
-                HomeScreenCardsPager(
-                    modifier = Modifier.padding(it),
-                    pageSize = if (isExpandedScreen) PageSize.Fixed(400.dp) else PageSize.Fill,
-                    cardViewStates = viewState.cardViewStates,
-                    onRefreshBtnClick = onRefreshBtnClick
-                )
-            }
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun HomeScreenLoadingPreview() {
-    HackertabTheme {
-        HomeScreen(
-            isExpandedScreen = false,
-            viewState = HomeScreenViewState.Loading,
-            onRefreshBtnClick = {},
-            onSettingBtnClick = {}
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun HomeScreenEmptyPreview() {
-    HackertabTheme {
-        HomeScreen(
-            isExpandedScreen = false,
-            viewState = HomeScreenViewState.Cards(emptyList()),
-            onRefreshBtnClick = {},
-            onSettingBtnClick = {}
-        )
-    }
+        backgroundColor = MaterialTheme.colors.background,
+        elevation = MaterialTheme.dimension.none
+    )
 }
 
 @Composable
-private fun HomeScreenTopAppBar(
-    onRefreshBtnClick: () -> Unit,
-    onSettingBtnClick: () -> Unit,
+private fun HomeScreenDrawer(
+    onNavigateToTopicsSettings: () -> Unit,
+    onNavigateToSourcesSettings: () -> Unit,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.padding(start = MaterialTheme.dimension.large),
+    val contactSupport: ContactSupport = koinInject()
+    val appConfig: AppConfig = koinInject()
+    val contactSupportData = ContactSupportData(
+        email = stringResource(Res.string.support_email),
+        subject = stringResource(Res.string.support_email_subject),
+        footerMessage = stringResource(Res.string.support_support_footer_message),
+        osVersion = stringResource(Res.string.support_device_os_version),
+        deviceModel = stringResource(Res.string.support_device_model),
+        appVersion = appConfig.versionName,
+        noAppFoundTitle = stringResource(Res.string.support_no_apps_title),
+        noAppFoundDescription = stringResource(Res.string.support_no_apps_description),
+        noAppFoundOk = stringResource(Res.string.common_ok),
+    )
+    Column(
+        modifier = Modifier.fillMaxSize().padding(MaterialTheme.dimension.big),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.large),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = stringResource(Res.string.app_title),
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.h5
-        )
+        Text(text = "Hackertab", style = MaterialTheme.typography.h5)
+        Divider()
+        Column {
+            Spacer(modifier = Modifier.height(MaterialTheme.dimension.large))
+            HomeScreenDrawerItem(
+                title = stringResource(Res.string.setting_master_screen_topics),
+                onClick = onNavigateToTopicsSettings
+            )
+            HomeScreenDrawerItem(
+                title = stringResource(Res.string.setting_master_screen_sources),
+                onClick = onNavigateToSourcesSettings
+            )
+            Spacer(modifier = Modifier.height(MaterialTheme.dimension.large))
+            HomeScreenDrawerItem(
+                title = stringResource(Res.string.setting_master_screen_contact_us),
+                onClick = {
+                    contactSupport.invoke(data = contactSupportData)
+                }
+            )
+        }
         Spacer(modifier = Modifier.weight(1f))
-        Button(
-            onClick = { onRefreshBtnClick() },
-            modifier = Modifier.size(50.dp),
-            shape = CircleShape,
-            contentPadding = PaddingValues(MaterialTheme.dimension.none),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = MaterialTheme.colors.primaryVariant
-            )
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.ic_refresh),
-                contentDescription = "refresh button",
-                tint = MaterialTheme.colors.onBackground
-            )
-        }
-        Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
-        Button(
-            onClick = { onSettingBtnClick() },
-            modifier = Modifier.size(50.dp),
-            shape = CircleShape,
-            contentPadding = PaddingValues(MaterialTheme.dimension.none),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = MaterialTheme.colors.primaryVariant
-            )
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.ic_settings),
-                contentDescription = "settings button",
-                tint = MaterialTheme.colors.onBackground
-            )
-        }
-    }
-}
-
-@Preview()
-@Composable
-private fun HomeScreenTopAppBarPreview() {
-    HackertabTheme {
-        HomeScreenTopAppBar({}, {})
+        AppVersionName(versionName = appConfig.versionName)
+        Spacer(modifier = Modifier.heightIn(MaterialTheme.dimension.big))
     }
 }
 
 @Composable
-private fun HomeScreenCardsPager(
-    modifier: Modifier = Modifier,
-    pageSize: PageSize,
-    cardViewStates: List<CardViewState>,
-    onRefreshBtnClick: () -> Unit
+private fun HomeScreenDrawerItemsContainer(
+    content: @Composable ColumnScope.() -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-    val pagerState = rememberPagerState { cardViewStates.size }
-    Box(
-        modifier = modifier.fillMaxSize(),
-    ) {
-        HorizontalPager(
-            modifier = Modifier.fillMaxSize(),
-            state = pagerState,
-            contentPadding = PaddingValues(
-                start = MaterialTheme.dimension.default,
-                end = MaterialTheme.dimension.medium
-            ),
-            pageSize = pageSize
-        ) { page ->
-            cardViewStates.getOrNull(page)?.let { state ->
-                CardTemplate(
-                    cardUiState = state,
-                    cardItem = { sourceName, model ->
-                        sourceName.ToCardItem(model = model)
-                    },
-                    onRetryBtnClick = onRefreshBtnClick
+    Card(shape = MaterialTheme.shapes.large) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = MaterialTheme.dimension.large,
+                    vertical = MaterialTheme.dimension.default
                 )
-            }
-        }
-        if(pagerState.currentPage > 0) {
-            RoundedIconButton(
-                modifier = Modifier
-                    .alpha(0.6f)
-                    .padding(end = MaterialTheme.dimension.default)
-                    .align(Alignment.CenterStart),
-                size = 60.dp,
-                icon = Res.drawable.ic_baseline_arrow_back_ios
-            ) {
-                scope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                }
-            }
-        }
-        if(pagerState.currentPage < pagerState.pageCount - 1) {
-            RoundedIconButton(
-                modifier = Modifier
-                    .alpha(0.6f)
-                    .padding(end = MaterialTheme.dimension.default)
-                    .align(Alignment.CenterEnd),
-                size = 60.dp,
-                icon = Res.drawable.ic_baseline_arrow_forward
-            ) {
-                scope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                }
-            }
+        ) {
+            content()
         }
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun HomeScreenDrawerItem(
+    title: String,
+    onClick: () -> Unit = {}
+) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.medium,
+        backgroundColor = MaterialTheme.colors.secondary,
+        elevation = 0.4.dp
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(MaterialTheme.dimension.medium)
+        ) {
+            Spacer(modifier = Modifier.width(MaterialTheme.dimension.large))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colors.onBackground
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                modifier = Modifier.size(MaterialTheme.dimension.bigger),
+                imageVector = Icons.AutoMirrored.Default.ArrowRight,
+                contentDescription = "Arrow forward",
+                tint = MaterialTheme.colors.onBackground
+            )
+        }
+    }
+}
 
-
+@Composable
+private fun AppVersionName(modifier: Modifier = Modifier, versionName: String) {
+    Text(
+        modifier = modifier,
+        text = stringResource(Res.string.setting_master_screen_version_name, versionName),
+        color = MaterialTheme.colors.onBackground,
+        style = MaterialTheme.typography.subtitle1,
+        textAlign = TextAlign.Center
+    )
+}

@@ -12,6 +12,10 @@
 		A931B87E2C693FF10067E644 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A931B87D2C693FF10067E644 /* Assets.xcassets */; };
 		A931B8812C693FF10067E644 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A931B8802C693FF10067E644 /* Preview Assets.xcassets */; };
 		A94538492CB5266C009D84C0 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A94538482CB5266C009D84C0 /* SplashScreen.storyboard */; };
+		A9BDD27D2DBA8E6B009E0AAA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9BDD27C2DBA8E6B009E0AAA /* GoogleService-Info.plist */; };
+		A9BDD2802DBA9260009E0AAA /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = A9BDD27F2DBA9260009E0AAA /* FirebaseCore */; };
+		A9BDD2822DBA9260009E0AAA /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = A9BDD2812DBA9260009E0AAA /* FirebaseCrashlytics */; };
+		A9BDD2842DBAA059009E0AAA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = A9BDD2832DBAA059009E0AAA /* FirebaseAnalytics */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +44,7 @@
 		A931B8862C693FF20067E644 /* iosAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iosAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A931B8902C693FF20067E644 /* iosAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iosAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A94538482CB5266C009D84C0 /* SplashScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
+		A9BDD27C2DBA8E6B009E0AAA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +52,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9BDD2802DBA9260009E0AAA /* FirebaseCore in Frameworks */,
+				A9BDD2822DBA9260009E0AAA /* FirebaseCrashlytics in Frameworks */,
+				A9BDD2842DBAA059009E0AAA /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +101,7 @@
 				A931B87D2C693FF10067E644 /* Assets.xcassets */,
 				A931B87F2C693FF10067E644 /* Preview Content */,
 				A94538482CB5266C009D84C0 /* SplashScreen.storyboard */,
+				A9BDD27C2DBA8E6B009E0AAA /* GoogleService-Info.plist */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -170,7 +179,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 1610;
 				TargetAttributes = {
 					A931B8752C693FF00067E644 = {
 						CreatedOnToolsVersion = 15.3;
@@ -194,6 +203,9 @@
 				Base,
 			);
 			mainGroup = A931B86D2C693FF00067E644;
+			packageReferences = (
+				A9BDD27E2DBA9260009E0AAA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = A931B8772C693FF00067E644 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -211,6 +223,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A931B8812C693FF10067E644 /* Preview Assets.xcassets in Resources */,
+				A9BDD27D2DBA8E6B009E0AAA /* GoogleService-Info.plist in Resources */,
 				A94538492CB5266C009D84C0 /* SplashScreen.storyboard in Resources */,
 				A931B87E2C693FF10067E644 /* Assets.xcassets in Resources */,
 			);
@@ -417,27 +430,33 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.1.0;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = D9BGVYW9P9;
+				DEVELOPMENT_TEAM = U5AZCR7GPV;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Hackertab;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = SplashScreen.storyboard;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zrcoding.iosApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zrcoding.hackertabIos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -450,27 +469,33 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.1.0;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = D9BGVYW9P9;
+				DEVELOPMENT_TEAM = U5AZCR7GPV;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Hackertab;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = SplashScreen.storyboard;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zrcoding.iosApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zrcoding.hackertabIos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -480,7 +505,6 @@
 		A931B89E2C693FF20067E644 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.1.0;
@@ -499,7 +523,6 @@
 		A931B89F2C693FF20067E644 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.1.0;
@@ -518,7 +541,6 @@
 		A931B8A12C693FF20067E644 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.1.0;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -535,7 +557,6 @@
 		A931B8A22C693FF20067E644 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.1.0;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -589,6 +610,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A9BDD27E2DBA9260009E0AAA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.12.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A9BDD27F2DBA9260009E0AAA /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A9BDD27E2DBA9260009E0AAA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		A9BDD2812DBA9260009E0AAA /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A9BDD27E2DBA9260009E0AAA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		A9BDD2832DBAA059009E0AAA /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A9BDD27E2DBA9260009E0AAA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A931B86E2C693FF00067E644 /* Project object */;
 }

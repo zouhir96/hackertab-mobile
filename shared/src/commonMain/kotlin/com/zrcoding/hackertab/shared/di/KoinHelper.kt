@@ -1,7 +1,11 @@
 package com.zrcoding.hackertab.shared.di
 
+import com.zrcoding.hackertab.analytics.analyticsModule
+import com.zrcoding.hackertab.data.dataModule
+import com.zrcoding.hackertab.domain.domainModule
 import com.zrcoding.hackertab.home.homeModule
 import com.zrcoding.hackertab.network.networkModule
+import com.zrcoding.hackertab.onboarding.onboardingModule
 import com.zrcoding.hackertab.settings.settingsModule
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -30,7 +34,11 @@ fun initKoin(appModule: Module = module { }) {
 internal val appModules = listOf(
     homeModule,
     settingsModule,
-    networkModule
+    onboardingModule,
+    networkModule,
+    dataModule,
+    domainModule,
+    analyticsModule
 )
 
 expect val platformModule: Module

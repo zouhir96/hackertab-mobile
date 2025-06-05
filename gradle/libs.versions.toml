@@ -1,56 +1,57 @@
 [versions]
 jvmTarget = "17"
-compileSdk = "34"
-targetSdk = "34"
+compileSdk = "35"
+targetSdk = "35"
 minSdk = "21"
-versionName = "1.1.0"
+versionName = "2.0.0"
 
-kotlin = "2.0.0"
-agp = "8.3.2"
+kotlin = "2.1.21"
+agp = "8.10.1"
 googleServices = "4.4.2"
-ksp = "2.0.0-1.0.21"
-composePlugin = "1.7.0"
+crashlytics = "3.0.3"
+ksp = "2.1.20-2.0.1"
+jbCompose = "1.8.1"
+composePlugin = "1.8.1"
 
-activity = "1.9.0"
 coreSplashscreen = "1.0.1"
-material3VersionHack = "1.1.2"
-kamel = "0.9.3"
+activity = "1.10.1"
+material3VersionHack = "1.3.2"
+navigation = "2.8.0-alpha13"
+lifecycle = "2.9.0"
+kamel = "1.0.5"
 
-moko = "0.16.1"
-navigation = "2.8.0-alpha10"
-koin = "3.5.6"
-koinCompose = "1.1.5"
-datastore = '1.1.1'
-ktor = "2.0.1"
+koinBom = "4.0.4"
+
+datastore = '1.1.7'
+ktor = "3.1.3"
 room = "2.6.1"
-kotlinxSerializationJson = "1.7.1"
-kotlinxDatetime = "0.6.0"
-atomicfu = "0.24.0"
-firebaseBom = "33.1.1"
+kotlinxSerializationJson = "1.8.1"
+kotlinxDatetime = "0.6.2"
+atomicfu = "0.27.0"
+firebaseBom = "33.14.0"
+gitlive = "2.1.0"
+coroutines = "1.10.2"
+collectionsImmutable = "0.4.0"
+napier = "2.7.1"
 
 [libraries]
 
-#core
+#presentation
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
-
-#ui
-androidx-compose-materialWindow = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3VersionHack"}
-kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel" }
-
-#activity
 androidx-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
-
-# Moko
-moko-mvvm-core = { module = "dev.icerock.moko:mvvm-core", version.ref = "moko" }
-moko-mvvm-compose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "moko" }
-
-#navigation
+androidx-compose-materialWindow = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3VersionHack"}
 androidx-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+androidx-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+kamel-image = { group = "media.kamel", name = "kamel-image", version.ref = "kamel" }
+kamel-bitmap = { group = "media.kamel", name ="kamel-decoder-image-bitmap", version.ref = "kamel"}
+kamel-animated = { group = "media.kamel", name ="kamel-decoder-animated-image", version.ref = "kamel"}
 
 #koin
-koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
-koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
-koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koinCompose" }
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBom" }
+koin-core = { group = "io.insert-koin", name = "koin-core" }
+koin-android = { group = "io.insert-koin", name = "koin-android" }
+koin-compose = { group = "io.insert-koin", name = "koin-compose" }
+koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel" }
 
 #data
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -62,6 +63,8 @@ androidx-datastore-preferences-core = { group = "androidx.datastore", name = "da
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "collectionsImmutable" }
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
@@ -70,9 +73,13 @@ ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", versi
 ktor-loggingInterceptor = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 
 #firebase
-com-google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
-com-google-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
-com-google-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+gitlive-analytics = { group = "dev.gitlive", name = "firebase-analytics", version.ref = "gitlive" }
+gitlive-crashlytics = { group = "dev.gitlive", name = "firebase-crashlytics", version.ref = "gitlive" }
+
+napier = { group = "io.github.aakira", name = "napier", version.ref = "napier" }
 
 # Dependencies of the included build-logic
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -84,10 +91,11 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "composePlugin" }
+jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "jbCompose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 jetbrains-kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

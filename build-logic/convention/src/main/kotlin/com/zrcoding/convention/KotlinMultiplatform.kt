@@ -19,14 +19,11 @@ internal fun Project.configureKotlinMultiplatform(
     sourceSets.apply {
         commonMain {
             dependencies {
+                implementation(project.dependencies.platform(versionCatalog().findLibrary("koin.bom").get()))
                 implementation(versionCatalog().findLibrary("koin.core").get())
                 implementation(versionCatalog().findLibrary("kotlinx.datetime").get())
-            }
-        }
-
-        androidMain {
-            dependencies {
-                implementation(versionCatalog().findLibrary("koin.android").get())
+                implementation(versionCatalog().findLibrary("kotlinx.coroutines").get())
+                implementation(versionCatalog().findLibrary("kotlinx.serialization.json").get())
             }
         }
 

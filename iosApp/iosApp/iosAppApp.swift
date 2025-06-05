@@ -11,6 +11,7 @@ import shared
 @main
 struct iosAppApp: App {
     init() {
+        MainViewControllerKt.initializeFirebase()
         KoinHelperKt.doInitKoin()
     }
     

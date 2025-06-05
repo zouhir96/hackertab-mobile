@@ -7,6 +7,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.nunito_bold
 import com.zrcoding.hackertab.design.resources.nunito_medium
 import com.zrcoding.hackertab.design.resources.nunito_regular
 import org.jetbrains.compose.resources.Font
@@ -39,6 +40,11 @@ val Typography: Typography
             fontWeight = FontWeight.W500,
             fontSize = 14.sp,
             letterSpacing = 0.1.sp
+        ),
+        body1 = TextStyle(
+            fontFamily = FontFamily(Font(Res.font.nunito_bold)),
+            fontSize = 16.sp,
+            letterSpacing = 0.25.sp
         ),
         body2 = TextStyle(
             fontFamily = FontFamily(Font(Res.font.nunito_medium)),
