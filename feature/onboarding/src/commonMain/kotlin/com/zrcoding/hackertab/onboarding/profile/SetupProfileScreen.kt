@@ -87,7 +87,7 @@ fun SetupProfileRoute(
                             .fillMaxWidth(),
                         text = it.label,
                         color = MaterialTheme.colors.onBackground,
-                        style = MaterialTheme.typography.subtitle1,
+                        style = MaterialTheme.typography.body1,
                         textAlign = TextAlign.Center
                     )
                 }

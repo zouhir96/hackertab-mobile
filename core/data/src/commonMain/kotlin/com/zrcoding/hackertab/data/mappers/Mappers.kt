@@ -32,12 +32,12 @@ fun ArticleDto.toFreeCodeCamp() = FreeCodeCamp(
     title = title,
     url = url,
     isoDate = publishedAt.toZonedLocalDate(),
-    categories = tags.orEmpty()
+    categories = tags.orEmpty().take(4)
 )
 
 fun GithubDto.toGithubRepo() = GithubRepo(
     id = id,
-    name = title,
+    title = title,
     description = description,
     owner = owner,
     url = url,

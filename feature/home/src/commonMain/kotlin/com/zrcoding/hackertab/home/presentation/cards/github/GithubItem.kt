@@ -21,7 +21,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun GithubItem(post: GithubRepo) {
     SourceItemTemplate(
-        title = "${post.owner}/${post.name}",
+        title = post.title,
         description = post.description.trim().ifEmpty { null },
         primaryInfoSection = {
             TextWithStartIcon(
@@ -51,7 +51,7 @@ private fun GithubItemPreview() {
         GithubItem(
             post = GithubRepo(
                 id = "habeo",
-                name = "Jetpack compose",
+                title = "Jetpack compose",
                 description = "This is a fake repo for preview",
                 owner = "Celina Wells",
                 url = "https://www.google.com/#q=propriae",

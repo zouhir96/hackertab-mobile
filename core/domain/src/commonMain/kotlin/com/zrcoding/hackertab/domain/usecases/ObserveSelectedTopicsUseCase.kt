@@ -13,8 +13,8 @@ class ObserveSelectedTopicsUseCase(
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(): Flow<List<Topic>> {
         return settingRepository.observeSavedTopicsIds().mapLatest { savedTopicsIds ->
-            val topics = settingRepository.getTopics() + Topic.trending
-            topics.filter { it.id in savedTopicsIds }
+            val topics = settingRepository.getTopics()
+            listOf(Topic.trending) + topics.filter { it.id in savedTopicsIds }
         }
     }
 }

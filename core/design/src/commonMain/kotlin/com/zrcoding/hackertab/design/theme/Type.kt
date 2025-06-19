@@ -30,13 +30,13 @@ val Typography: Typography
             fontSize = 20.sp
         ),
         subtitle1 = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_regular)),
+            fontFamily = FontFamily(Font(Res.font.nunito_medium)),
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
+            fontSize = 18.sp,
             letterSpacing = 0.15.sp
         ),
         subtitle2 = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_medium)),
+            fontFamily = FontFamily(Font(Res.font.nunito_regular)),
             fontWeight = FontWeight.W500,
             fontSize = 14.sp,
             letterSpacing = 0.1.sp

@@ -1,10 +1,10 @@
 package com.zrcoding.hackertab.home.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,6 +37,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
+import androidx.compose.material.icons.filled.AddBox
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberDrawerState
@@ -74,7 +75,6 @@ import com.zrcoding.hackertab.design.resources.support_email_subject
 import com.zrcoding.hackertab.design.resources.support_no_apps_description
 import com.zrcoding.hackertab.design.resources.support_no_apps_title
 import com.zrcoding.hackertab.design.resources.support_support_footer_message
-import com.zrcoding.hackertab.design.theme.White600
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.common.AppConfig
 import com.zrcoding.hackertab.domain.models.BaseArticle
@@ -90,6 +90,7 @@ import com.zrcoding.hackertab.domain.models.Medium
 import com.zrcoding.hackertab.domain.models.ProductHunt
 import com.zrcoding.hackertab.domain.models.Reddit
 import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.home.presentation.cards.conferences.ConferenceItem
 import com.zrcoding.hackertab.home.presentation.cards.devto.DevtoItem
 import com.zrcoding.hackertab.home.presentation.cards.freecodecamp.FreeCodeCampItem
@@ -130,7 +131,8 @@ fun HomeRoute(
                 onSourceSelected = viewModel::onSourceSelected,
                 onNavigationBtnClick = {
                     scope.launch { drawerState.open() }
-                }
+                },
+                onAddSourceClick = onNavigateToSourcesSettings
             )
         },
         drawerContent = {
@@ -159,30 +161,15 @@ fun HomeRoute(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (viewState.selectedSource?.supportsFilters == true && viewState.enabledTopics.isNotEmpty()) {
-                CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
-                    LazyRow(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = MaterialTheme.dimension.large)
-                            .padding(bottom = MaterialTheme.dimension.small),
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
-                    ) {
-                        items(viewState.enabledTopics) { topic ->
-                            val selected = viewState.selectedTopic == topic
-                            FilterChip(
-                                selected = selected,
-                                onClick = { viewModel.onTopicSelected(topic) },
-                                colors = if (selected) ChipDefaults.filterChipColors(
-                                    backgroundColor = MaterialTheme.colors.primary,
-                                    contentColor = White600
-                                ) else ChipDefaults.filterChipColors(),
-                            ) {
-                                Text(text = topic.label)
-                            }
-                        }
-                    }
-                }
+                HomeScreenTopicsFilter(
+                    enabledTopics = viewState.enabledTopics,
+                    selectedTopic = viewState.selectedTopic,
+                    onTopicSelected = viewModel::onTopicSelected
+                )
             }
-            if (viewState.isLoading) CircularProgressIndicator()
+            if (viewState.isLoading) {
+                CircularProgressIndicator()
+            }
             when {
                 viewState.articles.isNotEmpty() -> LazyColumn(
                     modifier = Modifier.fillMaxSize(),
@@ -193,20 +180,8 @@ fun HomeRoute(
                         items = viewState.articles,
                         key = { item -> item.id }
                     ) { item: BaseArticle ->
-                        when (item) {
-                            is GithubRepo -> GithubItem(item)
-                            is HackerNews -> HackerNewsItem(item)
-                            is Conference -> ConferenceItem(item)
-                            is Devto -> DevtoItem(item)
-                            is ProductHunt -> ProductHuntItem(item)
-                            is Reddit -> RedditItem(item)
-                            is Lobster -> LobstersItem(item)
-                            is Hashnode -> HashnodeItem(item)
-                            is FreeCodeCamp -> FreeCodeCampItem(item)
-                            is IndieHackers -> IndieHackersItem(item)
-                            is Medium -> MediumItem(item)
-                        }
-                        Divider(modifier = Modifier.padding(horizontal = MaterialTheme.dimension.large))
+                        item.ToListItem()
+                        Divider()
                     }
                 }
 
@@ -236,6 +211,7 @@ private fun HomeScreenTopAppBar(
     selectedSource: String,
     onSourceSelected: (Source) -> Unit,
     onNavigationBtnClick: () -> Unit,
+    onAddSourceClick: () -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
     TopAppBar(
@@ -274,12 +250,27 @@ private fun HomeScreenTopAppBar(
                                     onSourceSelected(source)
                                 }
                             ) {
-                                Icon(
+                                Image(
                                     painter = painterResource(source.icon),
                                     contentDescription = "Select source",
                                 )
                                 Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
                                 Text(text = source.label)
+                            }
+                        }
+                        if (enabledSources.size < Source.entries.size) {
+                            DropdownMenuItem(
+                                onClick = {
+                                    expanded = false
+                                    onAddSourceClick()
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.AddBox,
+                                    contentDescription = "Select source",
+                                )
+                                Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
+                                Text(text = "Add source", color = MaterialTheme.colors.onBackground.copy(alpha = 0.8f))
                             }
                         }
                     }
@@ -296,6 +287,10 @@ private fun HomeScreenTopAppBar(
                     tint = MaterialTheme.colors.onBackground
                 )
             }
+        },
+
+        actions = {
+
         },
         backgroundColor = MaterialTheme.colors.background,
         elevation = MaterialTheme.dimension.none
@@ -351,24 +346,6 @@ private fun HomeScreenDrawer(
     }
 }
 
-@Composable
-private fun HomeScreenDrawerItemsContainer(
-    content: @Composable ColumnScope.() -> Unit
-) {
-    Card(shape = MaterialTheme.shapes.large) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = MaterialTheme.dimension.large,
-                    vertical = MaterialTheme.dimension.default
-                )
-        ) {
-            content()
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun HomeScreenDrawerItem(
@@ -412,7 +389,58 @@ private fun AppVersionName(modifier: Modifier = Modifier, versionName: String) {
         modifier = modifier,
         text = stringResource(Res.string.setting_master_screen_version_name, versionName),
         color = MaterialTheme.colors.onBackground,
-        style = MaterialTheme.typography.subtitle1,
+        style = MaterialTheme.typography.body1,
         textAlign = TextAlign.Center
     )
+}
+
+@Composable
+@OptIn(ExperimentalMaterialApi::class)
+private fun HomeScreenTopicsFilter(
+    enabledTopics: ImmutableList<Topic>,
+    selectedTopic: Topic?,
+    onTopicSelected: (Topic) -> Unit,
+) {
+    CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
+        LazyRow(
+            modifier = Modifier.fillMaxWidth().padding(bottom = MaterialTheme.dimension.small),
+            contentPadding = PaddingValues(horizontal = MaterialTheme.dimension.default),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
+        ) {
+            items(enabledTopics) { topic ->
+                val selected = selectedTopic == topic
+                FilterChip(
+                    selected = selected,
+                    onClick = { onTopicSelected(topic) },
+                    shape = MaterialTheme.shapes.medium,
+                    colors = if (selected) ChipDefaults.filterChipColors(
+                        backgroundColor = MaterialTheme.colors.onBackground,
+                        contentColor = MaterialTheme.colors.background
+                    ) else ChipDefaults.filterChipColors(
+                        backgroundColor = MaterialTheme.colors.secondary,
+                        contentColor = MaterialTheme.colors.onBackground
+                    ),
+                ) {
+                    Text(text = topic.label)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun BaseArticle.ToListItem() {
+    when (this) {
+        is GithubRepo -> GithubItem(this)
+        is HackerNews -> HackerNewsItem(this)
+        is Conference -> ConferenceItem(this)
+        is Devto -> DevtoItem(this)
+        is ProductHunt -> ProductHuntItem(this)
+        is Reddit -> RedditItem(this)
+        is Lobster -> LobstersItem(this)
+        is Hashnode -> HashnodeItem(this)
+        is FreeCodeCamp -> FreeCodeCampItem(this)
+        is IndieHackers -> IndieHackersItem(this)
+        is Medium -> MediumItem(this)
+    }
 }
