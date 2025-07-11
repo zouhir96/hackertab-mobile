@@ -20,6 +20,7 @@ data class AnalyticsEvent(
         const val SETUP_COMPLETED = "setup_completed"
         const val TOPIC_SELECTION_CHANGED = "topic_selection_changed"
         const val SOURCE_SELECTION_CHANGED = "source_selection_changed"
+        const val SOURCE_FILTER_CHANGED = "source_filter_changed"
         const val TOPIC_FILTER_CHANGED = "topic_filter_changed"
         // Add more standard event types here
     }

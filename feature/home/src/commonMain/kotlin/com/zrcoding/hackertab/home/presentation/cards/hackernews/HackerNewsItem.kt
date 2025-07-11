@@ -14,11 +14,12 @@ import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.HackerNews
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -45,6 +46,7 @@ fun HackerNewsItem(new: HackerNews) {
     )
 }
 
+@OptIn(ExperimentalTime::class)
 @Preview()
 @Composable
 fun HackerNewsItemPreview() {
