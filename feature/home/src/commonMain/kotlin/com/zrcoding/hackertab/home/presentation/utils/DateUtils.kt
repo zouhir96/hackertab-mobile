@@ -1,11 +1,13 @@
 package com.zrcoding.hackertab.home.presentation.utils
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 fun LocalDateTime.timeAgo(): String {
     val timeZone = TimeZone.currentSystemDefault()
     val currentTime = Clock.System.now().toLocalDateTime(timeZone)

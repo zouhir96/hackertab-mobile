@@ -2,6 +2,9 @@ package com.zrcoding.hackertab.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zrcoding.hackertab.analytics.AnalyticsHelper
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.analytics.models.Param
 import com.zrcoding.hackertab.domain.models.BaseArticle
 import com.zrcoding.hackertab.domain.models.NetworkErrors
 import com.zrcoding.hackertab.domain.models.Resource
@@ -22,7 +25,8 @@ import kotlinx.coroutines.launch
 class HomeScreenViewModel(
     private val observeSelectedSourcesUseCase: ObserveSelectedSourcesUseCase,
     private val observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase,
-    private val articleRepository: ArticleRepository
+    private val articleRepository: ArticleRepository,
+    private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(HomeScreenViewState())
@@ -75,6 +79,7 @@ class HomeScreenViewModel(
             it.copy(selectedSource = source)
         }
         loadArticles()
+        logSourceFilterChanged(source)
     }
 
     fun onTopicSelected(topic: Topic) {
@@ -83,6 +88,7 @@ class HomeScreenViewModel(
             it.copy(selectedTopic = topic)
         }
         loadArticles()
+        logTopicFilterChanged(topic)
     }
 
     fun onRefreshBtnClick() {
@@ -104,6 +110,7 @@ class HomeScreenViewModel(
                             error = null
                         )
                     }
+
                     is Resource.Failure -> {
                         _viewState.update {
                             it.copy(
@@ -130,7 +137,7 @@ class HomeScreenViewModel(
         }
     }
 
-    suspend fun getSourceTag(
+    private suspend fun getSourceTag(
         source: Source,
         topic: Topic
     ): Resource<List<BaseArticle>, NetworkErrors>? {
@@ -178,5 +185,33 @@ class HomeScreenViewModel(
 
             Source.INDIE_HACKERS -> articleRepository.getIndieHackersArticles()
         }
+    }
+
+    private fun logSourceFilterChanged(source: Source) {
+        analyticsHelper.logEvent(
+            event = AnalyticsEvent(
+                name = AnalyticsEvent.Types.SOURCE_FILTER_CHANGED,
+                properties = setOf(
+                    Param(
+                        key = AnalyticsEvent.ParamKeys.VALUE,
+                        value = source.analyticsTag
+                    )
+                )
+            ),
+        )
+    }
+
+    private fun logTopicFilterChanged(topic: Topic) {
+        analyticsHelper.logEvent(
+            event = AnalyticsEvent(
+                name = AnalyticsEvent.Types.SOURCE_FILTER_CHANGED,
+                properties = setOf(
+                    Param(
+                        key = AnalyticsEvent.ParamKeys.VALUE,
+                        value = topic.id
+                    )
+                )
+            ),
+        )
     }
 }

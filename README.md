@@ -3,7 +3,7 @@
 <table align="center">
 <tr>
 <td>
-<img src="imgs/preview.svg" alt="Preview image" /> 
+<img src="imgs/thumbnail.png" alt="Preview image" /> 
 </td>
 </tr>
 </table>
@@ -21,19 +21,37 @@ TypeScript all visualized in an intuitive interface.
 This is the Mobile(Non official) version of [hackertab.dev](https://hackertab.dev) extension brought to your
 phone now so you stay always posted even if you’re not on your pc.
 
-## Demo
-
-<table align="center">
-<tr>
-<td>
-<img src="imgs/demo.gif" alt="Hackertab Android & IOS" /> 
-</td>
-</tr>
-</table>
-
 ## ⬇️ Download
 
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="90"/>](https://play.google.com/store/apps/details?id=com.zrcoding.hackertab)<br>
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; align-items: center;">
+  <a href="https://play.google.com/store/apps/details?id=com.zrcoding.hackertab" style="display: inline-block;">
+    <img src="imgs/playstore.png" alt="Get it on Google Play" height="80" style="max-width: 100%; height: auto;"/>
+  </a>
+  <a href="https://apps.apple.com/us/app/hackertab-unofficial/id6746347807" style="display: inline-block;">
+    <img src="imgs/appstore.png" alt="Get it on App Store" height="80" style="max-width: 100%; height: auto;"/>
+  </a>
+</div>
+
+<style>
+/* Responsive layout for download buttons */
+@media (max-width: 768px) {
+  div[style*="display: flex"] {
+    flex-direction: column !important;
+    gap: 15px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  div[style*="display: flex"] {
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 30px !important;
+  }
+}
+</style>
+
+<br>
+
 You can check the [releases](https://github.com/zouhir96/hackertab-android/releases/latest) page for
 details.
 
@@ -50,14 +68,16 @@ details.
 - Github actions: Run tests, deploy to google play
 
 ## 🛠️ Resources
+
 - Figma: [Design file](https://www.figma.com/file/IMFz1yU7jLCIQL1ZM0X8t7/Hackertab?type=design&node-id=0-1&mode=design&t=7yYklSUnlheLkOaN-0)
 - Trello: [Project board](https://trello.com/b/OaxWzI96/hackertab)
 
 ### Features
 
 - [x] 11 sources of news: Github, Hackernews, Conferences, Devto, Producthunt, Reddit, Lobsters,
-  Hashnode, Freecodecamp, IndieHackers and Medium.
+      Hashnode, Freecodecamp, IndieHackers and Medium.
 - [x] 26 Topics to follow: Android, Kotlin, Java, JavaScript, TypeScript ...
+- [x] Onboarding and app setup
 - [x] Possibility to configure which sources to follow.
 - [x] Possibility to configure which topics to follow.
 - [x] Contact support by email.
@@ -68,7 +88,6 @@ details.
 ### Development
 
 - [ ] Add offline first support
-- [ ] Add onboarding and app install setup
 
 ## 🧩 Requirements
 

@@ -16,12 +16,14 @@ import com.zrcoding.hackertab.network.dtos.ConferenceDto
 import com.zrcoding.hackertab.network.dtos.GithubDto
 import com.zrcoding.hackertab.network.dtos.IndieHackersDto
 import com.zrcoding.hackertab.network.dtos.ProductHuntDto
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
+@OptIn(ExperimentalTime::class)
 fun Long.toZonedLocalDate(): LocalDateTime = Instant.fromEpochMilliseconds(this)
     .toLocalDateTime(TimeZone.currentSystemDefault())
 
@@ -32,12 +34,12 @@ fun ArticleDto.toFreeCodeCamp() = FreeCodeCamp(
     title = title,
     url = url,
     isoDate = publishedAt.toZonedLocalDate(),
-    categories = tags.orEmpty()
+    categories = tags.orEmpty().take(4)
 )
 
 fun GithubDto.toGithubRepo() = GithubRepo(
     id = id,
-    name = title,
+    title = title,
     description = description,
     owner = owner,
     url = url,
@@ -108,6 +110,7 @@ fun ProductHuntDto.toProductHunt() = ProductHunt(
     tags = tags.orEmpty().take(1)
 )
 
+@OptIn(ExperimentalTime::class)
 fun IndieHackersDto.toIndieHackers() = IndieHackers(
     id = id ?: Clock.System.now().toEpochMilliseconds().toString(),
     title = title,

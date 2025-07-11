@@ -14,7 +14,7 @@ object BuildConferenceDisplayedDateUseCase {
                     if (startDate.month != endDate.month) {
                         "$start - ${toMonthWithDay(endDate)}"
                     } else {
-                        "$start - ${endDate.dayOfMonth}"
+                        "$start - ${endDate.day}"
                     }
                 }
             }
@@ -25,6 +25,6 @@ object BuildConferenceDisplayedDateUseCase {
         val month = date.month.name.lowercase().replaceFirstChar {
             if (it.isLowerCase()) it.titlecase() else it.toString()
         }
-        return "$month ${date.dayOfMonth}"
+        return "$month ${date.day}"
     }
 }

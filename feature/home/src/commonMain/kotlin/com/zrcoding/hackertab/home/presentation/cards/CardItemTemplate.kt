@@ -10,9 +10,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
@@ -57,16 +60,16 @@ fun SourceItemTemplate(
             style = MaterialTheme.typography.subtitle1,
             maxLines = 2
         )
-        Spacer(modifier = modifier.height(MaterialTheme.dimension.medium))
+        Spacer(modifier = modifier.height(MaterialTheme.dimension.small))
 
         if (description.isNullOrBlank().not()) {
             Text(
                 modifier = modifier.fillMaxWidth(),
                 text = description,
                 style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.onBackground,
+                color = MaterialTheme.colors.onBackground.copy(alpha = 0.7f),
             )
-            Spacer(modifier = modifier.height(MaterialTheme.dimension.small))
+            Spacer(modifier = modifier.height(MaterialTheme.dimension.medium))
         }
 
         FlowRow(
@@ -92,7 +95,7 @@ fun SourceItemTemplatePreview() {
             title = "HackerNews",
             description = "this is a lorem ipsum test",
             primaryInfoSection = {
-                TextWithStartIcon(text = "il y a 1h", icon = Res.drawable.ic_time_24)
+                TextWithStartIcon(text = "1h ago", icon = Res.drawable.ic_time_24)
             },
             modifier = Modifier,
             tags = listOf("Java", "Kotlin", "JavaScript", "android development"),
@@ -100,7 +103,7 @@ fun SourceItemTemplatePreview() {
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun CardItemTags(
     modifier: Modifier = Modifier,
@@ -108,17 +111,20 @@ fun CardItemTags(
 ) {
     val isTagsBlank = tags.isEmpty() || (tags.size == 1 && tags.first().isBlank())
     if (isTagsBlank) return
-    FlowRow(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium)
-    ) {
-        tags.forEach {
-            val color = it.getTagColor()
-            TextWithStartIcon(
-                text = it,
-                icon = Res.drawable.ic_ellipse,
-                tint = color
-            )
+    CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
+        FlowRow(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.tiny)
+        ) {
+            tags.forEach {
+                val color = it.getTagColor()
+                TextWithStartIcon(
+                    text = it,
+                    icon = Res.drawable.ic_ellipse,
+                    tint = color
+                )
+            }
         }
     }
 }
