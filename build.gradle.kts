@@ -18,7 +18,7 @@ plugins {
     alias(libs.plugins.google.services) apply false
     alias(libs.plugins.google.devtools.ksp) apply false
     alias(libs.plugins.crashlytics) apply false
-    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.room) apply false
 }
 
 tasks.register("clean", Delete::class) {

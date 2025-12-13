@@ -1,8 +1,8 @@
 [versions]
 jvmTarget = "17"
-compileSdk = "35"
-targetSdk = "35"
-minSdk = "21"
+compileSdk = "36"
+targetSdk = "36"
+minSdk = "23"
 versionName = "2.0.1"
 
 kotlin = "2.2.0"
@@ -24,7 +24,8 @@ koinBom = "4.1.0"
 
 datastore = '1.1.7'
 ktor = "3.2.1"
-room = "2.6.1"
+room = "2.8.4"
+sqlite = "2.6.2"
 kotlinxSerializationJson = "1.9.0"
 kotlinxDatetime = "0.7.1"
 atomicfu = "0.29.0"
@@ -58,6 +59,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
+androidx-sqlite-bundled = { group = "androidx.sqlite", name = "sqlite-bundled", version.ref = "sqlite" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
@@ -96,6 +98,6 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+room = { id = "androidx.room", version.ref = "room" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 jetbrains-kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

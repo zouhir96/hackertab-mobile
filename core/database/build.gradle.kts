@@ -1,18 +1,41 @@
+import com.zrcoding.convention.setFrameworkBaseName
+
 plugins {
-    id("hackertab.android.library")
-    id("hackertab.android.koin")
+    id("hackertab.kmp.library")
     alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.room)
 }
 
 android {
     namespace = "com.zrcoding.hackertab.database"
 }
 
-dependencies {
+kotlin {
+    setFrameworkBaseName("database")
+    sourceSets.commonMain {
+        kotlin.srcDir("build/generated/ksp/metadata")
+    }
+    sourceSets {
+        commonMain.dependencies {
+            // Room
+            api(libs.androidx.room.runtime)
+            api(libs.androidx.sqlite.bundled)
+        }
+    }
+}
 
-    // Room
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.paging)
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
+dependencies {
+    listOf(
+        "kspAndroid",
+        // "kspJvm",
+        "kspIosSimulatorArm64",
+        "kspIosX64",
+        "kspIosArm64"
+    ).forEach {
+        add(it, libs.androidx.room.compiler)
+    }
 }
