@@ -23,7 +23,11 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HackerNewsItem(new: HackerNews) {
+fun HackerNewsItem(
+    new: HackerNews,
+    isBookmarked: Boolean = false,
+    onBookmarkClick: () -> Unit = {}
+) {
     SourceItemTemplate(
         title = new.title,
         primaryInfoSection = {
@@ -43,6 +47,8 @@ fun HackerNewsItem(new: HackerNews) {
             )
         },
         url = new.url,
+        isBookmarked = isBookmarked,
+        onBookmarkClick = onBookmarkClick
     )
 }
 

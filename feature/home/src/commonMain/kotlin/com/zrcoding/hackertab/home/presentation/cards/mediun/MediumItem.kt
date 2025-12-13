@@ -23,7 +23,11 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun MediumItem(medium: Medium) {
+fun MediumItem(
+    medium: Medium,
+    isBookmarked: Boolean = false,
+    onBookmarkClick: () -> Unit = {}
+) {
     with(medium) {
         SourceItemTemplate(
             title = title,
@@ -42,7 +46,9 @@ fun MediumItem(medium: Medium) {
                     text = date.timeAgo(),
                     icon = Res.drawable.ic_time_24,
                 )
-            }
+            },
+            isBookmarked = isBookmarked,
+            onBookmarkClick = onBookmarkClick
         )
     }
 }

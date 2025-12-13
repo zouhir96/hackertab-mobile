@@ -11,6 +11,7 @@ import com.zrcoding.hackertab.data.mappers.toLobster
 import com.zrcoding.hackertab.data.mappers.toMedium
 import com.zrcoding.hackertab.data.mappers.toProductHunt
 import com.zrcoding.hackertab.data.mappers.toReddit
+import com.zrcoding.hackertab.database.AppDatabase
 import com.zrcoding.hackertab.domain.models.Conference
 import com.zrcoding.hackertab.domain.models.Devto
 import com.zrcoding.hackertab.domain.models.FreeCodeCamp
@@ -31,6 +32,7 @@ import kotlinx.io.IOException
 
 class ArticleRepositoryImpl(
     private val articlesNetworkDataSource: ArticlesNetworkDataSource,
+    private val database: AppDatabase
 ) : ArticleRepository {
     override suspend fun getHackerNewsArticles(): Resource<List<HackerNews>, NetworkErrors> {
         return execute(

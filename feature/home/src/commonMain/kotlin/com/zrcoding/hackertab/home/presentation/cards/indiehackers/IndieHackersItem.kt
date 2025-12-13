@@ -23,7 +23,11 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun IndieHackersItem(indieHackers: IndieHackers) {
+fun IndieHackersItem(
+    indieHackers: IndieHackers,
+    isBookmarked: Boolean = false,
+    onBookmarkClick: () -> Unit = {}
+) {
     with(indieHackers) {
         SourceItemTemplate(
             title = title,
@@ -43,7 +47,9 @@ fun IndieHackersItem(indieHackers: IndieHackers) {
                     text = stringResource( Res.string.comments, commentsCount),
                     icon = Res.drawable.ic_comment,
                 )
-            }
+            },
+            isBookmarked = isBookmarked,
+            onBookmarkClick = onBookmarkClick
         )
     }
 }

@@ -19,7 +19,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun GithubItem(post: GithubRepo) {
+fun GithubItem(
+    post: GithubRepo,
+    isBookmarked: Boolean = false,
+    onBookmarkClick: () -> Unit = {}
+) {
     SourceItemTemplate(
         title = post.title,
         description = post.description.trim().ifEmpty { null },
@@ -41,6 +45,8 @@ fun GithubItem(post: GithubRepo) {
         },
         url = post.url,
         titleColor = MaterialTheme.colors.primary,
+        isBookmarked = isBookmarked,
+        onBookmarkClick = onBookmarkClick
     )
 }
 

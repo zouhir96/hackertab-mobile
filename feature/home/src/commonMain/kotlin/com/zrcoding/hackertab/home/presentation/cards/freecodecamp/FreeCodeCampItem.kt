@@ -17,7 +17,11 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun FreeCodeCampItem(post: FreeCodeCamp) {
+fun FreeCodeCampItem(
+    post: FreeCodeCamp,
+    isBookmarked: Boolean = false,
+    onBookmarkClick: () -> Unit = {}
+) {
     SourceItemTemplate(
         title = post.title.trim(),
         description = null,
@@ -29,6 +33,8 @@ fun FreeCodeCampItem(post: FreeCodeCamp) {
         },
         url = post.url,
         tags = post.categories,
+        isBookmarked = isBookmarked,
+        onBookmarkClick = onBookmarkClick
     )
 }
 

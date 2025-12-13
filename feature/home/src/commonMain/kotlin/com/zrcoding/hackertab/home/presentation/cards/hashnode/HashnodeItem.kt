@@ -22,7 +22,11 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HashnodeItem(hashnode: Hashnode) {
+fun HashnodeItem(
+    hashnode: Hashnode,
+    isBookmarked: Boolean = false,
+    onBookmarkClick: () -> Unit = {}
+) {
     with(hashnode) {
         SourceItemTemplate(
             title = title.trim(),
@@ -43,6 +47,8 @@ fun HashnodeItem(hashnode: Hashnode) {
             },
             url = url,
             tags = tags,
+            isBookmarked = isBookmarked,
+            onBookmarkClick = onBookmarkClick
         )
     }
 }

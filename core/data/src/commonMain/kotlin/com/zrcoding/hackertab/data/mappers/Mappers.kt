@@ -1,5 +1,8 @@
 package com.zrcoding.hackertab.data.mappers
 
+import com.zrcoding.hackertab.database.entities.BookmarkedArticleEntity
+import com.zrcoding.hackertab.domain.models.BaseArticle
+import com.zrcoding.hackertab.domain.models.BookmarkedArticle
 import com.zrcoding.hackertab.domain.models.Conference
 import com.zrcoding.hackertab.domain.models.Devto
 import com.zrcoding.hackertab.domain.models.FreeCodeCamp
@@ -138,3 +141,25 @@ fun ArticleDto.toMedium() = Medium(
     claps = reactions?.toLong().orEmpty(),
     url = url,
 )
+
+// Bookmark mappers
+@OptIn(ExperimentalTime::class)
+fun BookmarkedArticleEntity.toBookmarkedArticle() = BookmarkedArticle(
+    id = id,
+    title = title,
+    url = url,
+    savedAt = Instant.fromEpochMilliseconds(savedAt)
+        .toLocalDateTime(TimeZone.currentSystemDefault()),
+    source = source
+)
+
+@OptIn(ExperimentalTime::class)
+fun BaseArticle.toBookmarkedArticleEntity(source: String): BookmarkedArticleEntity {
+    return BookmarkedArticleEntity(
+        id = this.id,
+        title = title,
+        url = url,
+        savedAt = Clock.System.now().toEpochMilliseconds(),
+        source = source
+    )
+}

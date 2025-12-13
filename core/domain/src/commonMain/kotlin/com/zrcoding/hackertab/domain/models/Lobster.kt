@@ -4,10 +4,10 @@ import kotlinx.datetime.LocalDateTime
 
 data class Lobster(
     override val id: String,
-    val title: String,
+    override val title: String,
+    override val url: String,
     val date: LocalDateTime,
     val commentsCount: Long,
     val reactions: Long,
-    val url: String,
     val commentsUrl: String,
 ) : BaseArticle()

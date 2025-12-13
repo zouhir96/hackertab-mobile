@@ -4,8 +4,8 @@ import kotlinx.datetime.LocalDateTime
 
 data class Conference(
     override val id: String,
-    val url: String,
-    val title: String,
+    override val url: String,
+    override val title: String,
     val startDate: LocalDateTime?,
     val endDate: LocalDateTime?,
     val tag: String,

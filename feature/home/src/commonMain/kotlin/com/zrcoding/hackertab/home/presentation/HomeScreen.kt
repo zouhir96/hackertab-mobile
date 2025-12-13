@@ -180,7 +180,10 @@ fun HomeRoute(
                         items = viewState.articles,
                         key = { item -> item.id }
                     ) { item: BaseArticle ->
-                        item.ToListItem()
+                        item.ToListItem(
+                            isBookmarked = viewState.bookmarkedIds.contains(item.id),
+                            onBookmarkClick = { viewModel.toggleBookmark(item) }
+                        )
                         Divider()
                     }
                 }
@@ -429,18 +432,21 @@ private fun HomeScreenTopicsFilter(
 }
 
 @Composable
-private fun BaseArticle.ToListItem() {
+private fun BaseArticle.ToListItem(
+    isBookmarked: Boolean,
+    onBookmarkClick: () -> Unit
+) {
     when (this) {
-        is GithubRepo -> GithubItem(this)
-        is HackerNews -> HackerNewsItem(this)
-        is Conference -> ConferenceItem(this)
-        is Devto -> DevtoItem(this)
-        is ProductHunt -> ProductHuntItem(this)
-        is Reddit -> RedditItem(this)
-        is Lobster -> LobstersItem(this)
-        is Hashnode -> HashnodeItem(this)
-        is FreeCodeCamp -> FreeCodeCampItem(this)
-        is IndieHackers -> IndieHackersItem(this)
-        is Medium -> MediumItem(this)
+        is GithubRepo -> GithubItem(this, isBookmarked, onBookmarkClick)
+        is HackerNews -> HackerNewsItem(this, isBookmarked, onBookmarkClick)
+        is Conference -> ConferenceItem(this, isBookmarked, onBookmarkClick)
+        is Devto -> DevtoItem(this, isBookmarked, onBookmarkClick)
+        is ProductHunt -> ProductHuntItem(this, isBookmarked, onBookmarkClick)
+        is Reddit -> RedditItem(this, isBookmarked, onBookmarkClick)
+        is Lobster -> LobstersItem(this, isBookmarked, onBookmarkClick)
+        is Hashnode -> HashnodeItem(this, isBookmarked, onBookmarkClick)
+        is FreeCodeCamp -> FreeCodeCampItem(this, isBookmarked, onBookmarkClick)
+        is IndieHackers -> IndieHackersItem(this, isBookmarked, onBookmarkClick)
+        is Medium -> MediumItem(this, isBookmarked, onBookmarkClick)
     }
 }

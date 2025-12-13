@@ -15,7 +15,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ConferenceItem(conf: Conference) {
+fun ConferenceItem(
+    conf: Conference,
+    isBookmarked: Boolean = false,
+    onBookmarkClick: () -> Unit = {}
+) {
     val date = BuildConferenceDisplayedDateUseCase(conf)
     val location = if (conf.online) {
         "\uD83C\uDF10 Online"
@@ -37,6 +41,8 @@ fun ConferenceItem(conf: Conference) {
         },
         url = conf.url,
         tags = listOf(conf.tag),
+        isBookmarked = isBookmarked,
+        onBookmarkClick = onBookmarkClick
     )
 }
 

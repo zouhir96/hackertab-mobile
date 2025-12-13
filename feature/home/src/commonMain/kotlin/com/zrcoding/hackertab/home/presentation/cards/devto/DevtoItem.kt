@@ -22,7 +22,11 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun DevtoItem(devto: Devto) {
+fun DevtoItem(
+    devto: Devto,
+    isBookmarked: Boolean = false,
+    onBookmarkClick: () -> Unit = {}
+) {
     with(devto) {
         SourceItemTemplate(
             title = title.trim(),
@@ -43,6 +47,8 @@ fun DevtoItem(devto: Devto) {
             },
             url = url,
             tags = tags,
+            isBookmarked = isBookmarked,
+            onBookmarkClick = onBookmarkClick
         )
     }
 }

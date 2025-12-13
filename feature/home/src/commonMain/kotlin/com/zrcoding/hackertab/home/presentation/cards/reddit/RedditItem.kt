@@ -24,7 +24,11 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun RedditItem(reddit: Reddit) {
+fun RedditItem(
+    reddit: Reddit,
+    isBookmarked: Boolean = false,
+    onBookmarkClick: () -> Unit = {}
+) {
     SourceItemTemplate(
         title = reddit.title,
         primaryInfoSection = {
@@ -44,7 +48,9 @@ fun RedditItem(reddit: Reddit) {
             )
         },
         url = reddit.url,
-        tags = listOf(stringResource( Res.string.subreddit, reddit.subreddit))
+        tags = listOf(stringResource( Res.string.subreddit, reddit.subreddit)),
+        isBookmarked = isBookmarked,
+        onBookmarkClick = onBookmarkClick
     )
 }
 

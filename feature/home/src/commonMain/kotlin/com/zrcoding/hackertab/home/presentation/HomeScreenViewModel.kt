@@ -11,10 +11,13 @@ import com.zrcoding.hackertab.domain.models.Resource
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.ArticleRepository
+import com.zrcoding.hackertab.domain.usecases.ObserveBookmarkedIdsUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedSourcesUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedTopicsUseCase
+import com.zrcoding.hackertab.domain.usecases.ToggleBookmarkUseCase
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -25,6 +28,8 @@ import kotlinx.coroutines.launch
 class HomeScreenViewModel(
     private val observeSelectedSourcesUseCase: ObserveSelectedSourcesUseCase,
     private val observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase,
+    private val observeBookmarkedIdsUseCase: ObserveBookmarkedIdsUseCase,
+    private val toggleBookmarkUseCase: ToggleBookmarkUseCase,
     private val articleRepository: ArticleRepository,
     private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
@@ -37,8 +42,10 @@ class HomeScreenViewModel(
             combine(
                 observeSelectedSourcesUseCase(),
                 observeSelectedTopicsUseCase(),
-                ::Pair
-            ).collectLatest { (sources, topics) ->
+                observeBookmarkedIdsUseCase()
+            ) { sources, topics, bookmarkedIds ->
+                Triple(sources, topics, bookmarkedIds)
+            }.collectLatest { (sources, topics, bookmarkedIds) ->
                 _viewState.update { state ->
                     val newSelectedSource = when {
                         // If current selection is still available, keep it
@@ -62,7 +69,10 @@ class HomeScreenViewModel(
                         selectedSource = newSelectedSource,
                         enabledTopics = topics.toPersistentList(),
                         selectedTopic = newSelectedTopic,
-                        articles = if (sources.isEmpty() || topics.isEmpty()) persistentListOf() else state.articles,
+                        bookmarkedIds = bookmarkedIds.toPersistentSet(),
+                        articles = if (sources.isEmpty() || topics.isEmpty()) {
+                            persistentListOf()
+                        } else state.articles,
                         isLoading = false
                     )
                 }
@@ -101,8 +111,7 @@ class HomeScreenViewModel(
         if (selectedSource != null && selectedTopic != null) {
             viewModelScope.launch {
                 _viewState.update { it.copy(isLoading = true) }
-                val result = getSourceTag(selectedSource, selectedTopic)
-                when (result) {
+                when (val result = getArticles(selectedSource, selectedTopic)) {
                     is Resource.Success -> _viewState.update {
                         it.copy(
                             articles = result.data.toPersistentList(),
@@ -137,7 +146,7 @@ class HomeScreenViewModel(
         }
     }
 
-    private suspend fun getSourceTag(
+    private suspend fun getArticles(
         source: Source,
         topic: Topic
     ): Resource<List<BaseArticle>, NetworkErrors>? {
@@ -213,5 +222,12 @@ class HomeScreenViewModel(
                 )
             ),
         )
+    }
+
+    fun toggleBookmark(article: BaseArticle) {
+        viewModelScope.launch {
+            val source = _viewState.value.selectedSource?.name ?: return@launch
+            toggleBookmarkUseCase(article, source)
+        }
     }
 }

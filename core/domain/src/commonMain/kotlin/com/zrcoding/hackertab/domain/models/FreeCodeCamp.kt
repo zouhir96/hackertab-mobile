@@ -4,8 +4,8 @@ import kotlinx.datetime.LocalDateTime
 
 data class FreeCodeCamp(
     override val id: String,
-    val title: String,
-    val url: String,
+    override val title: String,
+    override val url: String,
     val isoDate: LocalDateTime,
     val categories: List<String>,
 ): BaseArticle()

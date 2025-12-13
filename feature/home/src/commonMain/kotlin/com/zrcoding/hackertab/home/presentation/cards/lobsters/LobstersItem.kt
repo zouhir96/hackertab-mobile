@@ -28,7 +28,11 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun LobstersItem(lobster: Lobster) {
+fun LobstersItem(
+    lobster: Lobster,
+    isBookmarked: Boolean = false,
+    onBookmarkClick: () -> Unit = {}
+) {
     with(lobster) {
         SourceItemTemplate(
             title = title,
@@ -55,7 +59,9 @@ fun LobstersItem(lobster: Lobster) {
                     icon = Res.drawable.ic_comment,
                     tint = Color(0xFF4799eb)
                 )
-            }
+            },
+            isBookmarked = isBookmarked,
+            onBookmarkClick = onBookmarkClick
         )
     }
 }
