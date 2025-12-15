@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.database
 
+import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
@@ -11,6 +12,7 @@ import com.zrcoding.hackertab.database.entities.BookmarkedArticleEntity
     exportSchema = true,
     version = 1
 )
+@ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase(), DB {
     abstract fun bookmarkedArticleDao(): BookmarkedArticleDao
 

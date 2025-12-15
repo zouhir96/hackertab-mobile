@@ -1,17 +1,18 @@
 package com.zrcoding.hackertab.design.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
@@ -50,7 +51,7 @@ data class ChipData(
     val id: String,
     val name: String,
     val analyticsTag: String,
-    val image: DrawableResource? = null,
+    val image: (@Composable () -> Unit)? = null,
     val selected: Boolean = false
 )
 
@@ -58,7 +59,7 @@ fun Source.toChipData(selected: Boolean = false) = ChipData(
     id = id,
     name = label,
     analyticsTag = analyticsTag,
-    image = icon,
+    image = { Icon(size = MaterialTheme.dimension.bigger) },
     selected = selected
 )
 
@@ -119,15 +120,9 @@ fun Chip(
             verticalAlignment = Alignment.CenterVertically
         ) {
             chipData.image?.let {
-                Image(
-                    modifier = Modifier
-                        .padding(end = MaterialTheme.dimension.medium)
-                        .size(MaterialTheme.dimension.big),
-                    painter = painterResource(it),
-                    contentDescription = null,
-                )
+                it.invoke()
+                Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
             }
-
             Text(
                 modifier = Modifier.padding(vertical = MaterialTheme.dimension.medium),
                 text = chipData.name,

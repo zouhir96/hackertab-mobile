@@ -1,6 +1,5 @@
 package com.zrcoding.hackertab.home.presentation
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -62,7 +61,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.components.ErrorMsgWithBtn
-import com.zrcoding.hackertab.design.components.icon
+import com.zrcoding.hackertab.design.components.Icon
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.common_ok
 import com.zrcoding.hackertab.design.resources.common_retry
@@ -110,7 +109,6 @@ import com.zrcoding.hackertab.home.presentation.utils.ContactSupport
 import com.zrcoding.hackertab.home.presentation.utils.ContactSupportData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -269,10 +267,7 @@ private fun HomeScreenTopAppBar(
                                     onSourceSelected(source)
                                 }
                             ) {
-                                Image(
-                                    painter = painterResource(source.icon),
-                                    contentDescription = "Select source",
-                                )
+                                source.Icon(size = MaterialTheme.dimension.bigger)
                                 Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
                                 Text(text = source.label)
                             }

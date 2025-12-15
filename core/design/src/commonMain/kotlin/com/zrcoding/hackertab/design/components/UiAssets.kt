@@ -1,6 +1,19 @@
 package com.zrcoding.hackertab.design.components
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.ic_conferences
 import com.zrcoding.hackertab.design.resources.ic_devto
@@ -13,10 +26,12 @@ import com.zrcoding.hackertab.design.resources.ic_lobsters
 import com.zrcoding.hackertab.design.resources.ic_medium
 import com.zrcoding.hackertab.design.resources.ic_product_hunt
 import com.zrcoding.hackertab.design.resources.ic_reddit
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Source
+import org.jetbrains.compose.resources.painterResource
 
 val Source.icon
-    get() = when(this) {
+    get() = when (this) {
         Source.GITHUB -> Res.drawable.ic_github
         Source.HACKER_NEWS -> Res.drawable.ic_hackernews
         Source.CONFERENCES -> Res.drawable.ic_conferences
@@ -29,6 +44,25 @@ val Source.icon
         Source.INDIE_HACKERS -> Res.drawable.ic_indie_hackers
         Source.MEDIUM -> Res.drawable.ic_medium
     }
+
+@Composable
+fun Source.Icon(size: Dp = MaterialTheme.dimension.extraBig) {
+    Box(
+        modifier = Modifier
+            .background(Color.White, CircleShape)
+            .size(size),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            modifier = Modifier
+                .size(size - 2.dp)
+                .clip(CircleShape),
+            painter = painterResource(icon),
+            contentScale = ContentScale.FillBounds,
+            contentDescription = null,
+        )
+    }
+}
 
 val tags = mapOf(
     "python" to Color((0XFF3572A5)),

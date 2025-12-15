@@ -11,12 +11,14 @@ import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
 
 actual val databaseModule = module {
-    val dbFilePath = documentDirectory() + DATABASE_NAME
-    Room.databaseBuilder<AppDatabase>(name = dbFilePath)
-        .fallbackToDestructiveMigration(true)
-        .setDriver(_root_ide_package_.androidx.sqlite.driver.bundled.BundledSQLiteDriver())
-        .setQueryCoroutineContext(Dispatchers.IO)
-        .build()
+    single<AppDatabase> {
+        val dbFilePath = documentDirectory() + "/$DATABASE_NAME"
+        Room.databaseBuilder<AppDatabase>(name = dbFilePath)
+            .fallbackToDestructiveMigration(true)
+            .setDriver(_root_ide_package_.androidx.sqlite.driver.bundled.BundledSQLiteDriver())
+            .setQueryCoroutineContext(Dispatchers.IO)
+            .build()
+    }
 }
 
 @OptIn(ExperimentalForeignApi::class)

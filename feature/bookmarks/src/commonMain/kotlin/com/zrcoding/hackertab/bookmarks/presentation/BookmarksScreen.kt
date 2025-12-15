@@ -1,6 +1,5 @@
 package com.zrcoding.hackertab.bookmarks.presentation
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,8 +31,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.design.components.Icon
 import com.zrcoding.hackertab.design.components.TextWithStartIcon
-import com.zrcoding.hackertab.design.components.icon
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.ic_time_24
 import com.zrcoding.hackertab.design.theme.dimension
@@ -43,7 +42,6 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.until
-import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.time.Clock
 import kotlin.time.DurationUnit
@@ -137,11 +135,7 @@ private fun BookmarkItem(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
         verticalAlignment = Alignment.Top
     ) {
-        Image(
-            painter = painterResource(Source.valueOf(bookmark.source).icon),
-            contentDescription = null,
-            modifier = Modifier.size(MaterialTheme.dimension.extraBig)
-        )
+        Source.valueOf(bookmark.source).Icon()
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small)
