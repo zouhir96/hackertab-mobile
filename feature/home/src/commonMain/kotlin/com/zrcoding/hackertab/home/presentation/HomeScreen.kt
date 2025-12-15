@@ -1,6 +1,7 @@
 package com.zrcoding.hackertab.home.presentation
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ChipDefaults
@@ -39,6 +41,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material.icons.filled.AddBox
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
@@ -64,6 +67,7 @@ import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.common_ok
 import com.zrcoding.hackertab.design.resources.common_retry
 import com.zrcoding.hackertab.design.resources.common_settings
+import com.zrcoding.hackertab.design.resources.setting_master_screen_bookmarks
 import com.zrcoding.hackertab.design.resources.setting_master_screen_contact_us
 import com.zrcoding.hackertab.design.resources.setting_master_screen_sources
 import com.zrcoding.hackertab.design.resources.setting_master_screen_topics
@@ -117,6 +121,7 @@ fun HomeRoute(
     viewModel: HomeScreenViewModel = koinViewModel(),
     onNavigateToTopicsSettings: () -> Unit,
     onNavigateToSourcesSettings: () -> Unit,
+    onNavigateToBookmarks: () -> Unit,
 ) {
     val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
     val scope = rememberCoroutineScope()
@@ -132,7 +137,8 @@ fun HomeRoute(
                 onNavigationBtnClick = {
                     scope.launch { drawerState.open() }
                 },
-                onAddSourceClick = onNavigateToSourcesSettings
+                onAddSourceClick = onNavigateToSourcesSettings,
+                onBookmarksClick = onNavigateToBookmarks
             )
         },
         drawerContent = {
@@ -148,6 +154,12 @@ fun HomeRoute(
                         drawerState.close()
                         onNavigateToSourcesSettings()
                     }
+                },
+                onNavigateToBookmarks = {
+                    scope.launch {
+                        drawerState.close()
+                        onNavigateToBookmarks()
+                    }
                 }
             )
         },
@@ -160,6 +172,7 @@ fun HomeRoute(
             modifier = Modifier.padding(it),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(MaterialTheme.dimension.medium))
             if (viewState.selectedSource?.supportsFilters == true && viewState.enabledTopics.isNotEmpty()) {
                 HomeScreenTopicsFilter(
                     enabledTopics = viewState.enabledTopics,
@@ -215,6 +228,7 @@ private fun HomeScreenTopAppBar(
     onSourceSelected: (Source) -> Unit,
     onNavigationBtnClick: () -> Unit,
     onAddSourceClick: () -> Unit,
+    onBookmarksClick: () -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
     TopAppBar(
@@ -273,7 +287,10 @@ private fun HomeScreenTopAppBar(
                                     contentDescription = "Select source",
                                 )
                                 Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
-                                Text(text = "Add source", color = MaterialTheme.colors.onBackground.copy(alpha = 0.8f))
+                                Text(
+                                    text = "Add source",
+                                    color = MaterialTheme.colors.onBackground.copy(alpha = 0.8f)
+                                )
                             }
                         }
                     }
@@ -283,6 +300,10 @@ private fun HomeScreenTopAppBar(
         navigationIcon = {
             IconButton(
                 onClick = onNavigationBtnClick,
+                modifier = Modifier.background(
+                    color = MaterialTheme.colors.secondary.copy(alpha = 0.5f),
+                    shape = CircleShape
+                )
             ) {
                 Icon(
                     imageVector = Icons.Default.Menu,
@@ -291,9 +312,20 @@ private fun HomeScreenTopAppBar(
                 )
             }
         },
-
         actions = {
-
+            IconButton(
+                onClick = onBookmarksClick,
+                modifier = Modifier.background(
+                    color = MaterialTheme.colors.secondary.copy(alpha = 0.5f),
+                    shape = CircleShape
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Bookmark,
+                    contentDescription = "Bookmarks",
+                    tint = MaterialTheme.colors.onBackground
+                )
+            }
         },
         backgroundColor = MaterialTheme.colors.background,
         elevation = MaterialTheme.dimension.none
@@ -304,6 +336,7 @@ private fun HomeScreenTopAppBar(
 private fun HomeScreenDrawer(
     onNavigateToTopicsSettings: () -> Unit,
     onNavigateToSourcesSettings: () -> Unit,
+    onNavigateToBookmarks: () -> Unit,
 ) {
     val contactSupport: ContactSupport = koinInject()
     val appConfig: AppConfig = koinInject()
@@ -334,6 +367,11 @@ private fun HomeScreenDrawer(
             HomeScreenDrawerItem(
                 title = stringResource(Res.string.setting_master_screen_sources),
                 onClick = onNavigateToSourcesSettings
+            )
+            Spacer(modifier = Modifier.height(MaterialTheme.dimension.large))
+            HomeScreenDrawerItem(
+                title = stringResource(Res.string.setting_master_screen_bookmarks),
+                onClick = onNavigateToBookmarks
             )
             Spacer(modifier = Modifier.height(MaterialTheme.dimension.large))
             HomeScreenDrawerItem(

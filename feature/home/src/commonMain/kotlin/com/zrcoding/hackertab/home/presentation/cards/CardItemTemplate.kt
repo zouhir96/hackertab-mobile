@@ -21,7 +21,7 @@ import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.BookmarkAdded
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -104,7 +104,7 @@ fun SourceItemTemplate(
         ) {
             Icon(
                 modifier = Modifier.size(MaterialTheme.dimension.big),
-                imageVector = if (isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                imageVector = if (isBookmarked) Icons.Default.BookmarkAdded else Icons.Default.BookmarkBorder,
                 contentDescription = if (isBookmarked) "Remove bookmark" else "Add bookmark",
                 tint = MaterialTheme.colors.onBackground
             )

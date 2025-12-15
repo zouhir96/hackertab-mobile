@@ -11,10 +11,9 @@ import com.zrcoding.hackertab.domain.models.Resource
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.ArticleRepository
-import com.zrcoding.hackertab.domain.usecases.ObserveBookmarkedIdsUseCase
+import com.zrcoding.hackertab.domain.repositories.BookmarkRepository
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedSourcesUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedTopicsUseCase
-import com.zrcoding.hackertab.domain.usecases.ToggleBookmarkUseCase
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentSet
@@ -28,8 +27,7 @@ import kotlinx.coroutines.launch
 class HomeScreenViewModel(
     private val observeSelectedSourcesUseCase: ObserveSelectedSourcesUseCase,
     private val observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase,
-    private val observeBookmarkedIdsUseCase: ObserveBookmarkedIdsUseCase,
-    private val toggleBookmarkUseCase: ToggleBookmarkUseCase,
+    private val bookmarkRepository: BookmarkRepository,
     private val articleRepository: ArticleRepository,
     private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
@@ -42,7 +40,7 @@ class HomeScreenViewModel(
             combine(
                 observeSelectedSourcesUseCase(),
                 observeSelectedTopicsUseCase(),
-                observeBookmarkedIdsUseCase()
+                bookmarkRepository.observeBookmarkedIds()
             ) { sources, topics, bookmarkedIds ->
                 Triple(sources, topics, bookmarkedIds)
             }.collectLatest { (sources, topics, bookmarkedIds) ->
@@ -226,8 +224,16 @@ class HomeScreenViewModel(
 
     fun toggleBookmark(article: BaseArticle) {
         viewModelScope.launch {
-            val source = _viewState.value.selectedSource?.name ?: return@launch
-            toggleBookmarkUseCase(article, source)
+            val isBookmarked = bookmarkRepository.isBookmarked(article.id)
+            if (isBookmarked) {
+                bookmarkRepository.removeBookmark(article.id)
+                _viewState.update {
+                    it.copy(bookmarkedIds = (it.bookmarkedIds - article.id).toPersistentSet())
+                }
+            } else {
+                val source = _viewState.value.selectedSource?.name ?: return@launch
+                bookmarkRepository.bookmarkArticle(article, source)
+            }
         }
     }
 }
