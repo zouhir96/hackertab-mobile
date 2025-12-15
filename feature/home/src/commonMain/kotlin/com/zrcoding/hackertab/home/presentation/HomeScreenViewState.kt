@@ -13,8 +13,10 @@ import kotlinx.collections.immutable.persistentSetOf
 data class HomeScreenViewState(
     val enabledSources: PersistentList<Source> = persistentListOf(),
     val selectedSource: Source? = null,
+    val canAddSource: Boolean = false,
     val enabledTopics: PersistentList<Topic> = persistentListOf(),
     val selectedTopic: Topic? = null,
+    val canAddTopic: Boolean = false,
     val articles: PersistentList<BaseArticle> = persistentListOf(),
     val bookmarkedIds: PersistentSet<String> = persistentSetOf(),
     val isLoading: Boolean = true,

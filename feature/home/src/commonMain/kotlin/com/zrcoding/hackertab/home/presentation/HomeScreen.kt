@@ -39,9 +39,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddBox
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
@@ -133,12 +133,12 @@ fun HomeRoute(
             HomeScreenTopAppBar(
                 enabledSources = viewState.enabledSources,
                 selectedSource = viewState.selectedSource?.label.orEmpty(),
+                canAddSource = viewState.canAddSource,
                 onSourceSelected = viewModel::onSourceSelected,
                 onNavigationBtnClick = {
                     scope.launch { drawerState.open() }
                 },
                 onAddSourceClick = onNavigateToSourcesSettings,
-                onBookmarksClick = onNavigateToBookmarks
             )
         },
         drawerContent = {
@@ -177,7 +177,9 @@ fun HomeRoute(
                 HomeScreenTopicsFilter(
                     enabledTopics = viewState.enabledTopics,
                     selectedTopic = viewState.selectedTopic,
-                    onTopicSelected = viewModel::onTopicSelected
+                    canAddTopic = viewState.canAddTopic,
+                    onTopicSelected = viewModel::onTopicSelected,
+                    onAddTopicClick = onNavigateToTopicsSettings
                 )
             }
             if (viewState.isLoading) {
@@ -225,10 +227,10 @@ fun HomeRoute(
 private fun HomeScreenTopAppBar(
     enabledSources: ImmutableList<Source>,
     selectedSource: String,
+    canAddSource: Boolean,
     onSourceSelected: (Source) -> Unit,
     onNavigationBtnClick: () -> Unit,
     onAddSourceClick: () -> Unit,
-    onBookmarksClick: () -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
     TopAppBar(
@@ -275,7 +277,7 @@ private fun HomeScreenTopAppBar(
                                 Text(text = source.label)
                             }
                         }
-                        if (enabledSources.size < Source.entries.size) {
+                        if (canAddSource) {
                             DropdownMenuItem(
                                 onClick = {
                                     expanded = false
@@ -308,21 +310,6 @@ private fun HomeScreenTopAppBar(
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = "Navigation button to show drawer",
-                    tint = MaterialTheme.colors.onBackground
-                )
-            }
-        },
-        actions = {
-            IconButton(
-                onClick = onBookmarksClick,
-                modifier = Modifier.background(
-                    color = MaterialTheme.colors.secondary.copy(alpha = 0.5f),
-                    shape = CircleShape
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Bookmark,
-                    contentDescription = "Bookmarks",
                     tint = MaterialTheme.colors.onBackground
                 )
             }
@@ -440,7 +427,9 @@ private fun AppVersionName(modifier: Modifier = Modifier, versionName: String) {
 private fun HomeScreenTopicsFilter(
     enabledTopics: ImmutableList<Topic>,
     selectedTopic: Topic?,
+    canAddTopic: Boolean,
     onTopicSelected: (Topic) -> Unit,
+    onAddTopicClick: () -> Unit,
 ) {
     CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
         LazyRow(
@@ -463,6 +452,23 @@ private fun HomeScreenTopicsFilter(
                     ),
                 ) {
                     Text(text = topic.label)
+                }
+            }
+            if (canAddTopic) {
+                item {
+                    IconButton(
+                        onClick = onAddTopicClick,
+                        modifier = Modifier.background(
+                            color = MaterialTheme.colors.secondary,
+                            shape = CircleShape
+                        ).size(ChipDefaults.MinHeight)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add topic",
+                            tint = MaterialTheme.colors.onBackground
+                        )
+                    }
                 }
             }
         }

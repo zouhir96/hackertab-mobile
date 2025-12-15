@@ -12,6 +12,7 @@ import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.ArticleRepository
 import com.zrcoding.hackertab.domain.repositories.BookmarkRepository
+import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedSourcesUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedTopicsUseCase
 import kotlinx.collections.immutable.persistentListOf
@@ -29,6 +30,7 @@ class HomeScreenViewModel(
     private val observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase,
     private val bookmarkRepository: BookmarkRepository,
     private val articleRepository: ArticleRepository,
+    private val settingRepository: SettingRepository,
     private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
 
@@ -65,8 +67,10 @@ class HomeScreenViewModel(
                     state.copy(
                         enabledSources = sources.toPersistentList(),
                         selectedSource = newSelectedSource,
+                        canAddSource = sources.size < Source.entries.size,
                         enabledTopics = topics.toPersistentList(),
                         selectedTopic = newSelectedTopic,
+                        canAddTopic = topics.size < settingRepository.getTopics().size,
                         bookmarkedIds = bookmarkedIds.toPersistentSet(),
                         articles = if (sources.isEmpty() || topics.isEmpty()) {
                             persistentListOf()
