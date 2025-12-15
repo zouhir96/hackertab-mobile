@@ -13,7 +13,7 @@ interface BookmarkedArticleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(bookmarkedArticleEntity: BookmarkedArticleEntity)
 
-    @Query("SELECT * FROM bookmarked_articles")
+    @Query("SELECT * FROM bookmarked_articles ORDER BY saved_at DESC")
     fun observeAll(): Flow<List<BookmarkedArticleEntity>>
 
     @Query("SELECT * FROM bookmarked_articles WHERE id = :id")

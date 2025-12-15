@@ -1,6 +1,7 @@
 package com.zrcoding.hackertab.shared.di
 
 import com.zrcoding.hackertab.analytics.analyticsModule
+import com.zrcoding.hackertab.bookmarks.bookmarksModule
 import com.zrcoding.hackertab.data.dataModule
 import com.zrcoding.hackertab.domain.domainModule
 import com.zrcoding.hackertab.home.homeModule
@@ -35,6 +36,7 @@ internal val appModules = listOf(
     homeModule,
     settingsModule,
     onboardingModule,
+    bookmarksModule,
     networkModule,
     dataModule,
     domainModule,

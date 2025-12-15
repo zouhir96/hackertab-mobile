@@ -3,6 +3,8 @@ package com.zrcoding.hackertab.shared.navigation
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -20,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import com.zrcoding.hackertab.analytics.LocalAnalyticsHelper
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.bookmarks.presentation.BookmarksRoute
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase
 import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase.ScreenToComplete
@@ -48,6 +51,9 @@ object SettingsTopicsScreen
 
 @Serializable
 object SettingsSourcesScreen
+
+@Serializable
+object BookmarksScreen
 
 @Composable
 fun MainNavHost(
@@ -92,7 +98,8 @@ fun MainNavHost(
                     onBackClick = { navController.navigateUp() }
                 ) {
                     SetupProfileRoute(
-                        navigateToNextScreen = { if (shouldSetupTopics) {
+                        navigateToNextScreen = {
+                            if (shouldSetupTopics) {
                                 navController.navigate(SetupTopicsScreen)
                             } else if (shouldSetupSources) {
                                 navController.navigate(SetupSourcesScreen)
@@ -137,6 +144,9 @@ fun MainNavHost(
                 },
                 onNavigateToSourcesSettings = {
                     navController.navigate(SettingsSourcesScreen)
+                },
+                onNavigateToBookmarks = {
+                    navController.navigate(BookmarksScreen)
                 }
             )
         }
@@ -153,6 +163,14 @@ fun MainNavHost(
                 onBackClick = { navController.navigateUp() },
                 screen = {
                     SettingSourcesRoute()
+                }
+            )
+        }
+        composableWithAnimation<BookmarksScreen> {
+            ScreenWithBackButton(
+                onBackClick = { navController.navigateUp() },
+                screen = {
+                    BookmarksRoute()
                 }
             )
         }
@@ -198,22 +216,30 @@ private fun ScreenWithBackButton(
     onBackClick: () -> Unit,
     screen: @Composable () -> Unit
 ) {
-    Scaffold(topBar = {
-        TopAppBar(
-            navigationIcon = {
-                IconButton(onClick = onBackClick) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back button",
-                        tint = MaterialTheme.colors.onBackground
-                    )
-                }
-            },
-            title = {},
-            backgroundColor = MaterialTheme.colors.background,
-            elevation = MaterialTheme.dimension.none
-        )
-    }) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                navigationIcon = {
+                    IconButton(
+                        onClick = onBackClick,
+                        modifier = Modifier.background(
+                            color = MaterialTheme.colors.secondary.copy(alpha = 0.5f),
+                            shape = CircleShape
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back button",
+                            tint = MaterialTheme.colors.onBackground
+                        )
+                    }
+                },
+                title = {},
+                backgroundColor = MaterialTheme.colors.background,
+                elevation = MaterialTheme.dimension.none
+            )
+        }
+    ) {
         screen()
     }
 }

@@ -18,6 +18,7 @@ kotlin {
             implementation(project(":feature:onboarding"))
             implementation(project(":feature:home"))
             implementation(project(":feature:settings"))
+            implementation(project(":feature:bookmarks"))
 
             implementation(libs.gitlive.crashlytics)
             implementation(libs.gitlive.analytics)
