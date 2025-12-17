@@ -25,8 +25,9 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun HackerNewsItem(
     new: HackerNews,
-    isBookmarked: Boolean = false,
-    onBookmarkClick: () -> Unit = {}
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit
 ) {
     SourceItemTemplate(
         title = new.title,
@@ -46,9 +47,9 @@ fun HackerNewsItem(
                 icon = Res.drawable.ic_comment
             )
         },
-        url = new.url,
         isBookmarked = isBookmarked,
-        onBookmarkClick = onBookmarkClick
+        onBookmarkClick = onBookmarkClick,
+        onClick = onClick
     )
 }
 
@@ -65,7 +66,10 @@ fun HackerNewsItemPreview() {
                 time = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
                 descendants = 1234,
                 score = 1234
-            )
+            ),
+            isBookmarked = false,
+            onClick = {},
+            onBookmarkClick = {}
         )
     }
 }

@@ -24,8 +24,9 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun HashnodeItem(
     hashnode: Hashnode,
-    isBookmarked: Boolean = false,
-    onBookmarkClick: () -> Unit = {}
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit
 ) {
     with(hashnode) {
         SourceItemTemplate(
@@ -45,10 +46,10 @@ fun HashnodeItem(
                     icon = Res.drawable.ic_like
                 )
             },
-            url = url,
             tags = tags,
             isBookmarked = isBookmarked,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onClick = onClick
         )
     }
 }
@@ -67,7 +68,10 @@ private fun HashnodeItemPreview() {
                 reactions = 4022,
                 url = "http://www.bing.com/search?q=vocent",
                 tags = listOf("Kotlin")
-            )
+            ),
+            isBookmarked = false,
+            onClick = {},
+            onBookmarkClick = {}
         )
     }
 }

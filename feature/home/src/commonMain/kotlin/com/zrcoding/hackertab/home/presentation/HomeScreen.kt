@@ -117,6 +117,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HomeRoute(
     viewModel: HomeScreenViewModel = koinViewModel(),
+    onNavigateToWebView: (String) -> Unit,
     onNavigateToTopicsSettings: () -> Unit,
     onNavigateToSourcesSettings: () -> Unit,
     onNavigateToBookmarks: () -> Unit,
@@ -195,6 +196,7 @@ fun HomeRoute(
                     ) { item: BaseArticle ->
                         item.ToListItem(
                             isBookmarked = viewState.bookmarkedIds.contains(item.id),
+                            onClick = { onNavigateToWebView(item.url) },
                             onBookmarkClick = { viewModel.toggleBookmark(item) }
                         )
                         Divider()
@@ -340,8 +342,9 @@ private fun HomeScreenDrawer(
     ) {
         Text(text = "Hackertab", style = MaterialTheme.typography.h5)
         Divider()
-        Column {
-            Spacer(modifier = Modifier.height(MaterialTheme.dimension.large))
+        Column(
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.large)
+        ) {
             HomeScreenDrawerItem(
                 title = stringResource(Res.string.setting_master_screen_topics),
                 onClick = onNavigateToTopicsSettings
@@ -350,12 +353,10 @@ private fun HomeScreenDrawer(
                 title = stringResource(Res.string.setting_master_screen_sources),
                 onClick = onNavigateToSourcesSettings
             )
-            Spacer(modifier = Modifier.height(MaterialTheme.dimension.large))
             HomeScreenDrawerItem(
                 title = stringResource(Res.string.setting_master_screen_bookmarks),
                 onClick = onNavigateToBookmarks
             )
-            Spacer(modifier = Modifier.height(MaterialTheme.dimension.large))
             HomeScreenDrawerItem(
                 title = stringResource(Res.string.setting_master_screen_contact_us),
                 onClick = {
@@ -473,19 +474,75 @@ private fun HomeScreenTopicsFilter(
 @Composable
 private fun BaseArticle.ToListItem(
     isBookmarked: Boolean,
+    onClick: () -> Unit,
     onBookmarkClick: () -> Unit
 ) {
     when (this) {
-        is GithubRepo -> GithubItem(this, isBookmarked, onBookmarkClick)
-        is HackerNews -> HackerNewsItem(this, isBookmarked, onBookmarkClick)
-        is Conference -> ConferenceItem(this, isBookmarked, onBookmarkClick)
-        is Devto -> DevtoItem(this, isBookmarked, onBookmarkClick)
-        is ProductHunt -> ProductHuntItem(this, isBookmarked, onBookmarkClick)
-        is Reddit -> RedditItem(this, isBookmarked, onBookmarkClick)
-        is Lobster -> LobstersItem(this, isBookmarked, onBookmarkClick)
-        is Hashnode -> HashnodeItem(this, isBookmarked, onBookmarkClick)
-        is FreeCodeCamp -> FreeCodeCampItem(this, isBookmarked, onBookmarkClick)
-        is IndieHackers -> IndieHackersItem(this, isBookmarked, onBookmarkClick)
-        is Medium -> MediumItem(this, isBookmarked, onBookmarkClick)
+        is GithubRepo -> GithubItem(
+            post = this,
+            isBookmarked = isBookmarked,
+            onClick = onClick,
+            onBookmarkClick = onBookmarkClick
+        )
+        is HackerNews -> HackerNewsItem(
+            new = this,
+            isBookmarked = isBookmarked,
+            onClick = onClick,
+            onBookmarkClick = onBookmarkClick
+        )
+        is Conference -> ConferenceItem(
+            conf = this,
+            isBookmarked = isBookmarked,
+            onClick = onClick,
+            onBookmarkClick = onBookmarkClick
+        )
+        is Devto -> DevtoItem(
+            devto = this,
+            isBookmarked = isBookmarked,
+            onClick = onClick,
+            onBookmarkClick = onBookmarkClick
+        )
+        is ProductHunt -> ProductHuntItem(
+            product = this,
+            isBookmarked = isBookmarked,
+            onClick = onClick,
+            onBookmarkClick = onBookmarkClick
+        )
+        is Reddit -> RedditItem(
+            reddit = this,
+            isBookmarked = isBookmarked,
+            onClick = onClick,
+            onBookmarkClick = onBookmarkClick
+        )
+        is Lobster -> LobstersItem(
+            lobster = this,
+            isBookmarked = isBookmarked,
+            onClick = onClick,
+            onBookmarkClick = onBookmarkClick
+        )
+        is Hashnode -> HashnodeItem(
+            hashnode = this,
+            isBookmarked = isBookmarked,
+            onClick = onClick,
+            onBookmarkClick = onBookmarkClick
+        )
+        is FreeCodeCamp -> FreeCodeCampItem(
+            post = this,
+            isBookmarked = isBookmarked,
+            onClick = onClick,
+            onBookmarkClick = onBookmarkClick
+        )
+        is IndieHackers -> IndieHackersItem(
+            indieHackers = this,
+            isBookmarked = isBookmarked,
+            onClick = onClick,
+            onBookmarkClick = onBookmarkClick
+        )
+        is Medium -> MediumItem(
+            medium = this,
+            isBookmarked = isBookmarked,
+            onClick = onClick,
+            onBookmarkClick = onBookmarkClick
+        )
     }
 }

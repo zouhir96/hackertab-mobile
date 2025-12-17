@@ -41,12 +41,14 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun ProductHuntItem(
     product: ProductHunt,
-    isBookmarked: Boolean = false,
-    onBookmarkClick: () -> Unit = {}
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit
 ) {
     val uriHandler = LocalUriHandler.current
     Row(
         modifier = Modifier
+            .clickable(onClick = onClick)
             .fillMaxWidth()
             .padding(
                 horizontal = MaterialTheme.dimension.default,
@@ -158,7 +160,10 @@ private fun ProductHuntItemPreview() {
                 reactions = 4827,
                 url = "https://www.google.com/#q=vivendo",
                 tags = listOf("Kotlin")
-            )
+            ),
+            isBookmarked = false,
+            onClick = {},
+            onBookmarkClick = {}
         )
     }
 }

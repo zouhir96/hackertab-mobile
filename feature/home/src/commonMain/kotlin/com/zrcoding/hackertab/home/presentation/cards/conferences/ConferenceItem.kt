@@ -17,8 +17,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun ConferenceItem(
     conf: Conference,
-    isBookmarked: Boolean = false,
-    onBookmarkClick: () -> Unit = {}
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit
 ) {
     val date = BuildConferenceDisplayedDateUseCase(conf)
     val location = if (conf.online) {
@@ -39,10 +40,10 @@ fun ConferenceItem(
                 text = date
             )
         },
-        url = conf.url,
         tags = listOf(conf.tag),
         isBookmarked = isBookmarked,
-        onBookmarkClick = onBookmarkClick
+        onClick = onClick,
+        onBookmarkClick = onBookmarkClick,
     )
 }
 
@@ -61,7 +62,10 @@ private fun ConferenceItemPreview() {
                 online = true,
                 city = "Berlin",
                 country = "Germany"
-            )
+            ),
+            isBookmarked = false,
+            onClick = {},
+            onBookmarkClick = {}
         )
     }
 }

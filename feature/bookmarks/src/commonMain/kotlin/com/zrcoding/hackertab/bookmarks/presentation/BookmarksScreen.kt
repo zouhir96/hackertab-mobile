@@ -25,7 +25,6 @@ import androidx.compose.material.icons.filled.BookmarkRemove
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -51,12 +50,14 @@ import kotlin.time.toDuration
 
 @Composable
 fun BookmarksRoute(
+    onNavigateToWebView: (String) -> Unit,
     viewModel: BookmarksScreenViewModel = koinViewModel()
 ) {
     val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
 
     BookmarksScreen(
         viewState = viewState,
+        onClick = onNavigateToWebView,
         onRemoveBookmark = viewModel::removeBookmark
     )
     TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.BOOKMARKS)
@@ -65,6 +66,7 @@ fun BookmarksRoute(
 @Composable
 fun BookmarksScreen(
     viewState: BookmarksScreenViewState,
+    onClick: (String) -> Unit,
     onRemoveBookmark: (String) -> Unit
 ) {
     Column(
@@ -106,6 +108,7 @@ fun BookmarksScreen(
                     ) { bookmark ->
                         BookmarkItem(
                             bookmark = bookmark,
+                            onClick = { onClick(bookmark.url) },
                             onRemoveBookmark = { onRemoveBookmark(bookmark.id) }
                         )
                         Divider()
@@ -120,14 +123,13 @@ fun BookmarksScreen(
 @Composable
 private fun BookmarkItem(
     bookmark: BookmarkedArticle,
+    onClick: () -> Unit,
     onRemoveBookmark: () -> Unit
 ) {
-    val uriHandler = LocalUriHandler.current
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { uriHandler.openUri(bookmark.url) }
+            .clickable(onClick = onClick)
             .padding(
                 horizontal = MaterialTheme.dimension.default,
                 vertical = MaterialTheme.dimension.medium

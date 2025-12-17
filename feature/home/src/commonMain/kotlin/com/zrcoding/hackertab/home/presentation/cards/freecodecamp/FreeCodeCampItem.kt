@@ -19,8 +19,9 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun FreeCodeCampItem(
     post: FreeCodeCamp,
-    isBookmarked: Boolean = false,
-    onBookmarkClick: () -> Unit = {}
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit
 ) {
     SourceItemTemplate(
         title = post.title.trim(),
@@ -31,10 +32,10 @@ fun FreeCodeCampItem(
                 text = post.isoDate.timeAgo()
             )
         },
-        url = post.url,
         tags = post.categories,
         isBookmarked = isBookmarked,
-        onBookmarkClick = onBookmarkClick
+        onBookmarkClick = onBookmarkClick,
+        onClick = onClick
     )
 }
 
@@ -50,7 +51,10 @@ private fun FreeCodeCampItemPreview() {
                 url = "https://www.google.com/#q=propriae",
                 isoDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
                 categories = listOf()
-            )
+            ),
+            isBookmarked = false,
+            onClick = {},
+            onBookmarkClick = {}
         )
     }
 }

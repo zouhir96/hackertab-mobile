@@ -25,13 +25,13 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun IndieHackersItem(
     indieHackers: IndieHackers,
-    isBookmarked: Boolean = false,
-    onBookmarkClick: () -> Unit = {}
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit
 ) {
     with(indieHackers) {
         SourceItemTemplate(
             title = title,
-            url = url,
             primaryInfoSection = {
                 TextWithStartIcon(
                     text = stringResource( Res.string.score, reactions),
@@ -49,7 +49,8 @@ fun IndieHackersItem(
                 )
             },
             isBookmarked = isBookmarked,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onClick = onClick
         )
     }
 }
@@ -67,7 +68,10 @@ private fun IndieHackersItemPreview() {
                 commentsCount = 1349,
                 reactions = 1634,
                 url = "http://www.bing.com/search?q=dicam"
-            )
+            ),
+            isBookmarked = false,
+            onClick = {},
+            onBookmarkClick = {}
         )
     }
 }

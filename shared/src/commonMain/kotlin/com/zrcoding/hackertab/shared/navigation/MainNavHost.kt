@@ -20,9 +20,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
+import androidx.navigation.toRoute
 import com.zrcoding.hackertab.analytics.LocalAnalyticsHelper
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.bookmarks.presentation.BookmarksRoute
+import com.zrcoding.hackertab.design.components.WebViewRoute
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase
 import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase.ScreenToComplete
@@ -54,6 +56,9 @@ object SettingsSourcesScreen
 
 @Serializable
 object BookmarksScreen
+
+@Serializable
+data class WebViewScreen(val url: String)
 
 @Composable
 fun MainNavHost(
@@ -139,6 +144,9 @@ fun MainNavHost(
         }
         composable<HomeScreen> {
             HomeRoute(
+                onNavigateToWebView = { url ->
+                    navController.navigate(WebViewScreen(url))
+                },
                 onNavigateToTopicsSettings = {
                     navController.navigate(SettingsTopicsScreen)
                 },
@@ -170,7 +178,18 @@ fun MainNavHost(
             ScreenWithBackButton(
                 onBackClick = { navController.navigateUp() },
                 screen = {
-                    BookmarksRoute()
+                    BookmarksRoute(
+                        onNavigateToWebView = { url -> navController.navigate(WebViewScreen(url)) }
+                    )
+                }
+            )
+        }
+        composableWithAnimation<WebViewScreen> {
+            val route = it.toRoute<WebViewScreen>()
+            ScreenWithBackButton(
+                onBackClick = { navController.navigateUp() },
+                screen = {
+                    WebViewRoute(url = route.url)
                 }
             )
         }

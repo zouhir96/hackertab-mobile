@@ -19,6 +19,7 @@ material3VersionHack = "1.3.2"
 navigation = "2.9.0-beta03"
 lifecycle = "2.9.1"
 kamel = "1.0.7"
+webview = "2.0.3"
 
 koinBom = "4.1.0"
 
@@ -46,6 +47,7 @@ androidx-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifec
 kamel-image = { group = "media.kamel", name = "kamel-image", version.ref = "kamel" }
 kamel-bitmap = { group = "media.kamel", name ="kamel-decoder-image-bitmap", version.ref = "kamel"}
 kamel-animated = { group = "media.kamel", name ="kamel-decoder-animated-image", version.ref = "kamel"}
+kevinnzou-webview = { group = "io.github.kevinnzou", name = "compose-webview-multiplatform", version.ref = "webview" }
 
 #koin
 koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBom" }

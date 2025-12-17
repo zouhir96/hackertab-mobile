@@ -24,8 +24,9 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun DevtoItem(
     devto: Devto,
-    isBookmarked: Boolean = false,
-    onBookmarkClick: () -> Unit = {}
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit
 ) {
     with(devto) {
         SourceItemTemplate(
@@ -45,10 +46,10 @@ fun DevtoItem(
                     icon = Res.drawable.ic_like
                 )
             },
-            url = url,
             tags = tags,
             isBookmarked = isBookmarked,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onClick = onClick
         )
     }
 }
@@ -67,7 +68,10 @@ private fun DevtoItemPreview() {
                 reactions = 6147,
                 url = "https://search.yahoo.com/search?p=mnesarchum",
                 tags = listOf("Kotlin")
-            )
+            ),
+            isBookmarked = false,
+            onClick = {},
+            onBookmarkClick = {}
         )
     }
 }

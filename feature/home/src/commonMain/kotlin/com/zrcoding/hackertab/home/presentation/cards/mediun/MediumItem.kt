@@ -25,13 +25,13 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun MediumItem(
     medium: Medium,
-    isBookmarked: Boolean = false,
-    onBookmarkClick: () -> Unit = {}
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit
 ) {
     with(medium) {
         SourceItemTemplate(
             title = title,
-            url = url,
             primaryInfoSection = {
                 TextWithStartIcon(
                     text = stringResource( Res.string.claps, claps),
@@ -48,7 +48,8 @@ fun MediumItem(
                 )
             },
             isBookmarked = isBookmarked,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onClick = onClick
         )
     }
 }
@@ -66,7 +67,10 @@ private fun MediumItemPreview() {
                 commentsCount = 9783,
                 claps = 9145,
                 url = "https://duckduckgo.com/?q=minim"
-            )
+            ),
+            isBookmarked = false,
+            onClick = {},
+            onBookmarkClick = {}
         )
     }
 }

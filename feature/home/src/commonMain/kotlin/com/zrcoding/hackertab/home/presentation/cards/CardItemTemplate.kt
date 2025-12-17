@@ -28,7 +28,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
 import com.zrcoding.hackertab.design.components.TextWithStartIcon
 import com.zrcoding.hackertab.design.components.getTagColor
 import com.zrcoding.hackertab.design.resources.Res
@@ -41,25 +40,20 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SourceItemTemplate(
-    modifier: Modifier = Modifier,
     title: String,
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit,
+    modifier: Modifier = Modifier,
     titleColor: Color = MaterialTheme.colors.onBackground,
     description: String? = null,
     primaryInfoSection: @Composable FlowRowScope.() -> Unit,
-    url: String? = null,
     tags: List<String>? = null,
-    isBookmarked: Boolean = false,
-    onBookmarkClick: () -> Unit = {},
 ) {
-    val localUriHandler = LocalUriHandler.current
     Box(modifier = modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier
-                .clickable {
-                    url?.let {
-                        localUriHandler.openUri(it)
-                    }
-                }
+                .clickable(onClick = onClick)
                 .fillMaxWidth()
                 .padding(
                     horizontal = MaterialTheme.dimension.default,
@@ -125,6 +119,7 @@ fun SourceItemTemplatePreview() {
             },
             isBookmarked = false,
             onBookmarkClick = {},
+            onClick = {},
             modifier = Modifier,
             tags = listOf("Java", "Kotlin", "JavaScript", "android development"),
         )

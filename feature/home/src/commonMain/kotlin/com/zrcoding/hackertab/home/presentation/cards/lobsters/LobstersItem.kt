@@ -30,13 +30,13 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun LobstersItem(
     lobster: Lobster,
-    isBookmarked: Boolean = false,
-    onBookmarkClick: () -> Unit = {}
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit
 ) {
     with(lobster) {
         SourceItemTemplate(
             title = title,
-            url = url,
             primaryInfoSection = {
                 TextWithStartIcon(
                     text = stringResource( Res.string.score, reactions),
@@ -61,7 +61,8 @@ fun LobstersItem(
                 )
             },
             isBookmarked = isBookmarked,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onClick = onClick
         )
     }
 }
@@ -80,7 +81,10 @@ private fun LobstersItemPreview() {
                 reactions = 8948,
                 url = "https://search.yahoo.com/search?p=habitasse",
                 commentsUrl = "http://www.bing.com/search?q=brute"
-            )
+            ),
+            isBookmarked = false,
+            onClick = {},
+            onBookmarkClick = {}
         )
     }
 }

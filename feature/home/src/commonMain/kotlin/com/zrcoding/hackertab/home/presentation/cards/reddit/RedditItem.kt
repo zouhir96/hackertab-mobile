@@ -26,8 +26,9 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun RedditItem(
     reddit: Reddit,
-    isBookmarked: Boolean = false,
-    onBookmarkClick: () -> Unit = {}
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit
 ) {
     SourceItemTemplate(
         title = reddit.title,
@@ -47,10 +48,10 @@ fun RedditItem(
                 icon = Res.drawable.ic_comment
             )
         },
-        url = reddit.url,
         tags = listOf(stringResource( Res.string.subreddit, reddit.subreddit)),
         isBookmarked = isBookmarked,
-        onBookmarkClick = onBookmarkClick
+        onBookmarkClick = onBookmarkClick,
+        onClick = onClick
     )
 }
 
@@ -68,7 +69,10 @@ fun RedditItemPreview() {
                 score = 118,
                 commentsCount = 30,
                 date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            )
+            ),
+            isBookmarked = false,
+            onClick = {},
+            onBookmarkClick = {}
         )
     }
 }

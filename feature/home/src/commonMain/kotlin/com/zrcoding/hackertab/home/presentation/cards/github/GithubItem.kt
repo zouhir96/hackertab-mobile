@@ -21,8 +21,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun GithubItem(
     post: GithubRepo,
-    isBookmarked: Boolean = false,
-    onBookmarkClick: () -> Unit = {}
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit
 ) {
     SourceItemTemplate(
         title = post.title,
@@ -43,10 +44,10 @@ fun GithubItem(
                 text = stringResource(Res.string.forks, post.forks)
             )
         },
-        url = post.url,
         titleColor = MaterialTheme.colors.primary,
         isBookmarked = isBookmarked,
-        onBookmarkClick = onBookmarkClick
+        onBookmarkClick = onBookmarkClick,
+        onClick = onClick
     )
 }
 
@@ -64,7 +65,10 @@ private fun GithubItemPreview() {
                 programmingLanguage = "Kotlin",
                 stars = 20,
                 forks = 15
-            )
+            ),
+            isBookmarked = false,
+            onClick = {},
+            onBookmarkClick = {}
         )
     }
 }
