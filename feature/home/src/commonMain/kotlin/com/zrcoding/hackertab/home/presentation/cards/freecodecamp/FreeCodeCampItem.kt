@@ -21,7 +21,8 @@ fun FreeCodeCampItem(
     post: FreeCodeCamp,
     isBookmarked: Boolean,
     onClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     SourceItemTemplate(
         title = post.title.trim(),
@@ -35,6 +36,7 @@ fun FreeCodeCampItem(
         tags = post.categories,
         isBookmarked = isBookmarked,
         onBookmarkClick = onBookmarkClick,
+        onShareClick = onShareClick,
         onClick = onClick
     )
 }
@@ -54,7 +56,8 @@ private fun FreeCodeCampItemPreview() {
             ),
             isBookmarked = false,
             onClick = {},
-            onBookmarkClick = {}
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

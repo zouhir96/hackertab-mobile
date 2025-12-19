@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +44,8 @@ fun ProductHuntItem(
     product: ProductHunt,
     isBookmarked: Boolean,
     onClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     val uriHandler = LocalUriHandler.current
     Row(
@@ -129,6 +131,19 @@ fun ProductHuntItem(
                     )
                 }
                 IconButton(
+                    onClick = onShareClick,
+                    modifier = Modifier
+                        .size(MaterialTheme.dimension.extraBig)
+                        .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
+                ) {
+                    Icon(
+                        modifier = Modifier.size(MaterialTheme.dimension.big),
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Share article",
+                        tint = MaterialTheme.colors.onBackground
+                    )
+                }
+                IconButton(
                     onClick = onBookmarkClick,
                     modifier = Modifier
                         .size(MaterialTheme.dimension.extraBig)
@@ -163,7 +178,8 @@ private fun ProductHuntItemPreview() {
             ),
             isBookmarked = false,
             onClick = {},
-            onBookmarkClick = {}
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

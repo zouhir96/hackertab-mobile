@@ -27,7 +27,8 @@ fun MediumItem(
     medium: Medium,
     isBookmarked: Boolean,
     onClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     with(medium) {
         SourceItemTemplate(
@@ -49,6 +50,7 @@ fun MediumItem(
             },
             isBookmarked = isBookmarked,
             onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick,
             onClick = onClick
         )
     }
@@ -70,7 +72,8 @@ private fun MediumItemPreview() {
             ),
             isBookmarked = false,
             onClick = {},
-            onBookmarkClick = {}
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

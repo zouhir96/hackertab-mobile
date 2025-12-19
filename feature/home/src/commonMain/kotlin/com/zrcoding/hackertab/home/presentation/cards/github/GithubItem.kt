@@ -23,7 +23,8 @@ fun GithubItem(
     post: GithubRepo,
     isBookmarked: Boolean,
     onClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     SourceItemTemplate(
         title = post.title,
@@ -47,6 +48,7 @@ fun GithubItem(
         titleColor = MaterialTheme.colors.primary,
         isBookmarked = isBookmarked,
         onBookmarkClick = onBookmarkClick,
+        onShareClick = onShareClick,
         onClick = onClick
     )
 }
@@ -68,7 +70,8 @@ private fun GithubItemPreview() {
             ),
             isBookmarked = false,
             onClick = {},
-            onBookmarkClick = {}
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

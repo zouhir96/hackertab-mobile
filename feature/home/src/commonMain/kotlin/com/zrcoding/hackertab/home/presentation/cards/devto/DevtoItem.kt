@@ -26,7 +26,8 @@ fun DevtoItem(
     devto: Devto,
     isBookmarked: Boolean,
     onClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     with(devto) {
         SourceItemTemplate(
@@ -49,6 +50,7 @@ fun DevtoItem(
             tags = tags,
             isBookmarked = isBookmarked,
             onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick,
             onClick = onClick
         )
     }
@@ -71,7 +73,8 @@ private fun DevtoItemPreview() {
             ),
             isBookmarked = false,
             onClick = {},
-            onBookmarkClick = {}
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

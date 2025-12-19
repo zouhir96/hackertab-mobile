@@ -28,7 +28,8 @@ fun RedditItem(
     reddit: Reddit,
     isBookmarked: Boolean,
     onClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     SourceItemTemplate(
         title = reddit.title,
@@ -51,6 +52,7 @@ fun RedditItem(
         tags = listOf(stringResource( Res.string.subreddit, reddit.subreddit)),
         isBookmarked = isBookmarked,
         onBookmarkClick = onBookmarkClick,
+        onShareClick = onShareClick,
         onClick = onClick
     )
 }
@@ -72,7 +74,8 @@ fun RedditItemPreview() {
             ),
             isBookmarked = false,
             onClick = {},
-            onBookmarkClick = {}
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

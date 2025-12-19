@@ -107,6 +107,8 @@ import com.zrcoding.hackertab.home.presentation.cards.producthunt.ProductHuntIte
 import com.zrcoding.hackertab.home.presentation.cards.reddit.RedditItem
 import com.zrcoding.hackertab.home.presentation.utils.ContactSupport
 import com.zrcoding.hackertab.home.presentation.utils.ContactSupportData
+import com.zrcoding.hackertab.home.presentation.utils.ShareData
+import com.zrcoding.hackertab.home.presentation.utils.ShareManager
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -125,6 +127,7 @@ fun HomeRoute(
     val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val shareManager: ShareManager = koinInject()
 
     Scaffold(
         scaffoldState = rememberScaffoldState(drawerState = drawerState),
@@ -197,7 +200,15 @@ fun HomeRoute(
                         item.ToListItem(
                             isBookmarked = viewState.bookmarkedIds.contains(item.id),
                             onClick = { onNavigateToWebView(item.url) },
-                            onBookmarkClick = { viewModel.toggleBookmark(item) }
+                            onBookmarkClick = { viewModel.toggleBookmark(item) },
+                            onShareClick = {
+                                shareManager.share(
+                                    ShareData(
+                                        title = item.title,
+                                        url = item.url
+                                    )
+                                )
+                            }
                         )
                         Divider()
                     }
@@ -475,74 +486,86 @@ private fun HomeScreenTopicsFilter(
 private fun BaseArticle.ToListItem(
     isBookmarked: Boolean,
     onClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     when (this) {
         is GithubRepo -> GithubItem(
             post = this,
             isBookmarked = isBookmarked,
             onClick = onClick,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick
         )
         is HackerNews -> HackerNewsItem(
             new = this,
             isBookmarked = isBookmarked,
             onClick = onClick,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick
         )
         is Conference -> ConferenceItem(
             conf = this,
             isBookmarked = isBookmarked,
             onClick = onClick,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick
         )
         is Devto -> DevtoItem(
             devto = this,
             isBookmarked = isBookmarked,
             onClick = onClick,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick
         )
         is ProductHunt -> ProductHuntItem(
             product = this,
             isBookmarked = isBookmarked,
             onClick = onClick,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick
         )
         is Reddit -> RedditItem(
             reddit = this,
             isBookmarked = isBookmarked,
             onClick = onClick,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick
         )
         is Lobster -> LobstersItem(
             lobster = this,
             isBookmarked = isBookmarked,
             onClick = onClick,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick
         )
         is Hashnode -> HashnodeItem(
             hashnode = this,
             isBookmarked = isBookmarked,
             onClick = onClick,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick
         )
         is FreeCodeCamp -> FreeCodeCampItem(
             post = this,
             isBookmarked = isBookmarked,
             onClick = onClick,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick
         )
         is IndieHackers -> IndieHackersItem(
             indieHackers = this,
             isBookmarked = isBookmarked,
             onClick = onClick,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick
         )
         is Medium -> MediumItem(
             medium = this,
             isBookmarked = isBookmarked,
             onClick = onClick,
-            onBookmarkClick = onBookmarkClick
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick
         )
     }
 }

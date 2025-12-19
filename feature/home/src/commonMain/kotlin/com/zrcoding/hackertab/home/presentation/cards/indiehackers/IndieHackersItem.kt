@@ -27,7 +27,8 @@ fun IndieHackersItem(
     indieHackers: IndieHackers,
     isBookmarked: Boolean,
     onClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     with(indieHackers) {
         SourceItemTemplate(
@@ -50,6 +51,7 @@ fun IndieHackersItem(
             },
             isBookmarked = isBookmarked,
             onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick,
             onClick = onClick
         )
     }
@@ -71,7 +73,8 @@ private fun IndieHackersItemPreview() {
             ),
             isBookmarked = false,
             onClick = {},
-            onBookmarkClick = {}
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

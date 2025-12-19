@@ -19,7 +19,8 @@ fun ConferenceItem(
     conf: Conference,
     isBookmarked: Boolean,
     onClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     val date = BuildConferenceDisplayedDateUseCase(conf)
     val location = if (conf.online) {
@@ -44,6 +45,7 @@ fun ConferenceItem(
         isBookmarked = isBookmarked,
         onClick = onClick,
         onBookmarkClick = onBookmarkClick,
+        onShareClick = onShareClick,
     )
 }
 
@@ -65,7 +67,8 @@ private fun ConferenceItemPreview() {
             ),
             isBookmarked = false,
             onClick = {},
-            onBookmarkClick = {}
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

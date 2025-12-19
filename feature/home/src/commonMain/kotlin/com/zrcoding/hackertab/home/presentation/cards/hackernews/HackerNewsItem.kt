@@ -27,7 +27,8 @@ fun HackerNewsItem(
     new: HackerNews,
     isBookmarked: Boolean,
     onClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     SourceItemTemplate(
         title = new.title,
@@ -49,6 +50,7 @@ fun HackerNewsItem(
         },
         isBookmarked = isBookmarked,
         onBookmarkClick = onBookmarkClick,
+        onShareClick = onShareClick,
         onClick = onClick
     )
 }
@@ -69,7 +71,8 @@ fun HackerNewsItemPreview() {
             ),
             isBookmarked = false,
             onClick = {},
-            onBookmarkClick = {}
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

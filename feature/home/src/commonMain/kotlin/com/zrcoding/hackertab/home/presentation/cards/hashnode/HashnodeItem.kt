@@ -26,7 +26,8 @@ fun HashnodeItem(
     hashnode: Hashnode,
     isBookmarked: Boolean,
     onClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     with(hashnode) {
         SourceItemTemplate(
@@ -49,6 +50,7 @@ fun HashnodeItem(
             tags = tags,
             isBookmarked = isBookmarked,
             onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick,
             onClick = onClick
         )
     }
@@ -71,7 +73,8 @@ private fun HashnodeItemPreview() {
             ),
             isBookmarked = false,
             onClick = {},
-            onBookmarkClick = {}
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

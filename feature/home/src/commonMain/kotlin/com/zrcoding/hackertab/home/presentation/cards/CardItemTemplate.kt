@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.FlowRowScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,6 +24,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BookmarkAdded
 import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -44,6 +46,7 @@ fun SourceItemTemplate(
     isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
     titleColor: Color = MaterialTheme.colors.onBackground,
     description: String? = null,
@@ -85,23 +88,41 @@ fun SourceItemTemplate(
             Spacer(modifier = modifier.height(MaterialTheme.dimension.small))
             tags?.let { CardItemTags(modifier = Modifier.fillMaxWidth(), tags = it) }
         }
-        IconButton(
-            onClick = onBookmarkClick,
+        Row(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(
                     end = MaterialTheme.dimension.medium,
                     bottom = MaterialTheme.dimension.medium
-                )
-                .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
-                .size(MaterialTheme.dimension.extraBig)
+                ),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small)
         ) {
-            Icon(
-                modifier = Modifier.size(MaterialTheme.dimension.big),
-                imageVector = if (isBookmarked) Icons.Default.BookmarkAdded else Icons.Default.BookmarkBorder,
-                contentDescription = if (isBookmarked) "Remove bookmark" else "Add bookmark",
-                tint = MaterialTheme.colors.onBackground
-            )
+            IconButton(
+                onClick = onShareClick,
+                modifier = Modifier
+                    .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
+                    .size(MaterialTheme.dimension.extraBig)
+            ) {
+                Icon(
+                    modifier = Modifier.size(MaterialTheme.dimension.big),
+                    imageVector = Icons.Default.Share,
+                    contentDescription = "Share article",
+                    tint = MaterialTheme.colors.onBackground
+                )
+            }
+            IconButton(
+                onClick = onBookmarkClick,
+                modifier = Modifier
+                    .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
+                    .size(MaterialTheme.dimension.extraBig)
+            ) {
+                Icon(
+                    modifier = Modifier.size(MaterialTheme.dimension.big),
+                    imageVector = if (isBookmarked) Icons.Default.BookmarkAdded else Icons.Default.BookmarkBorder,
+                    contentDescription = if (isBookmarked) "Remove bookmark" else "Add bookmark",
+                    tint = MaterialTheme.colors.onBackground
+                )
+            }
         }
     }
 }
@@ -119,6 +140,7 @@ fun SourceItemTemplatePreview() {
             },
             isBookmarked = false,
             onBookmarkClick = {},
+            onShareClick = {},
             onClick = {},
             modifier = Modifier,
             tags = listOf("Java", "Kotlin", "JavaScript", "android development"),

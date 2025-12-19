@@ -32,7 +32,8 @@ fun LobstersItem(
     lobster: Lobster,
     isBookmarked: Boolean,
     onClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     with(lobster) {
         SourceItemTemplate(
@@ -62,6 +63,7 @@ fun LobstersItem(
             },
             isBookmarked = isBookmarked,
             onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick,
             onClick = onClick
         )
     }
@@ -84,7 +86,8 @@ private fun LobstersItemPreview() {
             ),
             isBookmarked = false,
             onClick = {},
-            onBookmarkClick = {}
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }
