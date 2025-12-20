@@ -6,11 +6,10 @@ plugins {
     alias(libs.plugins.room)
 }
 
-android {
-    namespace = "com.zrcoding.hackertab.database"
-}
-
 kotlin {
+    androidLibrary {
+        namespace = "com.zrcoding.hackertab.database"
+    }
     setFrameworkBaseName("database")
     sourceSets.commonMain {
         kotlin.srcDir("build/generated/ksp/metadata")

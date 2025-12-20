@@ -7,6 +7,14 @@ plugins {
 
 
 kotlin {
+    androidLibrary {
+        namespace = "com.zrcoding.hackertab.data"
+
+        // Enable Android resources for Compose Multiplatform resources
+        androidResources {
+            enable = true
+        }
+    }
     setFrameworkBaseName("data")
 
     sourceSets {
@@ -24,10 +32,6 @@ kotlin {
             implementation(compose.components.resources)
         }
     }
-}
-
-android {
-    namespace = "com.zrcoding.hackertab.data"
 }
 
 compose.resources {

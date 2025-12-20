@@ -10,9 +10,6 @@ internal fun Project.configureKotlinMultiplatform(
 
     jvmToolchain(JavaLanguageVersion.of(17).asInt())
 
-    // targets
-    androidTarget()
-
     applyDefaultHierarchyTemplate()
 
     //common dependencies

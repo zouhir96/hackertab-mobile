@@ -4,11 +4,10 @@ plugins {
     id("hackertab.kmp.feature")
 }
 
-android {
-    namespace = "com.zrcoding.hackertab.bookmarks"
-}
-
 kotlin {
+    androidLibrary {
+        namespace = "com.zrcoding.hackertab.bookmarks"
+    }
     setFrameworkBaseName("bookmarks")
 }
 

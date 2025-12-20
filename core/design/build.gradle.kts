@@ -6,6 +6,14 @@ plugins {
 }
 
 kotlin {
+    androidLibrary {
+        namespace = "com.zrcoding.hackertab.design"
+
+        // Enable Android resources for Compose Multiplatform resources
+        androidResources {
+            enable = true
+        }
+    }
     setFrameworkBaseName("design")
 
     sourceSets {
@@ -14,10 +22,6 @@ kotlin {
             implementation(libs.kevinnzou.webview)
         }
     }
-}
-
-android {
-    namespace = "com.zrcoding.hackertab.design"
 }
 
 compose.resources {

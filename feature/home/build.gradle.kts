@@ -4,10 +4,9 @@ plugins {
     id("hackertab.kmp.feature")
 }
 
-android {
-    namespace = "com.zrcoding.hackertab.home"
-}
-
 kotlin {
+    androidLibrary {
+        namespace = "com.zrcoding.hackertab.home"
+    }
     setFrameworkBaseName("home")
 }

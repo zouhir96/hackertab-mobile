@@ -5,6 +5,9 @@ plugins {
 }
 
 kotlin {
+    androidLibrary {
+        namespace = "com.zrcoding.hackertab.network"
+    }
     setFrameworkBaseName("network")
 
     sourceSets {
@@ -22,8 +25,4 @@ kotlin {
             implementation(libs.ktor.darwin)
         }
     }
-}
-
-android {
-    namespace = "com.zrcoding.hackertab.network"
 }
