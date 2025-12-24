@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.home.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -53,6 +54,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -92,6 +96,7 @@ import com.zrcoding.hackertab.home.presentation.cards.devto.DevtoItem
 import com.zrcoding.hackertab.home.presentation.cards.freecodecamp.FreeCodeCampItem
 import com.zrcoding.hackertab.home.presentation.cards.github.GithubItem
 import com.zrcoding.hackertab.home.presentation.cards.hackernews.HackerNewsItem
+import com.zrcoding.hackertab.home.presentation.cards.hackernoon.HackerNoonItem
 import com.zrcoding.hackertab.home.presentation.cards.hashnode.HashnodeItem
 import com.zrcoding.hackertab.home.presentation.cards.indiehackers.IndieHackersItem
 import com.zrcoding.hackertab.home.presentation.cards.lobsters.LobstersItem
@@ -104,6 +109,7 @@ import com.zrcoding.hackertab.home.presentation.utils.ShareData
 import com.zrcoding.hackertab.home.presentation.utils.ShareManager
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -127,7 +133,7 @@ fun HomeRoute(
         topBar = {
             HomeScreenTopAppBar(
                 enabledSources = viewState.enabledSources,
-                selectedSource = viewState.selectedSource?.label.orEmpty(),
+                selectedSource = viewState.selectedSource,
                 canAddSource = viewState.canAddSource,
                 onSourceSelected = viewModel::onSourceSelected,
                 onNavigationBtnClick = {
@@ -229,7 +235,7 @@ fun HomeRoute(
 @Composable
 private fun HomeScreenTopAppBar(
     enabledSources: ImmutableList<Source>,
-    selectedSource: String,
+    selectedSource: Source?,
     canAddSource: Boolean,
     onSourceSelected: (Source) -> Unit,
     onNavigationBtnClick: () -> Unit,
@@ -248,8 +254,20 @@ private fun HomeScreenTopAppBar(
                         ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        selectedSource?.let {
+                            Image(
+                                modifier = Modifier.size(MaterialTheme.dimension.bigger),
+                                painter = painterResource(it.Icon().first),
+                                contentScale = ContentScale.FillBounds,
+                                contentDescription = null,
+                                colorFilter = if (it.Icon().second == Color.Unspecified) {
+                                    null
+                                } else ColorFilter.tint(it.Icon().second)
+                            )
+                            Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
+                        }
                         Text(
-                            text = selectedSource,
+                            text = selectedSource?.label.orEmpty(),
                             color = MaterialTheme.colors.onBackground,
                             style = MaterialTheme.typography.h6,
                             overflow = TextOverflow.Visible,
@@ -507,6 +525,12 @@ private fun BaseArticle.ToListItem(
                 onShareClick = onShareClick
             )
             Source.HACKER_NEWS -> HackerNewsItem(
+                article = this,
+                onClick = onClick,
+                onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick
+            )
+            Source.HACKER_NOON -> HackerNoonItem(
                 article = this,
                 onClick = onClick,
                 onBookmarkClick = onBookmarkClick,

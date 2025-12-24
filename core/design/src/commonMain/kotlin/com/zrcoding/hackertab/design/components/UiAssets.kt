@@ -19,6 +19,7 @@ import com.zrcoding.hackertab.design.resources.ic_conferences
 import com.zrcoding.hackertab.design.resources.ic_devto
 import com.zrcoding.hackertab.design.resources.ic_freecodecamp
 import com.zrcoding.hackertab.design.resources.ic_github
+import com.zrcoding.hackertab.design.resources.ic_hacker_noon
 import com.zrcoding.hackertab.design.resources.ic_hackernews
 import com.zrcoding.hackertab.design.resources.ic_hashnode
 import com.zrcoding.hackertab.design.resources.ic_indie_hackers
@@ -30,20 +31,21 @@ import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Source
 import org.jetbrains.compose.resources.painterResource
 
-val Source.icon
-    get() = when (this) {
-        Source.GITHUB -> Res.drawable.ic_github
-        Source.HACKER_NEWS -> Res.drawable.ic_hackernews
-        Source.CONFERENCES -> Res.drawable.ic_conferences
-        Source.DEVTO -> Res.drawable.ic_devto
-        Source.PRODUCTHUNT -> Res.drawable.ic_product_hunt
-        Source.REDDIT -> Res.drawable.ic_reddit
-        Source.LOBSTERS -> Res.drawable.ic_lobsters
-        Source.HASH_NODE -> Res.drawable.ic_hashnode
-        Source.FREE_CODE_CAMP -> Res.drawable.ic_freecodecamp
-        Source.INDIE_HACKERS -> Res.drawable.ic_indie_hackers
-        Source.MEDIUM -> Res.drawable.ic_medium
-    }
+@Composable
+fun Source.Icon() = when (this) {
+    Source.DEVTO -> Res.drawable.ic_devto to MaterialTheme.colors.onBackground
+    Source.FREE_CODE_CAMP -> Res.drawable.ic_freecodecamp to MaterialTheme.colors.onBackground
+    Source.GITHUB -> Res.drawable.ic_github to MaterialTheme.colors.onBackground
+    Source.HACKER_NEWS -> Res.drawable.ic_hackernews to Color.Unspecified
+    Source.HACKER_NOON -> Res.drawable.ic_hacker_noon to Color.Unspecified
+    Source.HASH_NODE -> Res.drawable.ic_hashnode to Color.Unspecified
+    Source.INDIE_HACKERS -> Res.drawable.ic_indie_hackers to MaterialTheme.colors.onBackground
+    Source.LOBSTERS -> Res.drawable.ic_lobsters to Color.Unspecified
+    Source.MEDIUM -> Res.drawable.ic_medium to MaterialTheme.colors.onBackground
+    Source.PRODUCTHUNT -> Res.drawable.ic_product_hunt to Color.Unspecified
+    Source.REDDIT -> Res.drawable.ic_reddit to Color.Unspecified
+    Source.CONFERENCES -> Res.drawable.ic_conferences to MaterialTheme.colors.onBackground
+}
 
 @Composable
 fun Source.Icon(size: Dp = MaterialTheme.dimension.extraBig) {
@@ -57,7 +59,7 @@ fun Source.Icon(size: Dp = MaterialTheme.dimension.extraBig) {
             modifier = Modifier
                 .size(size - 2.dp)
                 .clip(CircleShape),
-            painter = painterResource(icon),
+            painter = painterResource(Icon().first),
             contentScale = ContentScale.FillBounds,
             contentDescription = null,
         )
