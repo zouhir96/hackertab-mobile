@@ -10,7 +10,7 @@ import com.zrcoding.hackertab.design.resources.ic_like
 import com.zrcoding.hackertab.design.resources.ic_time_24
 import com.zrcoding.hackertab.design.resources.reactions
 import com.zrcoding.hackertab.design.theme.HackertabTheme
-import com.zrcoding.hackertab.domain.models.Hashnode
+import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.TimeZone
@@ -23,19 +23,19 @@ import kotlin.time.ExperimentalTime
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HashnodeItem(
-    hashnode: Hashnode,
+    article: Article,
     isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
 ) {
-    with(hashnode) {
+    with(article) {
         SourceItemTemplate(
             title = title.trim(),
             description = null,
             primaryInfoSection = {
                 TextWithStartIcon(
-                    text = date.timeAgo(),
+                    text = publishedAt.timeAgo(),
                     icon = Res.drawable.ic_time_24,
                 )
                 TextWithStartIcon(
@@ -62,14 +62,17 @@ fun HashnodeItem(
 private fun HashnodeItemPreview() {
     HackertabTheme {
         HashnodeItem(
-            hashnode = Hashnode(
-                id = "reque",
-                title = "Just migrate your app to jetpack compose",
-                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                commentsCount = 4459,
-                reactions = 4022,
-                url = "http://www.bing.com/search?q=vocent",
-                tags = listOf("Kotlin")
+            article =  Article(
+                id = "similique",
+                title = "React is the best web framework ever React is the best web framework ever",
+                url = "https://www.google.com/#q=propriae",
+                publishedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                tags = listOf(),
+                commentsCount = 0,
+                reactions = 0,
+                canonicalUrl = null,
+                imageUrl = null,
+                source = null
             ),
             isBookmarked = false,
             onClick = {},

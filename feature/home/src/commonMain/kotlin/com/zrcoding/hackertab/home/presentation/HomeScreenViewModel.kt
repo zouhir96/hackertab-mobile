@@ -114,12 +114,17 @@ class HomeScreenViewModel(
             viewModelScope.launch {
                 _viewState.update { it.copy(isLoading = true) }
                 when (val result = getArticles(selectedSource, selectedTopic)) {
-                    is Resource.Success -> _viewState.update {
-                        it.copy(
-                            articles = result.data.toPersistentList(),
-                            isLoading = false,
-                            error = null
-                        )
+                    is Resource.Success -> {
+                        _viewState.update {
+                            it.copy(
+                                articles = result.data.toPersistentList(),
+                                isLoading = false,
+                                error = if (result.data.isEmpty()) {
+                                    "No items found, try adjusting your filter or choosing a different tag."
+                                } else null,
+                                canRefresh = false
+                            )
+                        }
                     }
 
                     is Resource.Failure -> {
@@ -132,17 +137,6 @@ class HomeScreenViewModel(
                             )
                         }
                     }
-
-                    null -> {
-                        _viewState.update {
-                            it.copy(
-                                articles = persistentListOf(),
-                                isLoading = false,
-                                error = "${selectedSource.label} doesn't support ${selectedTopic.label}, \n please select another source or topic",
-                                canRefresh = false
-                            )
-                        }
-                    }
                 }
             }
         }
@@ -151,50 +145,12 @@ class HomeScreenViewModel(
     private suspend fun getArticles(
         source: Source,
         topic: Topic
-    ): Resource<List<BaseArticle>, NetworkErrors>? {
+    ): Resource<List<BaseArticle>, NetworkErrors> {
         return when (source) {
-            Source.CONFERENCES -> {
-                val tag = topic.confsValues?.firstOrNull() ?: return null
-                articleRepository.getConferences(tag)
-            }
-
-            Source.DEVTO -> {
-                val tag = topic.devtoValues.firstOrNull() ?: return null
-                articleRepository.getDevtoArticles(tag)
-            }
-
-            Source.GITHUB -> {
-                val tag = topic.githubValues?.firstOrNull() ?: return null
-                articleRepository.getGithubRepositories(tag)
-            }
-
-            Source.MEDIUM -> {
-                val tag = topic.mediumValues.firstOrNull() ?: return null
-                articleRepository.getMediumArticles(tag)
-            }
-
-            Source.REDDIT -> {
-                val tag = topic.redditValues.firstOrNull() ?: return null
-                articleRepository.getRedditArticles(tag)
-            }
-
-            Source.HASH_NODE -> {
-                val tag = topic.hashnodeValues.firstOrNull() ?: return null
-                articleRepository.getHashnodeArticles(tag)
-            }
-
-            Source.FREE_CODE_CAMP -> {
-                val tag = topic.freecodecampValues.firstOrNull() ?: return null
-                articleRepository.getFreeCodeCampArticles(tag)
-            }
-
-            Source.HACKER_NEWS -> articleRepository.getHackerNewsArticles()
-
+            Source.GITHUB -> articleRepository.getGithubRepositories(topic.value)
+            Source.CONFERENCES -> articleRepository.getConferences(topic.value)
             Source.PRODUCTHUNT -> articleRepository.getProductHuntProducts()
-
-            Source.LOBSTERS -> articleRepository.getLobstersArticles()
-
-            Source.INDIE_HACKERS -> articleRepository.getIndieHackersArticles()
+            else -> articleRepository.getSourceArticles(source, topic.value)
         }
     }
 
@@ -219,7 +175,7 @@ class HomeScreenViewModel(
                 properties = setOf(
                     Param(
                         key = AnalyticsEvent.ParamKeys.VALUE,
-                        value = topic.id
+                        value = topic.value
                     )
                 )
             ),

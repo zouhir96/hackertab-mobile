@@ -31,7 +31,7 @@ class SettingTopicsScreenViewModel(
             settingRepository.observeSavedTopicsIds().collectLatest { savedTopicsIds ->
                 _viewState.update {
                     topics.map {
-                        it.toChipData(selected = it.id in savedTopicsIds)
+                        it.toChipData(selected = it.value in savedTopicsIds)
                     }.toPersistentList()
                 }
             }

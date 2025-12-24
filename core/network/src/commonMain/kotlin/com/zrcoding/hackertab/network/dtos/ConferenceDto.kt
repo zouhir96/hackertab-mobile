@@ -6,12 +6,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ConferenceDto(
     @SerialName("id") val id: String,
-    @SerialName("url") val url: String,
     @SerialName("title") val title: String,
-    @SerialName("start_date") val startDate: Long? = null,
-    @SerialName("end_date") val endDate: Long? = null,
-    @SerialName("tag") val tag: String,
-    @SerialName("online") val online: Boolean,
+    @SerialName("url") val url: String,
+    @SerialName("start_date") val startDate: String?,
+    @SerialName("end_date") val endDate: String?,
+    @SerialName("online") val online: Boolean = false,
     @SerialName("city") val city: String? = null,
     @SerialName("country") val country: String? = null,
+    @SerialName("tags") val tags: List<String> = emptyList(),
 )

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.components.TextWithStartIcon
@@ -33,7 +33,6 @@ import com.zrcoding.hackertab.design.resources.ic_comment
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ProductHunt
-import com.zrcoding.hackertab.home.presentation.cards.CardItemTags
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import org.jetbrains.compose.resources.stringResource
@@ -47,8 +46,7 @@ fun ProductHuntItem(
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
 ) {
-    val uriHandler = LocalUriHandler.current
-    Row(
+    Box(
         modifier = Modifier
             .clickable(onClick = onClick)
             .fillMaxWidth()
@@ -56,54 +54,43 @@ fun ProductHuntItem(
                 horizontal = MaterialTheme.dimension.default,
                 vertical = MaterialTheme.dimension.medium
             ),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.large),
-        verticalAlignment = Alignment.Top
+        contentAlignment = Alignment.BottomEnd
     ) {
-        with(product) {
-            KamelImage(
-                { asyncPainterResource(data = imageUrl) },
-                modifier = Modifier
-                    .size(52.dp)
-                    .clickable {
-                        uriHandler.openUri(product.url)
-                    },
-                contentDescription = null,
-                alignment = Alignment.Center,
-                contentScale = ContentScale.Fit,
-                contentAlignment = Alignment.Center,
-            )
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable {
-                        uriHandler.openUri(product.url)
-                    },
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small)
-            ) {
-                Text(
-                    text = title,
-                    color = MaterialTheme.colors.onBackground,
-                    style = MaterialTheme.typography.subtitle1,
-                    maxLines = 2
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(bottom = MaterialTheme.dimension.default),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.large),
+            verticalAlignment = Alignment.Top
+        ) {
+            with(product) {
+                KamelImage(
+                    { asyncPainterResource(data = imageUrl) },
+                    modifier = Modifier.size(52.dp),
+                    contentDescription = null,
+                    alignment = Alignment.Center,
+                    contentScale = ContentScale.FillBounds,
+                    contentAlignment = Alignment.Center,
                 )
-                Text(
-                    text = description,
-                    color = MaterialTheme.colors.onBackground.copy(alpha = 0.7f),
-                    style = MaterialTheme.typography.body2,
-                    maxLines = 2
-                )
-                Row {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small)
+                ) {
+                    Text(
+                        text = title,
+                        color = MaterialTheme.colors.onBackground,
+                        style = MaterialTheme.typography.subtitle1,
+                        maxLines = 2
+                    )
+                    Text(
+                        text = description,
+                        color = MaterialTheme.colors.onBackground.copy(alpha = 0.7f),
+                        style = MaterialTheme.typography.body2,
+                        maxLines = 2,
+                    )
                     TextWithStartIcon(
                         text = stringResource(Res.string.comments, commentsCount),
                         icon = Res.drawable.ic_comment,
                     )
-                    CardItemTags(tags = tags)
                 }
-            }
-            Column(
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
                 Column(
                     modifier = Modifier
                         .border(
@@ -112,8 +99,8 @@ fun ProductHuntItem(
                             shape = MaterialTheme.shapes.small
                         )
                         .padding(
-                            horizontal = MaterialTheme.dimension.medium,
-                            vertical = MaterialTheme.dimension.large
+                            horizontal = MaterialTheme.dimension.small,
+                            vertical = MaterialTheme.dimension.small
                         ),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -130,32 +117,36 @@ fun ProductHuntItem(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                IconButton(
-                    onClick = onShareClick,
-                    modifier = Modifier
-                        .size(MaterialTheme.dimension.extraBig)
-                        .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
-                ) {
-                    Icon(
-                        modifier = Modifier.size(MaterialTheme.dimension.big),
-                        imageVector = Icons.Default.Share,
-                        contentDescription = "Share article",
-                        tint = MaterialTheme.colors.onBackground
-                    )
-                }
-                IconButton(
-                    onClick = onBookmarkClick,
-                    modifier = Modifier
-                        .size(MaterialTheme.dimension.extraBig)
-                        .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
-                ) {
-                    Icon(
-                        modifier = Modifier.size(MaterialTheme.dimension.big),
-                        imageVector = if (isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
-                        contentDescription = if (isBookmarked) "Remove bookmark" else "Add bookmark",
-                        tint = MaterialTheme.colors.onBackground
-                    )
-                }
+            }
+        }
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium)
+        ) {
+            IconButton(
+                onClick = onShareClick,
+                modifier = Modifier
+                    .size(MaterialTheme.dimension.extraBig)
+                    .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
+            ) {
+                Icon(
+                    modifier = Modifier.size(MaterialTheme.dimension.big),
+                    imageVector = Icons.Default.Share,
+                    contentDescription = "Share article",
+                    tint = MaterialTheme.colors.onBackground
+                )
+            }
+            IconButton(
+                onClick = onBookmarkClick,
+                modifier = Modifier
+                    .size(MaterialTheme.dimension.extraBig)
+                    .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
+            ) {
+                Icon(
+                    modifier = Modifier.size(MaterialTheme.dimension.big),
+                    imageVector = if (isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                    contentDescription = if (isBookmarked) "Remove bookmark" else "Add bookmark",
+                    tint = MaterialTheme.colors.onBackground
+                )
             }
         }
     }

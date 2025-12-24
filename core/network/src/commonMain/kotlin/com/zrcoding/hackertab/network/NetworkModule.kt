@@ -12,7 +12,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
-const val BASE_URL = "https://api.hackertab.dev/data/v2/"
+const val BASE_URL = "https://api.hackertab.dev/engine/"
 
 val networkModule = module {
     factory<HttpClient> {

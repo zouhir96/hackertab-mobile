@@ -95,5 +95,9 @@ enum class Source(
         link = "https://medium.com/",
         analyticsTag = "medium",
         supportsFilters = true
-    ),
+    );
+
+    companion object {
+        fun fromId(id: String): Source? = entries.find { it.id == id }
+    }
 }

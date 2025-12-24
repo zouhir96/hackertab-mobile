@@ -64,9 +64,9 @@ fun Source.toChipData(selected: Boolean = false) = ChipData(
 )
 
 fun Topic.toChipData(selected: Boolean = false) = ChipData(
-    id = id,
+    id = value,
     name = label,
-    analyticsTag = id,
+    analyticsTag = value,
     image = null,
     selected = selected
 )

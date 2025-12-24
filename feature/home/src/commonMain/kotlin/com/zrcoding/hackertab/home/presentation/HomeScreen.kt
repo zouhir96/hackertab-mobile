@@ -80,18 +80,11 @@ import com.zrcoding.hackertab.design.resources.support_no_apps_title
 import com.zrcoding.hackertab.design.resources.support_support_footer_message
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.common.AppConfig
+import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.domain.models.BaseArticle
 import com.zrcoding.hackertab.domain.models.Conference
-import com.zrcoding.hackertab.domain.models.Devto
-import com.zrcoding.hackertab.domain.models.FreeCodeCamp
 import com.zrcoding.hackertab.domain.models.GithubRepo
-import com.zrcoding.hackertab.domain.models.HackerNews
-import com.zrcoding.hackertab.domain.models.Hashnode
-import com.zrcoding.hackertab.domain.models.IndieHackers
-import com.zrcoding.hackertab.domain.models.Lobster
-import com.zrcoding.hackertab.domain.models.Medium
 import com.zrcoding.hackertab.domain.models.ProductHunt
-import com.zrcoding.hackertab.domain.models.Reddit
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.home.presentation.cards.conferences.ConferenceItem
@@ -497,22 +490,8 @@ private fun BaseArticle.ToListItem(
             onBookmarkClick = onBookmarkClick,
             onShareClick = onShareClick
         )
-        is HackerNews -> HackerNewsItem(
-            new = this,
-            isBookmarked = isBookmarked,
-            onClick = onClick,
-            onBookmarkClick = onBookmarkClick,
-            onShareClick = onShareClick
-        )
         is Conference -> ConferenceItem(
             conf = this,
-            isBookmarked = isBookmarked,
-            onClick = onClick,
-            onBookmarkClick = onBookmarkClick,
-            onShareClick = onShareClick
-        )
-        is Devto -> DevtoItem(
-            devto = this,
             isBookmarked = isBookmarked,
             onClick = onClick,
             onBookmarkClick = onBookmarkClick,
@@ -525,47 +504,64 @@ private fun BaseArticle.ToListItem(
             onBookmarkClick = onBookmarkClick,
             onShareClick = onShareClick
         )
-        is Reddit -> RedditItem(
-            reddit = this,
-            isBookmarked = isBookmarked,
-            onClick = onClick,
-            onBookmarkClick = onBookmarkClick,
-            onShareClick = onShareClick
-        )
-        is Lobster -> LobstersItem(
-            lobster = this,
-            isBookmarked = isBookmarked,
-            onClick = onClick,
-            onBookmarkClick = onBookmarkClick,
-            onShareClick = onShareClick
-        )
-        is Hashnode -> HashnodeItem(
-            hashnode = this,
-            isBookmarked = isBookmarked,
-            onClick = onClick,
-            onBookmarkClick = onBookmarkClick,
-            onShareClick = onShareClick
-        )
-        is FreeCodeCamp -> FreeCodeCampItem(
-            post = this,
-            isBookmarked = isBookmarked,
-            onClick = onClick,
-            onBookmarkClick = onBookmarkClick,
-            onShareClick = onShareClick
-        )
-        is IndieHackers -> IndieHackersItem(
-            indieHackers = this,
-            isBookmarked = isBookmarked,
-            onClick = onClick,
-            onBookmarkClick = onBookmarkClick,
-            onShareClick = onShareClick
-        )
-        is Medium -> MediumItem(
-            medium = this,
-            isBookmarked = isBookmarked,
-            onClick = onClick,
-            onBookmarkClick = onBookmarkClick,
-            onShareClick = onShareClick
-        )
+        is Article -> when(this.source) {
+            Source.FREE_CODE_CAMP -> FreeCodeCampItem(
+                article = this,
+                isBookmarked = isBookmarked,
+                onClick = onClick,
+                onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick
+            )
+            Source.HACKER_NEWS -> HackerNewsItem(
+                article = this,
+                isBookmarked = isBookmarked,
+                onClick = onClick,
+                onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick
+            )
+            Source.REDDIT -> RedditItem(
+                article = this,
+                isBookmarked = isBookmarked,
+                onClick = onClick,
+                onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick
+            )
+            Source.DEVTO -> DevtoItem(
+                article = this,
+                isBookmarked = isBookmarked,
+                onClick = onClick,
+                onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick
+            )
+            Source.LOBSTERS -> LobstersItem(
+                article = this,
+                isBookmarked = isBookmarked,
+                onClick = onClick,
+                onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick
+            )
+            Source.HASH_NODE -> HashnodeItem(
+                article = this,
+                isBookmarked = isBookmarked,
+                onClick = onClick,
+                onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick
+            )
+            Source.INDIE_HACKERS -> IndieHackersItem(
+                article = this,
+                isBookmarked = isBookmarked,
+                onClick = onClick,
+                onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick
+            )
+            Source.MEDIUM -> MediumItem(
+                article = this,
+                isBookmarked = isBookmarked,
+                onClick = onClick,
+                onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick
+            )
+            else -> {}
+        }
     }
 }

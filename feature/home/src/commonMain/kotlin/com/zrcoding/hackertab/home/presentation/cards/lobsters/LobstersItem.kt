@@ -1,12 +1,7 @@
 package com.zrcoding.hackertab.home.presentation.cards.lobsters
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.style.TextDecoration
 import com.zrcoding.hackertab.design.components.TextWithStartIcon
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.comments
@@ -16,7 +11,7 @@ import com.zrcoding.hackertab.design.resources.ic_time_24
 import com.zrcoding.hackertab.design.resources.score
 import com.zrcoding.hackertab.design.theme.Flamingo
 import com.zrcoding.hackertab.design.theme.HackertabTheme
-import com.zrcoding.hackertab.domain.models.Lobster
+import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.TimeZone
@@ -29,13 +24,13 @@ import kotlin.time.ExperimentalTime
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LobstersItem(
-    lobster: Lobster,
+    article: Article,
     isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
 ) {
-    with(lobster) {
+    with(article) {
         SourceItemTemplate(
             title = title,
             primaryInfoSection = {
@@ -46,19 +41,12 @@ fun LobstersItem(
                     tint = Flamingo
                 )
                 TextWithStartIcon(
-                    text = date.timeAgo(),
+                    text = publishedAt.timeAgo(),
                     icon = Res.drawable.ic_time_24,
                 )
-                val localUriHandler = LocalUriHandler.current
                 TextWithStartIcon(
-                    modifier = Modifier.clickable {
-                        localUriHandler.openUri(commentsUrl)
-                    },
                     text = stringResource( Res.string.comments, commentsCount),
-                    textColor = Color(0xFF4799eb),
-                    textDecoration = TextDecoration.Underline,
                     icon = Res.drawable.ic_comment,
-                    tint = Color(0xFF4799eb)
                 )
             },
             isBookmarked = isBookmarked,
@@ -75,14 +63,17 @@ fun LobstersItem(
 private fun LobstersItemPreview() {
     HackertabTheme {
         LobstersItem(
-            lobster = Lobster(
-                id = "feugiat",
-                title = "XML based apps are worst",
-                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                commentsCount = 4849,
-                reactions = 8948,
-                url = "https://search.yahoo.com/search?p=habitasse",
-                commentsUrl = "http://www.bing.com/search?q=brute"
+            article =  Article(
+                id = "similique",
+                title = "React is the best web framework ever React is the best web framework ever",
+                url = "https://www.google.com/#q=propriae",
+                publishedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                tags = listOf(),
+                commentsCount = 0,
+                reactions = 0,
+                canonicalUrl = null,
+                imageUrl = null,
+                source = null
             ),
             isBookmarked = false,
             onClick = {},

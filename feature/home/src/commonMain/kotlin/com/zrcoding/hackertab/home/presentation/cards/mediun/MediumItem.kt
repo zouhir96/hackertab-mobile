@@ -11,7 +11,7 @@ import com.zrcoding.hackertab.design.resources.ic_claps
 import com.zrcoding.hackertab.design.resources.ic_comment
 import com.zrcoding.hackertab.design.resources.ic_time_24
 import com.zrcoding.hackertab.design.theme.HackertabTheme
-import com.zrcoding.hackertab.domain.models.Medium
+import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.TimeZone
@@ -24,18 +24,18 @@ import kotlin.time.ExperimentalTime
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MediumItem(
-    medium: Medium,
+    article: Article,
     isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
 ) {
-    with(medium) {
+    with(article) {
         SourceItemTemplate(
             title = title,
             primaryInfoSection = {
                 TextWithStartIcon(
-                    text = stringResource( Res.string.claps, claps),
+                    text = stringResource( Res.string.claps, reactions),
                     icon = Res.drawable.ic_claps,
                     tint = MaterialTheme.colors.onBackground
                 )
@@ -44,7 +44,7 @@ fun MediumItem(
                     icon = Res.drawable.ic_comment,
                 )
                 TextWithStartIcon(
-                    text = date.timeAgo(),
+                    text = publishedAt.timeAgo(),
                     icon = Res.drawable.ic_time_24,
                 )
             },
@@ -62,13 +62,17 @@ fun MediumItem(
 private fun MediumItemPreview() {
     HackertabTheme {
         MediumItem(
-            medium = Medium(
-                id = "porttitor",
-                title = "Coroutines explained in a simple way",
-                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                commentsCount = 9783,
-                claps = 9145,
-                url = "https://duckduckgo.com/?q=minim"
+            article =  Article(
+                id = "similique",
+                title = "React is the best web framework ever React is the best web framework ever",
+                url = "https://www.google.com/#q=propriae",
+                publishedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                tags = listOf(),
+                commentsCount = 0,
+                reactions = 0,
+                canonicalUrl = null,
+                imageUrl = null,
+                source = null
             ),
             isBookmarked = false,
             onClick = {},

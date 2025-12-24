@@ -14,7 +14,7 @@ class ObserveSelectedTopicsUseCase(
     operator fun invoke(): Flow<List<Topic>> {
         return settingRepository.observeSavedTopicsIds().mapLatest { savedTopicsIds ->
             val topics = settingRepository.getTopics()
-            listOf(Topic.trending) + topics.filter { it.id in savedTopicsIds }
+            topics.filter { it.value in savedTopicsIds }
         }
     }
 }

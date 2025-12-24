@@ -11,7 +11,7 @@ import com.zrcoding.hackertab.design.resources.ic_comment
 import com.zrcoding.hackertab.design.resources.ic_time_24
 import com.zrcoding.hackertab.design.resources.score
 import com.zrcoding.hackertab.design.theme.HackertabTheme
-import com.zrcoding.hackertab.domain.models.IndieHackers
+import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.TimeZone
@@ -24,13 +24,13 @@ import kotlin.time.ExperimentalTime
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun IndieHackersItem(
-    indieHackers: IndieHackers,
+    article: Article,
     isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
 ) {
-    with(indieHackers) {
+    with(article) {
         SourceItemTemplate(
             title = title,
             primaryInfoSection = {
@@ -41,7 +41,7 @@ fun IndieHackersItem(
                     tint = Color(0xFF4799eb)
                 )
                 TextWithStartIcon(
-                    text = date.timeAgo(),
+                    text = publishedAt.timeAgo(),
                     icon = Res.drawable.ic_time_24,
                 )
                 TextWithStartIcon(
@@ -63,13 +63,17 @@ fun IndieHackersItem(
 private fun IndieHackersItemPreview() {
     HackertabTheme {
         IndieHackersItem(
-            indieHackers = IndieHackers(
-                id = "fastidii",
-                title = "Hackertab will pay someday",
-                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                commentsCount = 1349,
-                reactions = 1634,
-                url = "http://www.bing.com/search?q=dicam"
+            article =  Article(
+                id = "similique",
+                title = "React is the best web framework ever React is the best web framework ever",
+                url = "https://www.google.com/#q=propriae",
+                publishedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                tags = listOf(),
+                commentsCount = 0,
+                reactions = 0,
+                canonicalUrl = null,
+                imageUrl = null,
+                source = null
             ),
             isBookmarked = false,
             onClick = {},

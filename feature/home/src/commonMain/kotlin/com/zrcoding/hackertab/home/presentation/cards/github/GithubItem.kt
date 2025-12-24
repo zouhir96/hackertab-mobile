@@ -27,7 +27,7 @@ fun GithubItem(
     onShareClick: () -> Unit
 ) {
     SourceItemTemplate(
-        title = post.title,
+        title = "${post.owner}/${post.title}",
         description = post.description.trim().ifEmpty { null },
         primaryInfoSection = {
             TextWithStartIcon(
