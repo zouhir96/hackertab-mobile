@@ -22,16 +22,27 @@ class SettingTopicsScreenViewModel(
     private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
 
-    private val _viewState = MutableStateFlow<PersistentList<ChipData>>(persistentListOf())
+    private val _viewState =
+        MutableStateFlow<PersistentList<Pair<String, PersistentList<ChipData>>>>(persistentListOf())
     val viewState = _viewState.asStateFlow()
 
     init {
         viewModelScope.launch {
             val topics = settingRepository.getTopics()
             settingRepository.observeSavedTopicsIds().collectLatest { savedTopicsIds ->
+                val groupedTopics = topics
+                    .groupBy { it.category ?: "Other" }
+                    .toMutableMap()
+
+                if (groupedTopics.containsKey("Other")) {
+                    val other = groupedTopics.remove("Other")!!
+                    groupedTopics["Other"] = other
+                }
                 _viewState.update {
-                    topics.map {
-                        it.toChipData(selected = it.value in savedTopicsIds)
+                    groupedTopics.map {
+                        it.key to it.value.map { topic ->
+                            topic.toChipData(selected = topic.value in savedTopicsIds)
+                        }.toPersistentList()
                     }.toPersistentList()
                 }
             }
@@ -39,7 +50,7 @@ class SettingTopicsScreenViewModel(
     }
 
     fun onChipClicked(topic: ChipData) {
-        if (_viewState.value.count { it.selected } <= 1 && topic.selected) return
+        // if (_viewState.value.count { it.selected } <= 1 && topic.selected) return
         viewModelScope.launch {
             if (topic.selected) {
                 settingRepository.removeTopic(id = topic.id)
