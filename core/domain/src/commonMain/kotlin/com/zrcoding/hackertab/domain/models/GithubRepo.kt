@@ -4,6 +4,7 @@ data class GithubRepo(
     override val id: String,
     override val url: String,
     override val title: String,
+    override val bookmarked: Boolean = false,
     val description: String,
     val owner: String,
     val programmingLanguage: String,

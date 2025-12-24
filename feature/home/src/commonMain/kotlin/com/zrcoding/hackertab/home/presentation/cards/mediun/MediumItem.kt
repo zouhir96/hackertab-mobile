@@ -25,7 +25,6 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun MediumItem(
     article: Article,
-    isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
@@ -48,7 +47,7 @@ fun MediumItem(
                     icon = Res.drawable.ic_time_24,
                 )
             },
-            isBookmarked = isBookmarked,
+            isBookmarked = article.bookmarked,
             onBookmarkClick = onBookmarkClick,
             onShareClick = onShareClick,
             onClick = onClick
@@ -74,7 +73,6 @@ private fun MediumItemPreview() {
                 imageUrl = null,
                 source = null
             ),
-            isBookmarked = false,
             onClick = {},
             onBookmarkClick = {},
             onShareClick = {}

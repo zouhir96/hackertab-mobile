@@ -24,7 +24,6 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun DevtoItem(
     article: Article,
-    isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
@@ -48,7 +47,7 @@ fun DevtoItem(
                 )
             },
             tags = tags,
-            isBookmarked = isBookmarked,
+            isBookmarked = article.bookmarked,
             onBookmarkClick = onBookmarkClick,
             onShareClick = onShareClick,
             onClick = onClick
@@ -74,7 +73,6 @@ private fun DevtoItemPreview() {
                 imageUrl = null,
                 source = null
             ),
-            isBookmarked = false,
             onClick = {},
             onBookmarkClick = {},
             onShareClick = {}

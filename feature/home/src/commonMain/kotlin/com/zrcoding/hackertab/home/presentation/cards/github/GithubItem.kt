@@ -21,7 +21,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun GithubItem(
     post: GithubRepo,
-    isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
@@ -46,7 +45,7 @@ fun GithubItem(
             )
         },
         titleColor = MaterialTheme.colors.primary,
-        isBookmarked = isBookmarked,
+        isBookmarked = post.bookmarked,
         onBookmarkClick = onBookmarkClick,
         onShareClick = onShareClick,
         onClick = onClick
@@ -68,7 +67,6 @@ private fun GithubItemPreview() {
                 stars = 20,
                 forks = 15
             ),
-            isBookmarked = false,
             onClick = {},
             onBookmarkClick = {},
             onShareClick = {}

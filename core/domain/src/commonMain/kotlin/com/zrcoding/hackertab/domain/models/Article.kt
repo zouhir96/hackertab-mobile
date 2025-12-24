@@ -6,6 +6,7 @@ data class Article(
     override val id: String,
     override val title: String,
     override val url: String,
+    override val bookmarked: Boolean = false,
     val publishedAt: LocalDateTime,
     val commentsCount: Long,
     val reactions: Long,

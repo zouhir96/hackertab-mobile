@@ -6,6 +6,7 @@ data class Conference(
     override val id: String,
     override val url: String,
     override val title: String,
+    override val bookmarked: Boolean = false,
     val startDate: LocalDate?,
     val endDate: LocalDate?,
     val tags: List<String>,

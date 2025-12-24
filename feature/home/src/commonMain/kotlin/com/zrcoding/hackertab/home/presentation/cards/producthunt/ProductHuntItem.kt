@@ -41,7 +41,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun ProductHuntItem(
     product: ProductHunt,
-    isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
@@ -143,8 +142,8 @@ fun ProductHuntItem(
             ) {
                 Icon(
                     modifier = Modifier.size(MaterialTheme.dimension.big),
-                    imageVector = if (isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
-                    contentDescription = if (isBookmarked) "Remove bookmark" else "Add bookmark",
+                    imageVector = if (product.bookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                    contentDescription = if (product.bookmarked) "Remove bookmark" else "Add bookmark",
                     tint = MaterialTheme.colors.onBackground
                 )
             }
@@ -167,7 +166,6 @@ private fun ProductHuntItemPreview() {
                 url = "https://www.google.com/#q=vivendo",
                 tags = listOf("Kotlin")
             ),
-            isBookmarked = false,
             onClick = {},
             onBookmarkClick = {},
             onShareClick = {}

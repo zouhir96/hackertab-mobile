@@ -26,7 +26,6 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun RedditItem(
     article: Article,
-    isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
@@ -52,7 +51,7 @@ fun RedditItem(
         tags = getSubReddit(article.url)?.let {
             listOf(stringResource(Res.string.subreddit, it))
         },
-        isBookmarked = isBookmarked,
+        isBookmarked = article.bookmarked,
         onBookmarkClick = onBookmarkClick,
         onShareClick = onShareClick,
         onClick = onClick
@@ -88,7 +87,6 @@ fun RedditItemPreview() {
                 imageUrl = null,
                 source = null
             ),
-            isBookmarked = false,
             onClick = {},
             onBookmarkClick = {},
             onShareClick = {}

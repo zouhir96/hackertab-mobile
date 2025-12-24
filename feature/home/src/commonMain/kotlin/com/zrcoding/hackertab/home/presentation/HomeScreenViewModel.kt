@@ -5,8 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.zrcoding.hackertab.analytics.AnalyticsHelper
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.analytics.models.Param
+import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.domain.models.BaseArticle
+import com.zrcoding.hackertab.domain.models.Conference
+import com.zrcoding.hackertab.domain.models.GithubRepo
 import com.zrcoding.hackertab.domain.models.NetworkErrors
+import com.zrcoding.hackertab.domain.models.ProductHunt
 import com.zrcoding.hackertab.domain.models.Resource
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.Topic
@@ -17,7 +21,6 @@ import com.zrcoding.hackertab.domain.usecases.ObserveSelectedSourcesUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedTopicsUseCase
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -71,7 +74,6 @@ class HomeScreenViewModel(
                         enabledTopics = topics.toPersistentList(),
                         selectedTopic = newSelectedTopic,
                         canAddTopic = topics.size < settingRepository.getTopics().size,
-                        bookmarkedIds = bookmarkedIds.toPersistentSet(),
                         articles = if (sources.isEmpty() || topics.isEmpty()) {
                             persistentListOf()
                         } else state.articles,
@@ -79,7 +81,7 @@ class HomeScreenViewModel(
                     )
                 }
                 if (_viewState.value.articles.isEmpty()) {
-                    loadArticles()
+                    loadArticles(bookmarkedIds)
                 }
             }
         }
@@ -107,7 +109,7 @@ class HomeScreenViewModel(
         loadArticles()
     }
 
-    private fun loadArticles() {
+    private fun loadArticles(bookmarkedIds: Set<String> = emptySet()) {
         val selectedSource = _viewState.value.selectedSource
         val selectedTopic = _viewState.value.selectedTopic
         if (selectedSource != null && selectedTopic != null) {
@@ -115,9 +117,18 @@ class HomeScreenViewModel(
                 _viewState.update { it.copy(isLoading = true) }
                 when (val result = getArticles(selectedSource, selectedTopic)) {
                     is Resource.Success -> {
-                        _viewState.update {
-                            it.copy(
-                                articles = result.data.toPersistentList(),
+                        _viewState.update { state ->
+                            state.copy(
+                                articles = result.data.map {
+                                    val bookmarked = it.id in bookmarkedIds
+                                    when (it) {
+                                        is GithubRepo -> it.copy(bookmarked = bookmarked)
+                                        is Conference -> it.copy(bookmarked = bookmarked)
+                                        is ProductHunt -> it.copy(bookmarked = bookmarked)
+                                        is Article -> it.copy(bookmarked = bookmarked)
+                                        else -> it
+                                    }
+                                }.toPersistentList(),
                                 isLoading = false,
                                 error = if (result.data.isEmpty()) {
                                     "No items found, try adjusting your filter or choosing a different tag."
@@ -187,9 +198,6 @@ class HomeScreenViewModel(
             val isBookmarked = bookmarkRepository.isBookmarked(article.id)
             if (isBookmarked) {
                 bookmarkRepository.removeBookmark(article.id)
-                _viewState.update {
-                    it.copy(bookmarkedIds = (it.bookmarkedIds - article.id).toPersistentSet())
-                }
             } else {
                 val source = _viewState.value.selectedSource?.name ?: return@launch
                 bookmarkRepository.bookmarkArticle(article, source)

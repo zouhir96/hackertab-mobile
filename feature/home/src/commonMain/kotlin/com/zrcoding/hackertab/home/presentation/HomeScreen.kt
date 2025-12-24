@@ -191,7 +191,6 @@ fun HomeRoute(
                         key = { item -> item.id }
                     ) { item: BaseArticle ->
                         item.ToListItem(
-                            isBookmarked = viewState.bookmarkedIds.contains(item.id),
                             onClick = { onNavigateToWebView(item.url) },
                             onBookmarkClick = { viewModel.toggleBookmark(item) },
                             onShareClick = {
@@ -477,7 +476,6 @@ private fun HomeScreenTopicsFilter(
 
 @Composable
 private fun BaseArticle.ToListItem(
-    isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
@@ -485,21 +483,18 @@ private fun BaseArticle.ToListItem(
     when (this) {
         is GithubRepo -> GithubItem(
             post = this,
-            isBookmarked = isBookmarked,
             onClick = onClick,
             onBookmarkClick = onBookmarkClick,
             onShareClick = onShareClick
         )
         is Conference -> ConferenceItem(
             conf = this,
-            isBookmarked = isBookmarked,
             onClick = onClick,
             onBookmarkClick = onBookmarkClick,
             onShareClick = onShareClick
         )
         is ProductHunt -> ProductHuntItem(
             product = this,
-            isBookmarked = isBookmarked,
             onClick = onClick,
             onBookmarkClick = onBookmarkClick,
             onShareClick = onShareClick
@@ -507,56 +502,48 @@ private fun BaseArticle.ToListItem(
         is Article -> when(this.source) {
             Source.FREE_CODE_CAMP -> FreeCodeCampItem(
                 article = this,
-                isBookmarked = isBookmarked,
                 onClick = onClick,
                 onBookmarkClick = onBookmarkClick,
                 onShareClick = onShareClick
             )
             Source.HACKER_NEWS -> HackerNewsItem(
                 article = this,
-                isBookmarked = isBookmarked,
                 onClick = onClick,
                 onBookmarkClick = onBookmarkClick,
                 onShareClick = onShareClick
             )
             Source.REDDIT -> RedditItem(
                 article = this,
-                isBookmarked = isBookmarked,
                 onClick = onClick,
                 onBookmarkClick = onBookmarkClick,
                 onShareClick = onShareClick
             )
             Source.DEVTO -> DevtoItem(
                 article = this,
-                isBookmarked = isBookmarked,
                 onClick = onClick,
                 onBookmarkClick = onBookmarkClick,
                 onShareClick = onShareClick
             )
             Source.LOBSTERS -> LobstersItem(
                 article = this,
-                isBookmarked = isBookmarked,
                 onClick = onClick,
                 onBookmarkClick = onBookmarkClick,
                 onShareClick = onShareClick
             )
             Source.HASH_NODE -> HashnodeItem(
                 article = this,
-                isBookmarked = isBookmarked,
                 onClick = onClick,
                 onBookmarkClick = onBookmarkClick,
                 onShareClick = onShareClick
             )
             Source.INDIE_HACKERS -> IndieHackersItem(
                 article = this,
-                isBookmarked = isBookmarked,
                 onClick = onClick,
                 onBookmarkClick = onBookmarkClick,
                 onShareClick = onShareClick
             )
             Source.MEDIUM -> MediumItem(
                 article = this,
-                isBookmarked = isBookmarked,
                 onClick = onClick,
                 onBookmarkClick = onBookmarkClick,
                 onShareClick = onShareClick

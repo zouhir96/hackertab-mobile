@@ -25,7 +25,6 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun HackerNewsItem(
     article: Article,
-    isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
@@ -48,7 +47,7 @@ fun HackerNewsItem(
                 icon = Res.drawable.ic_comment
             )
         },
-        isBookmarked = isBookmarked,
+        isBookmarked = article.bookmarked,
         onBookmarkClick = onBookmarkClick,
         onShareClick = onShareClick,
         onClick = onClick
@@ -73,7 +72,6 @@ fun HackerNewsItemPreview() {
                 imageUrl = null,
                 source = null
             ),
-            isBookmarked = false,
             onClick = {},
             onBookmarkClick = {},
             onShareClick = {}

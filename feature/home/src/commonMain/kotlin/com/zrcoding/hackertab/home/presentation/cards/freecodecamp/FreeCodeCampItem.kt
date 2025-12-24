@@ -19,7 +19,6 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun FreeCodeCampItem(
     article: Article,
-    isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
@@ -34,7 +33,7 @@ fun FreeCodeCampItem(
             )
         },
         tags = article.tags,
-        isBookmarked = isBookmarked,
+        isBookmarked = article.bookmarked,
         onBookmarkClick = onBookmarkClick,
         onShareClick = onShareClick,
         onClick = onClick
@@ -59,7 +58,6 @@ private fun FreeCodeCampItemPreview() {
                 imageUrl = null,
                 source = null
             ),
-            isBookmarked = false,
             onClick = {},
             onBookmarkClick = {},
             onShareClick = {}

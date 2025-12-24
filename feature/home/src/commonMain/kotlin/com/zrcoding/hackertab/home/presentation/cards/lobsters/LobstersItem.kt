@@ -25,7 +25,6 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun LobstersItem(
     article: Article,
-    isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
@@ -49,7 +48,7 @@ fun LobstersItem(
                     icon = Res.drawable.ic_comment,
                 )
             },
-            isBookmarked = isBookmarked,
+            isBookmarked = article.bookmarked,
             onBookmarkClick = onBookmarkClick,
             onShareClick = onShareClick,
             onClick = onClick
@@ -75,7 +74,6 @@ private fun LobstersItemPreview() {
                 imageUrl = null,
                 source = null
             ),
-            isBookmarked = false,
             onClick = {},
             onBookmarkClick = {},
             onShareClick = {}

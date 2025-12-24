@@ -16,7 +16,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun ConferenceItem(
     conf: Conference,
-    isBookmarked: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit
@@ -35,7 +34,7 @@ fun ConferenceItem(
             )
         },
         tags = conf.tags,
-        isBookmarked = isBookmarked,
+        isBookmarked = conf.bookmarked,
         onClick = onClick,
         onBookmarkClick = onBookmarkClick,
         onShareClick = onShareClick,
@@ -90,7 +89,6 @@ private fun ConferenceItemPreview() {
                 city = "Berlin",
                 country = "Germany"
             ),
-            isBookmarked = false,
             onClick = {},
             onBookmarkClick = {},
             onShareClick = {}
