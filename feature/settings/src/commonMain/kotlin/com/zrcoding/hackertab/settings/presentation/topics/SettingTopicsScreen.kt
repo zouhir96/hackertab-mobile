@@ -40,7 +40,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SettingTopicsRoute(
-    viewModel: SettingTopicsScreenViewModel = koinViewModel(),
+    viewModel: SettingTopicsViewModel = koinViewModel(),
 ) {
     val topics = viewModel.viewState.collectAsStateWithLifecycle().value
     SettingScreen(

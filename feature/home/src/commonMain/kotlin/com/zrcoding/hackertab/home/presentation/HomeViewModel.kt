@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class HomeScreenViewModel(
+class HomeViewModel(
     private val observeSelectedSourcesUseCase: ObserveSelectedSourcesUseCase,
     private val observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase,
     private val bookmarkRepository: BookmarkRepository,
@@ -37,7 +37,7 @@ class HomeScreenViewModel(
     private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
 
-    private val _viewState = MutableStateFlow(HomeScreenViewState())
+    private val _viewState = MutableStateFlow(HomeViewState())
     val viewState = _viewState.asStateFlow()
 
     init {

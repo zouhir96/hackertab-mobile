@@ -31,13 +31,12 @@ import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Profile
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SetupProfileRoute(
     navigateToNextScreen: (Profile) -> Unit,
-    viewModel: SetupProfileViewModel = koinViewModel(parameters = { parametersOf(false) }),
+    viewModel: SetupProfileViewModel = koinViewModel(),
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     Column(
@@ -48,21 +47,19 @@ fun SetupProfileRoute(
     ) {
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.extraBig))
         Text(
-            text = "Hi, \uD83D\uDC4B Welcome%s to Hackertab mobile".replace("%s", if(state.newUser) "" else " again" ),
+            text = "Hi, \uD83D\uDC4B Welcome to Hackertab",
             color = MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.h5
         )
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.small))
-        if (state.newUser) {
-            Text(
-                text = "Let's customize your Hackertab experience!",
-                color = MaterialTheme.colors.onBackground,
-                style = MaterialTheme.typography.body2
-            )
-        }
+        Text(
+            text = "Let's customize your Hackertab experience!",
+            color = MaterialTheme.colors.onBackground,
+            style = MaterialTheme.typography.body2
+        )
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.big))
         Text(
-            text = "Let’s get to know you—choose your profile",
+            text = "Let’s get to know you, please choose your profile",
             color = MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.body1
         )
@@ -98,7 +95,7 @@ fun SetupProfileRoute(
         Spacer(modifier = Modifier.weight(1f))
         PrimaryButton(
             modifier = Modifier.fillMaxWidth(),
-            text = if (state.newUser) "Next" else "Validate",
+            text = "Next",
             enabled = state.canContinue(),
             trailingIcon = Icons.AutoMirrored.Default.ArrowRight,
             onClick = viewModel::onContinueClicked

@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SettingSourcesScreenViewModel(
+class SettingSourcesViewModel(
     private val settingRepository: SettingRepository,
     private val observeSelectedSourcesUseCase: ObserveSelectedSourcesUseCase,
     private val analyticsHelper: AnalyticsHelper

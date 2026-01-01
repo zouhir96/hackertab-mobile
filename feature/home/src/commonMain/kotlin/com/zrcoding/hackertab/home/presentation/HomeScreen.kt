@@ -117,11 +117,11 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeRoute(
-    viewModel: HomeScreenViewModel = koinViewModel(),
     onNavigateToWebView: (String) -> Unit,
     onNavigateToTopicsSettings: () -> Unit,
     onNavigateToSourcesSettings: () -> Unit,
     onNavigateToBookmarks: () -> Unit,
+    viewModel: HomeViewModel = koinViewModel(),
 ) {
     val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
     val scope = rememberCoroutineScope()

@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SettingTopicsScreenViewModel(
+class SettingTopicsViewModel(
     private val settingRepository: SettingRepository,
     private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {

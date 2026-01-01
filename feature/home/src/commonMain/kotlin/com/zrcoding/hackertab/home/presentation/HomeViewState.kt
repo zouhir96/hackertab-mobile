@@ -8,7 +8,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
 @Stable
-data class HomeScreenViewState(
+data class HomeViewState(
     val enabledSources: PersistentList<Source> = persistentListOf(),
     val selectedSource: Source? = null,
     val canAddSource: Boolean = false,

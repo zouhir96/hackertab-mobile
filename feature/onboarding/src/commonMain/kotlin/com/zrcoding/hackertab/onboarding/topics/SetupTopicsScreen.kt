@@ -43,16 +43,19 @@ import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.components.ChipGroup
 import com.zrcoding.hackertab.design.components.PrimaryButton
 import com.zrcoding.hackertab.design.theme.dimension
+import com.zrcoding.hackertab.domain.models.Profile
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun SetupTopicsRoute(
+    profile: Profile,
     navigateToNextScreen: () -> Unit,
-    viewModel: SetupTopicsViewModel = koinViewModel(),
+    viewModel: SetupTopicsViewModel = koinViewModel(parameters = { parametersOf(profile) }),
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
-    var expandedCategory by remember { mutableStateOf<String?>(viewModel.route.profile.category) }
+    var expandedCategory by remember { mutableStateOf<String?>(profile.category) }
     Column(
         modifier = Modifier
             .fillMaxSize()

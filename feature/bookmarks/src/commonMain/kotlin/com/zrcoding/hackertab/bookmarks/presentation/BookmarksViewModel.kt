@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class BookmarksScreenViewModel(
+class BookmarksViewModel(
     private val bookmarkRepository: BookmarkRepository
 ) : ViewModel() {
 
-    private val _viewState = MutableStateFlow(BookmarksScreenViewState())
+    private val _viewState = MutableStateFlow(BookmarksViewState())
     val viewState = _viewState.asStateFlow()
 
     init {

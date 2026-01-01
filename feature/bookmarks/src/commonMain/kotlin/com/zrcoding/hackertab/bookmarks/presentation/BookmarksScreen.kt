@@ -51,7 +51,7 @@ import kotlin.time.toDuration
 @Composable
 fun BookmarksRoute(
     onNavigateToWebView: (String) -> Unit,
-    viewModel: BookmarksScreenViewModel = koinViewModel()
+    viewModel: BookmarksViewModel = koinViewModel()
 ) {
     val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
 
@@ -65,7 +65,7 @@ fun BookmarksRoute(
 
 @Composable
 fun BookmarksScreen(
-    viewState: BookmarksScreenViewState,
+    viewState: BookmarksViewState,
     onClick: (String) -> Unit,
     onRemoveBookmark: (String) -> Unit
 ) {

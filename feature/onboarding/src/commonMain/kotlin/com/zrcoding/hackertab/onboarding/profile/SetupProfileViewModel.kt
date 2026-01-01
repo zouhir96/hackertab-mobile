@@ -1,15 +1,12 @@
 package com.zrcoding.hackertab.onboarding.profile
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.zrcoding.hackertab.analytics.AnalyticsHelper
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.analytics.models.Param
 import com.zrcoding.hackertab.domain.models.Profile
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
-import com.zrcoding.hackertab.onboarding.SetupProfileScreen
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,10 +18,7 @@ import kotlinx.coroutines.launch
 class SetupProfileViewModel(
     private val settingsRepository: SettingRepository,
     private val analyticsHelper: AnalyticsHelper,
-    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
-    private val route = savedStateHandle.toRoute<SetupProfileScreen>()
 
     private val _viewState = MutableStateFlow(SetupProfileViewState())
     val viewState = _viewState.asStateFlow()
@@ -37,7 +31,6 @@ class SetupProfileViewModel(
             _viewState.update {
                 SetupProfileViewState(
                     profiles = settingsRepository.getProfiles().toPersistentList(),
-                    newUser = route.newUser
                 )
             }
         }

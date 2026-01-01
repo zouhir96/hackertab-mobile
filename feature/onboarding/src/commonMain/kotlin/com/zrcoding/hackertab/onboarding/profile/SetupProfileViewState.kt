@@ -9,7 +9,6 @@ import kotlinx.collections.immutable.persistentListOf
 data class SetupProfileViewState(
     val profiles: PersistentList<Profile> = persistentListOf(),
     val selectedProfile: Profile? = null,
-    val newUser: Boolean = false
 ) {
     fun canContinue() = selectedProfile != null
 }

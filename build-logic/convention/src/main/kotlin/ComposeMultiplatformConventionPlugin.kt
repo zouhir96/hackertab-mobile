@@ -27,8 +27,9 @@ class ComposeMultiplatformConventionPlugin : Plugin<Project> {
                 implementation(versionCatalog().findLibrary("kamel-image").get())
                 implementation(versionCatalog().findLibrary("kamel-animated").get())
                 implementation(versionCatalog().findLibrary("kamel-bitmap").get())
-                implementation(versionCatalog().findLibrary("androidx-viewmodel").get())
-                implementation(versionCatalog().findLibrary("androidx-navigation").get())
+                implementation(versionCatalog().findLibrary("androidx-navigation3-ui").get())
+                implementation(versionCatalog().findLibrary("androidx-navigation3-lifecycle").get())
+                implementation(versionCatalog().findLibrary("androidx-navigation3-adaptive").get())
                 implementation(versionCatalog().findLibrary("kotlinx.collections.immutable").get())
             }
         }
