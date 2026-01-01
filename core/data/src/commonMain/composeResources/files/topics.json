@@ -59,7 +59,7 @@
   { "label": "Flutter", "value": "flutter", "category": "mobile" },
   { "label": "Xamarin", "value": "xamarin", "category": "mobile" },
   { "label": "Kotlin", "value": "kotlin", "category": "mobile" },
-  { "label": "Jetpack", "value": "jetpack", "category": "mobile" },
+  { "label": "Jetpack compose", "value": "jetpack", "category": "mobile" },
   { "label": "iOS", "value": "ios", "category": "mobile" },
   { "label": "SwiftUI", "value": "swiftui", "category": "mobile" },
   { "label": "Objective-C", "value": "objectivec", "category": "mobile" },

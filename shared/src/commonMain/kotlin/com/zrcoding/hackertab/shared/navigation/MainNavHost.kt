@@ -105,7 +105,7 @@ fun MainNavHost(
                     SetupProfileRoute(
                         navigateToNextScreen = {
                             if (shouldSetupTopics) {
-                                navController.navigate(SetupTopicsScreen)
+                                navController.navigate(SetupTopicsScreen(it))
                             } else if (shouldSetupSources) {
                                 navController.navigate(SetupSourcesScreen)
                             } else {

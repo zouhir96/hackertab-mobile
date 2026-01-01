@@ -28,14 +28,16 @@ import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.components.PrimaryButton
 import com.zrcoding.hackertab.design.theme.dimension
+import com.zrcoding.hackertab.domain.models.Profile
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SetupProfileRoute(
-    viewModel: SetupProfileViewModel = koinViewModel(),
-    navigateToNextScreen: () -> Unit,
+    navigateToNextScreen: (Profile) -> Unit,
+    viewModel: SetupProfileViewModel = koinViewModel(parameters = { parametersOf(false) }),
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     Column(
@@ -104,7 +106,7 @@ fun SetupProfileRoute(
     }
     LaunchedEffect(viewModel) {
         viewModel.goToNextPage.collectLatest {
-            navigateToNextScreen()
+            navigateToNextScreen(it)
         }
     }
     TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.SETUP_PROFILE)

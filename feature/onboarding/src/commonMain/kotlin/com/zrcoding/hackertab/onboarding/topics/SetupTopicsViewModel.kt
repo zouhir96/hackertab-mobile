@@ -1,7 +1,9 @@
 package com.zrcoding.hackertab.onboarding.topics
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.zrcoding.hackertab.analytics.AnalyticsHelper
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.analytics.models.Param
@@ -9,6 +11,7 @@ import com.zrcoding.hackertab.design.components.ChipData
 import com.zrcoding.hackertab.design.components.ChipStateHandler
 import com.zrcoding.hackertab.design.components.toChipData
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
+import com.zrcoding.hackertab.onboarding.SetupTopicsScreen
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,8 +22,11 @@ import kotlinx.coroutines.launch
 
 class SetupTopicsViewModel(
     private val settingRepository: SettingRepository,
-    private val analyticsHelper: AnalyticsHelper
+    private val analyticsHelper: AnalyticsHelper,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    val route = savedStateHandle.toRoute<SetupTopicsScreen>()
 
     private val _viewState = MutableStateFlow(SetupTopicsViewState())
     val viewState = _viewState.asStateFlow()
@@ -30,28 +36,38 @@ class SetupTopicsViewModel(
 
     init {
         viewModelScope.launch {
-            val topics = settingRepository.getTopics()
-            _viewState.update {
-                SetupTopicsViewState(
-                    topics = topics.map { it.toChipData() }.toPersistentList()
-                )
+            val groupedTopics = settingRepository.getTopics()
+                .groupBy { it.category ?: "Other" }
+                .toMutableMap()
+
+            if (groupedTopics.containsKey("Other")) {
+                val other = groupedTopics.remove("Other")!!
+                groupedTopics["Other"] = other
             }
+            val topics = groupedTopics.map {
+                val selected = it.key == route.profile.category
+                it.key to it.value.map { topic ->
+                    topic.toChipData(selected = selected)
+                }.toPersistentList()
+            }.toPersistentList()
+            _viewState.update { it.copy(topics = topics) }
         }
     }
 
     fun onChipClicked(topic: ChipData) {
-        _viewState.update {
-            SetupTopicsViewState(
-                topics = ChipStateHandler.handleMultiSelect(
-                    currentState = it.topics,
-                    clickedChip = topic
-                )
+        val newTopics = _viewState.value.topics.map { (category, topics) ->
+            category to ChipStateHandler.handleMultiSelect(
+                currentState = topics,
+                clickedChip = topic
             )
-        }
+        }.toPersistentList()
+        _viewState.update { SetupTopicsViewState(topics = newTopics) }
     }
 
     fun onContinueClicked() {
-        val selectedTopics = _viewState.value.topics.filter { it.selected }
+        val selectedTopics = _viewState.value.topics.flatMap { (_, topics) ->
+            topics.filter { it.selected }
+        }
         viewModelScope.launch {
             settingRepository.saveTopics(ids = selectedTopics.map { it.id })
             trackTopicsSelected(selectedTopics)

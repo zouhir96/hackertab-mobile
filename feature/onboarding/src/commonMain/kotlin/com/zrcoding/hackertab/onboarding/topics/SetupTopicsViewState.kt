@@ -7,7 +7,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Stable
 data class SetupTopicsViewState(
-    val topics: PersistentList<ChipData> = persistentListOf(),
+    val topics: PersistentList<Pair<String, PersistentList<ChipData>>> = persistentListOf(),
 ) {
-    fun canContinue() = topics.any { it.selected }
+    fun canContinue() = topics.any { pack -> pack.second.any { it.selected } }
 }

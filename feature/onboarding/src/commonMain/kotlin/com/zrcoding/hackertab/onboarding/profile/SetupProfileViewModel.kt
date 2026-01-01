@@ -29,7 +29,7 @@ class SetupProfileViewModel(
     private val _viewState = MutableStateFlow(SetupProfileViewState())
     val viewState = _viewState.asStateFlow()
 
-    private val _goToNextPage = MutableSharedFlow<Unit>()
+    private val _goToNextPage = MutableSharedFlow<Profile>()
     val goToNextPage = _goToNextPage.asSharedFlow()
 
     init {
@@ -52,7 +52,7 @@ class SetupProfileViewModel(
         viewModelScope.launch {
             settingsRepository.saveProfile(profile = profile)
             trackProfileSelected(profile)
-            _goToNextPage.emit(Unit)
+            _goToNextPage.emit(profile)
         }
     }
 

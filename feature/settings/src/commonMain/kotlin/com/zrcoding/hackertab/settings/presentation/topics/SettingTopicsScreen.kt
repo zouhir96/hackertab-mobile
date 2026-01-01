@@ -63,7 +63,13 @@ fun SettingTopicsRoute(
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small)
                 ) {
                     Row(
-                        modifier = Modifier.clickable { expandedCategory = category },
+                        modifier = Modifier.clickable {
+                            expandedCategory = if (expandedCategory == category) {
+                                null
+                            } else {
+                                category
+                            }
+                        },
                         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
