@@ -47,6 +47,7 @@ import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,6 +65,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
 import com.zrcoding.hackertab.design.components.ErrorMsgWithBtn
 import com.zrcoding.hackertab.design.components.Icon
 import com.zrcoding.hackertab.design.resources.Res
@@ -228,6 +230,14 @@ fun HomeRoute(
             }
         }
     }
+    // Auto-select first article when articles are loaded (only on tablets)
+    val isTabletSize = LocalIsTabletSize.current
+    LaunchedEffect(viewState.articles, isTabletSize) {
+        if (isTabletSize && viewState.articles.isNotEmpty()) {
+            onNavigateToWebView(viewState.articles.first().url)
+        }
+    }
+
     TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.HOME)
 }
 

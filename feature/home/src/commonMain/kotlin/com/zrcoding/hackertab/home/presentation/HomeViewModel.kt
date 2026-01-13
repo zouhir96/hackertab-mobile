@@ -21,13 +21,19 @@ import com.zrcoding.hackertab.domain.usecases.ObserveSelectedSourcesUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedTopicsUseCase
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
     private val observeSelectedSourcesUseCase: ObserveSelectedSourcesUseCase,
     private val observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase,
@@ -40,15 +46,16 @@ class HomeViewModel(
     private val _viewState = MutableStateFlow(HomeViewState())
     val viewState = _viewState.asStateFlow()
 
+    private val refreshTrigger = MutableSharedFlow<Unit>()
+
     init {
         viewModelScope.launch {
             combine(
                 observeSelectedSourcesUseCase(),
                 observeSelectedTopicsUseCase(),
-                bookmarkRepository.observeBookmarkedIds()
-            ) { sources, topics, bookmarkedIds ->
-                Triple(sources, topics, bookmarkedIds)
-            }.collectLatest { (sources, topics, bookmarkedIds) ->
+            ) { sources, topics ->
+                Pair(sources, topics)
+            }.collectLatest { (sources, topics) ->
                 _viewState.update { state ->
                     val newSelectedSource = when {
                         // If current selection is still available, keep it
@@ -80,8 +87,64 @@ class HomeViewModel(
                         isLoading = false
                     )
                 }
-                if (_viewState.value.articles.isEmpty()) {
-                    loadArticles(bookmarkedIds)
+            }
+        }
+        viewModelScope.launch {
+            combine(
+                combine(
+                    refreshTrigger.onStart { emit(Unit) },
+                    _viewState.map { it.selectedSource }.distinctUntilChanged(),
+                    _viewState.map { it.selectedTopic }.distinctUntilChanged(),
+                ) { _, source, topic ->
+                    Pair(source, topic)
+                }.map { (source, topic) ->
+                    if (source == null || topic == null) return@map emptyList()
+                    _viewState.update { it.copy(isLoading = true) }
+                    when (val result = getArticles(source, topic)) {
+                        is Resource.Success -> {
+                            _viewState.update { state ->
+                                state.copy(
+                                    articles = result.data.toPersistentList(),
+                                    isLoading = false,
+                                    error = if (result.data.isEmpty()) {
+                                        "No items found, try adjusting your filter or choosing a different tag."
+                                    } else null,
+                                    canRefresh = false
+                                )
+                            }
+                            result.data
+                        }
+
+                        is Resource.Failure -> {
+                            _viewState.update {
+                                it.copy(
+                                    articles = persistentListOf(),
+                                    isLoading = false,
+                                    error = "Something went wrong, please verify your internet connection and try again",
+                                    canRefresh = true
+                                )
+                            }
+                            emptyList()
+                        }
+                    }
+                },
+                bookmarkRepository.observeBookmarkedIds(),
+            ) { articles, bookmarks ->
+                Pair(articles, bookmarks)
+            }.collectLatest { (articles, bookmarkedIds) ->
+                _viewState.update { state ->
+                    state.copy(
+                        articles = articles.map {
+                            val bookmarked = bookmarkedIds.contains(it.id)
+                            when (it) {
+                                is GithubRepo -> it.copy(bookmarked = bookmarked)
+                                is Conference -> it.copy(bookmarked = bookmarked)
+                                is ProductHunt -> it.copy(bookmarked = bookmarked)
+                                is Article -> it.copy(bookmarked = bookmarked)
+                                else -> it
+                            }
+                        }.toPersistentList()
+                    )
                 }
             }
         }
@@ -89,69 +152,20 @@ class HomeViewModel(
 
     fun onSourceSelected(source: Source) {
         if (_viewState.value.selectedSource == source) return
-        _viewState.update {
-            it.copy(selectedSource = source)
-        }
-        loadArticles()
+        _viewState.update { it.copy(selectedSource = source) }
         logSourceFilterChanged(source)
     }
 
     fun onTopicSelected(topic: Topic) {
         if (_viewState.value.selectedTopic == topic) return
-        _viewState.update {
-            it.copy(selectedTopic = topic)
-        }
-        loadArticles()
+        _viewState.update { it.copy(selectedTopic = topic) }
         logTopicFilterChanged(topic)
     }
 
     fun onRefreshBtnClick() {
-        loadArticles()
+        viewModelScope.launch { refreshTrigger.emit(Unit) }
     }
 
-    private fun loadArticles(bookmarkedIds: Set<String> = emptySet()) {
-        val selectedSource = _viewState.value.selectedSource
-        val selectedTopic = _viewState.value.selectedTopic
-        if (selectedSource != null && selectedTopic != null) {
-            viewModelScope.launch {
-                _viewState.update { it.copy(isLoading = true) }
-                when (val result = getArticles(selectedSource, selectedTopic)) {
-                    is Resource.Success -> {
-                        _viewState.update { state ->
-                            state.copy(
-                                articles = result.data.map {
-                                    val bookmarked = it.id in bookmarkedIds
-                                    when (it) {
-                                        is GithubRepo -> it.copy(bookmarked = bookmarked)
-                                        is Conference -> it.copy(bookmarked = bookmarked)
-                                        is ProductHunt -> it.copy(bookmarked = bookmarked)
-                                        is Article -> it.copy(bookmarked = bookmarked)
-                                        else -> it
-                                    }
-                                }.toPersistentList(),
-                                isLoading = false,
-                                error = if (result.data.isEmpty()) {
-                                    "No items found, try adjusting your filter or choosing a different tag."
-                                } else null,
-                                canRefresh = false
-                            )
-                        }
-                    }
-
-                    is Resource.Failure -> {
-                        _viewState.update {
-                            it.copy(
-                                articles = persistentListOf(),
-                                isLoading = false,
-                                error = "Something went wrong, please verify your internet connection and try again",
-                                canRefresh = true
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     private suspend fun getArticles(
         source: Source,

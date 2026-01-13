@@ -1,24 +1,35 @@
 package com.zrcoding.hackertab.shared.navigation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
+import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.zrcoding.hackertab.analytics.LocalAnalyticsHelper
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.bookmarks.presentation.BookmarksRoute
+import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
 import com.zrcoding.hackertab.design.components.WebViewRoute
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Profile
@@ -72,6 +83,7 @@ private val config = SavedStateConfiguration {
     }
 }
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun MainNavHost(
     modifier: Modifier = Modifier,
@@ -95,6 +107,10 @@ fun MainNavHost(
         else -> arrayOf(HomeScreen)
     }
     val backStack = rememberNavBackStack(configuration = config, elements = stack)
+    val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val isTabletSize = windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND)
+
     fun navigateToHome() {
         analyticsHelper.logEvent(
             event = AnalyticsEvent(
@@ -105,10 +121,12 @@ fun MainNavHost(
         backStack.clear()
         backStack.add(HomeScreen)
     }
-    NavDisplay(
-        modifier = modifier,
-        backStack = backStack,
-        entryProvider = entryProvider {
+    CompositionLocalProvider(LocalIsTabletSize provides isTabletSize) {
+        NavDisplay(
+            modifier = modifier,
+            backStack = backStack,
+            sceneStrategy = listDetailStrategy,
+            entryProvider = entryProvider {
             entry<SetupProfileScreen> {
                 ScreenWithBackButton(
                     onBackClick = { backStack.removeLastOrNull() }
@@ -145,9 +163,25 @@ fun MainNavHost(
                     SetupSourcesRoute(navigateToNextScreen = ::navigateToHome)
                 }
             }
-            entry<HomeScreen> {
+            entry<HomeScreen>(
+                metadata = ListDetailSceneStrategy.listPane(
+                    detailPlaceholder = {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Select an article to read",
+                                style = MaterialTheme.typography.h6,
+                                color = MaterialTheme.colors.onBackground.copy(alpha = 0.6f)
+                            )
+                        }
+                    }
+                )
+            ) {
                 HomeRoute(
                     onNavigateToWebView = { url ->
+                        backStack.removeAll { it is WebViewScreen }
                         backStack.add(WebViewScreen(url))
                     },
                     onNavigateToTopicsSettings = {
@@ -157,6 +191,7 @@ fun MainNavHost(
                         backStack.add(SettingsSourcesScreen)
                     },
                     onNavigateToBookmarks = {
+                        backStack.removeAll { it is WebViewScreen }
                         backStack.add(BookmarksScreen)
                     }
                 )
@@ -177,26 +212,51 @@ fun MainNavHost(
                     }
                 )
             }
-            entry<BookmarksScreen> {
+            entry<BookmarksScreen>(
+                metadata = ListDetailSceneStrategy.listPane(
+                    detailPlaceholder = {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Select a bookmark to read",
+                                style = MaterialTheme.typography.h6,
+                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+                            )
+                        }
+                    }
+                )
+            ) {
                 ScreenWithBackButton(
                     onBackClick = { backStack.removeLastOrNull() },
                     screen = {
                         BookmarksRoute(
-                            onNavigateToWebView = { url -> backStack.add(WebViewScreen(url)) }
+                            onNavigateToWebView = { url ->
+                                backStack.removeAll { it is WebViewScreen }
+                                backStack.add(WebViewScreen(url))
+                            }
                         )
                     }
                 )
             }
-            entry<WebViewScreen> { route ->
-                ScreenWithBackButton(
-                    onBackClick = { backStack.removeLastOrNull() },
-                    screen = {
-                        WebViewRoute(url = route.url)
-                    }
-                )
+            entry<WebViewScreen>(
+                metadata = ListDetailSceneStrategy.detailPane()
+            ) { route ->
+                if (windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND)) {
+                    WebViewRoute(url = route.url)
+                } else {
+                    ScreenWithBackButton(
+                        onBackClick = { backStack.removeLastOrNull() },
+                        screen = {
+                            WebViewRoute(url = route.url)
+                        }
+                    )
+                }
             }
         }
-    )
+        )
+    }
 }
 
 @Composable

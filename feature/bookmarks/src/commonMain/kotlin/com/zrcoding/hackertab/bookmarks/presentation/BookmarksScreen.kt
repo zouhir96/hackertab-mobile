@@ -23,6 +23,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BookmarkRemove
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
 import com.zrcoding.hackertab.design.components.Icon
 import com.zrcoding.hackertab.design.components.TextWithStartIcon
 import com.zrcoding.hackertab.design.resources.Res
@@ -54,12 +56,19 @@ fun BookmarksRoute(
     viewModel: BookmarksViewModel = koinViewModel()
 ) {
     val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
-
     BookmarksScreen(
         viewState = viewState,
         onClick = onNavigateToWebView,
         onRemoveBookmark = viewModel::removeBookmark
     )
+
+    // Auto-select first bookmark when bookmarks are loaded (only on tablets)
+    val isTabletSize = LocalIsTabletSize.current
+    LaunchedEffect(viewState.bookmarks, isTabletSize) {
+        if (isTabletSize && viewState.bookmarks.isNotEmpty()) {
+            onNavigateToWebView(viewState.bookmarks.first().url)
+        }
+    }
     TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.BOOKMARKS)
 }
 
