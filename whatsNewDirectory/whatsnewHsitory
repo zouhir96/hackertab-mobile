@@ -10,3 +10,9 @@ Features:
 
 v1.1.0
 The main change in this upgrading to kotlin 2.0.0
+
+v2.0.1
+- New onboarding flow to help new users set up their favorite sources and topics
+- Choose which news sources you want to see
+-️ Filter articles by topic for a more focused feed
+- Updated UI with smoother UX and cleaner design
