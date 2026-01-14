@@ -3,7 +3,7 @@ jvmTarget = "17"
 compileSdk = "36"
 targetSdk = "36"
 minSdk = "23"
-versionName = "2.0.1"
+versionName = "3.0.0"
 
 kotlin = "2.3.0"
 agp = "8.13.2"
