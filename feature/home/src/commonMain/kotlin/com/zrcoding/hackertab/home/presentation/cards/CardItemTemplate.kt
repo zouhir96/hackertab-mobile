@@ -1,24 +1,35 @@
 package com.zrcoding.hackertab.home.presentation.cards
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.FlowRowScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BookmarkAdded
+import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
 import com.zrcoding.hackertab.design.components.TextWithStartIcon
 import com.zrcoding.hackertab.design.components.getTagColor
 import com.zrcoding.hackertab.design.resources.Res
@@ -31,57 +42,87 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SourceItemTemplate(
-    modifier: Modifier = Modifier,
     title: String,
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit,
+    modifier: Modifier = Modifier,
     titleColor: Color = MaterialTheme.colors.onBackground,
     description: String? = null,
     primaryInfoSection: @Composable FlowRowScope.() -> Unit,
-    url: String? = null,
     tags: List<String>? = null,
 ) {
-    val localUriHandler = LocalUriHandler.current
-    Column(
-        modifier = modifier
-            .clickable {
-                url?.let {
-                    localUriHandler.openUri(it)
-                }
-            }
-            .fillMaxWidth()
-            .padding(
-                horizontal = MaterialTheme.dimension.default,
-                vertical = MaterialTheme.dimension.medium
-            ),
-    ) {
-
-        Text(
-            text = title,
-            color = titleColor,
-            style = MaterialTheme.typography.subtitle1,
-            maxLines = 2
-        )
-        Spacer(modifier = modifier.height(MaterialTheme.dimension.small))
-
-        if (description.isNullOrBlank().not()) {
-            Text(
-                modifier = modifier.fillMaxWidth(),
-                text = description,
-                style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.onBackground.copy(alpha = 0.7f),
-            )
-            Spacer(modifier = modifier.height(MaterialTheme.dimension.medium))
-        }
-
-        FlowRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium)
+    Box(modifier = modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .clickable(onClick = onClick)
+                .fillMaxWidth()
+                .padding(
+                    horizontal = MaterialTheme.dimension.default,
+                    vertical = MaterialTheme.dimension.small
+                ),
         ) {
-            primaryInfoSection()
+            Text(
+                text = title,
+                color = titleColor,
+                style = MaterialTheme.typography.subtitle1,
+                maxLines = 2
+            )
+            Spacer(modifier = modifier.height(MaterialTheme.dimension.small))
+            if (description.isNullOrBlank().not()) {
+                Text(
+                    modifier = modifier.fillMaxWidth(),
+                    text = description,
+                    style = MaterialTheme.typography.body2,
+                    color = MaterialTheme.colors.onBackground.copy(alpha = 0.7f),
+                )
+                Spacer(modifier = modifier.height(MaterialTheme.dimension.medium))
+            }
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium)
+            ) {
+                primaryInfoSection()
+            }
+            Spacer(modifier = modifier.height(MaterialTheme.dimension.small))
+            tags?.let { CardItemTags(modifier = Modifier.fillMaxWidth(), tags = it) }
         }
-        Spacer(modifier = modifier.height(MaterialTheme.dimension.small))
-
-        tags?.let {
-            CardItemTags(modifier = Modifier.fillMaxWidth(), tags = it)
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(
+                    end = MaterialTheme.dimension.medium,
+                    bottom = MaterialTheme.dimension.medium
+                ),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small)
+        ) {
+            IconButton(
+                onClick = onShareClick,
+                modifier = Modifier
+                    .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
+                    .size(MaterialTheme.dimension.extraBig)
+            ) {
+                Icon(
+                    modifier = Modifier.size(MaterialTheme.dimension.big),
+                    imageVector = Icons.Default.Share,
+                    contentDescription = "Share article",
+                    tint = MaterialTheme.colors.onBackground
+                )
+            }
+            IconButton(
+                onClick = onBookmarkClick,
+                modifier = Modifier
+                    .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
+                    .size(MaterialTheme.dimension.extraBig)
+            ) {
+                Icon(
+                    modifier = Modifier.size(MaterialTheme.dimension.big),
+                    imageVector = if (isBookmarked) Icons.Default.BookmarkAdded else Icons.Default.BookmarkBorder,
+                    contentDescription = if (isBookmarked) "Remove bookmark" else "Add bookmark",
+                    tint = MaterialTheme.colors.onBackground
+                )
+            }
         }
     }
 }
@@ -97,6 +138,10 @@ fun SourceItemTemplatePreview() {
             primaryInfoSection = {
                 TextWithStartIcon(text = "1h ago", icon = Res.drawable.ic_time_24)
             },
+            isBookmarked = false,
+            onBookmarkClick = {},
+            onShareClick = {},
+            onClick = {},
             modifier = Modifier,
             tags = listOf("Java", "Kotlin", "JavaScript", "android development"),
         )
@@ -113,7 +158,7 @@ fun CardItemTags(
     if (isTagsBlank) return
     CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
         FlowRow(
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.tiny)
         ) {

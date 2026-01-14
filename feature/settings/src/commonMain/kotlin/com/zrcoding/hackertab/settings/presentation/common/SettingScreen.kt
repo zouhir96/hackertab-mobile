@@ -29,7 +29,7 @@ fun SettingScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
-            .padding(top = MaterialTheme.dimension.extraBig)
+            .padding(top = MaterialTheme.dimension.default)
             .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal)
     ) {
         Text(
@@ -40,7 +40,7 @@ fun SettingScreen(
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.medium))
         Text(
             text = stringResource(description),
-            style = MaterialTheme.typography.caption,
+            style = MaterialTheme.typography.body2,
             color = MaterialTheme.colors.onBackground
         )
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.big))

@@ -29,6 +29,7 @@
     <string name="setting_master_screen_title">Setting</string>
     <string name="setting_master_screen_topics">Topics</string>
     <string name="setting_master_screen_sources">Sources</string>
+    <string name="setting_master_screen_bookmarks">Bookmarks</string>
     <string name="setting_master_screen_contact_us">Contact us</string>
     <string name="setting_master_screen_version_name">with love ❤️ by Zouhir \n Version(%1$s)</string>
 

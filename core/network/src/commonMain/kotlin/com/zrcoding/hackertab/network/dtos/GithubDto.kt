@@ -6,14 +6,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GithubDto(
     @SerialName("id") val id: String,
-    @SerialName("url") val url: String,
-    @SerialName("title") val title: String,
-    @SerialName("programmingLanguage") val programmingLanguage: String,
-    @SerialName("stars") val stars: String,
-    @SerialName("source") val source: String,
-    @SerialName("description") val description: String,
-    @SerialName("owner") val owner: String,
-    @SerialName("forks") val forks: String,
-    @SerialName("starsInDateRange") val starsInDateRange: String,
     @SerialName("name") val name: String,
+    @SerialName("owner") val owner: String,
+    @SerialName("url") val url: String,
+    @SerialName("description") val description: String,
+    @SerialName("stars_count") val stars: Int,
+    @SerialName("stars_in_range") val starsInDateRange: Long,
+    @SerialName("forks_count") val forks: Int,
+    @SerialName("technology") val programmingLanguage: String,
 )

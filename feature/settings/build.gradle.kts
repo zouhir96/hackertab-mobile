@@ -5,9 +5,8 @@ plugins {
 }
 
 kotlin {
+    androidLibrary {
+        namespace = "com.zrcoding.hackertab.settings"
+    }
     setFrameworkBaseName("settings")
-}
-
-android {
-    namespace = "com.zrcoding.hackertab.settings"
 }

@@ -5,19 +5,22 @@ plugins {
     id("hackertab.kmp.compose")
 }
 
-android {
-    namespace = "com.zrcoding.hackertab.analytics"
-}
-
 kotlin {
+    androidLibrary {
+        namespace = "com.zrcoding.hackertab.analytics"
+    }
     setFrameworkBaseName("analytics")
 
     sourceSets {
+        androidMain.dependencies {
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.analytics)
+        }
+
         commonMain.dependencies {
             implementation(project(":core:domain"))
 
             implementation(libs.napier)
-            // Firebase
             implementation(libs.gitlive.analytics)
         }
     }

@@ -10,7 +10,7 @@ import com.zrcoding.hackertab.design.resources.ic_like
 import com.zrcoding.hackertab.design.resources.ic_time_24
 import com.zrcoding.hackertab.design.resources.reactions
 import com.zrcoding.hackertab.design.theme.HackertabTheme
-import com.zrcoding.hackertab.domain.models.Devto
+import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.TimeZone
@@ -22,14 +22,19 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun DevtoItem(devto: Devto) {
-    with(devto) {
+fun DevtoItem(
+    article: Article,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
+) {
+    with(article) {
         SourceItemTemplate(
             title = title.trim(),
             description = null,
             primaryInfoSection = {
                 TextWithStartIcon(
-                    text = date.timeAgo(),
+                    text = publishedAt.timeAgo(),
                     icon = Res.drawable.ic_time_24,
                 )
                 TextWithStartIcon(
@@ -41,8 +46,11 @@ fun DevtoItem(devto: Devto) {
                     icon = Res.drawable.ic_like
                 )
             },
-            url = url,
             tags = tags,
+            isBookmarked = article.bookmarked,
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick,
+            onClick = onClick
         )
     }
 }
@@ -53,15 +61,21 @@ fun DevtoItem(devto: Devto) {
 private fun DevtoItemPreview() {
     HackertabTheme {
         DevtoItem(
-            devto = Devto(
-                id = "convenire",
-                title = "Jetpack compose is the best",
-                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                commentsCount = 7527,
-                reactions = 6147,
-                url = "https://search.yahoo.com/search?p=mnesarchum",
-                tags = listOf("Kotlin")
-            )
+            article =  Article(
+                id = "similique",
+                title = "React is the best web framework ever React is the best web framework ever",
+                url = "https://www.google.com/#q=propriae",
+                publishedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                tags = listOf(),
+                commentsCount = 0,
+                reactions = 0,
+                canonicalUrl = null,
+                imageUrl = null,
+                source = null
+            ),
+            onClick = {},
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

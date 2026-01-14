@@ -11,7 +11,7 @@ import com.zrcoding.hackertab.design.resources.ic_time_24
 import com.zrcoding.hackertab.design.resources.score
 import com.zrcoding.hackertab.design.theme.Flamingo
 import com.zrcoding.hackertab.design.theme.HackertabTheme
-import com.zrcoding.hackertab.domain.models.HackerNews
+import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.TimeZone
@@ -23,26 +23,34 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HackerNewsItem(new: HackerNews) {
+fun HackerNewsItem(
+    article: Article,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
+) {
     SourceItemTemplate(
-        title = new.title,
+        title = article.title,
         primaryInfoSection = {
             TextWithStartIcon(
-                text = stringResource(Res.string.score, new.score),
+                text = stringResource(Res.string.score, article.reactions),
                 textColor = Flamingo,
                 icon = Res.drawable.ic_ellipse,
                 tint = Flamingo
             )
             TextWithStartIcon(
                 icon = Res.drawable.ic_time_24,
-                text = new.time.timeAgo()
+                text = article.publishedAt.timeAgo()
             )
             TextWithStartIcon(
-                text = stringResource(Res.string.comments, new.descendants),
+                text = stringResource(Res.string.comments, article.commentsCount),
                 icon = Res.drawable.ic_comment
             )
         },
-        url = new.url,
+        isBookmarked = article.bookmarked,
+        onBookmarkClick = onBookmarkClick,
+        onShareClick = onShareClick,
+        onClick = onClick
     )
 }
 
@@ -52,14 +60,21 @@ fun HackerNewsItem(new: HackerNews) {
 fun HackerNewsItemPreview() {
     HackertabTheme {
         HackerNewsItem(
-            new = HackerNews(
-                id = "",
+            article = Article(
+                id = "similique",
                 title = "React is the best web framework ever React is the best web framework ever",
                 url = "https://www.google.com/#q=propriae",
-                time = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                descendants = 1234,
-                score = 1234
-            )
+                publishedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                tags = listOf(),
+                commentsCount = 0,
+                reactions = 0,
+                canonicalUrl = null,
+                imageUrl = null,
+                source = null
+            ),
+            onClick = {},
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

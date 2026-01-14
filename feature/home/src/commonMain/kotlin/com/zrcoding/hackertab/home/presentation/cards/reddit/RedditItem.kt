@@ -12,7 +12,7 @@ import com.zrcoding.hackertab.design.resources.score
 import com.zrcoding.hackertab.design.resources.subreddit
 import com.zrcoding.hackertab.design.theme.Flamingo
 import com.zrcoding.hackertab.design.theme.HackertabTheme
-import com.zrcoding.hackertab.domain.models.Reddit
+import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.TimeZone
@@ -24,28 +24,49 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun RedditItem(reddit: Reddit) {
+fun RedditItem(
+    article: Article,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
+) {
     SourceItemTemplate(
-        title = reddit.title,
+        title = article.title,
         primaryInfoSection = {
             TextWithStartIcon(
                 icon = Res.drawable.ic_time_24,
-                text = reddit.date.timeAgo()
+                text = article.publishedAt.timeAgo()
             )
             TextWithStartIcon(
-                text = stringResource( Res.string.score, reddit.score),
+                text = stringResource(Res.string.score, article.reactions),
                 textColor = Flamingo,
                 icon = Res.drawable.ic_ellipse,
                 tint = Flamingo
             )
             TextWithStartIcon(
-                text = stringResource( Res.string.comments, reddit.commentsCount),
+                text = stringResource(Res.string.comments, article.commentsCount),
                 icon = Res.drawable.ic_comment
             )
         },
-        url = reddit.url,
-        tags = listOf(stringResource( Res.string.subreddit, reddit.subreddit))
+        tags = getSubReddit(article.url)?.let {
+            listOf(stringResource(Res.string.subreddit, it))
+        },
+        isBookmarked = article.bookmarked,
+        onBookmarkClick = onBookmarkClick,
+        onShareClick = onShareClick,
+        onClick = onClick
     )
+}
+
+private fun getSubReddit(url: String): String? {
+    val parts = url.split("/")
+    val rIndex = parts.indexOfFirst { it.equals("r", ignoreCase = true) }
+
+    return if (rIndex != -1 && parts.size > rIndex + 1) {
+        parts[rIndex + 1]
+    } else {
+        null
+    }
 }
 
 @OptIn(ExperimentalTime::class)
@@ -54,15 +75,21 @@ fun RedditItem(reddit: Reddit) {
 fun RedditItemPreview() {
     HackertabTheme {
         RedditItem(
-            reddit = Reddit(
+            article = Article(
                 id = "similique",
                 title = "React is the best web framework ever React is the best web framework ever",
-                subreddit = "reactDevs",
                 url = "https://www.google.com/#q=propriae",
-                score = 118,
-                commentsCount = 30,
-                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            )
+                publishedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                tags = listOf(),
+                commentsCount = 0,
+                reactions = 0,
+                canonicalUrl = null,
+                imageUrl = null,
+                source = null
+            ),
+            onClick = {},
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

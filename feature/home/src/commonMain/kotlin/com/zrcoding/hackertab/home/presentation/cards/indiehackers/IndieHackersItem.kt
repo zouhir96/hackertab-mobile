@@ -11,7 +11,7 @@ import com.zrcoding.hackertab.design.resources.ic_comment
 import com.zrcoding.hackertab.design.resources.ic_time_24
 import com.zrcoding.hackertab.design.resources.score
 import com.zrcoding.hackertab.design.theme.HackertabTheme
-import com.zrcoding.hackertab.domain.models.IndieHackers
+import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.TimeZone
@@ -23,11 +23,15 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun IndieHackersItem(indieHackers: IndieHackers) {
-    with(indieHackers) {
+fun IndieHackersItem(
+    article: Article,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
+) {
+    with(article) {
         SourceItemTemplate(
             title = title,
-            url = url,
             primaryInfoSection = {
                 TextWithStartIcon(
                     text = stringResource( Res.string.score, reactions),
@@ -36,14 +40,18 @@ fun IndieHackersItem(indieHackers: IndieHackers) {
                     tint = Color(0xFF4799eb)
                 )
                 TextWithStartIcon(
-                    text = date.timeAgo(),
+                    text = publishedAt.timeAgo(),
                     icon = Res.drawable.ic_time_24,
                 )
                 TextWithStartIcon(
                     text = stringResource( Res.string.comments, commentsCount),
                     icon = Res.drawable.ic_comment,
                 )
-            }
+            },
+            isBookmarked = article.bookmarked,
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick,
+            onClick = onClick
         )
     }
 }
@@ -54,14 +62,21 @@ fun IndieHackersItem(indieHackers: IndieHackers) {
 private fun IndieHackersItemPreview() {
     HackertabTheme {
         IndieHackersItem(
-            indieHackers = IndieHackers(
-                id = "fastidii",
-                title = "Hackertab will pay someday",
-                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                commentsCount = 1349,
-                reactions = 1634,
-                url = "http://www.bing.com/search?q=dicam"
-            )
+            article =  Article(
+                id = "similique",
+                title = "React is the best web framework ever React is the best web framework ever",
+                url = "https://www.google.com/#q=propriae",
+                publishedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                tags = listOf(),
+                commentsCount = 0,
+                reactions = 0,
+                canonicalUrl = null,
+                imageUrl = null,
+                source = null
+            ),
+            onClick = {},
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

@@ -1,4 +1,3 @@
-import com.android.build.api.dsl.LibraryExtension
 import com.zrcoding.convention.configureKotlinAndroid
 import com.zrcoding.convention.configureKotlinMultiplatform
 import com.zrcoding.convention.versionCatalog
@@ -19,7 +18,7 @@ class KotlinMultiplatformLibraryConventionPlugin : Plugin<Project> {
                 ::configureKotlinMultiplatform
             )
             extensions.configure(
-                LibraryExtension::class.java,
+                KotlinMultiplatformExtension::class.java,
                 ::configureKotlinAndroid
             )
         }

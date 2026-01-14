@@ -5,9 +5,8 @@ plugins {
 }
 
 kotlin {
+    androidLibrary {
+        namespace = "com.zrcoding.hackertab.domain"
+    }
     setFrameworkBaseName("domain")
-}
-
-android {
-    namespace = "com.zrcoding.hackertab.domain"
 }

@@ -6,21 +6,22 @@ plugins {
 }
 
 kotlin {
-    setFrameworkBaseName("design")
+    androidLibrary {
+        namespace = "com.zrcoding.hackertab.design"
 
-    dependencies {
-        sourceSets {
-            commonMain {
-                dependencies {
-                    implementation(project(":core:domain"))
-                }
-            }
+        // Enable Android resources for Compose Multiplatform resources
+        androidResources {
+            enable = true
         }
     }
-}
+    setFrameworkBaseName("design")
 
-android {
-    namespace = "com.zrcoding.hackertab.design"
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":core:domain"))
+            implementation(libs.kevinnzou.webview)
+        }
+    }
 }
 
 compose.resources {

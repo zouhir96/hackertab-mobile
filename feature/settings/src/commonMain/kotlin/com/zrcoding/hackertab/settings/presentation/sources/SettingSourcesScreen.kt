@@ -13,7 +13,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SettingSourcesRoute(
-    viewModel: SettingSourcesScreenViewModel = koinViewModel(),
+    viewModel: SettingSourcesViewModel = koinViewModel(),
 ) {
     val sources = viewModel.viewState.collectAsStateWithLifecycle().value
     SettingScreen(

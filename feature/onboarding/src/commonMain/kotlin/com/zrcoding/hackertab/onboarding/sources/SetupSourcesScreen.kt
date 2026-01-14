@@ -35,8 +35,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SetupSourcesRoute(
-    viewModel: SetupSourcesViewModel = koinViewModel(),
     navigateToNextScreen: () -> Unit,
+    viewModel: SetupSourcesViewModel = koinViewModel(),
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     Column(

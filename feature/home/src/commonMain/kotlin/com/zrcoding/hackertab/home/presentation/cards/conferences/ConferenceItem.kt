@@ -8,36 +8,69 @@ import com.zrcoding.hackertab.design.resources.ic_location
 import com.zrcoding.hackertab.design.resources.ic_time_24
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.Conference
-import com.zrcoding.hackertab.domain.usecases.BuildConferenceDisplayedDateUseCase
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ConferenceItem(conf: Conference) {
-    val date = BuildConferenceDisplayedDateUseCase(conf)
-    val location = if (conf.online) {
-        "\uD83C\uDF10 Online"
-    } else {
-        "${conf.country} ${conf.city.orEmpty()}"
-    }
+fun ConferenceItem(
+    conf: Conference,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
+) {
     SourceItemTemplate(
         title = conf.title.trim(),
         description = null,
         primaryInfoSection = {
             TextWithStartIcon(
                 icon = Res.drawable.ic_location,
-                text = location
+                text = getLocation(conf)
             )
             TextWithStartIcon(
                 icon = Res.drawable.ic_time_24,
-                text = date
+                text = getDate(conf)
             )
         },
-        url = conf.url,
-        tags = listOf(conf.tag),
+        tags = conf.tags,
+        isBookmarked = conf.bookmarked,
+        onClick = onClick,
+        onBookmarkClick = onBookmarkClick,
+        onShareClick = onShareClick,
     )
+}
+
+private fun getDate(conf: Conference): String {
+    val startDate = conf.startDate
+    val endDate = conf.endDate
+    return when {
+        startDate == null -> ""
+        endDate == null || startDate == endDate -> toMonthWithDay(startDate)
+        else -> {
+            val start = toMonthWithDay(startDate)
+            if (startDate.month != endDate.month) {
+                "$start - ${toMonthWithDay(endDate)}"
+            } else {
+                "$start - ${endDate.day}"
+            }
+        }
+    }
+}
+
+private fun toMonthWithDay(date: LocalDate): String {
+    val month = date.month.name.lowercase().replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase() else it.toString()
+    }
+    return "$month ${date.day}"
+}
+
+private fun getLocation(conf: Conference): String {
+    return if (conf.online) {
+        "\uD83C\uDF10 Online"
+    } else {
+        "${conf.country} ${conf.city.orEmpty()}"
+    }
 }
 
 @Preview()
@@ -49,13 +82,16 @@ private fun ConferenceItemPreview() {
                 id = "aliquam",
                 url = "https://www.google.com/#q=metus",
                 title = "KotlinConf",
-                startDate = LocalDateTime(2025, 10, 13, 0, 0, 0),
-                endDate = LocalDateTime(2025, 10, 15, 0, 0, 0),
-                tag = "Kotlin",
+                startDate = LocalDate(2025, 10, 10),
+                endDate = LocalDate(2025, 10, 12),
+                tags = listOf("Kotlin"),
                 online = true,
                 city = "Berlin",
                 country = "Germany"
-            )
+            ),
+            onClick = {},
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

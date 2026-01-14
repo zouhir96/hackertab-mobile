@@ -6,13 +6,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ProductHuntDto(
     @SerialName("id") val id: String,
-    @SerialName("url") val url: String,
     @SerialName("title") val title: String,
-    @SerialName("published_at") val publishedAt: Long?= null,
-    @SerialName("tags") val tags: List<String>? = emptyList(),
-    @SerialName("reactions") val reactions: Int? = null,
-    @SerialName("comments") val comments: Int? = null,
-    @SerialName("image_url") val imageUrl: String? = null,
-    @SerialName("source") val source: String,
-    @SerialName("description") val description: String? = null,
+    @SerialName("url") val url: String,
+    @SerialName("tagline") val description: String,
+    @SerialName("votes_count") val reactions: Int,
+    @SerialName("comments_count") val comments: Int,
+    @SerialName("image_url") val imageUrl: String,
+    @SerialName("published_at") val publishedAt: String,
+    @SerialName("topics") val tags: List<String>,
 )

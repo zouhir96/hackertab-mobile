@@ -19,9 +19,14 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun GithubItem(post: GithubRepo) {
+fun GithubItem(
+    post: GithubRepo,
+    onClick: () -> Unit,
+    onBookmarkClick: () -> Unit,
+    onShareClick: () -> Unit
+) {
     SourceItemTemplate(
-        title = post.title,
+        title = "${post.owner}/${post.title}",
         description = post.description.trim().ifEmpty { null },
         primaryInfoSection = {
             TextWithStartIcon(
@@ -39,8 +44,11 @@ fun GithubItem(post: GithubRepo) {
                 text = stringResource(Res.string.forks, post.forks)
             )
         },
-        url = post.url,
         titleColor = MaterialTheme.colors.primary,
+        isBookmarked = post.bookmarked,
+        onBookmarkClick = onBookmarkClick,
+        onShareClick = onShareClick,
+        onClick = onClick
     )
 }
 
@@ -58,7 +66,10 @@ private fun GithubItemPreview() {
                 programmingLanguage = "Kotlin",
                 stars = 20,
                 forks = 15
-            )
+            ),
+            onClick = {},
+            onBookmarkClick = {},
+            onShareClick = {}
         )
     }
 }

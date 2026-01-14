@@ -13,7 +13,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
 import com.zrcoding.hackertab.analytics.AnalyticsHelper
 import com.zrcoding.hackertab.analytics.LocalAnalyticsHelper
 import com.zrcoding.hackertab.design.theme.HackertabTheme
@@ -31,7 +30,7 @@ import org.koin.compose.koinInject
 fun HackertabKmpApp() {
     val startDestinationUseCase = koinInject<GetStartDestinationUseCase>()
     val analyticsHelper = koinInject<AnalyticsHelper>()
-    var startDestination by remember { mutableStateOf<GetStartDestinationUseCase.Result?>(null) }
+    var setupStatus by remember { mutableStateOf<GetStartDestinationUseCase.Result?>(null) }
     val customKamelConfig = remember {
         KamelConfig {
             takeFrom(KamelConfig.Core)
@@ -40,7 +39,7 @@ fun HackertabKmpApp() {
         }
     }
 
-    startDestination?.let { destination ->
+    setupStatus?.let { destination ->
         CompositionLocalProvider(
             LocalAnalyticsHelper provides  analyticsHelper,
             LocalKamelConfig provides customKamelConfig
@@ -51,11 +50,9 @@ fun HackertabKmpApp() {
                         .background(MaterialTheme.colors.background)
                         .statusBarsPadding(),
                 ) {
-                    val navController = rememberNavController()
                     MainNavHost(
                         modifier = Modifier.padding(it),
-                        navController = navController,
-                        startDestination = destination,
+                        setupStatus = destination,
                     )
                 }
             }
@@ -63,6 +60,6 @@ fun HackertabKmpApp() {
     }
 
     LaunchedEffect(Unit) {
-        startDestination = startDestinationUseCase()
+        setupStatus = startDestinationUseCase()
     }
 }
