@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Hackertab — Redesign system</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles/tokens.css"/>
+<link rel="stylesheet" href="styles/app.css"/>
+<style>
+  body { background: var(--bg); }
+  .deck-tab-bar {
+    position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%);
+    z-index: 200;
+    display: flex; gap: 4px; padding: 6px;
+    background: oklch(14% .006 145 / .96);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 999px;
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 12px 30px rgba(0,0,0,.25);
+  }
+  .deck-tab-bar button {
+    height: 34px; padding: 0 14px; border: 0; cursor: pointer;
+    background: transparent; color: rgba(255,255,255,.62);
+    border-radius: 999px;
+    font: 500 12px var(--font-sans); letter-spacing: .01em;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .deck-tab-bar button .num { font-family: var(--font-mono); font-size: 10px; opacity: .55; }
+  .deck-tab-bar button.active { background: var(--brand-primary); color: var(--brand-on-primary); }
+  .deck-tab-bar button.active .num { opacity: .7; }
+  .doc-panel { display: none; }
+  .doc-panel.active { display: block; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<nav class="deck-tab-bar" id="deck-tabs"></nav>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script src="components/data.js"></script>
+<script type="text/babel" src="components/Icons.jsx"></script>
+<script type="text/babel" src="components/Components.jsx"></script>
+<script type="text/babel" src="components/Screens.jsx"></script>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="components/MoodBoard.jsx"></script>
+<script type="text/babel" src="components/Tokens.jsx"></script>
+<script type="text/babel" src="components/Library.jsx"></script>
+<script type="text/babel" src="components/Motion.jsx"></script>
+<script type="text/babel" src="components/Handoff.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+
+const TABS = [
+  { id: "01", name: "Mood",      kind: "doc",    cmp: "MoodBoard" },
+  { id: "02", name: "Tokens",    kind: "doc",    cmp: "Tokens" },
+  { id: "03", name: "Library",   kind: "doc",    cmp: "Library" },
+  { id: "04", name: "Screens",   kind: "canvas", cmp: "ScreensCanvas" },
+  { id: "05", name: "Tablets",   kind: "canvas", cmp: "TabletCanvas" },
+  { id: "06", name: "Motion",    kind: "doc",    cmp: "Motion" },
+  { id: "07", name: "Handoff",   kind: "doc",    cmp: "Handoff" },
+];
+
+/* ===== Screens canvas — 18+ artboards across sections ===== */
+function ScreensCanvas() {
+  const PW = 390, PH = 844;
+  return (
+    <DesignCanvas>
+      <DCSection id="onboarding" title="01 · Onboarding" subtitle="Splash → Profile → Topics → Sources → Done. Step indicator persistent.">
+        <DCArtboard id="splash"   label="01 Splash"          width={PW} height={PH}><SplashScreen theme="dark"/></DCArtboard>
+        <DCArtboard id="profile"  label="02 Profile"         width={PW} height={PH}><SetupProfile/></DCArtboard>
+        <DCArtboard id="topics"   label="03 Topics"          width={PW} height={PH}><SetupTopics/></DCArtboard>
+        <DCArtboard id="sources"  label="04 Sources"         width={PW} height={PH}><SetupSources/></DCArtboard>
+        <DCArtboard id="done"     label="05 Done"            width={PW} height={PH}><OnboardingDone/></DCArtboard>
+      </DCSection>
+
+      <DCSection id="home" title="02 · Home & feed" subtitle="Today (multi-source) is the default. Source-focused is one tap away.">
+        <DCArtboard id="today-light" label="06 Today · Light"    width={PW} height={PH}><TodayScreen theme="light"/></DCArtboard>
+        <DCArtboard id="today-dark"  label="06 Today · Dark"     width={PW} height={PH}><TodayScreen theme="dark"/></DCArtboard>
+        <DCArtboard id="focused"     label="07 Focused (GitHub)" width={PW} height={PH}><FocusedFeed/></DCArtboard>
+        <DCArtboard id="ptr"         label="07b Pull-to-refresh" width={PW} height={PH}><PullToRefresh/></DCArtboard>
+        <DCArtboard id="long"        label="07c Long-press"      width={PW} height={PH}><LongPressSheet/></DCArtboard>
+      </DCSection>
+
+      <DCSection id="reader" title="03 · WebView reader">
+        <DCArtboard id="webview" label="08 WebView" width={PW} height={PH}><WebViewScreen/></DCArtboard>
+      </DCSection>
+
+      <DCSection id="bookmarks" title="04 · Bookmarks" subtitle="Search, group, swipe-to-remove. Empty state is its own designed surface.">
+        <DCArtboard id="bm-list"    label="09 Bookmarks"       width={PW} height={PH}><BookmarksScreen/></DCArtboard>
+        <DCArtboard id="bm-search"  label="09b Search active"  width={PW} height={PH}><BookmarksSearch/></DCArtboard>
+        <DCArtboard id="bm-empty"   label="09c Empty"          width={PW} height={PH}><BookmarksEmpty/></DCArtboard>
+      </DCSection>
+
+      <DCSection id="settings" title="05 · Settings" subtitle="Single master surface. Every toggle persists silently.">
+        <DCArtboard id="set-master"  label="10 Settings"          width={PW} height={PH}><SettingsMaster/></DCArtboard>
+        <DCArtboard id="set-topics"  label="11 Settings · Topics" width={PW} height={PH}><SettingsTopics/></DCArtboard>
+        <DCArtboard id="set-sources" label="12 Settings · Sources (toast)" width={PW} height={PH}><SettingsSources showToast={true}/></DCArtboard>
+        <DCArtboard id="set-appear"  label="13 Appearance"        width={PW} height={PH}><SettingsAppearance/></DCArtboard>
+        <DCArtboard id="set-about"   label="14 About"             width={PW} height={PH}><SettingsAbout/></DCArtboard>
+      </DCSection>
+
+      <DCSection id="states" title="06 · States & edge cases">
+        <DCArtboard id="loading"  label="15 Loading"        width={PW} height={PH}><LoadingState/></DCArtboard>
+        <DCArtboard id="error"    label="16 Error"          width={PW} height={PH}><ErrorState/></DCArtboard>
+        <DCArtboard id="offline"  label="16b No internet"   width={PW} height={PH}><ErrorState noNet={true}/></DCArtboard>
+        <DCArtboard id="empty"    label="17 Empty (no match)" width={PW} height={PH}><EmptyMatch/></DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+function TabletCanvas() {
+  return (
+    <DesignCanvas>
+      <DCSection id="tablet" title="Tablet — list-detail with NavRail" subtitle="≥600dp width: NavRail + list + WebView pane.">
+        <DCArtboard id="t-today"    label="Tablet · Today"     width={1180} height={820}><TabletToday/></DCArtboard>
+        <DCArtboard id="t-bookmarks" label="Tablet · Bookmarks" width={1180} height={820}><TabletBookmarks/></DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+window.ScreensCanvas = ScreensCanvas;
+window.TabletCanvas  = TabletCanvas;
+
+/* ===== Shell ===== */
+function App() {
+  const [tab, setTab] = React.useState(() => {
+    const h = (location.hash || "").replace("#","");
+    return TABS.find(t => t.id === h) ? h : "01";
+  });
+  React.useEffect(() => { history.replaceState(null, "", "#" + tab); }, [tab]);
+
+  // Render the canvas tabs as full-bleed by themselves; doc tabs go through doc layout.
+  const active = TABS.find(t => t.id === tab);
+  const Cmp = window[active.cmp];
+
+  return (
+    <>
+      {TABS.map(t => {
+        const C = window[t.cmp];
+        const isActive = t.id === tab;
+        const isCanvas = t.kind === "canvas";
+        return (
+          <div key={t.id}
+            style={{
+              display: isActive ? "block" : "none",
+              minHeight: "100vh",
+              padding: isCanvas ? 0 : "0",
+            }}>
+            {C ? <C/> : <div style={{padding:40}}>Missing component: {t.cmp}</div>}
+          </div>
+        );
+      })}
+      <DeckTabs tabs={TABS} active={tab} onSelect={setTab}/>
+    </>
+  );
+}
+
+function DeckTabs({ tabs, active, onSelect }) {
+  return ReactDOM.createPortal(
+    <>{tabs.map(t => (
+      <button key={t.id} className={t.id === active ? "active" : ""} onClick={() => onSelect(t.id)}>
+        <span className="num">{t.id}</span>{t.name}
+      </button>
+    ))}</>,
+    document.getElementById("deck-tabs")
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
