@@ -1,70 +1,174 @@
 package com.zrcoding.hackertab.design.theme
 
-import androidx.compose.material.Typography
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.zrcoding.hackertab.design.resources.Res
-import com.zrcoding.hackertab.design.resources.nunito_bold
-import com.zrcoding.hackertab.design.resources.nunito_medium
-import com.zrcoding.hackertab.design.resources.nunito_regular
+import com.zrcoding.hackertab.design.resources.geist_bold
+import com.zrcoding.hackertab.design.resources.geist_medium
+import com.zrcoding.hackertab.design.resources.geist_mono_medium
+import com.zrcoding.hackertab.design.resources.geist_mono_semibold
+import com.zrcoding.hackertab.design.resources.geist_regular
+import com.zrcoding.hackertab.design.resources.geist_semibold
 import org.jetbrains.compose.resources.Font
 
+/**
+ * Hackertab v4 typography ramp. Sizes mirror the `.t-*` classes in
+ * `design/project/styles/tokens.css` (lines 142–159). Fonts:
+ *  - Geist Sans (400, 500, 600, 700) — body and headings
+ *  - Geist Mono (500, 600) — code-text styles
+ */
+
+val GeistSans: FontFamily
+    @Composable get() = FontFamily(
+        Font(Res.font.geist_regular, FontWeight.W400),
+        Font(Res.font.geist_medium, FontWeight.W500),
+        Font(Res.font.geist_semibold, FontWeight.W600),
+        Font(Res.font.geist_bold, FontWeight.W700),
+    )
+
+val GeistMono: FontFamily
+    @Composable get() = FontFamily(
+        Font(Res.font.geist_mono_medium, FontWeight.W500),
+        Font(Res.font.geist_mono_semibold, FontWeight.W600),
+    )
+
+/**
+ * Material 3 typography ramp. Slot mapping follows tokens.css:
+ *  - displayLarge/Medium/Small  → .t-display-lg/md/sm
+ *  - headlineLarge/Medium/Small → .t-headline-lg/md/sm
+ *  - titleLarge/Medium/Small    → .t-title-lg/md/sm
+ *  - bodyLarge/Medium/Small     → .t-body-lg/md/sm
+ *  - labelLarge/Medium/Small    → .t-label-lg/md/sm
+ *
+ * Code text styles (`codeMedium`, `codeSmall`) are exposed as top-level vals
+ * because M3 Typography has no code slot.
+ */
 val Typography: Typography
-    @Composable get() = Typography(
-        h4 = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_medium)),
-            fontWeight = FontWeight.W900,
-            fontSize = 30.sp
-        ),
-        h5 = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_regular)),
-            fontWeight = FontWeight.W900,
-            fontSize = 24.sp,
-        ),
-        h6 = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_medium)),
-            fontWeight = FontWeight.W600,
-            fontSize = 20.sp
-        ),
-        subtitle1 = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_medium)),
-            fontWeight = FontWeight.Normal,
-            fontSize = 18.sp,
-            letterSpacing = 0.15.sp
-        ),
-        subtitle2 = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_regular)),
-            fontWeight = FontWeight.W500,
-            fontSize = 14.sp,
-            letterSpacing = 0.1.sp
-        ),
-        body1 = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_bold)),
-            fontSize = 16.sp,
-            letterSpacing = 0.25.sp
-        ),
-        body2 = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_medium)),
-            fontSize = 14.sp,
-            letterSpacing = 0.25.sp
-        ),
-        button = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_medium)),
-            fontWeight = FontWeight.W500,
-            fontSize = 14.sp,
-            letterSpacing = 1.25.sp
-        ),
-        caption = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_regular)),
-            fontWeight = FontWeight.Normal,
-            fontSize = 12.sp
-        ),
-        overline = TextStyle(
-            fontFamily = FontFamily(Font(Res.font.nunito_regular)),
-            fontWeight = FontWeight.W500,
-            fontSize = 12.sp
+    @Composable get() {
+        val sans = GeistSans
+        return Typography(
+            displayLarge = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W600,
+                fontSize = 56.sp,
+                lineHeight = 58.24.sp,
+                letterSpacing = (-0.04).em,
+            ),
+            displayMedium = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W600,
+                fontSize = 44.sp,
+                lineHeight = 46.64.sp,
+                letterSpacing = (-0.035).em,
+            ),
+            displaySmall = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W600,
+                fontSize = 34.sp,
+                lineHeight = 36.72.sp,
+                letterSpacing = (-0.03).em,
+            ),
+            headlineLarge = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W600,
+                fontSize = 28.sp,
+                lineHeight = 32.2.sp,
+                letterSpacing = (-0.02).em,
+            ),
+            headlineMedium = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W600,
+                fontSize = 22.sp,
+                lineHeight = 26.4.sp,
+                letterSpacing = (-0.015).em,
+            ),
+            headlineSmall = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W600,
+                fontSize = 18.sp,
+                lineHeight = 22.5.sp,
+                letterSpacing = (-0.01).em,
+            ),
+            titleLarge = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W600,
+                fontSize = 17.sp,
+                lineHeight = 22.1.sp,
+                letterSpacing = (-0.005).em,
+            ),
+            titleMedium = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W600,
+                fontSize = 15.sp,
+                lineHeight = 20.25.sp,
+            ),
+            titleSmall = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W600,
+                fontSize = 13.sp,
+                lineHeight = 17.55.sp,
+            ),
+            bodyLarge = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W400,
+                fontSize = 16.sp,
+                lineHeight = 23.2.sp,
+            ),
+            bodyMedium = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W400,
+                fontSize = 14.sp,
+                lineHeight = 20.3.sp,
+            ),
+            bodySmall = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W400,
+                fontSize = 13.sp,
+                lineHeight = 18.2.sp,
+            ),
+            labelLarge = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W500,
+                fontSize = 14.sp,
+                lineHeight = 16.8.sp,
+            ),
+            labelMedium = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W500,
+                fontSize = 12.sp,
+                lineHeight = 14.4.sp,
+                letterSpacing = 0.01.em,
+            ),
+            labelSmall = TextStyle(
+                fontFamily = sans,
+                fontWeight = FontWeight.W500,
+                fontSize = 11.sp,
+                lineHeight = 13.2.sp,
+                letterSpacing = 0.02.em,
+            ),
         )
+    }
+
+/** Code-text style — corresponds to `.t-code-md` in tokens.css. */
+val codeMedium: TextStyle
+    @Composable get() = TextStyle(
+        fontFamily = GeistMono,
+        fontWeight = FontWeight.W500,
+        fontSize = 13.sp,
+        lineHeight = 17.55.sp,
+        letterSpacing = (-0.01).em,
+    )
+
+/** Code-text style — corresponds to `.t-code-sm` in tokens.css. */
+val codeSmall: TextStyle
+    @Composable get() = TextStyle(
+        fontFamily = GeistMono,
+        fontWeight = FontWeight.W500,
+        fontSize = 11.sp,
+        lineHeight = 14.3.sp,
     )
