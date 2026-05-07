@@ -5,7 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,22 +33,22 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun Source.Icon() = when (this) {
-    Source.DEVTO -> Res.drawable.ic_devto to MaterialTheme.colors.onBackground
-    Source.FREE_CODE_CAMP -> Res.drawable.ic_freecodecamp to MaterialTheme.colors.onBackground
-    Source.GITHUB -> Res.drawable.ic_github to MaterialTheme.colors.onBackground
+    Source.DEVTO -> Res.drawable.ic_devto to MaterialTheme.colorScheme.onBackground
+    Source.FREE_CODE_CAMP -> Res.drawable.ic_freecodecamp to MaterialTheme.colorScheme.onBackground
+    Source.GITHUB -> Res.drawable.ic_github to MaterialTheme.colorScheme.onBackground
     Source.HACKER_NEWS -> Res.drawable.ic_hackernews to Color.Unspecified
     Source.HACKER_NOON -> Res.drawable.ic_hacker_noon to Color.Unspecified
     Source.HASH_NODE -> Res.drawable.ic_hashnode to Color.Unspecified
-    Source.INDIE_HACKERS -> Res.drawable.ic_indie_hackers to MaterialTheme.colors.onBackground
+    Source.INDIE_HACKERS -> Res.drawable.ic_indie_hackers to MaterialTheme.colorScheme.onBackground
     Source.LOBSTERS -> Res.drawable.ic_lobsters to Color.Unspecified
-    Source.MEDIUM -> Res.drawable.ic_medium to MaterialTheme.colors.onBackground
+    Source.MEDIUM -> Res.drawable.ic_medium to MaterialTheme.colorScheme.onBackground
     Source.PRODUCTHUNT -> Res.drawable.ic_product_hunt to Color.Unspecified
     Source.REDDIT -> Res.drawable.ic_reddit to Color.Unspecified
-    Source.CONFERENCES -> Res.drawable.ic_conferences to MaterialTheme.colors.onBackground
+    Source.CONFERENCES -> Res.drawable.ic_conferences to MaterialTheme.colorScheme.onBackground
 }
 
 @Composable
-fun Source.Icon(size: Dp = MaterialTheme.dimension.extraBig) {
+fun Source.Icon(size: Dp = MaterialTheme.dimension.space40) {
     Box(
         modifier = Modifier
             .background(Color.White, CircleShape)

@@ -9,7 +9,7 @@ import com.zrcoding.hackertab.design.resources.ic_arrow_drop_up
 import com.zrcoding.hackertab.design.resources.ic_comment
 import com.zrcoding.hackertab.design.resources.ic_time_24
 import com.zrcoding.hackertab.design.resources.score
-import com.zrcoding.hackertab.design.theme.Flamingo
+import com.zrcoding.hackertab.design.theme.SourceLobsters
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
@@ -35,9 +35,9 @@ fun LobstersItem(
             primaryInfoSection = {
                 TextWithStartIcon(
                     text = stringResource( Res.string.score, reactions),
-                    textColor = Flamingo,
+                    textColor = SourceLobsters,
                     icon = Res.drawable.ic_arrow_drop_up,
-                    tint = Flamingo
+                    tint = SourceLobsters
                 )
                 TextWithStartIcon(
                     text = publishedAt.timeAgo(),

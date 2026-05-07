@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Bookmark
@@ -50,14 +50,14 @@ fun ProductHuntItem(
             .clickable(onClick = onClick)
             .fillMaxWidth()
             .padding(
-                horizontal = MaterialTheme.dimension.default,
-                vertical = MaterialTheme.dimension.medium
+                horizontal = MaterialTheme.dimension.space16,
+                vertical = MaterialTheme.dimension.space8
             ),
         contentAlignment = Alignment.BottomEnd
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = MaterialTheme.dimension.default),
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.large),
+            modifier = Modifier.fillMaxWidth().padding(bottom = MaterialTheme.dimension.space16),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
             verticalAlignment = Alignment.Top
         ) {
             with(product) {
@@ -71,18 +71,18 @@ fun ProductHuntItem(
                 )
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small)
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4)
                 ) {
                     Text(
                         text = title,
-                        color = MaterialTheme.colors.onBackground,
-                        style = MaterialTheme.typography.subtitle1,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.titleMedium,
                         maxLines = 2
                     )
                     Text(
                         text = description,
-                        color = MaterialTheme.colors.onBackground.copy(alpha = 0.7f),
-                        style = MaterialTheme.typography.body2,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+                        style = MaterialTheme.typography.bodyMedium,
                         maxLines = 2,
                     )
                     TextWithStartIcon(
@@ -94,24 +94,24 @@ fun ProductHuntItem(
                     modifier = Modifier
                         .border(
                             width = 0.3.dp,
-                            color = MaterialTheme.colors.onBackground.copy(alpha = 0.5f),
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
                             shape = MaterialTheme.shapes.small
                         )
                         .padding(
-                            horizontal = MaterialTheme.dimension.small,
-                            vertical = MaterialTheme.dimension.small
+                            horizontal = MaterialTheme.dimension.space4,
+                            vertical = MaterialTheme.dimension.space4
                         ),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowDropUp,
                         contentDescription = null,
-                        tint = MaterialTheme.colors.onBackground
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                     Text(
                         text = "$reactions",
-                        color = MaterialTheme.colors.onBackground,
-                        style = MaterialTheme.typography.body1,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.bodyLarge,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -119,32 +119,32 @@ fun ProductHuntItem(
             }
         }
         Row(
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium)
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8)
         ) {
             IconButton(
                 onClick = onShareClick,
                 modifier = Modifier
-                    .size(MaterialTheme.dimension.extraBig)
-                    .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
+                    .size(MaterialTheme.dimension.space40)
+                    .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f), CircleShape)
             ) {
                 Icon(
-                    modifier = Modifier.size(MaterialTheme.dimension.big),
+                    modifier = Modifier.size(MaterialTheme.dimension.space20),
                     imageVector = Icons.Default.Share,
                     contentDescription = "Share article",
-                    tint = MaterialTheme.colors.onBackground
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
             IconButton(
                 onClick = onBookmarkClick,
                 modifier = Modifier
-                    .size(MaterialTheme.dimension.extraBig)
-                    .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
+                    .size(MaterialTheme.dimension.space40)
+                    .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f), CircleShape)
             ) {
                 Icon(
-                    modifier = Modifier.size(MaterialTheme.dimension.big),
+                    modifier = Modifier.size(MaterialTheme.dimension.space20),
                     imageVector = if (product.bookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
                     contentDescription = if (product.bookmarked) "Remove bookmark" else "Add bookmark",
-                    tint = MaterialTheme.colors.onBackground
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         }

@@ -16,9 +16,9 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -63,38 +63,38 @@ fun SetupTopicsRoute(
             .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal)
             .safeDrawingPadding()
     ) {
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.extraBig))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space40))
         Text(
             text = "Languages & topics",
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.h5
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.headlineMedium
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.small))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space4))
         Text(
             text = "Select the languages & topics you're interested in following.",
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.body2
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.bodyMedium
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.big))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space20))
         Box(
             modifier = Modifier
                 .border(
                     width = 1.dp,
-                    color = MaterialTheme.colors.onBackground.copy(0.3f),
+                    color = MaterialTheme.colorScheme.onBackground.copy(0.3f),
                     shape = MaterialTheme.shapes.medium
                 )
                 .weight(1f)
-                .padding(MaterialTheme.dimension.medium)
+                .padding(MaterialTheme.dimension.space8)
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium)
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8)
             ) {
                 state.topics.forEach { (category, chips) ->
                     val expanded by derivedStateOf { expandedCategory == category }
                     Column(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small)
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4)
                     ) {
                         Row(
                             modifier = Modifier.clickable {
@@ -104,20 +104,20 @@ fun SetupTopicsRoute(
                                     category
                                 }
                             },
-                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 text = category.capitalize(Locale("en")),
-                                style = MaterialTheme.typography.h6,
-                                color = MaterialTheme.colors.onBackground
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                             Icon(
                                 imageVector = if (expanded) {
                                     Icons.Default.ArrowDropUp
                                 } else Icons.Default.ArrowDropDown,
                                 contentDescription = null,
-                                tint = MaterialTheme.colors.onBackground
+                                tint = MaterialTheme.colorScheme.onBackground
                             )
                         }
                         AnimatedVisibility(visible = expanded) {
@@ -130,7 +130,7 @@ fun SetupTopicsRoute(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.big))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space20))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
@@ -139,17 +139,17 @@ fun SetupTopicsRoute(
             Icon(
                 imageVector = Icons.Default.Info,
                 contentDescription = null,
-                tint = MaterialTheme.colors.onBackground
+                tint = MaterialTheme.colorScheme.onBackground
             )
-            Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
+            Spacer(modifier = Modifier.width(MaterialTheme.dimension.space4))
             Text(
                 text = "You still can change this in settings",
-                color = MaterialTheme.colors.onBackground,
-                style = MaterialTheme.typography.body2,
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
             )
         }
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.large))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space12))
         PrimaryButton(
             modifier = Modifier.fillMaxWidth(),
             text = "Validate",

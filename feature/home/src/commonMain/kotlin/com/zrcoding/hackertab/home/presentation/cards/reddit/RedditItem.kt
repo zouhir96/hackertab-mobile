@@ -10,7 +10,7 @@ import com.zrcoding.hackertab.design.resources.ic_ellipse
 import com.zrcoding.hackertab.design.resources.ic_time_24
 import com.zrcoding.hackertab.design.resources.score
 import com.zrcoding.hackertab.design.resources.subreddit
-import com.zrcoding.hackertab.design.theme.Flamingo
+import com.zrcoding.hackertab.design.theme.SourceReddit
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
@@ -39,9 +39,9 @@ fun RedditItem(
             )
             TextWithStartIcon(
                 text = stringResource(Res.string.score, article.reactions),
-                textColor = Flamingo,
+                textColor = SourceReddit,
                 icon = Res.drawable.ic_ellipse,
-                tint = Flamingo
+                tint = SourceReddit
             )
             TextWithStartIcon(
                 text = stringResource(Res.string.comments, article.commentsCount),

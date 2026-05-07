@@ -12,9 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material.icons.filled.Info
@@ -45,25 +45,25 @@ fun SetupSourcesRoute(
             .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal)
             .safeDrawingPadding()
     ) {
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.extraBig))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space40))
         Text(
             text = "Sources",
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.h5
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.headlineMedium
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.small))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space4))
         Text(
             text = "Your feed will be tailored by your followed sources",
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.body2
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.bodyMedium
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.big))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space20))
         Box(
             modifier = Modifier.border(
                 width = 1.dp,
-                color = MaterialTheme.colors.onBackground.copy(0.3f),
+                color = MaterialTheme.colorScheme.onBackground.copy(0.3f),
                 shape = MaterialTheme.shapes.medium
-            ).padding(MaterialTheme.dimension.medium)
+            ).padding(MaterialTheme.dimension.space8)
         ) {
             ChipGroup(
                 chips = state.sources,
@@ -79,17 +79,17 @@ fun SetupSourcesRoute(
             Icon(
                 imageVector = Icons.Default.Info,
                 contentDescription = null,
-                tint = MaterialTheme.colors.onBackground
+                tint = MaterialTheme.colorScheme.onBackground
             )
-            Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
+            Spacer(modifier = Modifier.width(MaterialTheme.dimension.space4))
             Text(
                 text = "You still can change this in settings",
-                color = MaterialTheme.colors.onBackground,
-                style = MaterialTheme.typography.body2,
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
             )
         }
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.large))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space12))
         PrimaryButton(
             modifier = Modifier.fillMaxWidth(),
             text = "Finish",

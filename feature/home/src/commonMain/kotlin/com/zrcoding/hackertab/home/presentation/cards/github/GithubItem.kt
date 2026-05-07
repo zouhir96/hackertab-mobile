@@ -1,7 +1,7 @@
 package com.zrcoding.hackertab.home.presentation.cards.github
 
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.zrcoding.hackertab.design.components.TextWithStartIcon
 import com.zrcoding.hackertab.design.components.getTagColor
@@ -44,7 +44,7 @@ fun GithubItem(
                 text = stringResource(Res.string.forks, post.forks)
             )
         },
-        titleColor = MaterialTheme.colors.primary,
+        titleColor = MaterialTheme.colorScheme.primary,
         isBookmarked = post.bookmarked,
         onBookmarkClick = onBookmarkClick,
         onShareClick = onShareClick,

@@ -14,12 +14,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BookmarkRemove
 import androidx.compose.runtime.Composable
@@ -98,8 +98,8 @@ fun BookmarksScreen(
                 ) {
                     Text(
                         text = "No bookmarks yet",
-                        style = MaterialTheme.typography.h6,
-                        color = MaterialTheme.colors.onBackground.copy(alpha = 0.6f),
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -108,8 +108,8 @@ fun BookmarksScreen(
             else -> {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.large),
-                    contentPadding = PaddingValues(bottom = MaterialTheme.dimension.extraBig)
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
+                    contentPadding = PaddingValues(bottom = MaterialTheme.dimension.space40)
                 ) {
                     items(
                         items = viewState.bookmarks,
@@ -120,7 +120,7 @@ fun BookmarksScreen(
                             onClick = { onClick(bookmark.url) },
                             onRemoveBookmark = { onRemoveBookmark(bookmark.id) }
                         )
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
             }
@@ -140,21 +140,21 @@ private fun BookmarkItem(
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .padding(
-                horizontal = MaterialTheme.dimension.default,
-                vertical = MaterialTheme.dimension.medium
+                horizontal = MaterialTheme.dimension.space16,
+                vertical = MaterialTheme.dimension.space8
             ),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
         verticalAlignment = Alignment.Top
     ) {
         Source.valueOf(bookmark.source).Icon()
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4)
         ) {
             Text(
                 text = bookmark.title,
-                color = MaterialTheme.colors.onBackground,
-                style = MaterialTheme.typography.subtitle1,
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.titleMedium,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
@@ -166,14 +166,14 @@ private fun BookmarkItem(
         IconButton(
             onClick = onRemoveBookmark,
             modifier = Modifier.background(
-                color = MaterialTheme.colors.secondary.copy(alpha = 0.5f),
+                color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
                 shape = CircleShape
-            ).size(MaterialTheme.dimension.extraBig)
+            ).size(MaterialTheme.dimension.space40)
         ) {
             Icon(
                 imageVector = Icons.Default.BookmarkRemove,
                 contentDescription = "Remove bookmark",
-                tint = MaterialTheme.colors.onBackground.copy(alpha = 0.7f)
+                tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
             )
         }
     }

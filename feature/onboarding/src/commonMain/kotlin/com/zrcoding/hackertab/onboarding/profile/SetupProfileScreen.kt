@@ -12,10 +12,10 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.runtime.Composable
@@ -32,7 +32,6 @@ import com.zrcoding.hackertab.domain.models.Profile
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SetupProfileRoute(
     navigateToNextScreen: (Profile) -> Unit,
@@ -45,48 +44,52 @@ fun SetupProfileRoute(
             .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal)
             .safeDrawingPadding()
     ) {
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.extraBig))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space40))
         Text(
-            text = "Hi, \uD83D\uDC4B Welcome to Hackertab",
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.h5
+            text = "Hi, 👋 Welcome to Hackertab",
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.headlineMedium
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.small))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space4))
         Text(
             text = "Let's customize your Hackertab experience!",
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.body2
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.bodyMedium
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.big))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space20))
         Text(
             text = "Let’s get to know you, please choose your profile",
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.body1
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.bodyLarge
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.medium))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space8))
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
         ) {
             items(state.profiles) {
                 Card(
                     onClick = {
                         viewModel.onProfileSelected(it)
                     },
-                    backgroundColor = MaterialTheme.colors.background,
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.background
+                    ),
                     border = if (it == state.selectedProfile) {
-                        BorderStroke(MaterialTheme.dimension.tiny, MaterialTheme.colors.primary)
-                    } else BorderStroke(1.dp, MaterialTheme.colors.primary.copy(alpha = 0.1f)),
-                    elevation = if (it == state.selectedProfile) 1.dp else 0.dp
+                        BorderStroke(MaterialTheme.dimension.space2, MaterialTheme.colorScheme.primary)
+                    } else BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = if (it == state.selectedProfile) 1.dp else 0.dp
+                    )
                 ) {
                     Text(
                         modifier = Modifier
-                            .padding(vertical = MaterialTheme.dimension.default)
+                            .padding(vertical = MaterialTheme.dimension.space16)
                             .fillMaxWidth(),
                         text = it.label,
-                        color = MaterialTheme.colors.onBackground,
-                        style = MaterialTheme.typography.body1,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center
                     )
                 }

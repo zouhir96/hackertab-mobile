@@ -3,8 +3,8 @@ package com.zrcoding.hackertab.shared
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -47,7 +47,7 @@ fun HackertabKmpApp() {
             HackertabTheme {
                 Scaffold(
                     modifier = Modifier
-                        .background(MaterialTheme.colors.background)
+                        .background(MaterialTheme.colorScheme.background)
                         .statusBarsPadding(),
                 ) {
                     MainNavHost(

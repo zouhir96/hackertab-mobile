@@ -3,13 +3,16 @@ package com.zrcoding.hackertab.shared.navigation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -31,7 +34,6 @@ import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.bookmarks.presentation.BookmarksRoute
 import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
 import com.zrcoding.hackertab.design.components.WebViewRoute
-import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Profile
 import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase
 import com.zrcoding.hackertab.home.presentation.HomeRoute
@@ -172,8 +174,8 @@ fun MainNavHost(
                         ) {
                             Text(
                                 text = "Select an article to read",
-                                style = MaterialTheme.typography.h6,
-                                color = MaterialTheme.colors.onBackground.copy(alpha = 0.6f)
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                             )
                         }
                     }
@@ -221,8 +223,8 @@ fun MainNavHost(
                         ) {
                             Text(
                                 text = "Select a bookmark to read",
-                                style = MaterialTheme.typography.h6,
-                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                             )
                         }
                     }
@@ -259,6 +261,7 @@ fun MainNavHost(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScreenWithBackButton(
     onBackClick: () -> Unit,
@@ -271,23 +274,26 @@ private fun ScreenWithBackButton(
                     IconButton(
                         onClick = onBackClick,
                         modifier = Modifier.background(
-                            color = MaterialTheme.colors.secondary.copy(alpha = 0.5f),
+                            color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
                             shape = CircleShape
                         )
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back button",
-                            tint = MaterialTheme.colors.onBackground
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
                 title = {},
-                backgroundColor = MaterialTheme.colors.background,
-                elevation = MaterialTheme.dimension.none
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
             )
         }
-    ) {
-        screen()
+    ) { padding ->
+        Box(modifier = Modifier.padding(padding)) {
+            screen()
+        }
     }
 }

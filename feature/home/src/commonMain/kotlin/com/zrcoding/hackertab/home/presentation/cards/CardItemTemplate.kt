@@ -15,18 +15,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BookmarkAdded
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,7 +45,7 @@ fun SourceItemTemplate(
     onBookmarkClick: () -> Unit,
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
-    titleColor: Color = MaterialTheme.colors.onBackground,
+    titleColor: Color = MaterialTheme.colorScheme.onBackground,
     description: String? = null,
     primaryInfoSection: @Composable FlowRowScope.() -> Unit,
     tags: List<String>? = null,
@@ -59,68 +56,68 @@ fun SourceItemTemplate(
                 .clickable(onClick = onClick)
                 .fillMaxWidth()
                 .padding(
-                    horizontal = MaterialTheme.dimension.default,
-                    vertical = MaterialTheme.dimension.small
+                    horizontal = MaterialTheme.dimension.space16,
+                    vertical = MaterialTheme.dimension.space4
                 ),
         ) {
             Text(
                 text = title,
                 color = titleColor,
-                style = MaterialTheme.typography.subtitle1,
+                style = MaterialTheme.typography.titleMedium,
                 maxLines = 2
             )
-            Spacer(modifier = modifier.height(MaterialTheme.dimension.small))
+            Spacer(modifier = modifier.height(MaterialTheme.dimension.space4))
             if (description.isNullOrBlank().not()) {
                 Text(
                     modifier = modifier.fillMaxWidth(),
                     text = description,
-                    style = MaterialTheme.typography.body2,
-                    color = MaterialTheme.colors.onBackground.copy(alpha = 0.7f),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                 )
-                Spacer(modifier = modifier.height(MaterialTheme.dimension.medium))
+                Spacer(modifier = modifier.height(MaterialTheme.dimension.space8))
             }
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8)
             ) {
                 primaryInfoSection()
             }
-            Spacer(modifier = modifier.height(MaterialTheme.dimension.small))
+            Spacer(modifier = modifier.height(MaterialTheme.dimension.space4))
             tags?.let { CardItemTags(modifier = Modifier.fillMaxWidth(), tags = it) }
         }
         Row(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(
-                    end = MaterialTheme.dimension.medium,
-                    bottom = MaterialTheme.dimension.medium
+                    end = MaterialTheme.dimension.space8,
+                    bottom = MaterialTheme.dimension.space8
                 ),
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small)
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4)
         ) {
             IconButton(
                 onClick = onShareClick,
                 modifier = Modifier
-                    .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
-                    .size(MaterialTheme.dimension.extraBig)
+                    .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f), CircleShape)
+                    .size(MaterialTheme.dimension.space40)
             ) {
                 Icon(
-                    modifier = Modifier.size(MaterialTheme.dimension.big),
+                    modifier = Modifier.size(MaterialTheme.dimension.space20),
                     imageVector = Icons.Default.Share,
                     contentDescription = "Share article",
-                    tint = MaterialTheme.colors.onBackground
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
             IconButton(
                 onClick = onBookmarkClick,
                 modifier = Modifier
-                    .background(MaterialTheme.colors.secondary.copy(alpha = 0.5f), CircleShape)
-                    .size(MaterialTheme.dimension.extraBig)
+                    .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f), CircleShape)
+                    .size(MaterialTheme.dimension.space40)
             ) {
                 Icon(
-                    modifier = Modifier.size(MaterialTheme.dimension.big),
+                    modifier = Modifier.size(MaterialTheme.dimension.space20),
                     imageVector = if (isBookmarked) Icons.Default.BookmarkAdded else Icons.Default.BookmarkBorder,
                     contentDescription = if (isBookmarked) "Remove bookmark" else "Add bookmark",
-                    tint = MaterialTheme.colors.onBackground
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         }
@@ -148,7 +145,7 @@ fun SourceItemTemplatePreview() {
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CardItemTags(
     modifier: Modifier = Modifier,
@@ -156,20 +153,18 @@ fun CardItemTags(
 ) {
     val isTagsBlank = tags.isEmpty() || (tags.size == 1 && tags.first().isBlank())
     if (isTagsBlank) return
-    CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
-        FlowRow(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.tiny)
-        ) {
-            tags.forEach {
-                val color = it.getTagColor()
-                TextWithStartIcon(
-                    text = it,
-                    icon = Res.drawable.ic_ellipse,
-                    tint = color
-                )
-            }
+    FlowRow(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space2)
+    ) {
+        tags.forEach {
+            val color = it.getTagColor()
+            TextWithStartIcon(
+                text = it,
+                icon = Res.drawable.ic_ellipse,
+                tint = color
+            )
         }
     }
 }

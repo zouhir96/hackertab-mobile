@@ -1,7 +1,7 @@
 package com.zrcoding.hackertab.home.presentation.cards.mediun
 
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.zrcoding.hackertab.design.components.TextWithStartIcon
 import com.zrcoding.hackertab.design.resources.Res
@@ -36,7 +36,7 @@ fun MediumItem(
                 TextWithStartIcon(
                     text = stringResource( Res.string.claps, reactions),
                     icon = Res.drawable.ic_claps,
-                    tint = MaterialTheme.colors.onBackground
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
                 TextWithStartIcon(
                     text = stringResource( Res.string.comments, commentsCount),

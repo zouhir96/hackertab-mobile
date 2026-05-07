@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
@@ -50,8 +50,8 @@ fun SettingTopicsRoute(
         var expandedCategory by remember { mutableStateOf<String?>(null) }
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = MaterialTheme.dimension.extraBig),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium)
+            contentPadding = PaddingValues(bottom = MaterialTheme.dimension.space40),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8)
         ) {
             items(
                 items = topics,
@@ -60,7 +60,7 @@ fun SettingTopicsRoute(
                 val expanded by derivedStateOf { expandedCategory == category }
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small)
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4)
                 ) {
                     Row(
                         modifier = Modifier.clickable {
@@ -70,20 +70,20 @@ fun SettingTopicsRoute(
                                 category
                             }
                         },
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = category.capitalize(Locale("en")),
-                            style = MaterialTheme.typography.h6,
-                            color = MaterialTheme.colors.onBackground
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         Icon(
                             imageVector = if (expanded) {
                                 Icons.Default.ArrowDropUp
                             } else Icons.Default.ArrowDropDown,
                             contentDescription = null,
-                            tint = MaterialTheme.colors.onBackground
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                     AnimatedVisibility(visible = expanded) {

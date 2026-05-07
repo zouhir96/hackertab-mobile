@@ -9,7 +9,7 @@ import com.zrcoding.hackertab.design.resources.ic_comment
 import com.zrcoding.hackertab.design.resources.ic_ellipse
 import com.zrcoding.hackertab.design.resources.ic_time_24
 import com.zrcoding.hackertab.design.resources.score
-import com.zrcoding.hackertab.design.theme.Flamingo
+import com.zrcoding.hackertab.design.theme.SourceHackerNews
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
@@ -34,9 +34,9 @@ fun HackerNewsItem(
         primaryInfoSection = {
             TextWithStartIcon(
                 text = stringResource(Res.string.score, article.reactions),
-                textColor = Flamingo,
+                textColor = SourceHackerNews,
                 icon = Res.drawable.ic_ellipse,
-                tint = Flamingo
+                tint = SourceHackerNews
             )
             TextWithStartIcon(
                 icon = Res.drawable.ic_time_24,
