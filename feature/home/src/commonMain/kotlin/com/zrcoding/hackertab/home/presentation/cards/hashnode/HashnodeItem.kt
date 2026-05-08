@@ -1,81 +1,66 @@
 package com.zrcoding.hackertab.home.presentation.cards.hashnode
 
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
-import com.zrcoding.hackertab.design.components.TextWithStartIcon
+import com.zrcoding.hackertab.design.components.cards.ArticleCard
 import com.zrcoding.hackertab.design.resources.Res
-import com.zrcoding.hackertab.design.resources.comments
 import com.zrcoding.hackertab.design.resources.ic_comment
 import com.zrcoding.hackertab.design.resources.ic_like
-import com.zrcoding.hackertab.design.resources.ic_time_24
-import com.zrcoding.hackertab.design.resources.reactions
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.Article
-import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
+import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.home.presentation.cards.MetaIconText
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.compose.resources.stringResource
+import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalLayoutApi::class)
+/**
+ * Hashnode feed card. Meta: comments · reactions.
+ */
 @Composable
 fun HashnodeItem(
     article: Article,
+    isRead: Boolean = false,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
-    onShareClick: () -> Unit
+    onShareClick: () -> Unit,
+    onLongClick: () -> Unit = {},
 ) {
-    with(article) {
-        SourceItemTemplate(
-            title = title.trim(),
-            description = null,
-            primaryInfoSection = {
-                TextWithStartIcon(
-                    text = publishedAt.timeAgo(),
-                    icon = Res.drawable.ic_time_24,
-                )
-                TextWithStartIcon(
-                    text = stringResource( Res.string.comments, commentsCount),
-                    icon = Res.drawable.ic_comment,
-                )
-                TextWithStartIcon(
-                    text = stringResource( Res.string.reactions, reactions),
-                    icon = Res.drawable.ic_like
-                )
-            },
-            tags = tags,
-            isBookmarked = article.bookmarked,
-            onBookmarkClick = onBookmarkClick,
-            onShareClick = onShareClick,
-            onClick = onClick
-        )
-    }
+    ArticleCard(
+        article = article,
+        timeAgo = article.publishedAt.timeAgo(),
+        isBookmarked = article.bookmarked,
+        isFresh = false,
+        onClick = onClick,
+        onLongClick = onLongClick,
+        onBookmarkClick = onBookmarkClick,
+        onMoreClick = onLongClick,
+        metaContent = {
+            MetaIconText(icon = Res.drawable.ic_comment, text = "${article.commentsCount}")
+            MetaIconText(icon = Res.drawable.ic_like, text = "${article.reactions}")
+        },
+    )
 }
 
-@OptIn(ExperimentalTime::class)
-@Preview()
+@Preview
 @Composable
 private fun HashnodeItemPreview() {
     HackertabTheme {
         HashnodeItem(
-            article =  Article(
-                id = "similique",
-                title = "React is the best web framework ever React is the best web framework ever",
-                url = "https://www.google.com/#q=propriae",
-                publishedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                tags = listOf(),
-                commentsCount = 0,
-                reactions = 0,
+            article = Article(
+                id = "hn_1",
+                title = "Migrating a Kotlin Multiplatform app to Compose 1.9",
+                url = "https://example.hashnode.dev/post",
+                publishedAt = LocalDateTime(2025, 5, 8, 11, 15, 0),
+                tags = listOf("kotlin", "kmp"),
+                commentsCount = 7,
+                reactions = 64,
                 canonicalUrl = null,
                 imageUrl = null,
-                source = null
+                source = Source.HASH_NODE,
             ),
             onClick = {},
             onBookmarkClick = {},
-            onShareClick = {}
+            onShareClick = {},
         )
     }
 }

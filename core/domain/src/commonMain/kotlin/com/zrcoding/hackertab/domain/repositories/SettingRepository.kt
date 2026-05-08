@@ -29,4 +29,9 @@ interface SettingRepository {
     suspend fun getProfiles(): List<Profile>
 
     suspend fun saveProfile(profile: Profile)
+
+    // Wave 3G — last visited timestamp for "new since last visit" badges
+    suspend fun getLastVisitedAt(): Long
+
+    suspend fun setLastVisitedAt(epochMillis: Long)
 }

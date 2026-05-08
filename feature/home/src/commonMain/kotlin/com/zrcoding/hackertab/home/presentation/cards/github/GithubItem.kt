@@ -1,75 +1,76 @@
 package com.zrcoding.hackertab.home.presentation.cards.github
 
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import com.zrcoding.hackertab.design.components.TextWithStartIcon
-import com.zrcoding.hackertab.design.components.getTagColor
-import com.zrcoding.hackertab.design.resources.Res
-import com.zrcoding.hackertab.design.resources.forks
-import com.zrcoding.hackertab.design.resources.ic_baseline_fork
-import com.zrcoding.hackertab.design.resources.ic_baseline_star
-import com.zrcoding.hackertab.design.resources.ic_ellipse
-import com.zrcoding.hackertab.design.resources.stars
+import com.zrcoding.hackertab.design.components.cards.RepoCard
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.GithubRepo
-import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
-import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@OptIn(ExperimentalLayoutApi::class)
+/**
+ * GitHub trending-repo card.
+ * Delegates entirely to [RepoCard] from Wave 2C.
+ */
 @Composable
 fun GithubItem(
     post: GithubRepo,
+    isRead: Boolean = false,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
-    onShareClick: () -> Unit
+    onShareClick: () -> Unit,
+    onLongClick: () -> Unit = {},
 ) {
-    SourceItemTemplate(
-        title = "${post.owner}/${post.title}",
-        description = post.description.trim().ifEmpty { null },
-        primaryInfoSection = {
-            TextWithStartIcon(
-                icon = Res.drawable.ic_ellipse,
-                tint = post.programmingLanguage.getTagColor(),
-                text = post.programmingLanguage
-            )
-            TextWithStartIcon(
-                icon = Res.drawable.ic_baseline_star,
-                text = stringResource(Res.string.stars, post.stars)
-            )
-
-            TextWithStartIcon(
-                icon = Res.drawable.ic_baseline_fork,
-                text = stringResource(Res.string.forks, post.forks)
-            )
-        },
-        titleColor = MaterialTheme.colorScheme.primary,
+    RepoCard(
+        repo = post,
+        timeAgo = "trending",
         isBookmarked = post.bookmarked,
+        isFresh = false,
+        onClick = onClick,
+        onLongClick = onLongClick,
         onBookmarkClick = onBookmarkClick,
-        onShareClick = onShareClick,
-        onClick = onClick
+        onMoreClick = onLongClick,
     )
 }
 
-@Preview()
+@Preview
 @Composable
-private fun GithubItemPreview() {
+private fun GithubItemLightPreview() {
     HackertabTheme {
         GithubItem(
             post = GithubRepo(
-                id = "habeo",
-                title = "Jetpack compose",
-                description = "This is a fake repo for preview",
-                owner = "Celina Wells",
-                url = "https://www.google.com/#q=propriae",
+                id = "gh_1",
+                title = "compose-multiplatform",
+                description = "Kotlin Multiplatform framework for cross-platform UI using Compose.",
+                owner = "JetBrains",
+                url = "https://github.com/JetBrains/compose-multiplatform",
                 programmingLanguage = "Kotlin",
-                stars = 20,
-                forks = 15
+                stars = 14_800,
+                forks = 1_050,
             ),
             onClick = {},
             onBookmarkClick = {},
-            onShareClick = {}
+            onShareClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun GithubItemDarkPreview() {
+    HackertabTheme {
+        GithubItem(
+            post = GithubRepo(
+                id = "gh_2",
+                title = "okhttp",
+                description = "Square's meticulous HTTP client for the JVM, Android, and GraalVM.",
+                owner = "square",
+                url = "https://github.com/square/okhttp",
+                programmingLanguage = "Kotlin",
+                stars = 45_000,
+                forks = 9_300,
+            ),
+            onClick = {},
+            onBookmarkClick = {},
+            onShareClick = {},
         )
     }
 }

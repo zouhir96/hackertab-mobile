@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.zrcoding.hackertab.data.datastore.SettingsKeys
 import com.zrcoding.hackertab.data.resources.Res
 import com.zrcoding.hackertab.domain.models.Profile
 import com.zrcoding.hackertab.domain.models.Topic
@@ -83,6 +84,15 @@ class SettingRepositoryImpl(
 
     override suspend fun saveProfile(profile: Profile) {
         dataStore.edit { it[KEY_PROFILE] = profile.name }
+    }
+
+    // Wave 3G — last visited timestamp (epoch millis, for "new since last visit" badges)
+    override suspend fun getLastVisitedAt(): Long {
+        return dataStore.data.map { it[SettingsKeys.KEY_LAST_VISITED_AT] ?: 0L }.firstOrNull() ?: 0L
+    }
+
+    override suspend fun setLastVisitedAt(epochMillis: Long) {
+        dataStore.edit { it[SettingsKeys.KEY_LAST_VISITED_AT] = epochMillis }
     }
 
     private fun getSavedIds(key: Preferences.Key<String>): Flow<List<String>> {
