@@ -29,4 +29,11 @@ interface SettingRepository {
     suspend fun getProfiles(): List<Profile>
 
     suspend fun saveProfile(profile: Profile)
+
+    // Wave 3F — coachmarks_seen: false means "show coachmarks on first Home load".
+    // Default = true so existing users (who never ran onboarding again) skip coachmarks.
+    // New users: OnboardingDoneScreen sets this to false immediately before opening the feed.
+    fun observeCoachmarksSeen(): Flow<Boolean>
+
+    suspend fun setCoachmarksSeen(seen: Boolean)
 }

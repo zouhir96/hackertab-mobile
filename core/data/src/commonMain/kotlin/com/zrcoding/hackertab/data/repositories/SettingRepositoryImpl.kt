@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.zrcoding.hackertab.data.datastore.SettingsKeys
 import com.zrcoding.hackertab.data.resources.Res
 import com.zrcoding.hackertab.domain.models.Profile
 import com.zrcoding.hackertab.domain.models.Topic
@@ -84,6 +85,27 @@ class SettingRepositoryImpl(
     override suspend fun saveProfile(profile: Profile) {
         dataStore.edit { it[KEY_PROFILE] = profile.name }
     }
+
+    // region Wave 3F — coachmarks_seen
+
+    /**
+     * Emits the current coachmarks-seen flag. Default = **true** so that
+     * existing users (who already completed the old onboarding) are NOT shown
+     * coachmarks. New users completing the redesigned onboarding explicitly
+     * call [setCoachmarksSeen](false) before navigating to the feed, which
+     * triggers the Wave-5 coachmark overlay on first Home load.
+     */
+    override fun observeCoachmarksSeen(): Flow<Boolean> {
+        return dataStore.data.map { prefs ->
+            prefs[SettingsKeys.KEY_COACHMARKS_SEEN] ?: true
+        }
+    }
+
+    override suspend fun setCoachmarksSeen(seen: Boolean) {
+        dataStore.edit { it[SettingsKeys.KEY_COACHMARKS_SEEN] = seen }
+    }
+
+    // endregion
 
     private fun getSavedIds(key: Preferences.Key<String>): Flow<List<String>> {
         return dataStore.data.map { it.fromSavedJsonToList(key) }

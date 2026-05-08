@@ -53,6 +53,7 @@ data class AnalyticsEvent(
         const val SETTINGS_TOPICS = "SettingsTopics"
         const val SETTINGS_SOURCES = "SettingsSources"
         const val BOOKMARKS = "bookmarks"
+        const val ONBOARDING_DONE = "OnboardingDone"
         // Add more standard screen names here
     }
 }
