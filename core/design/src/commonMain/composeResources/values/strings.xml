@@ -48,4 +48,40 @@
 
     <string name="setting_sources_screen_title">Sources</string>
     <string name="setting_sources_screen_description">Your feed will be tailored by following the sources you are interested in.</string>
+
+    <!-- Settings v4 — master screen -->
+    <string name="settings_master_title">Settings</string>
+    <string name="settings_master_profile_setup_as">You\'re set up as</string>
+    <string name="settings_master_profile_change">Change</string>
+    <string name="settings_master_section_feed">Feed</string>
+    <string name="settings_master_row_topics">Topics</string>
+    <string name="settings_master_row_sources">Sources</string>
+    <string name="settings_master_section_app">App</string>
+    <string name="settings_master_row_appearance">Appearance</string>
+    <string name="settings_master_row_about">About</string>
+    <string name="settings_master_row_send_feedback">Send feedback</string>
+    <string name="settings_master_version_footer">Hackertab v%1$s</string>
+    <string name="settings_master_topics_count">%1$d topics selected</string>
+    <string name="settings_master_sources_count">%1$d sources active</string>
+
+    <!-- Settings v4 — appearance screen -->
+    <string name="settings_appearance_title">Appearance</string>
+    <string name="settings_appearance_description">Choose how Hackertab looks on your device.</string>
+    <string name="settings_appearance_light">Light</string>
+    <string name="settings_appearance_dark">Dark</string>
+    <string name="settings_appearance_system">System default</string>
+
+    <!-- Settings v4 — about screen -->
+    <string name="settings_about_title">About</string>
+    <string name="settings_about_app_name">Hackertab</string>
+    <string name="settings_about_version">Version %1$s</string>
+    <string name="settings_about_row_feedback">Send feedback</string>
+    <string name="settings_about_row_source_code">Source code</string>
+    <string name="settings_about_row_privacy">Privacy policy</string>
+    <string name="settings_about_row_rate">Rate on App Store</string>
+    <string name="settings_about_row_show_tour">Show tour again</string>
+    <string name="settings_about_tour_reset_confirmation">The onboarding tour has been reset. Restart the app to see it.</string>
+
+    <!-- Settings v4 — sources screen snackbar -->
+    <string name="settings_sources_min_one_guard">You need at least one source enabled.</string>
 </resources>

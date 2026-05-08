@@ -4,8 +4,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.zrcoding.hackertab.data.datastore.SettingsKeys
 import com.zrcoding.hackertab.data.resources.Res
 import com.zrcoding.hackertab.domain.models.Profile
+import com.zrcoding.hackertab.domain.models.ThemeMode
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import kotlinx.coroutines.flow.Flow
@@ -84,6 +86,33 @@ class SettingRepositoryImpl(
     override suspend fun saveProfile(profile: Profile) {
         dataStore.edit { it[KEY_PROFILE] = profile.name }
     }
+
+    // region Wave 3I — theme mode
+
+    override fun observeThemeMode(): Flow<ThemeMode> {
+        return dataStore.data.map { prefs ->
+            val raw = prefs[SettingsKeys.KEY_THEME_MODE]
+            if (raw != null) {
+                runCatching { ThemeMode.valueOf(raw) }.getOrDefault(ThemeMode.SYSTEM)
+            } else {
+                ThemeMode.SYSTEM
+            }
+        }
+    }
+
+    override suspend fun setThemeMode(mode: ThemeMode) {
+        dataStore.edit { it[SettingsKeys.KEY_THEME_MODE] = mode.name }
+    }
+
+    // endregion
+
+    // region Wave 3I — coachmark replay (Issue 15)
+
+    override suspend fun resetCoachmarks() {
+        dataStore.edit { it[SettingsKeys.KEY_COACHMARKS_SEEN] = false }
+    }
+
+    // endregion
 
     private fun getSavedIds(key: Preferences.Key<String>): Flow<List<String>> {
         return dataStore.data.map { it.fromSavedJsonToList(key) }
