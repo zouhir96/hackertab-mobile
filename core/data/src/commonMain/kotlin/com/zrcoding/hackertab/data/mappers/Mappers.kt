@@ -81,7 +81,8 @@ fun BookmarkedArticleEntity.toBookmarkedArticle() = BookmarkedArticle(
     url = url,
     savedAt = Instant.fromEpochMilliseconds(savedAt)
         .toLocalDateTime(TimeZone.currentSystemDefault()),
-    source = source
+    source = source,
+    read = read,
 )
 
 @OptIn(ExperimentalTime::class)
