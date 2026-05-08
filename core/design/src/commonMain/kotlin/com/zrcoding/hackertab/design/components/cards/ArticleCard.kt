@@ -22,8 +22,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.components.SourceTag
+import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.codeSmall
 import com.zrcoding.hackertab.domain.models.Article
+import com.zrcoding.hackertab.domain.models.Source
+import kotlinx.datetime.LocalDateTime
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Generic article card. Used by HN, Reddit, Lobsters, DevTo, Hashnode,
@@ -97,5 +101,35 @@ fun ArticleCard(
                 onMoreClick = onMoreClick,
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun ArticleCardPreview(){
+    HackertabTheme {
+        ArticleCard(
+            article = Article(
+                id = "populo",
+                title = "constituto",
+                url = "http://www.bing.com/search?q=voluptaria",
+                bookmarked = false,
+                publishedAt = LocalDateTime(2020, 12,12, 12,12, 12),
+                commentsCount = 1602,
+                reactions = 7139,
+                tags = listOf(),
+                canonicalUrl = "https://duckduckgo.com/?q=definitionem",
+                imageUrl = "https://search.yahoo.com/search?p=ridiculus",
+                source = Source.DEVTO
+            ),
+            timeAgo = "nonumes",
+            isBookmarked = false,
+            isFresh = false,
+            onClick = {},
+            onLongClick = {},
+            onBookmarkClick = {},
+            onMoreClick = {},
+            metaContent = {},
+        )
     }
 }
