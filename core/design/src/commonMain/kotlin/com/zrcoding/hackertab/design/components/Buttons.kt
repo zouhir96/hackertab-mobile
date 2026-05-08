@@ -1,19 +1,34 @@
+@file:Suppress("unused")
+
 package com.zrcoding.hackertab.design.components
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
-import com.zrcoding.hackertab.design.theme.Neutral0
-import com.zrcoding.hackertab.design.theme.dimension
+import com.zrcoding.hackertab.design.components.buttons.ButtonSize
+import com.zrcoding.hackertab.design.components.buttons.PrimaryButton as PrimaryButtonV4
 
+/**
+ * Wave 1 → Wave 2 shim. The canonical implementation now lives in
+ * `com.zrcoding.hackertab.design.components.buttons.PrimaryButton`. This
+ * top-level overload is kept so legacy `feature/*` call-sites (and the rest
+ * of the v4 migration) continue to compile against the existing
+ * `PrimaryButton(modifier = …, text = …, …)` shape.
+ *
+ * New call-sites should import directly from `…components.buttons.*` and use
+ * the full v4 API (size, isLoading, …).
+ */
+@Deprecated(
+    message = "Wave 2 migration: import PrimaryButton from " +
+        "com.zrcoding.hackertab.design.components.buttons.PrimaryButton " +
+        "to access size and isLoading.",
+    replaceWith = ReplaceWith(
+        expression = "PrimaryButton(text = text, onClick = onClick, modifier = modifier, " +
+            "enabled = enabled, leadingIcon = leadingIcon, trailingIcon = trailingIcon)",
+        imports = ["com.zrcoding.hackertab.design.components.buttons.PrimaryButton"],
+    ),
+    level = DeprecationLevel.WARNING,
+)
 @Composable
 fun PrimaryButton(
     modifier: Modifier = Modifier,
@@ -21,35 +36,15 @@ fun PrimaryButton(
     enabled: Boolean = true,
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
-    Button(
-        modifier = modifier,
+    PrimaryButtonV4(
+        text = text,
         onClick = onClick,
+        modifier = modifier,
         enabled = enabled,
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
-        shape = MaterialTheme.shapes.medium,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = Neutral0,
-            disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-            disabledContentColor = Neutral0.copy(alpha = 0.5f)
-        )
-    ) {
-        leadingIcon?.let {
-            Icon(
-                imageVector = it,
-                contentDescription = null,
-            )
-            Spacer(modifier = Modifier.width(MaterialTheme.dimension.space4))
-        }
-        Text(text = text)
-        trailingIcon?.let {
-            Spacer(modifier = Modifier.width(MaterialTheme.dimension.space4))
-            Icon(
-                imageVector = it,
-                contentDescription = null,
-            )
-        }
-    }
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        size = ButtonSize.Medium,
+    )
 }
