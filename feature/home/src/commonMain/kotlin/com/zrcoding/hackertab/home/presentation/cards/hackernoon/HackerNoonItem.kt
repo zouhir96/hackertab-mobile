@@ -1,63 +1,59 @@
 package com.zrcoding.hackertab.home.presentation.cards.hackernoon
 
 import androidx.compose.runtime.Composable
-import com.zrcoding.hackertab.design.components.TextWithStartIcon
-import com.zrcoding.hackertab.design.resources.Res
-import com.zrcoding.hackertab.design.resources.ic_time_24
+import com.zrcoding.hackertab.design.components.cards.ArticleCard
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.Article
-import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
+import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
+/**
+ * HackerNoon feed card. Tags-only meta (rendered by `ArticleCard`).
+ */
 @Composable
 fun HackerNoonItem(
     article: Article,
+    isRead: Boolean = false,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
-    onShareClick: () -> Unit
+    onShareClick: () -> Unit,
+    onLongClick: () -> Unit = {},
 ) {
-    SourceItemTemplate(
-        title = article.title.trim(),
+    ArticleCard(
+        article = article,
+        timeAgo = article.publishedAt.timeAgo(),
         isBookmarked = article.bookmarked,
+        isFresh = false,
         onClick = onClick,
+        onLongClick = onLongClick,
         onBookmarkClick = onBookmarkClick,
-        onShareClick = onShareClick,
-        primaryInfoSection = {
-            TextWithStartIcon(
-                icon = Res.drawable.ic_time_24,
-                text = article.publishedAt.timeAgo()
-            )
-        },
-        tags = article.tags
+        onMoreClick = onLongClick,
+        metaContent = {},
     )
 }
 
-@OptIn(ExperimentalTime::class)
-@Preview()
+@Preview
 @Composable
-fun HackerNewsItemPreview() {
+private fun HackerNoonItemPreview() {
     HackertabTheme {
         HackerNoonItem(
             article = Article(
-                id = "similique",
-                title = "React is the best web framework ever React is the best web framework ever",
-                url = "https://www.google.com/#q=propriae",
-                publishedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                tags = listOf(),
+                id = "hn_1",
+                title = "Why your AI startup needs a moat by next week",
+                url = "https://hackernoon.com/example",
+                publishedAt = LocalDateTime(2025, 5, 8, 7, 45, 0),
+                tags = listOf("ai", "startups"),
                 commentsCount = 0,
                 reactions = 0,
                 canonicalUrl = null,
                 imageUrl = null,
-                source = null
+                source = Source.HACKER_NOON,
             ),
             onClick = {},
             onBookmarkClick = {},
-            onShareClick = {}
+            onShareClick = {},
         )
     }
 }

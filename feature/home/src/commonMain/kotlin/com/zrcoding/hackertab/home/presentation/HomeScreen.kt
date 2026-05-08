@@ -1,75 +1,56 @@
 package com.zrcoding.hackertab.home.presentation
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Layers
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddBox
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
-import com.zrcoding.hackertab.design.components.ErrorMsgWithBtn
-import com.zrcoding.hackertab.design.components.Icon
-import com.zrcoding.hackertab.design.resources.Res
-import com.zrcoding.hackertab.design.resources.common_retry
-import com.zrcoding.hackertab.design.resources.common_settings
-import com.zrcoding.hackertab.design.theme.dimension
+import com.zrcoding.hackertab.design.components.HackertabAppBar
+import com.zrcoding.hackertab.design.components.SectionHeader
+import com.zrcoding.hackertab.design.components.SourceRail
+import com.zrcoding.hackertab.design.components.TopicChipStrip
+import com.zrcoding.hackertab.design.components.states.EmptyState
+import com.zrcoding.hackertab.design.components.states.EmptyStateCta
+import com.zrcoding.hackertab.design.components.states.ErrorState
+import com.zrcoding.hackertab.design.components.states.FeedLoadingSkeleton
+import com.zrcoding.hackertab.design.components.states.HackertabSnackbarHost
+import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.domain.models.BaseArticle
 import com.zrcoding.hackertab.domain.models.Conference
 import com.zrcoding.hackertab.domain.models.GithubRepo
 import com.zrcoding.hackertab.domain.models.ProductHunt
 import com.zrcoding.hackertab.domain.models.Source
-import com.zrcoding.hackertab.domain.models.Topic
+import com.zrcoding.hackertab.domain.models.ThemeMode
 import com.zrcoding.hackertab.home.presentation.cards.conferences.ConferenceItem
 import com.zrcoding.hackertab.home.presentation.cards.devto.DevtoItem
 import com.zrcoding.hackertab.home.presentation.cards.freecodecamp.FreeCodeCampItem
@@ -84,10 +65,12 @@ import com.zrcoding.hackertab.home.presentation.cards.producthunt.ProductHuntIte
 import com.zrcoding.hackertab.home.presentation.cards.reddit.RedditItem
 import com.zrcoding.hackertab.home.presentation.utils.ShareData
 import com.zrcoding.hackertab.home.presentation.utils.ShareManager
-import kotlinx.collections.immutable.ImmutableList
-import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+
+// TODO Wave 4: register HomeRoute + FocusedFeedRoute + WebViewRoute + LongPressActionSheet
+//  in MainNavHost. For now these routes use the existing navigation wiring.
 
 @Composable
 fun HomeRoute(
@@ -97,95 +80,53 @@ fun HomeRoute(
     onNavigateToBookmarks: () -> Unit,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
-    val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
+    val viewState by viewModel.viewState.collectAsStateWithLifecycle()
     val shareManager: ShareManager = koinInject()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    // TODO Wave 4: drawer removed during M3 migration; revisit nav. The
-    //  HomeScreenDrawer/HomeScreenDrawerItem composables and rememberDrawerState
-    //  scaffolding were dropped here so HomeScreen can compile against M3.
-    //  onNavigateToBookmarks is intentionally retained for Wave 4 wiring.
-    @Suppress("UNUSED_PARAMETER")
-    val unusedBookmarksRoute = onNavigateToBookmarks
-
-    Scaffold(
-        topBar = {
-            HomeScreenTopAppBar(
-                enabledSources = viewState.enabledSources,
-                selectedSource = viewState.selectedSource,
-                canAddSource = viewState.canAddSource,
-                onSourceSelected = viewModel::onSourceSelected,
-                onNavigationBtnClick = {
-                    // TODO Wave 4: re-add drawer / nav opening behaviour.
-                },
-                onAddSourceClick = onNavigateToSourcesSettings,
-            )
-        },
-    ) {
-        Column(
-            modifier = Modifier.padding(it),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(MaterialTheme.dimension.space8))
-            if (viewState.selectedSource?.supportsFilters == true && viewState.enabledTopics.isNotEmpty()) {
-                HomeScreenTopicsFilter(
-                    enabledTopics = viewState.enabledTopics,
-                    selectedTopic = viewState.selectedTopic,
-                    canAddTopic = viewState.canAddTopic,
-                    onTopicSelected = viewModel::onTopicSelected,
-                    onAddTopicClick = onNavigateToTopicsSettings
-                )
-            }
-            if (viewState.isLoading) {
-                CircularProgressIndicator()
-            }
-            when {
-                viewState.articles.isNotEmpty() -> LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
-                    contentPadding = PaddingValues(bottom = MaterialTheme.dimension.space40)
-                ) {
-                    items(
-                        items = viewState.articles,
-                        key = { item -> item.id }
-                    ) { item: BaseArticle ->
-                        item.ToListItem(
-                            onClick = { onNavigateToWebView(item.url) },
-                            onBookmarkClick = { viewModel.toggleBookmark(item) },
-                            onShareClick = {
-                                shareManager.share(
-                                    ShareData(
-                                        title = item.title,
-                                        url = item.url
-                                    )
-                                )
-                            }
-                        )
-                        HorizontalDivider()
-                    }
-                }
-
-                viewState.error != null -> ErrorMsgWithBtn(
-                    modifier = Modifier.fillMaxSize(),
-                    text = viewState.error,
-                    btnText = if (viewState.canRefresh) Res.string.common_retry else null,
-                    onBtnClicked = viewModel::onRefreshBtnClick
-                )
-
-                viewState.enabledSources.isEmpty() && viewState.isLoading.not() -> ErrorMsgWithBtn(
-                    modifier = Modifier.fillMaxSize(),
-                    text = "You didn't follow any source, you can follow your favorite sources in settings !!",
-                    btnText = Res.string.common_settings,
-                    onBtnClicked = onNavigateToSourcesSettings
-                )
-            }
+    // Auto-select first article on tablets
+    val isTabletSize = LocalIsTabletSize.current
+    LaunchedEffect(viewState.allArticles, isTabletSize) {
+        if (isTabletSize && viewState.allArticles.isNotEmpty()) {
+            onNavigateToWebView(viewState.allArticles.first().url)
         }
     }
-    // Auto-select first article when articles are loaded (only on tablets)
-    val isTabletSize = LocalIsTabletSize.current
-    LaunchedEffect(viewState.articles, isTabletSize) {
-        if (isTabletSize && viewState.articles.isNotEmpty()) {
-            onNavigateToWebView(viewState.articles.first().url)
-        }
+
+    HomeScreen(
+        viewState = viewState,
+        snackbarHostState = snackbarHostState,
+        onSourceSelected = viewModel::onSourceSelected,
+        onTopicSelected = viewModel::onTopicSelected,
+        onRefresh = viewModel::refresh,
+        onNavigateToSourcesSettings = onNavigateToSourcesSettings,
+        onNavigateToTopicsSettings = onNavigateToTopicsSettings,
+        onCardClick = { article ->
+            viewModel.markRead(article.id)
+            onNavigateToWebView(article.url)
+        },
+        onBookmarkClick = viewModel::toggleBookmark,
+        onShareClick = { article ->
+            shareManager.share(ShareData(title = article.title, url = article.url))
+        },
+        onLongPress = viewModel::onLongPress,
+    )
+
+    // Long-press action sheet
+    val longPressed = viewState.longPressedArticle
+    if (longPressed != null) {
+        LongPressActionSheet(
+            article = longPressed,
+            isBookmarked = longPressed.bookmarked,
+            onDismiss = viewModel::dismissLongPressSheet,
+            onSave = { viewModel.toggleBookmark(longPressed) },
+            onShare = {
+                shareManager.share(ShareData(title = longPressed.title, url = longPressed.url))
+            },
+            onOpenInBrowser = {
+                viewModel.markRead(longPressed.id)
+                onNavigateToWebView(longPressed.url)
+            },
+        )
     }
 
     TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.HOME)
@@ -193,246 +134,325 @@ fun HomeRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeScreenTopAppBar(
-    enabledSources: ImmutableList<Source>,
-    selectedSource: Source?,
-    canAddSource: Boolean,
-    onSourceSelected: (Source) -> Unit,
-    onNavigationBtnClick: () -> Unit,
-    onAddSourceClick: () -> Unit,
+internal fun HomeScreen(
+    viewState: HomeViewState,
+    snackbarHostState: SnackbarHostState,
+    onSourceSelected: (String) -> Unit,
+    onTopicSelected: (com.zrcoding.hackertab.domain.models.Topic) -> Unit,
+    onRefresh: () -> Unit,
+    onNavigateToSourcesSettings: () -> Unit,
+    onNavigateToTopicsSettings: () -> Unit,
+    onCardClick: (BaseArticle) -> Unit,
+    onBookmarkClick: (BaseArticle) -> Unit,
+    onShareClick: (BaseArticle) -> Unit,
+    onLongPress: (BaseArticle) -> Unit,
 ) {
-    var expanded by remember { mutableStateOf(false) }
-    TopAppBar(
-        modifier = Modifier.heightIn(56.dp),
-        title = {
-            if (enabledSources.isNotEmpty()) {
-                Box {
-                    Row(
-                        modifier = Modifier.clickable(
-                            onClick = { expanded = true },
-                            role = Role.DropdownList
-                        ),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        selectedSource?.let {
-                            Image(
-                                modifier = Modifier.size(MaterialTheme.dimension.space24),
-                                painter = painterResource(it.Icon().first),
-                                contentScale = ContentScale.FillBounds,
-                                contentDescription = null,
-                                colorFilter = if (it.Icon().second == Color.Unspecified) {
-                                    null
-                                } else ColorFilter.tint(it.Icon().second)
-                            )
-                            Spacer(modifier = Modifier.width(MaterialTheme.dimension.space4))
-                        }
-                        Text(
-                            text = selectedSource?.label.orEmpty(),
-                            color = MaterialTheme.colorScheme.onBackground,
-                            style = MaterialTheme.typography.headlineSmall,
-                            overflow = TextOverflow.Visible,
-                            maxLines = 1
-                        )
-                        Icon(
-                            imageVector = Icons.Filled.ArrowDropDown,
-                            contentDescription = "Select source",
-                            tint = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false },
-                    ) {
-                        enabledSources.forEach { source ->
-                            DropdownMenuItem(
-                                text = {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        source.Icon(size = MaterialTheme.dimension.space24)
-                                        Spacer(modifier = Modifier.width(MaterialTheme.dimension.space4))
-                                        Text(text = source.label)
-                                    }
-                                },
-                                onClick = {
-                                    expanded = false
-                                    onSourceSelected(source)
-                                }
-                            )
-                        }
-                        if (canAddSource) {
-                            DropdownMenuItem(
-                                text = {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Icon(
-                                            imageVector = Icons.Default.AddBox,
-                                            contentDescription = "Select source",
-                                        )
-                                        Spacer(modifier = Modifier.width(MaterialTheme.dimension.space4))
-                                        Text(
-                                            text = "Add source",
-                                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f)
-                                        )
-                                    }
-                                },
-                                onClick = {
-                                    expanded = false
-                                    onAddSourceClick()
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-        },
-        navigationIcon = {
-            IconButton(
-                onClick = onNavigationBtnClick,
-                modifier = Modifier.background(
-                    color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
-                    shape = CircleShape
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = "Navigation button to show drawer",
-                    tint = MaterialTheme.colorScheme.onBackground
-                )
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background
-        )
-    )
-}
+    val pullRefreshState = rememberPullToRefreshState()
 
-@Composable
-private fun HomeScreenTopicsFilter(
-    enabledTopics: ImmutableList<Topic>,
-    selectedTopic: Topic?,
-    canAddTopic: Boolean,
-    onTopicSelected: (Topic) -> Unit,
-    onAddTopicClick: () -> Unit,
-) {
-    LazyRow(
-        modifier = Modifier.fillMaxWidth().padding(bottom = MaterialTheme.dimension.space4),
-        contentPadding = PaddingValues(horizontal = MaterialTheme.dimension.space16),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
-    ) {
-        items(enabledTopics) { topic ->
-            val selected = selectedTopic == topic
-            FilterChip(
-                selected = selected,
-                onClick = { onTopicSelected(topic) },
-                shape = MaterialTheme.shapes.medium,
-                label = { Text(text = topic.label) },
-                colors = FilterChipDefaults.filterChipColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    labelColor = MaterialTheme.colorScheme.onBackground,
-                    selectedContainerColor = MaterialTheme.colorScheme.onBackground,
-                    selectedLabelColor = MaterialTheme.colorScheme.background,
-                ),
+    Scaffold(
+        topBar = {
+            HackertabAppBar(
+                wordmark = true,
+                trailing = {
+                    // Issue 14: no search icon in the feed AppBar
+                    IconButton(onClick = onRefresh) {
+                        Icon(
+                            imageVector = Icons.Outlined.Refresh,
+                            contentDescription = "Refresh feed",
+                            tint = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
+                },
             )
-        }
-        if (canAddTopic) {
-            item {
-                IconButton(
-                    onClick = onAddTopicClick,
-                    modifier = Modifier.background(
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                        shape = CircleShape
-                    ).size(32.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add topic",
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
+        },
+        snackbarHost = { HackertabSnackbarHost(hostState = snackbarHostState) },
+        // TODO Wave 4: bottomBar = { HackertabBottomNav(...) }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+        ) {
+            // Source rail — Issue 11: plain "All" (no ★), SourceRail handles it
+            SourceRail(
+                sources = viewState.enabledSources,
+                activeSourceId = viewState.activeSourceId,
+                onSelect = onSourceSelected,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            // Topic chip strip — shown for "All" mode and for filterable sources
+            if (viewState.showTopicStrip && viewState.enabledTopics.isNotEmpty()) {
+                TopicChipStrip(
+                    topics = viewState.enabledTopics,
+                    activeTopicId = viewState.selectedTopic?.value,
+                    onSelect = onTopicSelected,
+                    canAddTopic = viewState.canAddTopic,
+                    onAddTopic = onNavigateToTopicsSettings,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Spacer(Modifier.height(4.dp))
+            }
+
+            // Body
+            PullToRefreshBox(
+                isRefreshing = viewState.isLoading,
+                onRefresh = onRefresh,
+                state = pullRefreshState,
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                when {
+                    viewState.isLoading -> {
+                        FeedLoadingSkeleton(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(top = 8.dp),
+                        )
+                    }
+
+                    viewState.error != null -> {
+                        ErrorState(
+                            onRetry = onRefresh,
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                    }
+
+                    viewState.enabledSources.isEmpty() -> {
+                        EmptyState(
+                            icon = Icons.Outlined.Layers,
+                            title = "No sources selected",
+                            body = "You haven't followed any source yet. Add some to start your feed.",
+                            primaryCta = EmptyStateCta(label = "Add sources") {
+                                onNavigateToSourcesSettings()
+                            },
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                    }
+
+                    viewState.articlesByDay.isEmpty() -> {
+                        EmptyState(
+                            icon = Icons.Outlined.Layers,
+                            title = "Nothing here yet",
+                            body = "No items match your current filter. Try clearing the filter or switching to a different source.",
+                            primaryCta = EmptyStateCta(label = "See all sources") {
+                                onSourceSelected("all")
+                            },
+                            secondaryCta = viewState.selectedTopic?.let {
+                                EmptyStateCta(label = "Clear filter") {
+                                    // Reselect first topic to reset
+                                    viewState.enabledTopics.firstOrNull()?.let { t ->
+                                        onTopicSelected(t)
+                                    }
+                                }
+                            },
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                    }
+
+                    else -> {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(
+                                top = 8.dp,
+                                bottom = 80.dp,   // TODO Wave 4: adjust for actual BottomNav height
+                            ),
+                        ) {
+                            DayBucket.entries.forEach { bucket ->
+                                val items = viewState.articlesByDay[bucket] ?: return@forEach
+                                if (items.isEmpty()) return@forEach
+
+                                item(key = "header_${bucket.name}") {
+                                    SectionHeader(label = bucket.label)
+                                }
+
+                                feedItems(
+                                    items = items,
+                                    seenIds = viewState.seenArticleIds,
+                                    lastVisitedEpoch = 0L, // TODO: pass from viewState once surfaced
+                                    onCardClick = onCardClick,
+                                    onBookmarkClick = onBookmarkClick,
+                                    onShareClick = onShareClick,
+                                    onLongPress = onLongPress,
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 }
 
+/** LazyListScope extension to emit feed cards for a bucket's item list. */
+private fun LazyListScope.feedItems(
+    items: List<BaseArticle>,
+    seenIds: List<String>,
+    lastVisitedEpoch: Long,
+    onCardClick: (BaseArticle) -> Unit,
+    onBookmarkClick: (BaseArticle) -> Unit,
+    onShareClick: (BaseArticle) -> Unit,
+    onLongPress: (BaseArticle) -> Unit,
+) {
+    items(
+        items = items,
+        key = { it.id },
+    ) { article ->
+        val isRead = seenIds.contains(article.id)
+        article.ToFeedCard(
+            isRead = isRead,
+            onClick = { onCardClick(article) },
+            onBookmarkClick = { onBookmarkClick(article) },
+            onShareClick = { onShareClick(article) },
+            onLongClick = { onLongPress(article) },
+        )
+    }
+}
+
 @Composable
-private fun BaseArticle.ToListItem(
+private fun BaseArticle.ToFeedCard(
+    isRead: Boolean,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
-    onShareClick: () -> Unit
+    onShareClick: () -> Unit,
+    onLongClick: () -> Unit,
 ) {
     when (this) {
         is GithubRepo -> GithubItem(
             post = this,
+            isRead = isRead,
             onClick = onClick,
             onBookmarkClick = onBookmarkClick,
-            onShareClick = onShareClick
+            onShareClick = onShareClick,
+            onLongClick = onLongClick,
         )
         is Conference -> ConferenceItem(
             conf = this,
+            isRead = isRead,
             onClick = onClick,
             onBookmarkClick = onBookmarkClick,
-            onShareClick = onShareClick
+            onShareClick = onShareClick,
+            onLongClick = onLongClick,
         )
         is ProductHunt -> ProductHuntItem(
             product = this,
+            isRead = isRead,
             onClick = onClick,
             onBookmarkClick = onBookmarkClick,
-            onShareClick = onShareClick
+            onShareClick = onShareClick,
+            onLongClick = onLongClick,
         )
-        is Article -> when(this.source) {
+        is Article -> when (this.source) {
             Source.FREE_CODE_CAMP -> FreeCodeCampItem(
-                article = this,
-                onClick = onClick,
-                onBookmarkClick = onBookmarkClick,
-                onShareClick = onShareClick
+                article = this, isRead = isRead,
+                onClick = onClick, onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick, onLongClick = onLongClick,
             )
             Source.HACKER_NEWS -> HackerNewsItem(
-                article = this,
-                onClick = onClick,
-                onBookmarkClick = onBookmarkClick,
-                onShareClick = onShareClick
+                article = this, isRead = isRead,
+                onClick = onClick, onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick, onLongClick = onLongClick,
             )
             Source.HACKER_NOON -> HackerNoonItem(
-                article = this,
-                onClick = onClick,
-                onBookmarkClick = onBookmarkClick,
-                onShareClick = onShareClick
+                article = this, isRead = isRead,
+                onClick = onClick, onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick, onLongClick = onLongClick,
             )
             Source.REDDIT -> RedditItem(
-                article = this,
-                onClick = onClick,
-                onBookmarkClick = onBookmarkClick,
-                onShareClick = onShareClick
+                article = this, isRead = isRead,
+                onClick = onClick, onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick, onLongClick = onLongClick,
             )
             Source.DEVTO -> DevtoItem(
-                article = this,
-                onClick = onClick,
-                onBookmarkClick = onBookmarkClick,
-                onShareClick = onShareClick
+                article = this, isRead = isRead,
+                onClick = onClick, onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick, onLongClick = onLongClick,
             )
             Source.LOBSTERS -> LobstersItem(
-                article = this,
-                onClick = onClick,
-                onBookmarkClick = onBookmarkClick,
-                onShareClick = onShareClick
+                article = this, isRead = isRead,
+                onClick = onClick, onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick, onLongClick = onLongClick,
             )
             Source.HASH_NODE -> HashnodeItem(
-                article = this,
-                onClick = onClick,
-                onBookmarkClick = onBookmarkClick,
-                onShareClick = onShareClick
+                article = this, isRead = isRead,
+                onClick = onClick, onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick, onLongClick = onLongClick,
             )
             Source.INDIE_HACKERS -> IndieHackersItem(
-                article = this,
-                onClick = onClick,
-                onBookmarkClick = onBookmarkClick,
-                onShareClick = onShareClick
+                article = this, isRead = isRead,
+                onClick = onClick, onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick, onLongClick = onLongClick,
             )
             Source.MEDIUM -> MediumItem(
-                article = this,
-                onClick = onClick,
-                onBookmarkClick = onBookmarkClick,
-                onShareClick = onShareClick
+                article = this, isRead = isRead,
+                onClick = onClick, onBookmarkClick = onBookmarkClick,
+                onShareClick = onShareClick, onLongClick = onLongClick,
             )
-            else -> {}
+            else -> {} // Source types handled by their own model type above
         }
+    }
+}
+
+// -------------------------------------------------------------------------
+// Previews
+// -------------------------------------------------------------------------
+
+@Preview
+@Composable
+private fun HomeScreenLightPreview() {
+    HackertabTheme(themeMode = ThemeMode.LIGHT) {
+        HomeScreen(
+            viewState = HomeViewState(
+                activeSourceId = "all",
+                enabledSources = kotlinx.collections.immutable.persistentListOf(
+                    Source.GITHUB, Source.HACKER_NEWS, Source.DEVTO,
+                ),
+                enabledTopics = kotlinx.collections.immutable.persistentListOf(
+                    com.zrcoding.hackertab.domain.models.Topic(
+                        value = "kotlin", label = "Kotlin", category = "mobile"
+                    ),
+                ),
+                selectedTopic = com.zrcoding.hackertab.domain.models.Topic(
+                    value = "kotlin", label = "Kotlin", category = "mobile"
+                ),
+                isLoading = false,
+                articlesByDay = kotlinx.collections.immutable.persistentMapOf(),
+            ),
+            snackbarHostState = remember { SnackbarHostState() },
+            onSourceSelected = {},
+            onTopicSelected = {},
+            onRefresh = {},
+            onNavigateToSourcesSettings = {},
+            onNavigateToTopicsSettings = {},
+            onCardClick = {},
+            onBookmarkClick = {},
+            onShareClick = {},
+            onLongPress = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HomeScreenLoadingDarkPreview() {
+    HackertabTheme(themeMode = ThemeMode.DARK) {
+        HomeScreen(
+            viewState = HomeViewState(
+                activeSourceId = "all",
+                enabledSources = kotlinx.collections.immutable.persistentListOf(
+                    Source.GITHUB, Source.HACKER_NEWS,
+                ),
+                isLoading = true,
+            ),
+            snackbarHostState = remember { SnackbarHostState() },
+            onSourceSelected = {},
+            onTopicSelected = {},
+            onRefresh = {},
+            onNavigateToSourcesSettings = {},
+            onNavigateToTopicsSettings = {},
+            onCardClick = {},
+            onBookmarkClick = {},
+            onShareClick = {},
+            onLongPress = {},
+        )
     }
 }

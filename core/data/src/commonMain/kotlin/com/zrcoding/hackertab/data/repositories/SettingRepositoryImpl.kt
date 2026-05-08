@@ -114,6 +114,18 @@ class SettingRepositoryImpl(
 
     // endregion
 
+    // region Wave 3G — last visited timestamp (epoch millis, for "new since last visit" badges)
+
+    override suspend fun getLastVisitedAt(): Long {
+        return dataStore.data.map { it[SettingsKeys.KEY_LAST_VISITED_AT] ?: 0L }.firstOrNull() ?: 0L
+    }
+
+    override suspend fun setLastVisitedAt(epochMillis: Long) {
+        dataStore.edit { it[SettingsKeys.KEY_LAST_VISITED_AT] = epochMillis }
+    }
+
+    // endregion
+
     private fun getSavedIds(key: Preferences.Key<String>): Flow<List<String>> {
         return dataStore.data.map { it.fromSavedJsonToList(key) }
     }

@@ -38,4 +38,9 @@ interface SettingRepository {
 
     // Wave 3I — coachmark replay (Issue 15)
     suspend fun resetCoachmarks()
+
+    // Wave 3G — last visited timestamp for "new since last visit" badges
+    suspend fun getLastVisitedAt(): Long
+
+    suspend fun setLastVisitedAt(epochMillis: Long)
 }

@@ -1,82 +1,69 @@
 package com.zrcoding.hackertab.home.presentation.cards.indiehackers
 
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.zrcoding.hackertab.design.components.TextWithStartIcon
+import com.zrcoding.hackertab.design.components.cards.ArticleCard
 import com.zrcoding.hackertab.design.resources.Res
-import com.zrcoding.hackertab.design.resources.comments
-import com.zrcoding.hackertab.design.resources.ic_arrow_drop_up
 import com.zrcoding.hackertab.design.resources.ic_comment
-import com.zrcoding.hackertab.design.resources.ic_time_24
-import com.zrcoding.hackertab.design.resources.score
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.Article
-import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
+import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.home.presentation.cards.MetaDotText
+import com.zrcoding.hackertab.home.presentation.cards.MetaIconText
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.compose.resources.stringResource
+import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalLayoutApi::class)
+private val IndieHackersBlue = Color(0xFF4799EB)
+
+/**
+ * IndieHackers feed card. Meta: score (blue dot) · comments.
+ */
 @Composable
 fun IndieHackersItem(
     article: Article,
+    isRead: Boolean = false,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
-    onShareClick: () -> Unit
+    onShareClick: () -> Unit,
+    onLongClick: () -> Unit = {},
 ) {
-    with(article) {
-        SourceItemTemplate(
-            title = title,
-            primaryInfoSection = {
-                TextWithStartIcon(
-                    text = stringResource( Res.string.score, reactions),
-                    textColor = Color(0xFF4799eb),
-                    icon = Res.drawable.ic_arrow_drop_up,
-                    tint = Color(0xFF4799eb)
-                )
-                TextWithStartIcon(
-                    text = publishedAt.timeAgo(),
-                    icon = Res.drawable.ic_time_24,
-                )
-                TextWithStartIcon(
-                    text = stringResource( Res.string.comments, commentsCount),
-                    icon = Res.drawable.ic_comment,
-                )
-            },
-            isBookmarked = article.bookmarked,
-            onBookmarkClick = onBookmarkClick,
-            onShareClick = onShareClick,
-            onClick = onClick
-        )
-    }
+    ArticleCard(
+        article = article,
+        timeAgo = article.publishedAt.timeAgo(),
+        isBookmarked = article.bookmarked,
+        isFresh = false,
+        onClick = onClick,
+        onLongClick = onLongClick,
+        onBookmarkClick = onBookmarkClick,
+        onMoreClick = onLongClick,
+        metaContent = {
+            MetaDotText(text = "${article.reactions} pts", color = IndieHackersBlue)
+            MetaIconText(icon = Res.drawable.ic_comment, text = "${article.commentsCount}")
+        },
+    )
 }
 
-@OptIn(ExperimentalTime::class)
-@Preview()
+@Preview
 @Composable
 private fun IndieHackersItemPreview() {
     HackertabTheme {
         IndieHackersItem(
-            article =  Article(
-                id = "similique",
-                title = "React is the best web framework ever React is the best web framework ever",
-                url = "https://www.google.com/#q=propriae",
-                publishedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                tags = listOf(),
-                commentsCount = 0,
-                reactions = 0,
+            article = Article(
+                id = "ih_1",
+                title = "How I bootstrapped a SaaS to $10k MRR in 6 months",
+                url = "https://www.indiehackers.com/post/example",
+                publishedAt = LocalDateTime(2025, 5, 8, 12, 0, 0),
+                tags = listOf("saas", "bootstrap"),
+                commentsCount = 31,
+                reactions = 92,
                 canonicalUrl = null,
                 imageUrl = null,
-                source = null
+                source = Source.INDIE_HACKERS,
             ),
             onClick = {},
             onBookmarkClick = {},
-            onShareClick = {}
+            onShareClick = {},
         )
     }
 }

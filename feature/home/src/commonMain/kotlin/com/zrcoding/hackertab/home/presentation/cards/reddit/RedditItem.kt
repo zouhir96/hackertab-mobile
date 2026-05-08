@@ -1,95 +1,67 @@
 package com.zrcoding.hackertab.home.presentation.cards.reddit
 
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
-import com.zrcoding.hackertab.design.components.TextWithStartIcon
+import com.zrcoding.hackertab.design.components.cards.ArticleCard
 import com.zrcoding.hackertab.design.resources.Res
-import com.zrcoding.hackertab.design.resources.comments
 import com.zrcoding.hackertab.design.resources.ic_comment
-import com.zrcoding.hackertab.design.resources.ic_ellipse
-import com.zrcoding.hackertab.design.resources.ic_time_24
-import com.zrcoding.hackertab.design.resources.score
-import com.zrcoding.hackertab.design.resources.subreddit
-import com.zrcoding.hackertab.design.theme.SourceReddit
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.SourceReddit
 import com.zrcoding.hackertab.domain.models.Article
-import com.zrcoding.hackertab.home.presentation.cards.SourceItemTemplate
+import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.home.presentation.cards.MetaDotText
+import com.zrcoding.hackertab.home.presentation.cards.MetaIconText
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.compose.resources.stringResource
+import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalLayoutApi::class)
+/**
+ * Reddit feed card. Meta: score (brand-orange dot) · comments.
+ */
 @Composable
 fun RedditItem(
     article: Article,
+    isRead: Boolean = false,
     onClick: () -> Unit,
     onBookmarkClick: () -> Unit,
-    onShareClick: () -> Unit
+    onShareClick: () -> Unit,
+    onLongClick: () -> Unit = {},
 ) {
-    SourceItemTemplate(
-        title = article.title,
-        primaryInfoSection = {
-            TextWithStartIcon(
-                icon = Res.drawable.ic_time_24,
-                text = article.publishedAt.timeAgo()
-            )
-            TextWithStartIcon(
-                text = stringResource(Res.string.score, article.reactions),
-                textColor = SourceReddit,
-                icon = Res.drawable.ic_ellipse,
-                tint = SourceReddit
-            )
-            TextWithStartIcon(
-                text = stringResource(Res.string.comments, article.commentsCount),
-                icon = Res.drawable.ic_comment
-            )
-        },
-        tags = getSubReddit(article.url)?.let {
-            listOf(stringResource(Res.string.subreddit, it))
-        },
+    ArticleCard(
+        article = article,
+        timeAgo = article.publishedAt.timeAgo(),
         isBookmarked = article.bookmarked,
+        isFresh = false,
+        onClick = onClick,
+        onLongClick = onLongClick,
         onBookmarkClick = onBookmarkClick,
-        onShareClick = onShareClick,
-        onClick = onClick
+        onMoreClick = onLongClick,
+        metaContent = {
+            MetaDotText(text = "${article.reactions} pts", color = SourceReddit)
+            MetaIconText(icon = Res.drawable.ic_comment, text = "${article.commentsCount}")
+        },
     )
 }
 
-private fun getSubReddit(url: String): String? {
-    val parts = url.split("/")
-    val rIndex = parts.indexOfFirst { it.equals("r", ignoreCase = true) }
-
-    return if (rIndex != -1 && parts.size > rIndex + 1) {
-        parts[rIndex + 1]
-    } else {
-        null
-    }
-}
-
-@OptIn(ExperimentalTime::class)
-@Preview()
+@Preview
 @Composable
-fun RedditItemPreview() {
+private fun RedditItemPreview() {
     HackertabTheme {
         RedditItem(
             article = Article(
-                id = "similique",
-                title = "React is the best web framework ever React is the best web framework ever",
-                url = "https://www.google.com/#q=propriae",
-                publishedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                tags = listOf(),
-                commentsCount = 0,
-                reactions = 0,
+                id = "rd_1",
+                title = "Compose Multiplatform 1.9 — anyone else seeing iOS scrolling jank?",
+                url = "https://reddit.com/r/Kotlin/example",
+                publishedAt = LocalDateTime(2025, 5, 8, 14, 0, 0),
+                tags = listOf("kotlin", "compose"),
+                commentsCount = 47,
+                reactions = 256,
                 canonicalUrl = null,
                 imageUrl = null,
-                source = null
+                source = Source.REDDIT,
             ),
             onClick = {},
             onBookmarkClick = {},
-            onShareClick = {}
+            onShareClick = {},
         )
     }
 }

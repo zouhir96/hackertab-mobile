@@ -1,9 +1,11 @@
 package com.zrcoding.hackertab.data
 
+import com.zrcoding.hackertab.data.repositories.AggregatedArticleRepositoryImpl
 import com.zrcoding.hackertab.data.repositories.ArticleRepositoryImpl
 import com.zrcoding.hackertab.data.repositories.BookmarkRepositoryImpl
 import com.zrcoding.hackertab.data.repositories.SettingRepositoryImpl
 import com.zrcoding.hackertab.database.di.databaseModule
+import com.zrcoding.hackertab.domain.repositories.AggregatedArticleRepository
 import com.zrcoding.hackertab.domain.repositories.ArticleRepository
 import com.zrcoding.hackertab.domain.repositories.BookmarkRepository
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
@@ -17,6 +19,8 @@ val dataModule = module {
     singleOf(::ArticleRepositoryImpl) bind ArticleRepository::class
     singleOf(::SettingRepositoryImpl) bind SettingRepository::class
     singleOf(::BookmarkRepositoryImpl) bind BookmarkRepository::class
+    // Wave 3G — aggregated feed (parallel fan-out across all enabled sources)
+    singleOf(::AggregatedArticleRepositoryImpl) bind AggregatedArticleRepository::class
 }
 
 /**
