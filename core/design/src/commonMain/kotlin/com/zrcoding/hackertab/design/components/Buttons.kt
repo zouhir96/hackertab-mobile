@@ -11,7 +11,7 @@ import com.zrcoding.hackertab.design.components.buttons.PrimaryButton as Primary
 /**
  * Wave 1 → Wave 2 shim. The canonical implementation now lives in
  * `com.zrcoding.hackertab.design.components.buttons.PrimaryButton`. This
- * top-level overload is kept so legacy `feature/*` call-sites (and the rest
+ * top-level overload is kept so legacy feature-module call-sites (and the rest
  * of the v4 migration) continue to compile against the existing
  * `PrimaryButton(modifier = …, text = …, …)` shape.
  *
