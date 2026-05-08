@@ -1,68 +1,80 @@
 package com.zrcoding.hackertab.bookmarks.presentation
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BookmarkRemove
+import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.Icon
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.design.components.HackertabAppBar
+import com.zrcoding.hackertab.design.components.SectionHeader
+import com.zrcoding.hackertab.design.components.cards.BookmarkCard
+import com.zrcoding.hackertab.design.components.inputs.SegmentOption
+import com.zrcoding.hackertab.design.components.inputs.SegmentedControl
+import com.zrcoding.hackertab.design.components.states.EmptyState
+import com.zrcoding.hackertab.design.components.states.EmptyStateCta
+import com.zrcoding.hackertab.design.components.states.FeedLoadingSkeleton
 import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
-import com.zrcoding.hackertab.design.components.Icon
-import com.zrcoding.hackertab.design.components.TextWithStartIcon
-import com.zrcoding.hackertab.design.resources.Res
-import com.zrcoding.hackertab.design.resources.ic_time_24
+import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.BookmarkedArticle
-import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.domain.models.ThemeMode
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.until
-import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.material3.MaterialTheme
 import kotlin.time.Clock
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
 import kotlin.time.toDuration
+
+// ---------------------------------------------------------------------------
+// Route
+// ---------------------------------------------------------------------------
 
 @Composable
 fun BookmarksRoute(
     onNavigateToWebView: (String) -> Unit,
-    viewModel: BookmarksViewModel = koinViewModel()
+    // TODO Wave 4: wire up onNavigateToSearch in MainNavHost when BookmarksSearchScreen is registered.
+    onNavigateToSearch: () -> Unit = {},
+    viewModel: BookmarksViewModel = org.koin.compose.viewmodel.koinViewModel(),
 ) {
     val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
     BookmarksScreen(
         viewState = viewState,
-        onClick = onNavigateToWebView,
-        onRemoveBookmark = viewModel::removeBookmark
+        onBookmarkClick = { bookmark ->
+            viewModel.markRead(bookmark.id)
+            onNavigateToWebView(bookmark.url)
+        },
+        onRemoveBookmark = viewModel::removeBookmark,
+        onGroupByChanged = viewModel::onGroupByChanged,
+        onSearchClick = onNavigateToSearch,
     )
 
-    // Auto-select first bookmark when bookmarks are loaded (only on tablets)
+    // Auto-select first bookmark on tablets
     val isTabletSize = LocalIsTabletSize.current
     LaunchedEffect(viewState.bookmarks, isTabletSize) {
         if (isTabletSize && viewState.bookmarks.isNotEmpty()) {
@@ -72,119 +84,199 @@ fun BookmarksRoute(
     TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.BOOKMARKS)
 }
 
+// ---------------------------------------------------------------------------
+// Screen
+// ---------------------------------------------------------------------------
+
+private val GROUP_OPTIONS = persistentListOf(
+    SegmentOption(id = GroupBy.ALL.name, label = "All"),
+    SegmentOption(id = GroupBy.BY_SOURCE.name, label = "By source"),
+    SegmentOption(id = GroupBy.BY_DATE.name, label = "By date"),
+)
+
 @Composable
 fun BookmarksScreen(
     viewState: BookmarksViewState,
-    onClick: (String) -> Unit,
-    onRemoveBookmark: (String) -> Unit
+    onBookmarkClick: (BookmarkedArticle) -> Unit,
+    onRemoveBookmark: (String) -> Unit,
+    onGroupByChanged: (GroupBy) -> Unit,
+    onSearchClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Column(modifier = modifier.fillMaxSize()) {
+        HackertabAppBar(
+            title = "Bookmarks",
+            subtitle = "${viewState.totalCount} saved · ${viewState.unreadCount} unread",
+            trailing = {
+                IconButton(onClick = onSearchClick) {
+                    Icon(
+                        imageVector = Icons.Outlined.Search,
+                        contentDescription = "Search bookmarks",
+                    )
+                }
+            },
+        )
+
+        SegmentedControl(
+            options = GROUP_OPTIONS,
+            selectedId = viewState.groupBy.name,
+            onSelect = { id -> onGroupByChanged(GroupBy.valueOf(id)) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = MaterialTheme.dimension.space16,
+                    vertical = MaterialTheme.dimension.space12,
+                ),
+        )
+
         when {
             viewState.isLoading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
+                FeedLoadingSkeleton(itemCount = 5)
             }
 
             viewState.bookmarks.isEmpty() -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "No bookmarks yet",
-                        style = MaterialTheme.typography.headlineSmall,
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                        textAlign = TextAlign.Center
-                    )
-                }
+                EmptyState(
+                    icon = Icons.Outlined.BookmarkBorder,
+                    title = "No bookmarks yet",
+                    body = "Tap the bookmark icon on any card to save it here.",
+                    primaryCta = EmptyStateCta(label = "Browse Today", onClick = {}),
+                )
             }
 
             else -> {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
-                    contentPadding = PaddingValues(bottom = MaterialTheme.dimension.space40)
-                ) {
-                    items(
-                        items = viewState.bookmarks,
-                        key = { it.id }
-                    ) { bookmark ->
-                        BookmarkItem(
-                            bookmark = bookmark,
-                            onClick = { onClick(bookmark.url) },
-                            onRemoveBookmark = { onRemoveBookmark(bookmark.id) }
+                BookmarksList(
+                    viewState = viewState,
+                    onBookmarkClick = onBookmarkClick,
+                    onRemoveBookmark = onRemoveBookmark,
+                )
+            }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Grouped list
+// ---------------------------------------------------------------------------
+
+@Composable
+private fun BookmarksList(
+    viewState: BookmarksViewState,
+    onBookmarkClick: (BookmarkedArticle) -> Unit,
+    onRemoveBookmark: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(bottom = MaterialTheme.dimension.space40),
+    ) {
+        if (viewState.groupBy == GroupBy.ALL) {
+            // Flat list — no section headers
+            val items = viewState.groupedBookmarks.values
+                .flatten()
+                .toPersistentList()
+            items(
+                items = items,
+                key = { it.id },
+            ) { bookmark ->
+                SwipeToDismissBookmark(
+                    bookmark = bookmark,
+                    onClick = { onBookmarkClick(bookmark) },
+                    onRemove = { onRemoveBookmark(bookmark.id) },
+                )
+            }
+        } else {
+            viewState.groupedBookmarks.forEach { (groupKey, items) ->
+                if (groupKey.label.isNotEmpty()) {
+                    stickyHeader(key = "header_${groupKey.label}") {
+                        SectionHeader(
+                            label = groupKey.label.friendlyGroupLabel(),
+                            count = items.size,
+                            showCount = true,
                         )
-                        HorizontalDivider()
                     }
+                }
+                items(
+                    items = items,
+                    key = { it.id },
+                ) { bookmark ->
+                    SwipeToDismissBookmark(
+                        bookmark = bookmark,
+                        onClick = { onBookmarkClick(bookmark) },
+                        onRemove = { onRemoveBookmark(bookmark.id) },
+                    )
                 }
             }
         }
     }
 }
 
-@OptIn(ExperimentalTime::class)
+// ---------------------------------------------------------------------------
+// Swipe-to-dismiss wrapper
+// ---------------------------------------------------------------------------
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BookmarkItem(
+private fun SwipeToDismissBookmark(
     bookmark: BookmarkedArticle,
     onClick: () -> Unit,
-    onRemoveBookmark: () -> Unit
+    onRemove: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(
-                horizontal = MaterialTheme.dimension.space16,
-                vertical = MaterialTheme.dimension.space8
-            ),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
-        verticalAlignment = Alignment.Top
-    ) {
-        Source.valueOf(bookmark.source).Icon()
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4)
+    key(bookmark.id) {
+        val dismissState = rememberSwipeToDismissBoxState(
+            confirmValueChange = { value ->
+                if (value == SwipeToDismissBoxValue.EndToStart ||
+                    value == SwipeToDismissBoxValue.StartToEnd
+                ) {
+                    onRemove()
+                    true
+                } else {
+                    false
+                }
+            },
+        )
+        SwipeToDismissBox(
+            state = dismissState,
+            backgroundContent = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = MaterialTheme.dimension.space16)
+                )
+            },
         ) {
-            Text(
-                text = bookmark.title,
-                color = MaterialTheme.colorScheme.onBackground,
-                style = MaterialTheme.typography.titleMedium,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-            TextWithStartIcon(
-                text = bookmark.savedAt.toInstant(TimeZone.currentSystemDefault()).timeAgo(),
-                icon = Res.drawable.ic_time_24,
-            )
-        }
-        IconButton(
-            onClick = onRemoveBookmark,
-            modifier = Modifier.background(
-                color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
-                shape = CircleShape
-            ).size(MaterialTheme.dimension.space40)
-        ) {
-            Icon(
-                imageVector = Icons.Default.BookmarkRemove,
-                contentDescription = "Remove bookmark",
-                tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+            BookmarkCard(
+                bookmark = bookmark,
+                onClick = onClick,
+                onMoreClick = onRemove,
+                isUnread = !bookmark.read,
             )
         }
     }
 }
 
-@OptIn(ExperimentalTime::class)
-private fun Instant.timeAgo(): String {
-    val now = Clock.System.now()
-    val duration = this.until(now, DateTimeUnit.MINUTE)
-        .toDuration(DurationUnit.MINUTES)
+// ---------------------------------------------------------------------------
+// Date label helpers
+// ---------------------------------------------------------------------------
 
+/**
+ * Converts a "YYYY-MM-DD" group key into a human-readable label.
+ * The ViewModel emits ISO date strings; the screen layer pretty-prints them.
+ */
+private fun String.friendlyGroupLabel(): String {
+    // Relies on the format "YYYY-MM-DD" set in ViewModel.dateGroupLabel()
+    return this // Kept as-is for now; Wave 5 can localise.
+}
+
+// ---------------------------------------------------------------------------
+// Time-ago extension (kept local, pure KMP)
+// ---------------------------------------------------------------------------
+
+@OptIn(ExperimentalTime::class)
+internal fun LocalDateTime.timeAgoLabel(): String {
+    val instant = toInstant(TimeZone.currentSystemDefault())
+    val now = Clock.System.now()
+    val minutes = instant.until(now, DateTimeUnit.MINUTE)
+    val duration = minutes.toDuration(DurationUnit.MINUTES)
     return when {
         duration.inWholeMinutes < 1 -> "Just now"
         duration.inWholeMinutes < 60 -> "${duration.inWholeMinutes}m ago"
@@ -196,3 +288,99 @@ private fun Instant.timeAgo(): String {
     }
 }
 
+// ---------------------------------------------------------------------------
+// Previews
+// ---------------------------------------------------------------------------
+
+private fun fakeSavedAt(): LocalDateTime = LocalDateTime(2025, 5, 1, 10, 0, 0)
+
+private val fakeBookmarks = persistentListOf(
+    BookmarkedArticle(
+        id = "1",
+        title = "Kotlin 2.0 is out — what's new for multiplatform developers",
+        url = "https://example.com/1",
+        savedAt = fakeSavedAt(),
+        source = "HACKER_NEWS",
+        read = false,
+    ),
+    BookmarkedArticle(
+        id = "2",
+        title = "Jetpack Compose performance tips you might have missed",
+        url = "https://example.com/2",
+        savedAt = fakeSavedAt(),
+        source = "DEVTO",
+        read = true,
+    ),
+    BookmarkedArticle(
+        id = "3",
+        title = "Building offline-first apps with Room and KMM",
+        url = "https://example.com/3",
+        savedAt = fakeSavedAt(),
+        source = "MEDIUM",
+        read = false,
+    ),
+)
+
+@Preview
+@Composable
+private fun BookmarksScreenLightPreview() {
+    HackertabTheme(themeMode = ThemeMode.LIGHT) {
+        BookmarksScreen(
+            viewState = BookmarksViewState(
+                bookmarks = fakeBookmarks,
+                isLoading = false,
+                groupBy = GroupBy.ALL,
+            ),
+            onBookmarkClick = {},
+            onRemoveBookmark = {},
+            onGroupByChanged = {},
+            onSearchClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun BookmarksScreenDarkPreview() {
+    HackertabTheme(themeMode = ThemeMode.DARK) {
+        BookmarksScreen(
+            viewState = BookmarksViewState(
+                bookmarks = fakeBookmarks,
+                isLoading = false,
+                groupBy = GroupBy.ALL,
+            ),
+            onBookmarkClick = {},
+            onRemoveBookmark = {},
+            onGroupByChanged = {},
+            onSearchClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun BookmarksScreenEmptyLightPreview() {
+    HackertabTheme(themeMode = ThemeMode.LIGHT) {
+        BookmarksScreen(
+            viewState = BookmarksViewState(isLoading = false),
+            onBookmarkClick = {},
+            onRemoveBookmark = {},
+            onGroupByChanged = {},
+            onSearchClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun BookmarksScreenLoadingDarkPreview() {
+    HackertabTheme(themeMode = ThemeMode.DARK) {
+        BookmarksScreen(
+            viewState = BookmarksViewState(isLoading = true),
+            onBookmarkClick = {},
+            onRemoveBookmark = {},
+            onGroupByChanged = {},
+            onSearchClick = {},
+        )
+    }
+}
