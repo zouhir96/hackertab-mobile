@@ -52,6 +52,8 @@ data class AnalyticsEvent(
         const val SETTINGS_MASTER = "SettingsMaster"
         const val SETTINGS_TOPICS = "SettingsTopics"
         const val SETTINGS_SOURCES = "SettingsSources"
+        const val SETTINGS_APPEARANCE = "SettingsAppearance"
+        const val SETTINGS_ABOUT = "SettingsAbout"
         const val BOOKMARKS = "bookmarks"
         // Add more standard screen names here
     }

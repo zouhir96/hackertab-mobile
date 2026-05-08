@@ -1,6 +1,7 @@
 package com.zrcoding.hackertab.domain.repositories
 
 import com.zrcoding.hackertab.domain.models.Profile
+import com.zrcoding.hackertab.domain.models.ThemeMode
 import com.zrcoding.hackertab.domain.models.Topic
 import kotlinx.coroutines.flow.Flow
 
@@ -29,4 +30,12 @@ interface SettingRepository {
     suspend fun getProfiles(): List<Profile>
 
     suspend fun saveProfile(profile: Profile)
+
+    // Wave 3I — theme mode persistence
+    fun observeThemeMode(): Flow<ThemeMode>
+
+    suspend fun setThemeMode(mode: ThemeMode)
+
+    // Wave 3I — coachmark replay (Issue 15)
+    suspend fun resetCoachmarks()
 }

@@ -28,6 +28,10 @@ class SettingSourcesViewModel(
     private val _viewState = MutableStateFlow<PersistentList<ChipData>>(persistentListOf())
     val viewState = _viewState.asStateFlow()
 
+    /** One-shot event: true when the min-1-source guard was triggered. */
+    private val _minOneSourceViolation = MutableStateFlow(false)
+    val minOneSourceViolation = _minOneSourceViolation.asStateFlow()
+
     init {
         viewModelScope.launch {
             val sources = Source.entries
@@ -40,7 +44,10 @@ class SettingSourcesViewModel(
     }
 
     fun onChipClicked(source: ChipData) {
-        if (_viewState.value.count { it.selected } <= 1 && source.selected) return
+        if (_viewState.value.count { it.selected } <= 1 && source.selected) {
+            _minOneSourceViolation.value = true
+            return
+        }
         viewModelScope.launch {
             if (source.selected) {
                 settingRepository.removeSource(source.id)
@@ -49,6 +56,10 @@ class SettingSourcesViewModel(
             }
             trackSourceSelectionChanged(source)
         }
+    }
+
+    fun consumeMinOneSourceViolation() {
+        _minOneSourceViolation.value = false
     }
 
     fun trackSourceSelectionChanged(source: ChipData) {
