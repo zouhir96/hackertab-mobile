@@ -55,6 +55,7 @@ data class AnalyticsEvent(
         const val SETTINGS_APPEARANCE = "SettingsAppearance"
         const val SETTINGS_ABOUT = "SettingsAbout"
         const val BOOKMARKS = "bookmarks"
+        const val ONBOARDING_DONE = "OnboardingDone"
         // Add more standard screen names here
     }
 }

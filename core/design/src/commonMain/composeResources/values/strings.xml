@@ -84,4 +84,33 @@
 
     <!-- Settings v4 — sources screen snackbar -->
     <string name="settings_sources_min_one_guard">You need at least one source enabled.</string>
+
+    <!-- Onboarding v4 — SetupProfileScreen -->
+    <string name="onboarding_profile_title">What kind of\ndeveloper are you?</string>
+    <string name="onboarding_profile_subtitle">We\'ll prefill the topics that match your role. You can change anything later.</string>
+    <string name="onboarding_profile_cta">Continue</string>
+
+    <!-- Onboarding v4 — SetupTopicsScreen -->
+    <string name="onboarding_topics_title">Pick the topics\nyou live in.</string>
+    <string name="onboarding_topics_subtitle">Multi-select. Your profile category is pre-expanded.</string>
+    <string name="onboarding_topics_selected_count">%1$d selected</string>
+    <string name="onboarding_topics_reassurance">You can change this anytime in Settings.</string>
+    <string name="onboarding_topics_cta">Continue</string>
+
+    <!-- Onboarding v4 — SetupSourcesScreen -->
+    <string name="onboarding_sources_title">Where should\nwe read from?</string>
+    <string name="onboarding_sources_subtitle">12 sources. Pick at least one — your feed pulls from these.</string>
+    <string name="onboarding_sources_selected_count">%1$d of 12 selected.</string>
+    <string name="onboarding_sources_cta">Finish setup</string>
+
+    <!-- Onboarding v4 — OnboardingDoneScreen -->
+    <string name="onboarding_done_headline">Your feed\nis ready.</string>
+    <string name="onboarding_done_body">One tab. All your dev news. Three things to remember:</string>
+    <string name="onboarding_done_tip1_title">Tap a source</string>
+    <string name="onboarding_done_tip1_body">Switch from All → GitHub, HN, etc. via the rail under the title.</string>
+    <string name="onboarding_done_tip2_title">Pull to refresh</string>
+    <string name="onboarding_done_tip2_body">Drag down anywhere on the feed to fetch what\'s new.</string>
+    <string name="onboarding_done_tip3_title">Long-press a card</string>
+    <string name="onboarding_done_tip3_body">For Bookmark · Share · Copy link · Open in browser.</string>
+    <string name="onboarding_done_cta">Open my feed</string>
 </resources>

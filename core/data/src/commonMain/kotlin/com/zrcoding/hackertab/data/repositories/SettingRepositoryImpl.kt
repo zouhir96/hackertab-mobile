@@ -106,10 +106,28 @@ class SettingRepositoryImpl(
 
     // endregion
 
-    // region Wave 3I — coachmark replay (Issue 15)
+    // region Wave 3F — coachmarks_seen
 
+    /**
+     * Emits the current coachmarks-seen flag. Default = **true** so that
+     * existing users (who already completed the old onboarding) are NOT shown
+     * coachmarks. New users completing the redesigned onboarding explicitly
+     * call [setCoachmarksSeen](false) before navigating to the feed, which
+     * triggers the Wave-5 coachmark overlay on first Home load.
+     */
+    override fun observeCoachmarksSeen(): Flow<Boolean> {
+        return dataStore.data.map { prefs ->
+            prefs[SettingsKeys.KEY_COACHMARKS_SEEN] ?: true
+        }
+    }
+
+    override suspend fun setCoachmarksSeen(seen: Boolean) {
+        dataStore.edit { it[SettingsKeys.KEY_COACHMARKS_SEEN] = seen }
+    }
+
+    // Wave 3I — coachmark replay (Issue 15) — sugar over setCoachmarksSeen(false)
     override suspend fun resetCoachmarks() {
-        dataStore.edit { it[SettingsKeys.KEY_COACHMARKS_SEEN] = false }
+        setCoachmarksSeen(false)
     }
 
     // endregion

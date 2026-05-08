@@ -36,7 +36,14 @@ interface SettingRepository {
 
     suspend fun setThemeMode(mode: ThemeMode)
 
-    // Wave 3I — coachmark replay (Issue 15)
+    // Wave 3F — coachmarks_seen: false means "show coachmarks on first Home load".
+    // Default = true so existing users (who never ran onboarding again) skip coachmarks.
+    // New users: OnboardingDoneScreen sets this to false immediately before opening the feed.
+    fun observeCoachmarksSeen(): Flow<Boolean>
+
+    suspend fun setCoachmarksSeen(seen: Boolean)
+
+    // Wave 3I — coachmark replay (Issue 15) — sugar over setCoachmarksSeen(false)
     suspend fun resetCoachmarks()
 
     // Wave 3G — last visited timestamp for "new since last visit" badges
