@@ -22,6 +22,9 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabMotion
 
+// TODO Wave 6 a11y — wire to LocalAccessibilityManager when CMP stabilises
+private const val IS_REDUCED_MOTION = false
+
 /**
  * Bookmark + kebab pair rendered at the bottom-right of every feed card.
  *
@@ -59,7 +62,7 @@ fun CardActions(
 private fun BookmarkButton(isBookmarked: Boolean, onClick: () -> Unit) {
     val pulse = remember { Animatable(1f) }
     LaunchedEffect(isBookmarked) {
-        if (isBookmarked) {
+        if (isBookmarked && !IS_REDUCED_MOTION) {
             pulse.animateTo(1.15f, animationSpec = tween(120, easing = HackertabMotion.emphasizedEasing))
             pulse.animateTo(1f, animationSpec = tween(120, easing = HackertabMotion.emphasizedEasing))
         }

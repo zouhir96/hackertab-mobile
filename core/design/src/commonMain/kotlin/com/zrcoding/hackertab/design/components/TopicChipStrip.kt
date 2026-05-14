@@ -1,6 +1,8 @@
 package com.zrcoding.hackertab.design.components
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,6 +35,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.zrcoding.hackertab.design.theme.HackertabMotion
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.codeMedium
 import com.zrcoding.hackertab.domain.models.ThemeMode
@@ -40,6 +43,9 @@ import com.zrcoding.hackertab.domain.models.Topic
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+// TODO Wave 6 a11y — wire to LocalAccessibilityManager when CMP stabilises
+private const val IS_REDUCED_MOTION = false
 
 /**
  * Secondary horizontal filter strip. Shown below the [SourceRail] when the
@@ -84,12 +90,18 @@ private fun TopicPill(topic: Topic, selected: Boolean, onClick: () -> Unit) {
     val containerColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.surfaceVariant
         else Color.Transparent,
-        animationSpec = androidx.compose.animation.core.tween(durationMillis = 150),
+        animationSpec = if (IS_REDUCED_MOTION) snap() else tween(
+            durationMillis = HackertabMotion.fast,
+            easing = HackertabMotion.standardEasing,
+        ),
     )
     val contentColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.onSurface
         else MaterialTheme.colorScheme.onSurfaceVariant,
-        animationSpec = androidx.compose.animation.core.tween(durationMillis = 150),
+        animationSpec = if (IS_REDUCED_MOTION) snap() else tween(
+            durationMillis = HackertabMotion.fast,
+            easing = HackertabMotion.standardEasing,
+        ),
     )
 
     Row(
