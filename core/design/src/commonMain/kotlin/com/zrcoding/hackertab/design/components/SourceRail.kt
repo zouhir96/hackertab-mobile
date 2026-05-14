@@ -1,6 +1,8 @@
 package com.zrcoding.hackertab.design.components
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -39,7 +41,6 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.zrcoding.hackertab.design.theme.HackertabMotion
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.ThemeMode
@@ -50,6 +51,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /** Pseudo-source id for the "All" rail item that aggregates every enabled source. */
 const val ALL_SOURCES_ID: String = "all"
+
+// TODO Wave 6 a11y — wire to LocalAccessibilityManager when CMP stabilises
+private const val IS_REDUCED_MOTION = false
 
 /**
  * Persistent horizontal source switcher. Replaces the v3 dropdown title.
@@ -94,17 +98,17 @@ private fun AllPill(selected: Boolean, onClick: () -> Unit) {
     val containerColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.primary
         else Color.Transparent,
-        animationSpec = androidx.compose.animation.core.tween(
-            durationMillis = HackertabMotion.fast,
-            easing = HackertabMotion.emphasizedEasing,
+        animationSpec = if (IS_REDUCED_MOTION) snap() else spring(
+            stiffness = 380f,
+            dampingRatio = 0.5f,
         ),
     )
     val contentColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.onPrimary
         else MaterialTheme.colorScheme.onSurface,
-        animationSpec = androidx.compose.animation.core.tween(
-            durationMillis = HackertabMotion.fast,
-            easing = HackertabMotion.emphasizedEasing,
+        animationSpec = if (IS_REDUCED_MOTION) snap() else spring(
+            stiffness = 380f,
+            dampingRatio = 0.5f,
         ),
     )
     val interactionSource = remember { MutableInteractionSource() }
@@ -147,17 +151,17 @@ private fun SourcePill(source: Source, selected: Boolean, onClick: () -> Unit) {
     val containerColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.primary
         else Color.Transparent,
-        animationSpec = androidx.compose.animation.core.tween(
-            durationMillis = HackertabMotion.fast,
-            easing = HackertabMotion.emphasizedEasing,
+        animationSpec = if (IS_REDUCED_MOTION) snap() else spring(
+            stiffness = 380f,
+            dampingRatio = 0.5f,
         ),
     )
     val contentColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.onPrimary
         else MaterialTheme.colorScheme.onSurface,
-        animationSpec = androidx.compose.animation.core.tween(
-            durationMillis = HackertabMotion.fast,
-            easing = HackertabMotion.emphasizedEasing,
+        animationSpec = if (IS_REDUCED_MOTION) snap() else spring(
+            stiffness = 380f,
+            dampingRatio = 0.5f,
         ),
     )
     val interactionSource = remember { MutableInteractionSource() }

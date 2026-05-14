@@ -1,6 +1,9 @@
 package com.zrcoding.hackertab.design.components.cards
 
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -24,6 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
+
+// TODO Wave 6 a11y — wire to LocalAccessibilityManager when CMP stabilises
+private const val IS_REDUCED_MOTION = false
 
 /**
  * Hackertab v4 card chrome. Hosts every feed-card variant
@@ -51,6 +57,10 @@ fun CardShell(
     val pressed by interactionSource.collectIsPressedAsState()
     val scale by animateFloatAsState(
         targetValue = if (pressed) 0.98f else 1f,
+        animationSpec = if (IS_REDUCED_MOTION) snap() else spring(
+            stiffness = Spring.StiffnessHigh,
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+        ),
         label = "card-press-scale",
     )
 

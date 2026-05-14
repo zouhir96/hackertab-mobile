@@ -1,5 +1,10 @@
 package com.zrcoding.hackertab.home.presentation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Layers
 import androidx.compose.material.icons.outlined.Refresh
@@ -26,7 +32,10 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -43,6 +52,7 @@ import com.zrcoding.hackertab.design.components.states.EmptyStateCta
 import com.zrcoding.hackertab.design.components.states.ErrorState
 import com.zrcoding.hackertab.design.components.states.FeedLoadingSkeleton
 import com.zrcoding.hackertab.design.components.states.HackertabSnackbarHost
+import com.zrcoding.hackertab.design.theme.HackertabMotion
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.domain.models.BaseArticle
@@ -68,6 +78,9 @@ import com.zrcoding.hackertab.home.presentation.utils.ShareManager
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+
+// TODO Wave 6 a11y — wire to LocalAccessibilityManager when CMP stabilises
+private const val IS_REDUCED_MOTION = false
 
 // TODO Wave 4: register HomeRoute + FocusedFeedRoute + WebViewRoute + LongPressActionSheet
 //  in MainNavHost. For now these routes use the existing navigation wiring.
@@ -194,15 +207,23 @@ internal fun HomeScreen(
                 Spacer(Modifier.height(4.dp))
             }
 
-            // Body
+            // Body — M7: Crossfade between skeleton and feed content on isLoading toggle
             PullToRefreshBox(
                 isRefreshing = viewState.isLoading,
                 onRefresh = onRefresh,
                 state = pullRefreshState,
                 modifier = Modifier.fillMaxSize(),
             ) {
+                Crossfade(
+                    targetState = viewState.isLoading,
+                    animationSpec = if (IS_REDUCED_MOTION) tween(0) else tween(
+                        durationMillis = HackertabMotion.fast,
+                        easing = HackertabMotion.deceleratedEasing,
+                    ),
+                    label = "feed-loading-crossfade",
+                ) { isLoading ->
                 when {
-                    viewState.isLoading -> {
+                    isLoading -> {
                         FeedLoadingSkeleton(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -257,6 +278,7 @@ internal fun HomeScreen(
                                 bottom = 80.dp,   // TODO Wave 4: adjust for actual BottomNav height
                             ),
                         ) {
+                            var runningOffset = 0
                             DayBucket.entries.forEach { bucket ->
                                 val items = viewState.articlesByDay[bucket] ?: return@forEach
                                 if (items.isEmpty()) return@forEach
@@ -273,11 +295,14 @@ internal fun HomeScreen(
                                     onBookmarkClick = onBookmarkClick,
                                     onShareClick = onShareClick,
                                     onLongPress = onLongPress,
+                                    indexOffset = runningOffset,
                                 )
+                                runningOffset += items.size
                             }
                         }
                     }
                 }
+                } // end Crossfade content
             }
         }
     }
@@ -292,12 +317,58 @@ private fun LazyListScope.feedItems(
     onBookmarkClick: (BaseArticle) -> Unit,
     onShareClick: (BaseArticle) -> Unit,
     onLongPress: (BaseArticle) -> Unit,
+    indexOffset: Int = 0,
 ) {
-    items(
+    itemsIndexed(
         items = items,
-        key = { it.id },
-    ) { article ->
+        key = { _, item -> item.id },
+    ) { index, article ->
         val isRead = seenIds.contains(article.id)
+        StaggeredFeedCardEntry(
+            absoluteIndex = indexOffset + index,
+            article = article,
+            isRead = isRead,
+            onCardClick = onCardClick,
+            onBookmarkClick = onBookmarkClick,
+            onShareClick = onShareClick,
+            onLongPress = onLongPress,
+        )
+    }
+}
+
+/**
+ * M6: staggered fade-in + slide for the first 6 items on initial load. After
+ * the first reveal, subsequent updates render immediately (no re-stagger).
+ */
+@Composable
+private fun StaggeredFeedCardEntry(
+    absoluteIndex: Int,
+    article: BaseArticle,
+    isRead: Boolean,
+    onCardClick: (BaseArticle) -> Unit,
+    onBookmarkClick: (BaseArticle) -> Unit,
+    onShareClick: (BaseArticle) -> Unit,
+    onLongPress: (BaseArticle) -> Unit,
+) {
+    val shouldStagger = !IS_REDUCED_MOTION && absoluteIndex < 6
+    var visible by rememberSaveable(key = "stagger-${article.id}") { mutableStateOf(!shouldStagger) }
+    LaunchedEffect(article.id) {
+        if (!visible) {
+            kotlinx.coroutines.delay(30L * absoluteIndex)
+            visible = true
+        }
+    }
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(animationSpec = tween(durationMillis = HackertabMotion.fast)) +
+            slideInVertically(
+                animationSpec = tween(
+                    durationMillis = HackertabMotion.fast,
+                    easing = HackertabMotion.deceleratedEasing,
+                ),
+                initialOffsetY = { it / 4 },
+            ),
+    ) {
         article.ToFeedCard(
             isRead = isRead,
             onClick = { onCardClick(article) },
