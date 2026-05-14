@@ -13,7 +13,9 @@ import com.zrcoding.hackertab.domain.models.NetworkErrors
 import com.zrcoding.hackertab.domain.models.ProductHunt
 import com.zrcoding.hackertab.domain.models.Resource
 import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.domain.models.SourceLoadState
 import com.zrcoding.hackertab.domain.models.Topic
+import com.zrcoding.hackertab.domain.repositories.AggregatedFeedResult
 import com.zrcoding.hackertab.domain.repositories.ArticleRepository
 import com.zrcoding.hackertab.domain.repositories.BookmarkRepository
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
@@ -22,15 +24,19 @@ import com.zrcoding.hackertab.domain.usecases.ObserveSelectedSourcesUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedTopicsUseCase
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
@@ -94,57 +100,77 @@ class HomeViewModel(
                 }
         }
 
-        // Fetch articles whenever activeSourceId, selectedTopic, or refresh changes
+        // Fetch articles whenever activeSourceId, selectedTopic, or refresh changes.
+        // For "all" mode this is a Flow that emits incrementally as each source
+        // completes (Wave 5L). For single-source it's a one-shot emission.
         viewModelScope.launch {
-            combine(
-                combine(
-                    refreshTrigger.onStart { emit(Unit) },
-                    _viewState.map { it.activeSourceId }.distinctUntilChanged(),
-                    _viewState.map { it.selectedTopic }.distinctUntilChanged(),
-                    _viewState.map { it.enabledSources }.distinctUntilChanged(),
-                ) { _, sourceId, topic, sources ->
-                    Triple(sourceId, topic, sources)
-                }.map { (sourceId, topic, sources) ->
-                    if (sources.isEmpty() || (sourceId != "all" && topic == null)) {
-                        return@map emptyList<BaseArticle>()
+            val fetchFlow: Flow<List<BaseArticle>> = combine(
+                refreshTrigger.onStart { emit(Unit) },
+                _viewState.map { it.activeSourceId }.distinctUntilChanged(),
+                _viewState.map { it.selectedTopic }.distinctUntilChanged(),
+                _viewState.map { it.enabledSources }.distinctUntilChanged(),
+            ) { _, sourceId, topic, sources ->
+                FetchParams(sourceId, topic, sources)
+            }.flatMapLatest { params ->
+                if (params.sources.isEmpty() ||
+                    (params.sourceId != "all" && params.topic == null)
+                ) {
+                    _viewState.update {
+                        it.copy(
+                            isLoading = false,
+                            perSourceLoadState = persistentMapOf(),
+                            isPartialReveal = false,
+                        )
                     }
-                    _viewState.update { it.copy(isLoading = true, error = null) }
+                    return@flatMapLatest flow { emit(emptyList<BaseArticle>()) }
+                }
 
-                    val result = fetchArticles(sourceId, sources, topic)
-                    when (result) {
-                        is FetchResult.Success -> {
-                            val grouped = groupByDay(result.articles)
-                            _viewState.update { state ->
-                                state.copy(
-                                    articlesByDay = grouped,
-                                    isLoading = false,
-                                    error = if (result.articles.isEmpty()) {
-                                        "No items found, try adjusting your filter or choosing a different source."
-                                    } else null,
-                                    canRefresh = false,
-                                )
+                _viewState.update {
+                    it.copy(
+                        isLoading = true,
+                        error = null,
+                        perSourceLoadState = persistentMapOf(),
+                        isPartialReveal = params.sourceId == "all",
+                    )
+                }
+
+                if (params.sourceId == "all") {
+                    observeAggregatedFlow(params.sources, params.topic)
+                } else {
+                    flow {
+                        when (val result = fetchSingleSource(params.sourceId, params.topic)) {
+                            is FetchResult.Success -> {
+                                _viewState.update { state ->
+                                    state.copy(
+                                        isLoading = false,
+                                        error = if (result.articles.isEmpty()) {
+                                            "No items found, try adjusting your filter or choosing a different source."
+                                        } else null,
+                                        canRefresh = false,
+                                        isPartialReveal = false,
+                                    )
+                                }
+                                emit(result.articles)
                             }
-                            // Record last visited timestamp when Today feed loads successfully
-                            if (sourceId == "all" && result.articles.isNotEmpty()) {
-                                settingRepository.setLastVisitedAt(
-                                    Clock.System.now().toEpochMilliseconds()
-                                )
+                            is FetchResult.Failure -> {
+                                _viewState.update {
+                                    it.copy(
+                                        articlesByDay = persistentMapOf(),
+                                        isLoading = false,
+                                        error = "Something went wrong, please verify your internet connection and try again.",
+                                        canRefresh = true,
+                                        isPartialReveal = false,
+                                    )
+                                }
+                                emit(emptyList())
                             }
-                            result.articles
-                        }
-                        is FetchResult.Failure -> {
-                            _viewState.update {
-                                it.copy(
-                                    articlesByDay = kotlinx.collections.immutable.persistentMapOf(),
-                                    isLoading = false,
-                                    error = "Something went wrong, please verify your internet connection and try again.",
-                                    canRefresh = true,
-                                )
-                            }
-                            emptyList()
                         }
                     }
-                },
+                }
+            }
+
+            combine(
+                fetchFlow,
                 bookmarkRepository.observeBookmarkedIds(),
             ) { articles, bookmarkedIds -> articles to bookmarkedIds }
                 .collectLatest { (articles, bookmarkedIds) ->
@@ -159,6 +185,53 @@ class HomeViewModel(
                     }
                 }
         }
+    }
+
+    private data class FetchParams(
+        val sourceId: String,
+        val topic: Topic?,
+        val sources: PersistentList<Source>,
+    )
+
+    /**
+     * Wave 5L — observe the aggregator Flow. Each emission updates view-state
+     * (per-source state, partial-reveal flag, error message) and produces the
+     * latest merged article list for the downstream bookmark-merge stage.
+     */
+    private fun observeAggregatedFlow(
+        sources: PersistentList<Source>,
+        topic: Topic?,
+    ): Flow<List<BaseArticle>> = getAggregatedFeedUseCase(
+        sources = sources,
+        topic = topic,
+    ).map { result: AggregatedFeedResult ->
+        val allDone = result.perSourceState.values.none { it is SourceLoadState.Loading }
+        val anySucceeded = result.perSourceState.values.any { it is SourceLoadState.Loaded }
+        val allFailed = result.perSourceState.values.all {
+            it is SourceLoadState.Failed || it is SourceLoadState.Idle
+        } && result.perSourceState.isNotEmpty()
+
+        _viewState.update { state ->
+            state.copy(
+                isLoading = !allDone,
+                isPartialReveal = result.isPartialReveal,
+                perSourceLoadState = result.perSourceState.toPersistentMap(),
+                error = when {
+                    allDone && allFailed -> "Something went wrong, please verify your internet connection and try again."
+                    allDone && result.articles.isEmpty() && anySucceeded -> "No items found, try adjusting your filter or choosing a different source."
+                    else -> null
+                },
+                canRefresh = allDone && allFailed,
+            )
+        }
+
+        // Record last-visited when the aggregated feed has produced any results
+        if (allDone && result.articles.isNotEmpty()) {
+            settingRepository.setLastVisitedAt(
+                Clock.System.now().toEpochMilliseconds(),
+            )
+        }
+        result.articles
     }
 
     // -------------------------------------------------------------------------
@@ -240,28 +313,14 @@ class HomeViewModel(
         data object Failure : FetchResult
     }
 
-    private suspend fun fetchArticles(
+    private suspend fun fetchSingleSource(
         sourceId: String,
-        enabledSources: PersistentList<Source>,
         topic: Topic?,
     ): FetchResult {
-        return if (sourceId == "all") {
-            try {
-                val articles = getAggregatedFeedUseCase(
-                    sources = enabledSources,
-                    topic = topic,
-                )
-                FetchResult.Success(articles)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                FetchResult.Failure
-            }
-        } else {
-            val source = Source.fromId(sourceId) ?: return FetchResult.Failure
-            when (val result = getArticlesForSource(source, topic)) {
-                is Resource.Success -> FetchResult.Success(result.data)
-                is Resource.Failure -> FetchResult.Failure
-            }
+        val source = Source.fromId(sourceId) ?: return FetchResult.Failure
+        return when (val result = getArticlesForSource(source, topic)) {
+            is Resource.Success -> FetchResult.Success(result.data)
+            is Resource.Failure -> FetchResult.Failure
         }
     }
 

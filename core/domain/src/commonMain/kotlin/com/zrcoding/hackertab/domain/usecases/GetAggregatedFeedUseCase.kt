@@ -1,24 +1,27 @@
 package com.zrcoding.hackertab.domain.usecases
 
-import com.zrcoding.hackertab.domain.models.BaseArticle
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.AggregatedArticleRepository
+import com.zrcoding.hackertab.domain.repositories.AggregatedFeedResult
+import kotlinx.coroutines.flow.Flow
 
 /**
- * Wraps [AggregatedArticleRepository.getAggregatedFeed] with standard use-case
- * protocol. Invoked from [HomeViewModel] when `activeSourceId == "all"`.
+ * Wraps [AggregatedArticleRepository.observeAggregatedFeed] with standard
+ * use-case protocol. Invoked from `HomeViewModel` when `activeSourceId == "all"`.
  */
 class GetAggregatedFeedUseCase(
     private val aggregatedArticleRepository: AggregatedArticleRepository,
 ) {
-    suspend operator fun invoke(
+    operator fun invoke(
         sources: List<Source>,
         topic: Topic?,
-    ): List<BaseArticle> {
-        return aggregatedArticleRepository.getAggregatedFeed(
+        refresh: Boolean = false,
+    ): Flow<AggregatedFeedResult> {
+        return aggregatedArticleRepository.observeAggregatedFeed(
             sources = sources,
             topic = topic,
+            refresh = refresh,
         )
     }
 }

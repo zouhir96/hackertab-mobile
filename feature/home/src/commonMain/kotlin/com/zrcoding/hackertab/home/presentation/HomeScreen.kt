@@ -27,6 +27,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -54,12 +55,14 @@ import com.zrcoding.hackertab.design.components.states.FeedLoadingSkeleton
 import com.zrcoding.hackertab.design.components.states.HackertabSnackbarHost
 import com.zrcoding.hackertab.design.theme.HackertabMotion
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.codeSmall
 import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.domain.models.BaseArticle
 import com.zrcoding.hackertab.domain.models.Conference
 import com.zrcoding.hackertab.domain.models.GithubRepo
 import com.zrcoding.hackertab.domain.models.ProductHunt
 import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.domain.models.SourceLoadState
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import com.zrcoding.hackertab.home.presentation.cards.conferences.ConferenceItem
 import com.zrcoding.hackertab.home.presentation.cards.devto.DevtoItem
@@ -278,6 +281,17 @@ internal fun HomeScreen(
                                 bottom = 80.dp,   // TODO Wave 4: adjust for actual BottomNav height
                             ),
                         ) {
+                            // Wave 5L: top-of-feed partial-reveal skeleton —
+                            // shown while < 50% of aggregated sources have loaded.
+                            if (viewState.isPartialReveal && viewState.isAllSourcesMode) {
+                                item(key = "partial_reveal_skeleton") {
+                                    FeedLoadingSkeleton(
+                                        itemCount = 3,
+                                        modifier = Modifier.fillMaxWidth(),
+                                    )
+                                }
+                            }
+
                             var runningOffset = 0
                             DayBucket.entries.forEach { bucket ->
                                 val items = viewState.articlesByDay[bucket] ?: return@forEach
@@ -298,6 +312,24 @@ internal fun HomeScreen(
                                     indexOffset = runningOffset,
                                 )
                                 runningOffset += items.size
+                            }
+
+                            // Wave 5L (Issue 3 / E6): inline error caption per
+                            // failed source at the end of the feed.
+                            viewState.perSourceLoadState.forEach { (source, state) ->
+                                if (state is SourceLoadState.Failed) {
+                                    item(key = "failed-${source.id}") {
+                                        Text(
+                                            text = "${source.label} unavailable",
+                                            style = codeSmall,
+                                            color = MaterialTheme.colorScheme.error,
+                                            modifier = Modifier.padding(
+                                                horizontal = 16.dp,
+                                                vertical = 8.dp,
+                                            ),
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -351,7 +383,8 @@ private fun StaggeredFeedCardEntry(
     onLongPress: (BaseArticle) -> Unit,
 ) {
     val shouldStagger = !IS_REDUCED_MOTION && absoluteIndex < 6
-    var visible by rememberSaveable(key = "stagger-${article.id}") { mutableStateOf(!shouldStagger) }
+    // Positional scope is fine here — LazyColumn `key` already keys by article.id.
+    var visible by rememberSaveable(article.id) { mutableStateOf(!shouldStagger) }
     LaunchedEffect(article.id) {
         if (!visible) {
             kotlinx.coroutines.delay(30L * absoluteIndex)
