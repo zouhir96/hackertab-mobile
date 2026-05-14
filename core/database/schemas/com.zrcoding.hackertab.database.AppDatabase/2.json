@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "a3c4c1d8e5f6b2a7c9d0e1f2a3b4c5d6",
+    "identityHash": "3baab476bd7ac10d3fe061c2965276cb",
     "entities": [
       {
         "tableName": "bookmarked_articles",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `url` TEXT NOT NULL, `saved_at` INTEGER NOT NULL, `source` TEXT NOT NULL, `read` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `url` TEXT NOT NULL, `saved_at` INTEGER NOT NULL, `source` TEXT NOT NULL, `read` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -42,8 +42,7 @@
             "fieldPath": "read",
             "columnName": "read",
             "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -56,7 +55,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a3c4c1d8e5f6b2a7c9d0e1f2a3b4c5d6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3baab476bd7ac10d3fe061c2965276cb')"
     ]
   }
 }

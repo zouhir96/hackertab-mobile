@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,7 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.components.ChipData
-import com.zrcoding.hackertab.design.components.Source
+import com.zrcoding.hackertab.design.components.Icon
 import com.zrcoding.hackertab.design.components.states.HackertabSnackbarHost
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.setting_sources_screen_description
