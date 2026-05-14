@@ -48,6 +48,8 @@ import com.zrcoding.hackertab.domain.models.Profile
 import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase
 import com.zrcoding.hackertab.home.presentation.FocusedFeedRoute
 import com.zrcoding.hackertab.home.presentation.HomeRoute
+import com.zrcoding.hackertab.onboarding.coachmarks.CoachmarkOverlay
+import com.zrcoding.hackertab.onboarding.coachmarks.CoachmarkViewModel
 import com.zrcoding.hackertab.onboarding.done.OnboardingDoneRoute
 import com.zrcoding.hackertab.onboarding.profile.SetupProfileRoute
 import com.zrcoding.hackertab.onboarding.sources.SetupSourcesRoute
@@ -59,8 +61,10 @@ import com.zrcoding.hackertab.settings.presentation.sources.SettingSourcesRoute
 import com.zrcoding.hackertab.settings.presentation.topics.SettingTopicsRoute
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
+import org.koin.compose.viewmodel.koinViewModel
 
 @Serializable
 data object SetupProfileScreen : NavKey
@@ -200,9 +204,16 @@ fun MainNavHost(
         }
     }
 
+    // Wave 5K — coachmark overlay (visible on first arrival at Home, once
+    // coachmarksSeen flips to false in onboarding done step).
+    val coachmarkViewModel: CoachmarkViewModel = koinViewModel()
+    val coachmarksSeen by coachmarkViewModel.coachmarksSeen.collectAsStateWithLifecycle()
+    val isOnHome by remember { derivedStateOf { tip is HomeScreen } }
+
     CompositionLocalProvider(LocalIsTabletSize provides isTabletSize) {
+        Box(modifier = modifier.fillMaxSize()) {
         Scaffold(
-            modifier = modifier,
+            modifier = Modifier.fillMaxSize(),
             bottomBar = {
                 if (isTopLevel) {
                     HackertabBottomNav(
@@ -450,6 +461,13 @@ fun MainNavHost(
                     }
                 }
             )
+        }
+        // Wave 5K — coachmarks overlay sits above NavDisplay AND BottomNav.
+        CoachmarkOverlay(
+            visible = !coachmarksSeen && isOnHome,
+            onDismiss = coachmarkViewModel::dismiss,
+            modifier = Modifier.fillMaxSize(),
+        )
         }
     }
 }
