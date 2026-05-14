@@ -2,9 +2,15 @@ package com.zrcoding.hackertab.shared.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.LibraryBooks
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Today
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -13,14 +19,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
@@ -32,16 +39,25 @@ import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOW
 import com.zrcoding.hackertab.analytics.LocalAnalyticsHelper
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.bookmarks.presentation.BookmarksRoute
+import com.zrcoding.hackertab.bookmarks.presentation.BookmarksSearchRoute
 import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
+import com.zrcoding.hackertab.design.components.BottomNavItem
+import com.zrcoding.hackertab.design.components.HackertabBottomNav
 import com.zrcoding.hackertab.design.components.WebViewRoute
 import com.zrcoding.hackertab.domain.models.Profile
 import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase
+import com.zrcoding.hackertab.home.presentation.FocusedFeedRoute
 import com.zrcoding.hackertab.home.presentation.HomeRoute
+import com.zrcoding.hackertab.onboarding.done.OnboardingDoneRoute
 import com.zrcoding.hackertab.onboarding.profile.SetupProfileRoute
 import com.zrcoding.hackertab.onboarding.sources.SetupSourcesRoute
 import com.zrcoding.hackertab.onboarding.topics.SetupTopicsRoute
+import com.zrcoding.hackertab.settings.presentation.about.SettingsAboutRoute
+import com.zrcoding.hackertab.settings.presentation.appearance.SettingsAppearanceRoute
+import com.zrcoding.hackertab.settings.presentation.master.SettingsMasterRoute
 import com.zrcoding.hackertab.settings.presentation.sources.SettingSourcesRoute
 import com.zrcoding.hackertab.settings.presentation.topics.SettingTopicsRoute
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -56,7 +72,16 @@ data class SetupTopicsScreen(val profile: Profile) : NavKey
 data object SetupSourcesScreen : NavKey
 
 @Serializable
+data object OnboardingDoneScreen : NavKey
+
+@Serializable
 object HomeScreen : NavKey
+
+@Serializable
+data class FocusedFeedScreen(val sourceId: String) : NavKey
+
+@Serializable
+object SettingsMasterScreen : NavKey
 
 @Serializable
 object SettingsTopicsScreen : NavKey
@@ -65,7 +90,16 @@ object SettingsTopicsScreen : NavKey
 object SettingsSourcesScreen : NavKey
 
 @Serializable
+object SettingsAppearanceScreen : NavKey
+
+@Serializable
+object SettingsAboutScreen : NavKey
+
+@Serializable
 object BookmarksScreen : NavKey
+
+@Serializable
+object BookmarksSearchScreen : NavKey
 
 @Serializable
 data class WebViewScreen(val url: String) : NavKey
@@ -76,14 +110,26 @@ private val config = SavedStateConfiguration {
             subclass(SetupProfileScreen::class, SetupProfileScreen.serializer())
             subclass(SetupTopicsScreen::class, SetupTopicsScreen.serializer())
             subclass(SetupSourcesScreen::class, SetupSourcesScreen.serializer())
+            subclass(OnboardingDoneScreen::class, OnboardingDoneScreen.serializer())
             subclass(HomeScreen::class, HomeScreen.serializer())
+            subclass(FocusedFeedScreen::class, FocusedFeedScreen.serializer())
+            subclass(SettingsMasterScreen::class, SettingsMasterScreen.serializer())
             subclass(SettingsTopicsScreen::class, SettingsTopicsScreen.serializer())
             subclass(SettingsSourcesScreen::class, SettingsSourcesScreen.serializer())
+            subclass(SettingsAppearanceScreen::class, SettingsAppearanceScreen.serializer())
+            subclass(SettingsAboutScreen::class, SettingsAboutScreen.serializer())
             subclass(BookmarksScreen::class, BookmarksScreen.serializer())
+            subclass(BookmarksSearchScreen::class, BookmarksSearchScreen.serializer())
             subclass(WebViewScreen::class, WebViewScreen.serializer())
         }
     }
 }
+
+private val bottomNavItems = persistentListOf(
+    BottomNavItem(id = "today", label = "Today", icon = Icons.Outlined.Today),
+    BottomNavItem(id = "saved", label = "Saved", icon = Icons.AutoMirrored.Outlined.LibraryBooks),
+    BottomNavItem(id = "settings", label = "Settings", icon = Icons.Outlined.Settings),
+)
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
@@ -113,7 +159,26 @@ fun MainNavHost(
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val isTabletSize = windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND)
 
-    fun navigateToHome() {
+    // BottomNav visibility & active tab driven by the top of the back-stack.
+    val tip by remember { derivedStateOf { backStack.lastOrNull() } }
+    val isTopLevel by remember {
+        derivedStateOf {
+            tip is HomeScreen ||
+                tip is BookmarksScreen ||
+                tip is SettingsMasterScreen
+        }
+    }
+    val activeId by remember {
+        derivedStateOf {
+            when (tip) {
+                is BookmarksScreen -> "saved"
+                is SettingsMasterScreen -> "settings"
+                else -> "today"
+            }
+        }
+    }
+
+    fun navigateToOnboardingDone() {
         analyticsHelper.logEvent(
             event = AnalyticsEvent(
                 name = AnalyticsEvent.Types.SETUP_COMPLETED,
@@ -121,143 +186,271 @@ fun MainNavHost(
             )
         )
         backStack.clear()
-        backStack.add(HomeScreen)
+        backStack.add(OnboardingDoneScreen)
     }
+
+    fun switchTab(id: String) {
+        // v4.0: flat per-tab stacks. Tab switch always resets to the tab root.
+        // v4.1 can upgrade to nested per-tab stacks once Nav-3 ergonomics improve.
+        backStack.clear()
+        when (id) {
+            "today" -> backStack.add(HomeScreen)
+            "saved" -> backStack.add(BookmarksScreen)
+            "settings" -> backStack.add(SettingsMasterScreen)
+        }
+    }
+
     CompositionLocalProvider(LocalIsTabletSize provides isTabletSize) {
-        NavDisplay(
+        Scaffold(
             modifier = modifier,
-            backStack = backStack,
-            sceneStrategy = listDetailStrategy,
-            entryProvider = entryProvider {
-            entry<SetupProfileScreen> {
-                ScreenWithBackButton(
-                    onBackClick = { backStack.removeLastOrNull() }
-                ) {
-                    SetupProfileRoute(
-                        navigateToNextScreen = {
-                            if (setupStatus.topicsSetup) {
-                                backStack.add(SetupTopicsScreen(it))
-                            } else if (setupStatus.sourcesSetup) {
-                                backStack.add(SetupSourcesScreen)
-                            } else {
-                                navigateToHome()
+            bottomBar = {
+                if (isTopLevel) {
+                    HackertabBottomNav(
+                        items = bottomNavItems,
+                        activeId = activeId,
+                        onSelect = ::switchTab,
+                    )
+                }
+            },
+        ) { scaffoldPadding ->
+            NavDisplay(
+                modifier = Modifier.padding(scaffoldPadding),
+                backStack = backStack,
+                sceneStrategy = listDetailStrategy,
+                entryProvider = entryProvider {
+                    entry<SetupProfileScreen> {
+                        ScreenWithBackButton(
+                            onBackClick = { backStack.removeLastOrNull() }
+                        ) {
+                            SetupProfileRoute(
+                                navigateToNextScreen = {
+                                    if (setupStatus.topicsSetup) {
+                                        backStack.add(SetupTopicsScreen(it))
+                                    } else if (setupStatus.sourcesSetup) {
+                                        backStack.add(SetupSourcesScreen)
+                                    } else {
+                                        navigateToOnboardingDone()
+                                    }
+                                }
+                            )
+                        }
+                    }
+                    entry<SetupTopicsScreen> {
+                        ScreenWithBackButton(
+                            onBackClick = { backStack.removeLastOrNull() }
+                        ) {
+                            SetupTopicsRoute(
+                                profile = it.profile,
+                                navigateToNextScreen = {
+                                    backStack.add(SetupSourcesScreen)
+                                }
+                            )
+                        }
+                    }
+                    entry<SetupSourcesScreen> {
+                        ScreenWithBackButton(
+                            onBackClick = { backStack.removeLastOrNull() }
+                        ) {
+                            SetupSourcesRoute(navigateToNextScreen = ::navigateToOnboardingDone)
+                        }
+                    }
+                    entry<OnboardingDoneScreen> {
+                        // Terminal onboarding step — no back chrome.
+                        OnboardingDoneRoute(
+                            navigateToFeed = {
+                                backStack.clear()
+                                backStack.add(HomeScreen)
+                            },
+                        )
+                    }
+                    entry<HomeScreen>(
+                        metadata = ListDetailSceneStrategy.listPane(
+                            detailPlaceholder = {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = "Select an article to read",
+                                        style = MaterialTheme.typography.headlineSmall,
+                                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                                    )
+                                }
                             }
-                        }
-                    )
-                }
-            }
-            entry<SetupTopicsScreen> {
-                ScreenWithBackButton(
-                    onBackClick = { backStack.removeLastOrNull() }
-                ) {
-                    SetupTopicsRoute(
-                        profile = it.profile,
-                        navigateToNextScreen = {
-                            backStack.add(SetupSourcesScreen)
-                        }
-                    )
-                }
-            }
-            entry<SetupSourcesScreen> {
-                ScreenWithBackButton(
-                    onBackClick = { backStack.removeLastOrNull() }
-                ) {
-                    SetupSourcesRoute(navigateToNextScreen = ::navigateToHome)
-                }
-            }
-            entry<HomeScreen>(
-                metadata = ListDetailSceneStrategy.listPane(
-                    detailPlaceholder = {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
+                        )
+                    ) {
+                        HomeRoute(
+                            onNavigateToWebView = { url ->
+                                backStack.removeAll { it is WebViewScreen }
+                                backStack.add(WebViewScreen(url))
+                            },
+                            onNavigateToTopicsSettings = {
+                                backStack.add(SettingsTopicsScreen)
+                            },
+                            onNavigateToSourcesSettings = {
+                                backStack.add(SettingsSourcesScreen)
+                            },
+                            onNavigateToBookmarks = {
+                                backStack.removeAll { it is WebViewScreen }
+                                backStack.add(BookmarksScreen)
+                            }
+                        )
+                    }
+                    entry<FocusedFeedScreen>(
+                        metadata = ListDetailSceneStrategy.listPane(
+                            detailPlaceholder = {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        text = "Select an article to read",
+                                        style = MaterialTheme.typography.headlineSmall,
+                                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                                    )
+                                }
+                            },
+                        ),
+                    ) { route ->
+                        ScreenWithBackButton(
+                            onBackClick = { backStack.removeLastOrNull() },
                         ) {
-                            Text(
-                                text = "Select an article to read",
-                                style = MaterialTheme.typography.headlineSmall,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                            FocusedFeedRoute(
+                                sourceId = route.sourceId,
+                                onNavigateToWebView = { url ->
+                                    backStack.removeAll { it is WebViewScreen }
+                                    backStack.add(WebViewScreen(url))
+                                },
+                                onNavigateToTopicsSettings = {
+                                    backStack.add(SettingsTopicsScreen)
+                                },
+                                onNavigateToSourcesSettings = {
+                                    backStack.add(SettingsSourcesScreen)
+                                },
+                                onNavigateToBookmarks = {
+                                    backStack.removeAll { it is WebViewScreen }
+                                    backStack.add(BookmarksScreen)
+                                },
                             )
                         }
                     }
-                )
-            ) {
-                HomeRoute(
-                    onNavigateToWebView = { url ->
-                        backStack.removeAll { it is WebViewScreen }
-                        backStack.add(WebViewScreen(url))
-                    },
-                    onNavigateToTopicsSettings = {
-                        backStack.add(SettingsTopicsScreen)
-                    },
-                    onNavigateToSourcesSettings = {
-                        backStack.add(SettingsSourcesScreen)
-                    },
-                    onNavigateToBookmarks = {
-                        backStack.removeAll { it is WebViewScreen }
-                        backStack.add(BookmarksScreen)
+                    entry<SettingsMasterScreen>(
+                        metadata = ListDetailSceneStrategy.listPane(
+                            detailPlaceholder = {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Text(
+                                            text = "Settings",
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            color = MaterialTheme.colorScheme.onBackground,
+                                        )
+                                        Text(
+                                            text = "Pick a section",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        )
+                                    }
+                                }
+                            },
+                        ),
+                    ) {
+                        SettingsMasterRoute(
+                            onNavigateToTopics = { backStack.add(SettingsTopicsScreen) },
+                            onNavigateToSources = { backStack.add(SettingsSourcesScreen) },
+                            onNavigateToAppearance = { backStack.add(SettingsAppearanceScreen) },
+                            onNavigateToAbout = { backStack.add(SettingsAboutScreen) },
+                            // TODO Wave 5/6 — Profile-change flow. For v4.0 we route
+                            // back through onboarding's profile picker.
+                            onNavigateToProfile = { backStack.add(SetupProfileScreen) },
+                        )
                     }
-                )
-            }
-            entry<SettingsTopicsScreen> {
-                ScreenWithBackButton(
-                    onBackClick = { backStack.removeLastOrNull() },
-                    screen = {
-                        SettingTopicsRoute()
+                    entry<SettingsTopicsScreen> {
+                        ScreenWithBackButton(
+                            onBackClick = { backStack.removeLastOrNull() },
+                            screen = {
+                                SettingTopicsRoute()
+                            }
+                        )
                     }
-                )
-            }
-            entry<SettingsSourcesScreen> {
-                ScreenWithBackButton(
-                    onBackClick = { backStack.removeLastOrNull() },
-                    screen = {
-                        SettingSourcesRoute()
+                    entry<SettingsSourcesScreen> {
+                        ScreenWithBackButton(
+                            onBackClick = { backStack.removeLastOrNull() },
+                            screen = {
+                                SettingSourcesRoute()
+                            }
+                        )
                     }
-                )
-            }
-            entry<BookmarksScreen>(
-                metadata = ListDetailSceneStrategy.listPane(
-                    detailPlaceholder = {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = "Select a bookmark to read",
-                                style = MaterialTheme.typography.headlineSmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                            )
-                        }
+                    entry<SettingsAppearanceScreen> {
+                        ScreenWithBackButton(
+                            onBackClick = { backStack.removeLastOrNull() },
+                            screen = {
+                                SettingsAppearanceRoute()
+                            }
+                        )
                     }
-                )
-            ) {
-                ScreenWithBackButton(
-                    onBackClick = { backStack.removeLastOrNull() },
-                    screen = {
+                    entry<SettingsAboutScreen> {
+                        ScreenWithBackButton(
+                            onBackClick = { backStack.removeLastOrNull() },
+                            screen = {
+                                SettingsAboutRoute()
+                            }
+                        )
+                    }
+                    entry<BookmarksScreen>(
+                        metadata = ListDetailSceneStrategy.listPane(
+                            detailPlaceholder = {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = "Select a bookmark to read",
+                                        style = MaterialTheme.typography.headlineSmall,
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                    )
+                                }
+                            }
+                        )
+                    ) {
                         BookmarksRoute(
                             onNavigateToWebView = { url ->
                                 backStack.removeAll { it is WebViewScreen }
                                 backStack.add(WebViewScreen(url))
-                            }
+                            },
+                            onNavigateToSearch = {
+                                backStack.add(BookmarksSearchScreen)
+                            },
                         )
                     }
-                )
-            }
-            entry<WebViewScreen>(
-                metadata = ListDetailSceneStrategy.detailPane()
-            ) { route ->
-                if (windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND)) {
-                    WebViewRoute(url = route.url)
-                } else {
-                    ScreenWithBackButton(
-                        onBackClick = { backStack.removeLastOrNull() },
-                        screen = {
+                    entry<BookmarksSearchScreen> {
+                        BookmarksSearchRoute(
+                            onNavigateBack = { backStack.removeLastOrNull() },
+                            onNavigateToWebView = { url ->
+                                backStack.removeAll { it is WebViewScreen }
+                                backStack.add(WebViewScreen(url))
+                            },
+                        )
+                    }
+                    entry<WebViewScreen>(
+                        metadata = ListDetailSceneStrategy.detailPane()
+                    ) { route ->
+                        if (isTabletSize) {
                             WebViewRoute(url = route.url)
+                        } else {
+                            ScreenWithBackButton(
+                                onBackClick = { backStack.removeLastOrNull() },
+                                screen = {
+                                    WebViewRoute(url = route.url)
+                                }
+                            )
                         }
-                    )
+                    }
                 }
-            }
+            )
         }
-        )
     }
 }
 

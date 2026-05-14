@@ -8,6 +8,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,6 +17,8 @@ import androidx.compose.ui.Modifier
 import com.zrcoding.hackertab.analytics.AnalyticsHelper
 import com.zrcoding.hackertab.analytics.LocalAnalyticsHelper
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.domain.models.ThemeMode
+import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase
 import com.zrcoding.hackertab.shared.navigation.MainNavHost
 import io.kamel.core.config.Core
@@ -30,6 +33,7 @@ import org.koin.compose.koinInject
 fun HackertabKmpApp() {
     val startDestinationUseCase = koinInject<GetStartDestinationUseCase>()
     val analyticsHelper = koinInject<AnalyticsHelper>()
+    val settingRepository = koinInject<SettingRepository>()
     var setupStatus by remember { mutableStateOf<GetStartDestinationUseCase.Result?>(null) }
     val customKamelConfig = remember {
         KamelConfig {
@@ -39,12 +43,17 @@ fun HackertabKmpApp() {
         }
     }
 
+    // Observe persisted theme mode so toggles from SettingsAppearance take effect
+    // immediately app-wide, no restart required.
+    val themeMode by settingRepository.observeThemeMode()
+        .collectAsState(initial = ThemeMode.SYSTEM)
+
     setupStatus?.let { destination ->
         CompositionLocalProvider(
-            LocalAnalyticsHelper provides  analyticsHelper,
+            LocalAnalyticsHelper provides analyticsHelper,
             LocalKamelConfig provides customKamelConfig
         ) {
-            HackertabTheme {
+            HackertabTheme(themeMode = themeMode) {
                 Scaffold(
                     modifier = Modifier
                         .background(MaterialTheme.colorScheme.background)
@@ -54,6 +63,12 @@ fun HackertabKmpApp() {
                         modifier = Modifier.padding(it),
                         setupStatus = destination,
                     )
+                    // TODO Wave 5K — CoachmarkOverlay(
+                    //     visible = settingRepository.observeCoachmarksSeen()
+                    //         .collectAsState(initial = true).value.not()
+                    //         && backStack.tip is HomeScreen,
+                    //     onDismiss = { settingRepository.setCoachmarksSeen(true) },
+                    // )
                 }
             }
         }
