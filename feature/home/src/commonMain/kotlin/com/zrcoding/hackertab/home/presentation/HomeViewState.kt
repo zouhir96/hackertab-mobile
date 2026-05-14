@@ -3,6 +3,7 @@ package com.zrcoding.hackertab.home.presentation
 import androidx.compose.runtime.Stable
 import com.zrcoding.hackertab.domain.models.BaseArticle
 import com.zrcoding.hackertab.domain.models.Source
+import com.zrcoding.hackertab.domain.models.SourceLoadState
 import com.zrcoding.hackertab.domain.models.Topic
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.PersistentMap
@@ -42,6 +43,16 @@ data class HomeViewState(
     val seenArticleIds: PersistentList<String> = persistentListOf(),
     /** article shown in long-press bottom sheet (null = sheet hidden). */
     val longPressedArticle: BaseArticle? = null,
+    /**
+     * Wave 5L — per-source load state for aggregated "All" mode. Empty in
+     * single-source mode. Failed entries surface inline captions in the feed.
+     */
+    val perSourceLoadState: PersistentMap<Source, SourceLoadState> = persistentMapOf(),
+    /**
+     * Wave 5L — true while fewer than 50% of aggregated sources have finished.
+     * Renders a top-of-feed skeleton without hiding already-loaded articles.
+     */
+    val isPartialReveal: Boolean = false,
 ) {
     /** True when the active source is the aggregated "All" view. */
     val isAllSourcesMode: Boolean get() = activeSourceId == "all"
