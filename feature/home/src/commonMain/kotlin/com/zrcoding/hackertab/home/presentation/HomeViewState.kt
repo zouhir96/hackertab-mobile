@@ -8,6 +8,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toPersistentList
 
 /** Temporal bucket used to group feed items in the Today screen. */
 enum class DayBucket(val label: String) {
@@ -62,6 +63,6 @@ data class HomeViewState(
             DayBucket.entries.forEach { bucket ->
                 articlesByDay[bucket]?.let { list.addAll(it) }
             }
-            return kotlinx.collections.immutable.toPersistentList(list)
+            return list.toPersistentList()
         }
 }

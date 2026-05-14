@@ -2,8 +2,10 @@ package com.zrcoding.hackertab.home.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.material3.SnackbarHostState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
@@ -43,7 +45,7 @@ fun FocusedFeedRoute(
     }
 
     val isTabletSize = LocalIsTabletSize.current
-    val viewState = androidx.lifecycle.compose.collectAsStateWithLifecycle(viewModel.viewState).value
+    val viewState by viewModel.viewState.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewState.allArticles, isTabletSize) {
         if (isTabletSize && viewState.allArticles.isNotEmpty()) {

@@ -126,8 +126,9 @@ fun BookmarksSearchScreen(
 
         // Result count label (shown only when there is a non-empty query)
         if (query.isNotBlank()) {
+            val plural = if (results.size != 1) "s" else ""
             Text(
-                text = "${results.size} result${if (results.size == 1) "" else "s"} for "$query"",
+                text = "${results.size} result$plural for \"$query\"",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
@@ -141,7 +142,7 @@ fun BookmarksSearchScreen(
                 EmptyState(
                     icon = Icons.Outlined.BookmarkBorder,
                     title = "No results",
-                    body = "No bookmarks match "$query". Try a different search.",
+                    body = "No bookmarks match \"$query\". Try a different search.",
                     primaryCta = EmptyStateCta(label = "Clear search", onClick = onClearQuery),
                 )
             }
