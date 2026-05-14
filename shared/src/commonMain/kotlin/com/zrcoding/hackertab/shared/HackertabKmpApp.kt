@@ -63,12 +63,8 @@ fun HackertabKmpApp() {
                         modifier = Modifier.padding(it),
                         setupStatus = destination,
                     )
-                    // TODO Wave 5K — CoachmarkOverlay(
-                    //     visible = settingRepository.observeCoachmarksSeen()
-                    //         .collectAsState(initial = true).value.not()
-                    //         && backStack.tip is HomeScreen,
-                    //     onDismiss = { settingRepository.setCoachmarksSeen(true) },
-                    // )
+                    // Wave 5K — CoachmarkOverlay is hosted inside MainNavHost
+                    // so it can observe the back-stack tip directly.
                 }
             }
         }

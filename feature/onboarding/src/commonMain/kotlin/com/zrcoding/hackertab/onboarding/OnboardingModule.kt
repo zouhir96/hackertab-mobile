@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.onboarding
 
+import com.zrcoding.hackertab.onboarding.coachmarks.CoachmarkViewModel
 import com.zrcoding.hackertab.onboarding.done.OnboardingDoneViewModel
 import com.zrcoding.hackertab.onboarding.profile.SetupProfileViewModel
 import com.zrcoding.hackertab.onboarding.sources.SetupSourcesViewModel
@@ -12,4 +13,5 @@ val onboardingModule = module {
     viewModelOf(::SetupTopicsViewModel)
     viewModelOf(::SetupSourcesViewModel)
     viewModelOf(::OnboardingDoneViewModel)
+    viewModelOf(::CoachmarkViewModel)
 }
