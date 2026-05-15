@@ -92,7 +92,7 @@ object ChipStateHandler {
         clickedChip: ChipData
     ): PersistentList<ChipData> {
         val indexOfItem = currentState.indexOf(clickedChip)
-        if (indexOfItem == -1) throw IllegalArgumentException("Item doesn't exist in the list")
+        if (indexOfItem == -1) return currentState
 
         return currentState.toMutableList()
             .apply {

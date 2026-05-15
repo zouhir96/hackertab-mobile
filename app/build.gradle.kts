@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId = "com.zrcoding.hackertab"
         // The CI will take care of incrementing this using the build number.
-        versionCode = 3
+        versionCode = 4
         versionName = libs.versions.versionName.get()
 
 

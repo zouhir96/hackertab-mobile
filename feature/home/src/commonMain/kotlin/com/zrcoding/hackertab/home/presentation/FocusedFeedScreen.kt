@@ -24,8 +24,7 @@ import org.koin.compose.viewmodel.koinViewModel
  * initialised with a specific [sourceId] active, so the SourceRail starts on
  * that pill and the body shows only that source's content.
  *
- * Navigation: declared here for Wave 4 to wire into MainNavHost.
- * TODO Wave 4: register FocusedFeedRoute in MainNavHost with sourceId argument.
+ * Registered in MainNavHost with a `sourceId` route argument.
  */
 @Composable
 fun FocusedFeedRoute(

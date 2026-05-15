@@ -1,4 +1,4 @@
-package com.zrcoding.hackertab.home.presentation.cards.mediun
+package com.zrcoding.hackertab.home.presentation.cards.medium
 
 import androidx.compose.runtime.Composable
 import com.zrcoding.hackertab.design.components.cards.ArticleCard

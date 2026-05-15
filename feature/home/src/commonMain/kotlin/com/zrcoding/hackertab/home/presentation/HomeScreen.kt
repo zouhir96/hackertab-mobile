@@ -73,20 +73,26 @@ import com.zrcoding.hackertab.home.presentation.cards.hackernoon.HackerNoonItem
 import com.zrcoding.hackertab.home.presentation.cards.hashnode.HashnodeItem
 import com.zrcoding.hackertab.home.presentation.cards.indiehackers.IndieHackersItem
 import com.zrcoding.hackertab.home.presentation.cards.lobsters.LobstersItem
-import com.zrcoding.hackertab.home.presentation.cards.mediun.MediumItem
+import com.zrcoding.hackertab.home.presentation.cards.medium.MediumItem
 import com.zrcoding.hackertab.home.presentation.cards.producthunt.ProductHuntItem
 import com.zrcoding.hackertab.home.presentation.cards.reddit.RedditItem
 import com.zrcoding.hackertab.home.presentation.utils.ShareData
 import com.zrcoding.hackertab.home.presentation.utils.ShareManager
+import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.home_empty_filter_body
+import com.zrcoding.hackertab.design.resources.home_empty_filter_cta_clear
+import com.zrcoding.hackertab.design.resources.home_empty_filter_cta_see_all
+import com.zrcoding.hackertab.design.resources.home_empty_filter_title
+import com.zrcoding.hackertab.design.resources.home_empty_no_sources_body
+import com.zrcoding.hackertab.design.resources.home_empty_no_sources_cta
+import com.zrcoding.hackertab.design.resources.home_empty_no_sources_title
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
-// TODO Wave 7+: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
+// TODO v4.1: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
 private const val IS_REDUCED_MOTION = false
-
-// TODO Wave 4: register HomeRoute + FocusedFeedRoute + WebViewRoute + LongPressActionSheet
-//  in MainNavHost. For now these routes use the existing navigation wiring.
 
 @Composable
 fun HomeRoute(
@@ -182,7 +188,7 @@ internal fun HomeScreen(
             )
         },
         snackbarHost = { HackertabSnackbarHost(hostState = snackbarHostState) },
-        // TODO Wave 4: bottomBar = { HackertabBottomNav(...) }
+        // BottomNav is provided by MainNavHost's outer Scaffold (see shared/navigation).
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -244,9 +250,11 @@ internal fun HomeScreen(
                     viewState.enabledSources.isEmpty() -> {
                         EmptyState(
                             icon = Icons.Outlined.Layers,
-                            title = "No sources selected",
-                            body = "You haven't followed any source yet. Add some to start your feed.",
-                            primaryCta = EmptyStateCta(label = "Add sources") {
+                            title = stringResource(Res.string.home_empty_no_sources_title),
+                            body = stringResource(Res.string.home_empty_no_sources_body),
+                            primaryCta = EmptyStateCta(
+                                label = stringResource(Res.string.home_empty_no_sources_cta),
+                            ) {
                                 onNavigateToSourcesSettings()
                             },
                             modifier = Modifier.fillMaxSize(),
@@ -256,13 +264,17 @@ internal fun HomeScreen(
                     viewState.articlesByDay.isEmpty() -> {
                         EmptyState(
                             icon = Icons.Outlined.Layers,
-                            title = "Nothing here yet",
-                            body = "No items match your current filter. Try clearing the filter or switching to a different source.",
-                            primaryCta = EmptyStateCta(label = "See all sources") {
+                            title = stringResource(Res.string.home_empty_filter_title),
+                            body = stringResource(Res.string.home_empty_filter_body),
+                            primaryCta = EmptyStateCta(
+                                label = stringResource(Res.string.home_empty_filter_cta_see_all),
+                            ) {
                                 onSourceSelected("all")
                             },
                             secondaryCta = viewState.selectedTopic?.let {
-                                EmptyStateCta(label = "Clear filter") {
+                                EmptyStateCta(
+                                    label = stringResource(Res.string.home_empty_filter_cta_clear),
+                                ) {
                                     // Reselect first topic to reset
                                     viewState.enabledTopics.firstOrNull()?.let { t ->
                                         onTopicSelected(t)
@@ -278,7 +290,7 @@ internal fun HomeScreen(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(
                                 top = 8.dp,
-                                bottom = 80.dp,   // TODO Wave 4: adjust for actual BottomNav height
+                                bottom = 80.dp,   // Accounts for BottomNav height (provided by MainNavHost).
                             ),
                         ) {
                             // Wave 5L: top-of-feed partial-reveal skeleton —

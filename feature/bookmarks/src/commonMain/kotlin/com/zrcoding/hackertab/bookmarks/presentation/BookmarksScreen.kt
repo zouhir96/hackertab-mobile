@@ -44,6 +44,18 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.until
+import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.action_share
+import com.zrcoding.hackertab.design.resources.bookmarks_empty_body
+import com.zrcoding.hackertab.design.resources.bookmarks_empty_cta
+import com.zrcoding.hackertab.design.resources.bookmarks_empty_title
+import com.zrcoding.hackertab.design.resources.bookmarks_group_all
+import com.zrcoding.hackertab.design.resources.bookmarks_group_by_date
+import com.zrcoding.hackertab.design.resources.bookmarks_group_by_source
+import com.zrcoding.hackertab.design.resources.bookmarks_search_cd
+import com.zrcoding.hackertab.design.resources.bookmarks_subtitle
+import com.zrcoding.hackertab.design.resources.bookmarks_title
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.material3.MaterialTheme
 import kotlin.time.Clock
@@ -58,7 +70,6 @@ import kotlin.time.toDuration
 @Composable
 fun BookmarksRoute(
     onNavigateToWebView: (String) -> Unit,
-    // TODO Wave 4: wire up onNavigateToSearch in MainNavHost when BookmarksSearchScreen is registered.
     onNavigateToSearch: () -> Unit = {},
     viewModel: BookmarksViewModel = org.koin.compose.viewmodel.koinViewModel(),
 ) {
@@ -88,12 +99,6 @@ fun BookmarksRoute(
 // Screen
 // ---------------------------------------------------------------------------
 
-private val GROUP_OPTIONS = persistentListOf(
-    SegmentOption(id = GroupBy.ALL.name, label = "All"),
-    SegmentOption(id = GroupBy.BY_SOURCE.name, label = "By source"),
-    SegmentOption(id = GroupBy.BY_DATE.name, label = "By date"),
-)
-
 @Composable
 fun BookmarksScreen(
     viewState: BookmarksViewState,
@@ -103,22 +108,31 @@ fun BookmarksScreen(
     onSearchClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val groupOptions = persistentListOf(
+        SegmentOption(id = GroupBy.ALL.name, label = stringResource(Res.string.bookmarks_group_all)),
+        SegmentOption(id = GroupBy.BY_SOURCE.name, label = stringResource(Res.string.bookmarks_group_by_source)),
+        SegmentOption(id = GroupBy.BY_DATE.name, label = stringResource(Res.string.bookmarks_group_by_date)),
+    )
     Column(modifier = modifier.fillMaxSize()) {
         HackertabAppBar(
-            title = "Bookmarks",
-            subtitle = "${viewState.totalCount} saved · ${viewState.unreadCount} unread",
+            title = stringResource(Res.string.bookmarks_title),
+            subtitle = stringResource(
+                Res.string.bookmarks_subtitle,
+                viewState.totalCount,
+                viewState.unreadCount,
+            ),
             trailing = {
                 IconButton(onClick = onSearchClick) {
                     Icon(
                         imageVector = Icons.Outlined.Search,
-                        contentDescription = "Search bookmarks",
+                        contentDescription = stringResource(Res.string.bookmarks_search_cd),
                     )
                 }
             },
         )
 
         SegmentedControl(
-            options = GROUP_OPTIONS,
+            options = groupOptions,
             selectedId = viewState.groupBy.name,
             onSelect = { id -> onGroupByChanged(GroupBy.valueOf(id)) },
             modifier = Modifier
@@ -137,9 +151,12 @@ fun BookmarksScreen(
             viewState.bookmarks.isEmpty() -> {
                 EmptyState(
                     icon = Icons.Outlined.BookmarkBorder,
-                    title = "No bookmarks yet",
-                    body = "Tap the bookmark icon on any card to save it here.",
-                    primaryCta = EmptyStateCta(label = "Browse Today", onClick = {}),
+                    title = stringResource(Res.string.bookmarks_empty_title),
+                    body = stringResource(Res.string.bookmarks_empty_body),
+                    primaryCta = EmptyStateCta(
+                        label = stringResource(Res.string.bookmarks_empty_cta),
+                        onClick = {},
+                    ),
                 )
             }
 

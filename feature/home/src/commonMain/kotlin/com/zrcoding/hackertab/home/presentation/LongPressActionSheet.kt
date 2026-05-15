@@ -8,8 +8,12 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import com.zrcoding.hackertab.design.components.sheets.ActionRow
 import com.zrcoding.hackertab.design.components.sheets.ActionSheet
+import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.action_open_in_browser
+import com.zrcoding.hackertab.design.resources.action_share
 import com.zrcoding.hackertab.domain.models.BaseArticle
 import kotlinx.collections.immutable.persistentListOf
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Bottom-sheet long-press menu for feed cards.
@@ -44,13 +48,13 @@ fun LongPressActionSheet(
             ActionRow(
                 id = "share",
                 icon = Icons.Filled.Share,
-                label = "Share",
+                label = stringResource(Res.string.action_share),
                 onClick = onShare,
             ),
             ActionRow(
                 id = "open_browser",
                 icon = Icons.Filled.OpenInBrowser,
-                label = "Open in browser",
+                label = stringResource(Res.string.action_open_in_browser),
                 onClick = onOpenInBrowser,
             ),
         ),

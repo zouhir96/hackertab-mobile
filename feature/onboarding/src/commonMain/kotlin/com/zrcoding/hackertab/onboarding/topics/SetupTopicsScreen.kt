@@ -67,8 +67,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
-// TODO Wave 4: register in MainNavHost — NavKey: OnboardingTopics(profile: Profile)
-
 @Composable
 fun SetupTopicsRoute(
     profile: Profile,
