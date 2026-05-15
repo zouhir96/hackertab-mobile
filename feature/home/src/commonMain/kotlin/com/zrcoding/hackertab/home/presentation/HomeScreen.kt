@@ -82,7 +82,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
-// TODO Wave 6 a11y — wire to LocalAccessibilityManager when CMP stabilises
+// TODO Wave 7+: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
 private const val IS_REDUCED_MOTION = false
 
 // TODO Wave 4: register HomeRoute + FocusedFeedRoute + WebViewRoute + LongPressActionSheet

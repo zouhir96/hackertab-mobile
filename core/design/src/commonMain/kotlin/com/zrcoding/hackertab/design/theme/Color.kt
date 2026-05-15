@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
  * approximations documented in the Wave 0 brief. Exact values to be validated
  * in Wave 6 — TODO: validate exact OKLCH→sRGB color match.
  */
+// Wave 6 a11y: onSurfaceVariant raised from Neutral500 to Neutral600 for WCAG AA body-text contrast (~5.7:1).
 
 // region Brand & accent
 val BrandPrimary = Color(0xFF7BFFAA)            // oklch(78% 0.19 145) — electric terminal green
@@ -45,7 +46,7 @@ val LightSurface = Neutral0
 val LightSurfaceVariant = Neutral100
 val LightOnBg = Neutral900
 val LightOnSurface = Neutral900
-val LightOnSurfaceMuted = Neutral500
+val LightOnSurfaceMuted = Neutral600
 val LightOnSurfaceFaint = Neutral400
 val LightBorder = Neutral200
 val LightBorderSubtle = Neutral100
