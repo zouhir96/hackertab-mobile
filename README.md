@@ -57,8 +57,10 @@ details.
 
 ## 🔨 Stack
 
-- Kotlin(2.0.0), coroutines
-- Kotlin multi-platform & Compose multi-platform
+- Kotlin 2.3.0, coroutines
+- Kotlin Multiplatform & Compose Multiplatform 1.9.3 + Material 3
+- Geist Sans & Geist Mono custom fonts
+- Bottom-navigation-based information architecture (Today · Bookmarks · Settings)
 - Clean architecture / MVVM
 - Multi-Module architecture
 - Dependency injection - Koin
@@ -74,20 +76,40 @@ details.
 
 ### Features
 
-- [x] 11 sources of news: Github, Hackernews, Conferences, Devto, Producthunt, Reddit, Lobsters,
-      Hashnode, Freecodecamp, IndieHackers and Medium.
-- [x] 26 Topics to follow: Android, Kotlin, Java, JavaScript, TypeScript ...
-- [x] Onboarding and app setup
-- [x] Possibility to configure which sources to follow.
-- [x] Possibility to configure which topics to follow.
+- [x] 12 sources of news: Github, Hackernews, Conferences, Devto, Producthunt, Reddit, Lobsters,
+      Hashnode, Freecodecamp, IndieHackers, HackerNoon and Medium.
+- [x] 26+ Topics to follow: Android, Kotlin, Java, JavaScript, TypeScript ...
+- [x] Profile-aware onboarding (Mobile / Frontend / Backend / Data / Fullstack).
+- [x] Unified **Today** multi-source feed with per-source rail filtering.
+- [x] Searchable Bookmarks with swipe-to-delete and grouping (All / By source / By date).
+- [x] Theme override: Light · Dark · System.
+- [x] Post-onboarding coachmark sequence on first launch.
+- [x] Configure which sources / topics to follow.
 - [x] Contact support by email.
-- [x] Support large screens (Tablet and Ipad).
-- [x] System light/dark mode support.
-- [x] Migrate to Kotlin multiplatform and compose multiplatform.
+- [x] Support large screens (Tablet & iPad) with adaptive NavRail + list-detail.
+
+### What's new in v4
+
+The v4 release is a full visual and structural redesign:
+
+- New Material 3 design system, "terminal-green" brand accent, Geist typography.
+- Bottom-navigation IA replaces the legacy drawer (Today · Bookmarks · Settings).
+- Unified **Today** feed aggregates all enabled sources into a single chronological stream;
+  per-source pills filter inline (Wave 5L: real fan-out, dedup, partial reveal).
+- Bookmarks tab gains search, swipe actions, group-by chips, and read/unread badges.
+- Appearance setting now overrides system theme (Light · Dark · System default).
+- Profile-aware onboarding flow with three-screen setup → done coachmarks.
+- Long-press action sheet on cards: Save · Share · Open in browser.
+- WCAG 2.1 AA accessibility pass (Wave 6M).
+- Tablet adaptive layout (Wave 6N).
+
+Screenshots in `imgs/` will be refreshed post-merge for v4.0.
 
 ### Development
 
 - [ ] Add offline first support
+- [ ] v4.1: dedicated profile-change flow, reduced-motion CMP plumbing
+      (`expect`/`actual` provider), dynamic-color (Material You) on Android 12+
 
 ## 🧩 Requirements
 
