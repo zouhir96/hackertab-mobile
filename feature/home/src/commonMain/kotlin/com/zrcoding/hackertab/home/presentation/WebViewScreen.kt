@@ -38,7 +38,12 @@ import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.components.WebViewRoute
+import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.action_browser
+import com.zrcoding.hackertab.design.resources.action_open_in_browser
+import com.zrcoding.hackertab.design.resources.action_share
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import org.jetbrains.compose.resources.stringResource
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -151,12 +156,12 @@ fun WebViewScreen(
                         icon = {
                             Icon(
                                 imageVector = Icons.Filled.Share,
-                                contentDescription = "Share",
+                                contentDescription = stringResource(Res.string.action_share),
                                 tint = MaterialTheme.colorScheme.onBackground,
                                 modifier = Modifier.size(20.dp),
                             )
                         },
-                        label = "Share",
+                        label = stringResource(Res.string.action_share),
                         onClick = onShare,
                         modifier = Modifier.weight(1f),
                     )
@@ -164,12 +169,12 @@ fun WebViewScreen(
                         icon = {
                             Icon(
                                 imageVector = Icons.Filled.OpenInBrowser,
-                                contentDescription = "Open in browser",
+                                contentDescription = stringResource(Res.string.action_open_in_browser),
                                 tint = MaterialTheme.colorScheme.onBackground,
                                 modifier = Modifier.size(20.dp),
                             )
                         },
-                        label = "Browser",
+                        label = stringResource(Res.string.action_browser),
                         onClick = onOpenInBrowser,
                         modifier = Modifier.weight(1f),
                     )

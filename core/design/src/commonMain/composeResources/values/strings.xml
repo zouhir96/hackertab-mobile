@@ -15,10 +15,10 @@
     <string name="claps">%1$s claps</string>
     <string name="subreddit">r/ %1$s</string>
     <string name="loading">Loading …</string>
-    <string name="empty_source_msg">No articles found for %1$s !!</string>
-    <string name="failed_to_load_source">Failed to load articles found for %1$s !!</string>
-    <string name="no_internet_connect">Please verify you internet connection and !!</string>
-    <string name="no_source_selected">You didn\'t select any source yet!!\n you can enable sources in settings -> sources</string>
+    <string name="empty_source_msg">No articles found for %1$s.</string>
+    <string name="failed_to_load_source">Failed to load articles for %1$s.</string>
+    <string name="no_internet_connect">Please check your internet connection and try again.</string>
+    <string name="no_source_selected">You haven\'t followed any source yet.\nYou can enable sources in Settings → Sources.</string>
     <string name="common_retry">Retry</string>
     <string name="common_settings">Open Settings</string>
     <string name="common_ok">Ok</string>
@@ -113,4 +113,29 @@
     <string name="onboarding_done_tip3_title">Long-press a card</string>
     <string name="onboarding_done_tip3_body">For Bookmark · Share · Copy link · Open in browser.</string>
     <string name="onboarding_done_cta">Open my feed</string>
+
+    <!-- Bookmarks v4 -->
+    <string name="bookmarks_title">Bookmarks</string>
+    <string name="bookmarks_subtitle">%1$d saved · %2$d unread</string>
+    <string name="bookmarks_search_cd">Search bookmarks</string>
+    <string name="bookmarks_group_all">All</string>
+    <string name="bookmarks_group_by_source">By source</string>
+    <string name="bookmarks_group_by_date">By date</string>
+    <string name="bookmarks_empty_title">No bookmarks yet</string>
+    <string name="bookmarks_empty_body">Tap the bookmark icon on any card to save it here.</string>
+    <string name="bookmarks_empty_cta">Browse Today</string>
+
+    <!-- Home v4 — empty / error states -->
+    <string name="home_empty_no_sources_title">No sources selected</string>
+    <string name="home_empty_no_sources_body">You haven\'t followed any source yet. Add some to start your feed.</string>
+    <string name="home_empty_no_sources_cta">Add sources</string>
+    <string name="home_empty_filter_title">Nothing here yet</string>
+    <string name="home_empty_filter_body">No items match your current filter. Try clearing the filter or switching to a different source.</string>
+    <string name="home_empty_filter_cta_see_all">See all sources</string>
+    <string name="home_empty_filter_cta_clear">Clear filter</string>
+
+    <!-- Long-press action sheet + WebView bottom bar -->
+    <string name="action_share">Share</string>
+    <string name="action_open_in_browser">Open in browser</string>
+    <string name="action_browser">Browser</string>
 </resources>

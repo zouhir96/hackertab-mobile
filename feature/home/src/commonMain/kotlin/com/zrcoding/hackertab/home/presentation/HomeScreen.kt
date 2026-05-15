@@ -78,6 +78,15 @@ import com.zrcoding.hackertab.home.presentation.cards.producthunt.ProductHuntIte
 import com.zrcoding.hackertab.home.presentation.cards.reddit.RedditItem
 import com.zrcoding.hackertab.home.presentation.utils.ShareData
 import com.zrcoding.hackertab.home.presentation.utils.ShareManager
+import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.home_empty_filter_body
+import com.zrcoding.hackertab.design.resources.home_empty_filter_cta_clear
+import com.zrcoding.hackertab.design.resources.home_empty_filter_cta_see_all
+import com.zrcoding.hackertab.design.resources.home_empty_filter_title
+import com.zrcoding.hackertab.design.resources.home_empty_no_sources_body
+import com.zrcoding.hackertab.design.resources.home_empty_no_sources_cta
+import com.zrcoding.hackertab.design.resources.home_empty_no_sources_title
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -241,9 +250,11 @@ internal fun HomeScreen(
                     viewState.enabledSources.isEmpty() -> {
                         EmptyState(
                             icon = Icons.Outlined.Layers,
-                            title = "No sources selected",
-                            body = "You haven't followed any source yet. Add some to start your feed.",
-                            primaryCta = EmptyStateCta(label = "Add sources") {
+                            title = stringResource(Res.string.home_empty_no_sources_title),
+                            body = stringResource(Res.string.home_empty_no_sources_body),
+                            primaryCta = EmptyStateCta(
+                                label = stringResource(Res.string.home_empty_no_sources_cta),
+                            ) {
                                 onNavigateToSourcesSettings()
                             },
                             modifier = Modifier.fillMaxSize(),
@@ -253,13 +264,17 @@ internal fun HomeScreen(
                     viewState.articlesByDay.isEmpty() -> {
                         EmptyState(
                             icon = Icons.Outlined.Layers,
-                            title = "Nothing here yet",
-                            body = "No items match your current filter. Try clearing the filter or switching to a different source.",
-                            primaryCta = EmptyStateCta(label = "See all sources") {
+                            title = stringResource(Res.string.home_empty_filter_title),
+                            body = stringResource(Res.string.home_empty_filter_body),
+                            primaryCta = EmptyStateCta(
+                                label = stringResource(Res.string.home_empty_filter_cta_see_all),
+                            ) {
                                 onSourceSelected("all")
                             },
                             secondaryCta = viewState.selectedTopic?.let {
-                                EmptyStateCta(label = "Clear filter") {
+                                EmptyStateCta(
+                                    label = stringResource(Res.string.home_empty_filter_cta_clear),
+                                ) {
                                     // Reselect first topic to reset
                                     viewState.enabledTopics.firstOrNull()?.let { t ->
                                         onTopicSelected(t)
