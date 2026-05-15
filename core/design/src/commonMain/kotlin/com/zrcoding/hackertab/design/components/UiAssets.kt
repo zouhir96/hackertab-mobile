@@ -66,7 +66,14 @@ fun Source.Icon(size: Dp = MaterialTheme.dimension.space40) {
     }
 }
 
+/**
+ * Tag → language-color map consumed by [String.getTagColor]. Preserves the
+ * v3 22-entry baseline (Critique Issue 8 alignment) and adds the Wave-1 token
+ * additions (rust, csharp, html, css, shell, elixir, haskell, scala, clojure,
+ * svelte) as a superset.
+ */
 val tags = mapOf(
+    // v3-original 22-entry baseline (Critique Issue 8)
     "python" to Color((0XFF3572A5)),
     "javascript" to Color((0XFFF1E05A)),
     "cplusplus" to Color((0XFFF34B7D)),
@@ -89,4 +96,16 @@ val tags = mapOf(
     "android" to Color((0XFF30D880)),
     "flutter" to Color((0XFF67B1F1)),
     "dart" to Color((0XFF045797)),
+    // Wave 1 v4 additions — GitHub-Linguist canonical colors
+    "rust" to Color(0xFFDEA584),
+    "csharp" to Color(0xFF178600),
+    "c#" to Color(0xFF178600),
+    "html" to Color(0xFFE34C26),
+    "css" to Color(0xFF563D7C),
+    "shell" to Color(0xFF89E051),
+    "elixir" to Color(0xFF6E4A7E),
+    "haskell" to Color(0xFF5E5086),
+    "scala" to Color(0xFFC22D40),
+    "clojure" to Color(0xFFDB5855),
+    "svelte" to Color(0xFFFF3E00),
 )
