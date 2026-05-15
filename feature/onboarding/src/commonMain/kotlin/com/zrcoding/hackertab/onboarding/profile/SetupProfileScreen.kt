@@ -46,7 +46,16 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
-/** Emoji glyph + mono sub-label for each profile card in the v4 redesign. */
+/**
+ * Emoji glyph + mono sub-label for each profile card in the v4 redesign.
+ *
+ * Wave 6O (Critique Issue 12): the grid was originally laid out as 3 columns,
+ * which left ~91dp of text width per card. With the longest label
+ * ("Full Stack Engineer") that produced visually cramped 2-line wraps that
+ * fought the surrounding whitespace. Decision: drop to a 2-column grid —
+ * gives ~175dp text width, every label fits comfortably on a single line,
+ * and the calmer rhythm matches the onboarding "breathing room" vibe.
+ */
 private data class ProfileUiMeta(val emoji: String, val sub: String)
 
 private val profileMeta: Map<Profile, ProfileUiMeta> = mapOf(
@@ -113,7 +122,8 @@ fun SetupProfileScreen(
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
 
         LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
+            // Wave 6O — Issue 12: 2 columns gives the longest label ("Full Stack Engineer") room to breathe.
+            columns = GridCells.Fixed(2),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
             modifier = Modifier.weight(1f),
