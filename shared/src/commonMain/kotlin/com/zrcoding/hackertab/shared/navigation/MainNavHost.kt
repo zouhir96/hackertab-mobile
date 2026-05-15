@@ -3,6 +3,7 @@ package com.zrcoding.hackertab.shared.navigation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -43,6 +44,7 @@ import com.zrcoding.hackertab.bookmarks.presentation.BookmarksSearchRoute
 import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
 import com.zrcoding.hackertab.design.components.BottomNavItem
 import com.zrcoding.hackertab.design.components.HackertabBottomNav
+import com.zrcoding.hackertab.design.components.HackertabNavRail
 import com.zrcoding.hackertab.design.components.WebViewRoute
 import com.zrcoding.hackertab.domain.models.Profile
 import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase
@@ -129,7 +131,11 @@ private val config = SavedStateConfiguration {
     }
 }
 
-private val bottomNavItems = persistentListOf(
+/**
+ * Wave 6N — shared list of top-level destinations consumed by both
+ * [HackertabBottomNav] (phone) and [HackertabNavRail] (tablet).
+ */
+private val topLevelNavItems = persistentListOf(
     BottomNavItem(id = "today", label = "Today", icon = Icons.Outlined.Today),
     BottomNavItem(id = "saved", label = "Saved", icon = Icons.AutoMirrored.Outlined.LibraryBooks),
     BottomNavItem(id = "settings", label = "Settings", icon = Icons.Outlined.Settings),
@@ -212,12 +218,22 @@ fun MainNavHost(
 
     CompositionLocalProvider(LocalIsTabletSize provides isTabletSize) {
         Box(modifier = modifier.fillMaxSize()) {
+        Row(modifier = Modifier.fillMaxSize()) {
+            // Wave 6N — tablet: NavRail on the left (≥medium width).
+            if (isTabletSize && isTopLevel) {
+                HackertabNavRail(
+                    items = topLevelNavItems,
+                    activeId = activeId,
+                    onSelect = ::switchTab,
+                )
+            }
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
-                if (isTopLevel) {
+                // Phone: BottomNav. Tablet uses NavRail above instead.
+                if (isTopLevel && !isTabletSize) {
                     HackertabBottomNav(
-                        items = bottomNavItems,
+                        items = topLevelNavItems,
                         activeId = activeId,
                         onSelect = ::switchTab,
                     )
@@ -462,6 +478,7 @@ fun MainNavHost(
                 }
             )
         }
+        } // Row
         // Wave 5K — coachmarks overlay sits above NavDisplay AND BottomNav.
         CoachmarkOverlay(
             visible = !coachmarksSeen && isOnHome,
