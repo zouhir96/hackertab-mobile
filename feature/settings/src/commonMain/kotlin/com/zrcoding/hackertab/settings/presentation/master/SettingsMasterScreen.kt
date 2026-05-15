@@ -54,8 +54,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
-// TODO Wave 4: register SettingsMasterScreen in MainNavHost as a top-level tab destination
-
 @Composable
 fun SettingsMasterRoute(
     viewModel: SettingsMasterViewModel = koinViewModel(),

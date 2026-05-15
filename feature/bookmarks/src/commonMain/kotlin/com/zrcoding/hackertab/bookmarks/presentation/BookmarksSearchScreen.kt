@@ -50,8 +50,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
  * Shares the [BookmarksViewModel] with [BookmarksRoute] — the parent nav
  * host must ensure the same VM instance is provided (e.g. scoped to the
  * bookmarks nav graph).
- *
- * TODO Wave 4: register in MainNavHost.
  */
 @Composable
 fun BookmarksSearchRoute(

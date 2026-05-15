@@ -55,8 +55,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
-// TODO Wave 4: register SettingsAboutScreen in MainNavHost
-
 @Composable
 fun SettingsAboutRoute(
     viewModel: SettingsAboutViewModel = koinViewModel(),

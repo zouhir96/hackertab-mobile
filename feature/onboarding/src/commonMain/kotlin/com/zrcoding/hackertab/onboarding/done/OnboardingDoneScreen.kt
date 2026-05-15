@@ -46,10 +46,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
-// TODO Wave 4: register in MainNavHost — NavKey: OnboardingDone
-//   Navigation: replace the entire onboarding back-stack with the Home graph
-//   so the user cannot navigate back to onboarding after completing it.
-
 @Composable
 fun OnboardingDoneRoute(
     navigateToFeed: () -> Unit,

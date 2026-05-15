@@ -42,8 +42,6 @@ import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-// TODO Wave 4: register WebViewScreen in MainNavHost with url + title arguments.
-
 /**
  * WebView modal screen.
  *

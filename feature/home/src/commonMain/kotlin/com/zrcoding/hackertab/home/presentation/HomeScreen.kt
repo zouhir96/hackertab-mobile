@@ -73,7 +73,7 @@ import com.zrcoding.hackertab.home.presentation.cards.hackernoon.HackerNoonItem
 import com.zrcoding.hackertab.home.presentation.cards.hashnode.HashnodeItem
 import com.zrcoding.hackertab.home.presentation.cards.indiehackers.IndieHackersItem
 import com.zrcoding.hackertab.home.presentation.cards.lobsters.LobstersItem
-import com.zrcoding.hackertab.home.presentation.cards.mediun.MediumItem
+import com.zrcoding.hackertab.home.presentation.cards.medium.MediumItem
 import com.zrcoding.hackertab.home.presentation.cards.producthunt.ProductHuntItem
 import com.zrcoding.hackertab.home.presentation.cards.reddit.RedditItem
 import com.zrcoding.hackertab.home.presentation.utils.ShareData
@@ -82,11 +82,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
-// TODO Wave 7+: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
+// TODO v4.1: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
 private const val IS_REDUCED_MOTION = false
-
-// TODO Wave 4: register HomeRoute + FocusedFeedRoute + WebViewRoute + LongPressActionSheet
-//  in MainNavHost. For now these routes use the existing navigation wiring.
 
 @Composable
 fun HomeRoute(
@@ -182,7 +179,7 @@ internal fun HomeScreen(
             )
         },
         snackbarHost = { HackertabSnackbarHost(hostState = snackbarHostState) },
-        // TODO Wave 4: bottomBar = { HackertabBottomNav(...) }
+        // BottomNav is provided by MainNavHost's outer Scaffold (see shared/navigation).
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -278,7 +275,7 @@ internal fun HomeScreen(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(
                                 top = 8.dp,
-                                bottom = 80.dp,   // TODO Wave 4: adjust for actual BottomNav height
+                                bottom = 80.dp,   // Accounts for BottomNav height (provided by MainNavHost).
                             ),
                         ) {
                             // Wave 5L: top-of-feed partial-reveal skeleton —

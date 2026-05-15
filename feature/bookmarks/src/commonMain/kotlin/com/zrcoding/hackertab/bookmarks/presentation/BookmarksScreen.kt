@@ -58,7 +58,6 @@ import kotlin.time.toDuration
 @Composable
 fun BookmarksRoute(
     onNavigateToWebView: (String) -> Unit,
-    // TODO Wave 4: wire up onNavigateToSearch in MainNavHost when BookmarksSearchScreen is registered.
     onNavigateToSearch: () -> Unit = {},
     viewModel: BookmarksViewModel = org.koin.compose.viewmodel.koinViewModel(),
 ) {

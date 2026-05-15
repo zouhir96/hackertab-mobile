@@ -389,7 +389,7 @@ fun MainNavHost(
                             onNavigateToSources = { backStack.add(SettingsSourcesScreen) },
                             onNavigateToAppearance = { backStack.add(SettingsAppearanceScreen) },
                             onNavigateToAbout = { backStack.add(SettingsAboutScreen) },
-                            // TODO Wave 5/6 — Profile-change flow. For v4.0 we route
+                            // TODO v4.1 — dedicated profile-change flow. For v4.0 we route
                             // back through onboarding's profile picker.
                             onNavigateToProfile = { backStack.add(SetupProfileScreen) },
                         )
