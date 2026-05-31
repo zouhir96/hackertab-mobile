@@ -52,6 +52,7 @@ import com.zrcoding.hackertab.design.resources.home_empty_no_sources_title
 import com.zrcoding.hackertab.design.theme.HackertabMotion
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.codeSmall
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.domain.models.BaseArticle
 import com.zrcoding.hackertab.domain.models.Conference
@@ -93,7 +94,6 @@ fun HomeRoute(
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
     val shareManager: ShareManager = koinInject()
 
-    // Auto-select first article on tablets
     val isTabletSize = LocalIsTabletSize.current
     LaunchedEffect(viewState.allArticles, isTabletSize) {
         if (isTabletSize && viewState.allArticles.isNotEmpty()) {
@@ -119,7 +119,6 @@ fun HomeRoute(
         onLongPress = viewModel::onLongPress,
     )
 
-    // Long-press action sheet
     val longPressed = viewState.longPressedArticle
     if (longPressed != null) {
         LongPressActionSheet(
@@ -157,7 +156,6 @@ internal fun HomeScreen(
     val pullRefreshState = rememberPullToRefreshState()
 
     Column(modifier = Modifier.fillMaxSize(),) {
-        // Source rail — Issue 11: plain "All" (no ★), SourceRail handles it
         SourceRail(
             sources = viewState.enabledSources,
             activeSourceId = viewState.activeSourceId,
@@ -165,7 +163,6 @@ internal fun HomeScreen(
             modifier = Modifier.fillMaxWidth(),
         )
 
-        // Topic chip strip — shown for "All" mode and for filterable sources
         if (viewState.showTopicStrip && viewState.enabledTopics.isNotEmpty()) {
             TopicChipStrip(
                 topics = viewState.enabledTopics,
@@ -175,10 +172,9 @@ internal fun HomeScreen(
                 onAddTopic = onNavigateToTopicsSettings,
                 modifier = Modifier.fillMaxWidth(),
             )
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(MaterialTheme.dimension.space4))
         }
 
-        // Body — M7: Crossfade between skeleton and feed content on isLoading toggle
         PullToRefreshBox(
             isRefreshing = viewState.isLoading,
             onRefresh = onRefresh,
@@ -198,7 +194,7 @@ internal fun HomeScreen(
                         FeedLoadingSkeleton(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(top = 8.dp),
+                                .padding(top = MaterialTheme.dimension.space8),
                         )
                     }
 
@@ -237,7 +233,6 @@ internal fun HomeScreen(
                                 EmptyStateCta(
                                     label = stringResource(Res.string.home_empty_filter_cta_clear),
                                 ) {
-                                    // Reselect first topic to reset
                                     viewState.enabledTopics.firstOrNull()?.let { t ->
                                         onTopicSelected(t)
                                     }
@@ -251,12 +246,10 @@ internal fun HomeScreen(
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(
-                                top = 8.dp,
-                                bottom = 80.dp,   // Accounts for BottomNav height (provided by MainNavHost).
+                                top = MaterialTheme.dimension.space8,
+                                bottom = 80.dp,
                             ),
                         ) {
-                            // Wave 5L: top-of-feed partial-reveal skeleton —
-                            // shown while < 50% of aggregated sources have loaded.
                             if (viewState.isPartialReveal && viewState.isAllSourcesMode) {
                                 item(key = "partial_reveal_skeleton") {
                                     FeedLoadingSkeleton(
@@ -288,8 +281,6 @@ internal fun HomeScreen(
                                 runningOffset += items.size
                             }
 
-                            // Wave 5L (Issue 3 / E6): inline error caption per
-                            // failed source at the end of the feed.
                             viewState.perSourceLoadState.forEach { (source, state) ->
                                 if (state is SourceLoadState.Failed) {
                                     item(key = "failed-${source.id}") {
@@ -298,8 +289,8 @@ internal fun HomeScreen(
                                             style = codeSmall,
                                             color = MaterialTheme.colorScheme.error,
                                             modifier = Modifier.padding(
-                                                horizontal = 16.dp,
-                                                vertical = 8.dp,
+                                                horizontal = MaterialTheme.dimension.space16,
+                                                vertical = MaterialTheme.dimension.space8,
                                             ),
                                         )
                                     }
@@ -308,12 +299,11 @@ internal fun HomeScreen(
                         }
                     }
                 }
-            } // end Crossfade content
+            }
         }
     }
 }
 
-/** LazyListScope extension to emit feed cards for a bucket's item list. */
 private fun LazyListScope.feedItems(
     items: List<BaseArticle>,
     seenIds: List<String>,
@@ -341,10 +331,6 @@ private fun LazyListScope.feedItems(
     }
 }
 
-/**
- * M6: staggered fade-in + slide for the first 6 items on initial load. After
- * the first reveal, subsequent updates render immediately (no re-stagger).
- */
 @Composable
 private fun StaggeredFeedCardEntry(
     absoluteIndex: Int,
@@ -356,7 +342,6 @@ private fun StaggeredFeedCardEntry(
     onLongPress: (BaseArticle) -> Unit,
 ) {
     val shouldStagger = !IS_REDUCED_MOTION && absoluteIndex < 6
-    // Positional scope is fine here — LazyColumn `key` already keys by article.id.
     var visible by rememberSaveable(article.id) { mutableStateOf(!shouldStagger) }
     LaunchedEffect(article.id) {
         if (!visible) {
@@ -464,14 +449,10 @@ private fun BaseArticle.ToFeedCard(
                 onClick = onClick, onBookmarkClick = onBookmarkClick,
                 onShareClick = onShareClick, onLongClick = onLongClick,
             )
-            else -> {} // Source types handled by their own model type above
+            else -> {}
         }
     }
 }
-
-// -------------------------------------------------------------------------
-// Previews
-// -------------------------------------------------------------------------
 
 @Preview
 @Composable

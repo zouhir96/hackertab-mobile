@@ -70,7 +70,6 @@ fun OnboardingDoneScreen(
     ) {
         Spacer(modifier = Modifier.weight(1f))
 
-        // Headline
         Text(
             text = stringResource(Res.string.onboarding_done_headline),
             color = MaterialTheme.colorScheme.onBackground,
@@ -88,7 +87,6 @@ fun OnboardingDoneScreen(
 
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space32))
 
-        // 3 orientation cards
         Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12)) {
             OrientationCard(
                 number = 1,
@@ -139,10 +137,9 @@ private fun OrientationCard(
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
         ) {
-            // Number badge
             Box(
                 modifier = Modifier
-                    .size(28.dp)
+                    .size(MaterialTheme.dimension.space24)
                     .background(
                         MaterialTheme.colorScheme.primaryContainer,
                         MaterialTheme.shapes.small,
@@ -155,7 +152,6 @@ private fun OrientationCard(
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
             }
-            // Text content
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = stringResource(titleRes),
@@ -172,10 +168,6 @@ private fun OrientationCard(
         }
     }
 }
-
-// ---------------------------------------------------------------------------
-// Previews
-// ---------------------------------------------------------------------------
 
 @Preview
 @Composable

@@ -30,25 +30,10 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hackertab v4 SnackbarHost.
- *
- * Visual reference: `design/project/components/Library.jsx` line 177-181
- * (`Toast / Snackbar`).
- *
- * Anatomy:
- * - 12dp radius, `inverseSurface` background, `inverseOnSurface` text.
- * - 14/16 padding, 10dp gap.
- * - Leading `Icons.Outlined.Info` (16dp) tinted `colorScheme.primary`.
- * - Optional trailing action: 26dp tall, 0/8dp padding, fully rounded,
- *   1dp border tinted `inverseOnSurface @ 0.2f` alpha.
- * - 4-second auto-dismiss is the M3 default.
- *
- * A11y: marked as an assertive live region so action snackbars are announced.
- */
 @Composable
 fun HackertabSnackbarHost(
     hostState: SnackbarHostState,
@@ -71,20 +56,20 @@ private fun HackertabSnackbar(data: SnackbarData) {
     )
 
     Snackbar(
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier.padding(horizontal = MaterialTheme.dimension.space16, vertical = MaterialTheme.dimension.space12),
+        shape = RoundedCornerShape(MaterialTheme.dimension.space12),
         containerColor = containerColor,
         contentColor = contentColor,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
         ) {
             Icon(
                 imageVector = Icons.Outlined.Info,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(16.dp),
+                modifier = Modifier.size(MaterialTheme.dimension.space16),
             )
             Text(
                 text = data.visuals.message,
@@ -95,10 +80,10 @@ private fun HackertabSnackbar(data: SnackbarData) {
             data.visuals.actionLabel?.let { actionLabel ->
                 OutlinedButton(
                     onClick = { data.performAction() },
-                    modifier = Modifier.height(26.dp),
+                    modifier = Modifier.height(MaterialTheme.dimension.space24),
                     shape = CircleShape,
                     border = actionBorder,
-                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
+                    contentPadding = PaddingValues(horizontal = MaterialTheme.dimension.space8, vertical = 0.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
                         contentColor = contentColor,
                     ),
@@ -112,8 +97,6 @@ private fun HackertabSnackbar(data: SnackbarData) {
         }
     }
 }
-
-// ----- Previews ---------------------------------------------------------
 
 @Preview
 @Composable

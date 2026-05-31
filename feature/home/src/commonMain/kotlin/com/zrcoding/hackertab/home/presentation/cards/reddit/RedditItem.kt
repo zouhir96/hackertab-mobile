@@ -14,9 +14,6 @@ import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Reddit feed card. Meta: score (brand-orange dot) · comments.
- */
 @Composable
 fun RedditItem(
     article: Article,

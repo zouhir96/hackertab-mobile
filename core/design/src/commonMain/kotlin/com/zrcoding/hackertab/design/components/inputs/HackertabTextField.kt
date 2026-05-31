@@ -34,24 +34,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.dimension
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hackertab v4 single-line text field. Mirrors `Library.jsx` slug 03.05
- * (InputField).
- *
- * Anatomy:
- *  - 40dp tall row, 14dp horizontal / 0 vertical padding, 10dp radius.
- *  - `colorScheme.surfaceVariant` background. Optional 1dp `error` border.
- *  - Optional [leadingIcon] (16dp) tinted `colorScheme.onSurfaceVariant`.
- *  - Optional clear icon (14dp X) shown when the field is non-empty and
- *    [onClear] is non-null.
- *  - When [isError], the row gets a 1dp `colorScheme.error` border and the
- *    optional [errorMessage] is rendered below in `bodySmall` / `error` color.
- *
- * A11y: errors are exposed via `Modifier.semantics { error(errorMessage) }`
- * which TalkBack and VoiceOver announce alongside the value.
- */
 @Composable
 fun HackertabTextField(
     value: String,
@@ -77,13 +62,13 @@ fun HackertabTextField(
     Column(modifier = modifier) {
         val rowModifier = Modifier
             .fillMaxWidth()
-            .height(40.dp)
-            .clip(RoundedCornerShape(10.dp))
+            .height(MaterialTheme.dimension.space40)
+            .clip(RoundedCornerShape(MaterialTheme.dimension.space8))
             .background(backgroundColor)
             .let { base ->
-                if (isError) base.border(1.dp, errorColor, RoundedCornerShape(10.dp)) else base
+                if (isError) base.border(1.dp, errorColor, RoundedCornerShape(MaterialTheme.dimension.space8)) else base
             }
-            .padding(horizontal = 14.dp)
+            .padding(horizontal = MaterialTheme.dimension.space12)
             .semantics {
                 if (isError && errorMessage != null) error(errorMessage)
             }
@@ -91,14 +76,14 @@ fun HackertabTextField(
         Row(
             modifier = rowModifier,
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
         ) {
             leadingIcon?.let {
                 Icon(
                     imageVector = it,
                     contentDescription = null,
                     tint = mutedColor,
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(MaterialTheme.dimension.space16),
                 )
             }
             Box(modifier = Modifier.weight(1f)) {
@@ -129,8 +114,8 @@ fun HackertabTextField(
                     contentDescription = "Clear text",
                     tint = mutedColor,
                     modifier = Modifier
-                        .size(14.dp)
-                        .clip(RoundedCornerShape(7.dp))
+                        .size(MaterialTheme.dimension.space12)
+                        .clip(RoundedCornerShape(MaterialTheme.dimension.space6))
                         .clickable(role = Role.Button, onClick = onClear)
                         .semantics { role = Role.Button },
                 )
@@ -141,7 +126,7 @@ fun HackertabTextField(
                 text = errorMessage,
                 style = MaterialTheme.typography.bodySmall,
                 color = errorColor,
-                modifier = Modifier.padding(start = 14.dp, top = 4.dp),
+                modifier = Modifier.padding(start = MaterialTheme.dimension.space12, top = MaterialTheme.dimension.space4),
             )
         }
     }

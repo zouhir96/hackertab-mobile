@@ -9,12 +9,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-/**
- * Wave 4 wire-up:
- * In HackertabKmpApp.kt, koinInject<SettingRepository>().observeThemeMode()
- *   .collectAsStateWithLifecycle(ThemeMode.SYSTEM)
- * Pass to HackertabTheme(themeMode = mode).
- */
 class SettingsAppearanceViewModel(
     private val settingRepository: SettingRepository,
 ) : ViewModel() {

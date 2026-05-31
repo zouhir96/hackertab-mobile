@@ -13,13 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.components.cards.ArticleCard
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.ic_comment
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.SourceHackerNews
 import com.zrcoding.hackertab.design.theme.codeSmall
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.home.presentation.utils.timeAgo
@@ -27,10 +27,6 @@ import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hacker News feed card.
- * Meta: score (brand orange) · time ago · comment count.
- */
 @Composable
 fun HackerNewsItem(
     article: Article,
@@ -51,14 +47,13 @@ fun HackerNewsItem(
         onBookmarkClick = onBookmarkClick,
         onMoreClick = onLongClick,
         metaContent = {
-            // Score dot (brand orange)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4),
             ) {
                 Box(
                     modifier = Modifier
-                        .size(6.dp)
+                        .size(MaterialTheme.dimension.space6)
                         .clip(CircleShape)
                         .background(SourceHackerNews),
                 )
@@ -68,16 +63,15 @@ fun HackerNewsItem(
                     color = SourceHackerNews,
                 )
             }
-            // Comment count
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4),
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_comment),
                     contentDescription = "comments",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(12.dp),
+                    modifier = Modifier.size(MaterialTheme.dimension.space12),
                 )
                 Text(
                     text = "${article.commentsCount}",

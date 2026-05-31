@@ -6,19 +6,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-/**
- * Hackertab v4 button size scale. Heights, paddings, and text styles match
- * `design/project/components/Library.jsx` (slug 03.04 Buttons).
- *
- * Size selection:
- *  - [Small]  — inline / dense surfaces (filter rows, secondary calls).
- *  - [Medium] — default app-wide button height.
- *  - [Large]  — primary CTAs at the bottom of full-bleed onboarding screens.
- *
- *  Shape:
- *  - Small / Medium use [MaterialTheme.shapes.medium] (10dp).
- *  - Large uses fully-rounded `CircleShape` per the design reference.
- */
 enum class ButtonSize(
     val height: Dp,
     val horizontalPadding: Dp,

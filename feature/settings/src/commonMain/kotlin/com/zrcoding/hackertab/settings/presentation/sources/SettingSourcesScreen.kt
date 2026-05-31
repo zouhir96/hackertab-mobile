@@ -31,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
@@ -112,7 +111,7 @@ private fun SettingSourcesScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp)),
+                .clip(RoundedCornerShape(MaterialTheme.dimension.space12)),
         ) {
             sources.forEachIndexed { index, chipData ->
                 val domainSource = DomainSource.fromId(chipData.id)
@@ -154,14 +153,13 @@ private fun SourceRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
     ) {
-        // Brand icon block
         if (domainSource != null) {
-            domainSource.Icon(size = 32.dp)
+            domainSource.Icon(size = MaterialTheme.dimension.space32)
         } else {
             Box(
                 modifier = Modifier
-                    .size(32.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .size(MaterialTheme.dimension.space32)
+                    .clip(RoundedCornerShape(MaterialTheme.dimension.space8))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
             )
         }
@@ -191,8 +189,6 @@ private fun SourceRow(
         )
     }
 }
-
-// region Previews
 
 @Preview
 @Composable
@@ -227,5 +223,3 @@ private fun DomainSource.toChipDataPreview(selected: Boolean) = ChipData(
     image = null,
     selected = selected,
 )
-
-// endregion

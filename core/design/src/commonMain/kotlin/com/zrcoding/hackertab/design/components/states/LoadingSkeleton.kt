@@ -34,22 +34,10 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hackertab v4 ShimmerBox — primitive shimmering rectangle used by skeleton
- * placeholders.
- *
- * Animates a horizontal gradient sweep across `surfaceVariant` → `surface`
- * → `surfaceVariant` over 1500ms.
- *
- * NOTE: Compose Multiplatform does not yet expose a stable cross-platform
- * `LocalAccessibilityManager.isReduceMotionEnabled` reading. Reduced-motion
- * is honoured best-effort on platforms that pause infinite animations when
- * the OS-level setting is on. We document this limitation here so call-sites
- * can guard the skeleton with their own preference where required.
- */
 @Composable
 fun ShimmerBox(
     modifier: Modifier = Modifier,
@@ -79,22 +67,14 @@ fun ShimmerBox(
 
 private const val SHIMMER_WIDTH_PX: Float = 320f
 
-/**
- * Hackertab v4 FeedLoadingSkeleton — renders [itemCount] card placeholders that
- * mimic the rhythm of the real `ArticleCard`.
- *
- * Visual reference: `design/project/components/Screens.jsx` lines 727-752
- * (`LoadingState`).
- */
 @Composable
 fun FeedLoadingSkeleton(
     modifier: Modifier = Modifier,
     itemCount: Int = 4,
 ) {
     val border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-    val cardShape = RoundedCornerShape(16.dp)
+    val cardShape = RoundedCornerShape(MaterialTheme.dimension.space16)
 
-    // Match Screens.jsx LoadingState — 90/75% widths varied per item.
     val titleWidthFractions = listOf(0.90f, 0.85f, 0.80f, 0.75f, 0.70f, 0.65f)
 
     Column(
@@ -111,62 +91,59 @@ fun FeedLoadingSkeleton(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 14.dp)
-                    .padding(bottom = 8.dp)
+                    .padding(horizontal = MaterialTheme.dimension.space12)
+                    .padding(bottom = MaterialTheme.dimension.space8)
                     .background(MaterialTheme.colorScheme.surface, cardShape)
                     .border(border = border, shape = cardShape)
-                    .padding(horizontal = 14.dp, vertical = 14.dp),
+                    .padding(horizontal = MaterialTheme.dimension.space12, vertical = MaterialTheme.dimension.space12),
             ) {
                 Column {
-                    // Source-tag rhythm: 18dp icon shimmer + 90dp label shimmer.
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
                     ) {
                         ShimmerBox(
-                            modifier = Modifier.size(18.dp),
-                            shape = RoundedCornerShape(5.dp),
+                            modifier = Modifier.size(MaterialTheme.dimension.space16),
+                            shape = RoundedCornerShape(MaterialTheme.dimension.space4),
                         )
                         ShimmerBox(
                             modifier = Modifier
                                 .width(90.dp)
-                                .height(10.dp),
+                                .height(MaterialTheme.dimension.space8),
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(MaterialTheme.dimension.space8))
 
-                    // Two title lines.
                     ShimmerBox(
                         modifier = Modifier
                             .fillMaxWidth(titleFraction)
-                            .height(14.dp),
+                            .height(MaterialTheme.dimension.space12),
                     )
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(MaterialTheme.dimension.space6))
                     ShimmerBox(
                         modifier = Modifier
                             .fillMaxWidth(subtitleFraction)
-                            .height(14.dp),
+                            .height(MaterialTheme.dimension.space12),
                     )
 
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(modifier = Modifier.height(MaterialTheme.dimension.space12))
 
-                    // Meta row: 2-3 small shimmer rectangles.
-                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8)) {
                         ShimmerBox(
                             modifier = Modifier
                                 .width(60.dp)
-                                .height(10.dp),
+                                .height(MaterialTheme.dimension.space8),
                         )
                         ShimmerBox(
                             modifier = Modifier
                                 .width(50.dp)
-                                .height(10.dp),
+                                .height(MaterialTheme.dimension.space8),
                         )
                         ShimmerBox(
                             modifier = Modifier
-                                .width(40.dp)
-                                .height(10.dp),
+                                .width(MaterialTheme.dimension.space40)
+                                .height(MaterialTheme.dimension.space8),
                         )
                     }
                 }

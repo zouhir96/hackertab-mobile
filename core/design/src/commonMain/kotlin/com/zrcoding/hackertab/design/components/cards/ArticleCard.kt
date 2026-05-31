@@ -20,23 +20,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.components.SourceTag
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.codeSmall
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Article
 import com.zrcoding.hackertab.domain.models.Source
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Generic article card. Used by HN, Reddit, Lobsters, DevTo, Hashnode,
- * FreeCodeCamp, Medium, IndieHackers, HackerNoon — any source whose payload
- * shape matches the [Article] domain model.
- *
- * The [metaContent] slot lets the call site supply source-specific stats
- * (points, comments, reactions, etc.) without duplicating card chrome.
- */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ArticleCard(
@@ -54,7 +46,7 @@ fun ArticleCard(
     val source = requireNotNull(article.source) { "ArticleCard requires Article.source" }
     CardShell(
         isFresh = isFresh,
-        isRead = false, // wired by Wave 3 home feed
+        isRead = false,
         onClick = onClick,
         onLongClick = onLongClick,
         modifier = modifier.semantics(mergeDescendants = true) {
@@ -62,7 +54,7 @@ fun ArticleCard(
         },
     ) {
         SourceTag(source = source, timeAgo = timeAgo, isFresh = isFresh)
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(MaterialTheme.dimension.space8))
         Text(
             text = article.title,
             style = MaterialTheme.typography.titleLarge,
@@ -71,27 +63,27 @@ fun ArticleCard(
             overflow = TextOverflow.Ellipsis,
         )
         if (article.tags.isNotEmpty()) {
-            Spacer(Modifier.height(10.dp))
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            Spacer(Modifier.height(MaterialTheme.dimension.space8))
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6)) {
                 article.tags.take(6).forEach { tag ->
                     Text(
                         text = "#$tag",
                         style = codeSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
-                            .padding(bottom = 4.dp)
-                            .clip(RoundedCornerShape(6.dp))
+                            .padding(bottom = MaterialTheme.dimension.space4)
+                            .clip(RoundedCornerShape(MaterialTheme.dimension.space6))
                             .background(MaterialTheme.colorScheme.surfaceVariant)
-                            .padding(horizontal = 7.dp, vertical = 2.dp),
+                            .padding(horizontal = MaterialTheme.dimension.space6, vertical = MaterialTheme.dimension.space2),
                     )
                 }
             }
         }
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(MaterialTheme.dimension.space12))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
         ) {
             metaContent()
             Spacer(Modifier.weight(1f))

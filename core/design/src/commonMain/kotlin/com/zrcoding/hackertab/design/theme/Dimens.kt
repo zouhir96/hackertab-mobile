@@ -3,16 +3,7 @@ package com.zrcoding.hackertab.design.theme
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-/**
- * Hackertab v4 spacing scale. Mirrors `--space-*` tokens in
- * `design/project/styles/tokens.css` (lines 71–83).
- *
- * Old field names (`none`, `tiny`, `small`, ...) are retained as
- * `@Deprecated` aliases that route to the new explicit-unit scale; Wave 1
- * mass-migrates call sites and removes the aliases.
- */
 data class Dimens(
-    // New explicit-unit scale (matches tokens.css)
     val space2: Dp = 2.dp,
     val space4: Dp = 4.dp,
     val space6: Dp = 6.dp,
@@ -25,8 +16,6 @@ data class Dimens(
     val space40: Dp = 40.dp,
     val space48: Dp = 48.dp,
     val space64: Dp = 64.dp,
-
-    // Screen-level padding shortcut — kept because v4 still uses 20dp gutters.
     val screenPaddingHorizontal: Dp = 20.dp,
 ) {
     @Deprecated(

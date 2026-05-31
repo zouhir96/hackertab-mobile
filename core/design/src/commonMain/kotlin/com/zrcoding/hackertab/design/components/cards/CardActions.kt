@@ -19,19 +19,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabMotion
+import com.zrcoding.hackertab.design.theme.dimension
 
 // TODO Wave 7+: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
 private const val IS_REDUCED_MOTION = false
 
-/**
- * Bookmark + kebab pair rendered at the bottom-right of every feed card.
- *
- * Bookmark animation: when [isBookmarked] flips to true, the icon briefly
- * scales 1 → 1.15 → 1 over 240ms with [HackertabMotion.emphasizedEasing].
- * Color crossfades alongside.
- */
 @Composable
 fun CardActions(
     isBookmarked: Boolean,
@@ -41,18 +34,18 @@ fun CardActions(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space2),
     ) {
         BookmarkButton(isBookmarked = isBookmarked, onClick = onBookmarkClick)
         IconButton(
             onClick = onMoreClick,
-            modifier = Modifier.size(48.dp),
+            modifier = Modifier.size(MaterialTheme.dimension.space48),
         ) {
             Icon(
                 imageVector = Icons.Outlined.MoreHoriz,
                 contentDescription = "More actions",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(18.dp),
+                modifier = Modifier.size(MaterialTheme.dimension.space16),
             )
         }
     }
@@ -75,14 +68,14 @@ private fun BookmarkButton(isBookmarked: Boolean, onClick: () -> Unit) {
 
     IconButton(
         onClick = onClick,
-        modifier = Modifier.size(48.dp),
+        modifier = Modifier.size(MaterialTheme.dimension.space48),
     ) {
         Icon(
             imageVector = if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
             contentDescription = if (isBookmarked) "Remove bookmark" else "Bookmark",
             tint = tint,
             modifier = Modifier
-                .size(18.dp)
+                .size(MaterialTheme.dimension.space16)
                 .scale(pulse.value),
         )
     }

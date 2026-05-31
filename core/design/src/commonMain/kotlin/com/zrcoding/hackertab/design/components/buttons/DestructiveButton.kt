@@ -21,15 +21,6 @@ import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hackertab v4 destructive button — used for delete-bookmark and similarly
- * irreversible actions. Mirrors `Library.jsx` slug 03.04 ("Delete").
- *
- * Anatomy:
- *  - Filled background using `colorScheme.error`.
- *  - Content rendered in `Color.White` because `ErrorRed` is dark enough that
- *    on-error neutral reads, but we want stronger contrast than `onError`.
- */
 @Composable
 fun DestructiveButton(
     text: String,

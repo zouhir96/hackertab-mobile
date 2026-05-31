@@ -11,6 +11,5 @@ val domainModule = module {
     factoryOf(::ObserveSelectedTopicsUseCase)
     factoryOf(::ObserveSelectedSourcesUseCase)
     factoryOf(::GetStartDestinationUseCase)
-    // Wave 3G — aggregated feed use case
     factoryOf(::GetAggregatedFeedUseCase)
 }

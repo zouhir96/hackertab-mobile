@@ -15,16 +15,6 @@ import com.zrcoding.hackertab.domain.models.BaseArticle
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 
-/**
- * Bottom-sheet long-press menu for feed cards.
- *
- * Actions: Save / Share / Open in browser / Copy link (copy link is a
- * no-op stub until Wave 4 adds a clipboard utility).
- *
- * Wire-up: [HomeScreen] passes `onLongPress = viewModel::onLongPress` to
- * each card via [Modifier.combinedClickable]; the card item files call
- * this via the `onLongClick` parameter.
- */
 @Composable
 fun LongPressActionSheet(
     article: BaseArticle,

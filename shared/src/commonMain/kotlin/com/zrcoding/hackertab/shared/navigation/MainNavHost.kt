@@ -32,7 +32,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -51,6 +50,7 @@ import com.zrcoding.hackertab.design.components.HackertabNavRail
 import com.zrcoding.hackertab.design.components.WebViewRoute
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.settings_about_title
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Profile
 import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase
 import com.zrcoding.hackertab.home.presentation.HomeRoute
@@ -134,10 +134,6 @@ private val config = SavedStateConfiguration {
     }
 }
 
-/**
- * Wave 6N — shared list of top-level destinations consumed by both
- * [HackertabBottomNav] (phone) and [HackertabNavRail] (tablet).
- */
 private val topLevelNavItems = persistentListOf(
     BottomNavItem(id = "today", label = "Today", icon = Icons.Outlined.Today),
     BottomNavItem(id = "saved", label = "Saved", icon = Icons.AutoMirrored.Outlined.LibraryBooks),
@@ -172,7 +168,6 @@ fun MainNavHost(
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val isTabletSize = windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND)
 
-    // BottomNav visibility & active tab driven by the top of the back-stack.
     val tip by remember { derivedStateOf { backStack.lastOrNull() } }
     val isTopLevel by remember {
         derivedStateOf {
@@ -203,8 +198,6 @@ fun MainNavHost(
     }
 
     fun switchTab(id: String) {
-        // v4.0: flat per-tab stacks. Tab switch always resets to the tab root.
-        // v4.1 can upgrade to nested per-tab stacks once Nav-3 ergonomics improve.
         backStack.clear()
         when (id) {
             "today" -> backStack.add(HomeScreen)
@@ -213,8 +206,6 @@ fun MainNavHost(
         }
     }
 
-    // Wave 5K — coachmark overlay (visible on first arrival at Home, once
-    // coachmarksSeen flips to false in onboarding done step).
     val coachmarkViewModel: CoachmarkViewModel = koinViewModel()
     val coachmarksSeen by coachmarkViewModel.coachmarksSeen.collectAsStateWithLifecycle()
     val isOnHome by remember { derivedStateOf { tip is HomeScreen } }
@@ -222,7 +213,6 @@ fun MainNavHost(
     CompositionLocalProvider(LocalIsTabletSize provides isTabletSize) {
         Box(modifier = modifier.fillMaxSize()) {
             Row(modifier = Modifier.fillMaxSize()) {
-                // Wave 6N — tablet: NavRail on the left (≥medium width).
                 if (isTabletSize && isTopLevel) {
                     HackertabNavRail(
                         items = topLevelNavItems,
@@ -273,7 +263,6 @@ fun MainNavHost(
                                 }
                             }
                             entry<OnboardingDoneScreen> {
-                                // Terminal onboarding step — no back chrome.
                                 OnboardingDoneRoute(
                                     navigateToFeed = {
                                         backStack.clear()
@@ -434,7 +423,6 @@ fun MainNavHost(
                             }
                         }
                     )
-                    // Phone: BottomNav. Tablet uses NavRail above instead.
                     if (isTopLevel && !isTabletSize) {
                         HackertabBottomNav(
                             items = topLevelNavItems,
@@ -443,12 +431,11 @@ fun MainNavHost(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
                                 .windowInsetsPadding(WindowInsets())
-                                .padding(bottom = 18.dp)
+                                .padding(bottom = MaterialTheme.dimension.space16)
                         )
                     }
                 }
-            } // Row
-            // Wave 5K — coachmarks overlay sits above NavDisplay AND BottomNav.
+            }
             CoachmarkOverlay(
                 visible = !coachmarksSeen && isOnHome,
                 onDismiss = coachmarkViewModel::dismiss,

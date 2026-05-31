@@ -13,16 +13,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * 3-segment progress bar for the onboarding flow.
- *
- * @param currentStep zero-indexed step the user is currently on (0..[totalSteps]-1).
- */
 @Composable
 fun OnboardingStepIndicator(
     currentStep: Int,
@@ -43,7 +38,7 @@ fun OnboardingStepIndicator(
                     steps = totalSteps,
                 )
             },
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6),
     ) {
         repeat(totalSteps) { index ->
             val color = when {
@@ -54,8 +49,8 @@ fun OnboardingStepIndicator(
             androidx.compose.foundation.layout.Box(
                 modifier = Modifier
                     .weight(1f)
-                    .height(3.dp)
-                    .clip(RoundedCornerShape(2.dp))
+                    .height(MaterialTheme.dimension.space2)
+                    .clip(RoundedCornerShape(MaterialTheme.dimension.space2))
                     .background(color),
             )
         }

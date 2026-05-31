@@ -35,13 +35,13 @@ import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.components.SourceTag
 import com.zrcoding.hackertab.design.theme.codeMedium
 import com.zrcoding.hackertab.design.theme.codeSmall
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Conference
 import com.zrcoding.hackertab.domain.models.Source
 import kotlinx.datetime.LocalDate
 
 private val ConferencesPurple = Color(0xFF6E56CF)
 
-/** Conference card. Calendar-block date + location row + tags. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ConferenceCard(
@@ -66,21 +66,20 @@ fun ConferenceCard(
         },
     ) {
         SourceTag(source = Source.CONFERENCES, timeAgo = timeAgo, isFresh = isFresh)
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(MaterialTheme.dimension.space12))
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(14.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
             verticalAlignment = Alignment.Top,
         ) {
-            // Calendar block
             Column(
                 modifier = Modifier
                     .width(62.dp)
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
                     .border(
                         1.dp,
                         MaterialTheme.colorScheme.outline,
-                        RoundedCornerShape(12.dp),
+                        RoundedCornerShape(MaterialTheme.dimension.space12),
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -88,7 +87,7 @@ fun ConferenceCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(ConferencesPurple)
-                        .padding(vertical = 3.dp),
+                        .padding(vertical = MaterialTheme.dimension.space2),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
@@ -103,7 +102,7 @@ fun ConferenceCard(
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.W600,
-                    modifier = Modifier.padding(top = 6.dp, bottom = 8.dp),
+                    modifier = Modifier.padding(top = MaterialTheme.dimension.space6, bottom = MaterialTheme.dimension.space8),
                 )
             }
             Column(modifier = Modifier.weight(1f)) {
@@ -114,16 +113,16 @@ fun ConferenceCard(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Spacer(Modifier.height(4.dp))
+                Spacer(Modifier.height(MaterialTheme.dimension.space4))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6),
                 ) {
                     Icon(
                         imageVector = if (conference.online) Icons.Outlined.Public else Icons.Outlined.Place,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(13.dp),
+                        modifier = Modifier.size(MaterialTheme.dimension.space12),
                     )
                     Text(
                         text = conference.locationLabel(),
@@ -133,16 +132,16 @@ fun ConferenceCard(
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
-                Spacer(Modifier.height(3.dp))
+                Spacer(Modifier.height(MaterialTheme.dimension.space2))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6),
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.CalendarToday,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(13.dp),
+                        modifier = Modifier.size(MaterialTheme.dimension.space12),
                     )
                     Text(
                         text = conference.dateLabel(),
@@ -153,23 +152,23 @@ fun ConferenceCard(
             }
         }
         if (conference.tags.isNotEmpty()) {
-            Spacer(Modifier.height(10.dp))
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            Spacer(Modifier.height(MaterialTheme.dimension.space8))
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6)) {
                 conference.tags.take(6).forEach { tag ->
                     Text(
                         text = "#$tag",
                         style = codeSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
-                            .padding(bottom = 4.dp)
-                            .clip(RoundedCornerShape(6.dp))
+                            .padding(bottom = MaterialTheme.dimension.space4)
+                            .clip(RoundedCornerShape(MaterialTheme.dimension.space6))
                             .background(MaterialTheme.colorScheme.surfaceVariant)
-                            .padding(horizontal = 7.dp, vertical = 2.dp),
+                            .padding(horizontal = MaterialTheme.dimension.space6, vertical = MaterialTheme.dimension.space2),
                     )
                 }
             }
         }
-        Spacer(Modifier.height(6.dp))
+        Spacer(Modifier.height(MaterialTheme.dimension.space6))
         Row(modifier = Modifier.fillMaxWidth()) {
             Spacer(Modifier.weight(1f))
             CardActions(

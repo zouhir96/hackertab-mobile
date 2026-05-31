@@ -33,18 +33,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hackertab v4 ErrorState component.
- *
- * Visual reference: `design/project/components/Screens.jsx` lines 754-775
- * (`ErrorState`).
- *
- * Same shape as [EmptyState] but with an error-tinted icon container
- * (15% error red) and a primary "Try again" CTA with a leading refresh icon.
- */
 @Composable
 fun ErrorState(
     onRetry: () -> Unit,
@@ -58,7 +50,7 @@ fun ErrorState(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 40.dp)
+            .padding(horizontal = MaterialTheme.dimension.space40)
             .semantics {
                 liveRegion = LiveRegionMode.Polite
                 contentDescription = a11yLabel
@@ -70,9 +62,8 @@ fun ErrorState(
             modifier = Modifier
                 .size(80.dp)
                 .background(
-                    // 15% error red, matches `color-mix(in oklab, var(--error) 15%, transparent)`.
                     color = Color(0x33E6504C),
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(MaterialTheme.dimension.space24),
                 ),
             contentAlignment = Alignment.Center,
         ) {
@@ -80,11 +71,11 @@ fun ErrorState(
                 imageVector = Icons.Outlined.WifiOff,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.error,
-                modifier = Modifier.size(32.dp),
+                modifier = Modifier.size(MaterialTheme.dimension.space32),
             )
         }
 
-        Spacer(modifier = Modifier.height(22.dp))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space20))
 
         Text(
             text = title,
@@ -93,7 +84,7 @@ fun ErrorState(
             textAlign = TextAlign.Center,
         )
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space6))
 
         Text(
             text = body,
@@ -103,13 +94,13 @@ fun ErrorState(
             modifier = Modifier.widthIn(max = 260.dp),
         )
 
-        Spacer(modifier = Modifier.height(22.dp))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space20))
 
         Button(
             onClick = onRetry,
-            modifier = Modifier.height(42.dp),
+            modifier = Modifier.height(MaterialTheme.dimension.space40),
             shape = CircleShape,
-            contentPadding = PaddingValues(horizontal = 18.dp),
+            contentPadding = PaddingValues(horizontal = MaterialTheme.dimension.space16),
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -119,9 +110,9 @@ fun ErrorState(
             Icon(
                 imageVector = Icons.Outlined.Refresh,
                 contentDescription = null,
-                modifier = Modifier.size(15.dp),
+                modifier = Modifier.size(MaterialTheme.dimension.space16),
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(MaterialTheme.dimension.space8))
             Text(
                 text = retryLabel,
                 style = MaterialTheme.typography.labelLarge,

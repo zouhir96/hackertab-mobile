@@ -73,7 +73,6 @@ fun ProductHuntDto.toProductHunt() = ProductHunt(
     tags = tags
 )
 
-// Bookmark mappers
 @OptIn(ExperimentalTime::class)
 fun BookmarkedArticleEntity.toBookmarkedArticle() = BookmarkedArticle(
     id = id,

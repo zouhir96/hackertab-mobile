@@ -24,12 +24,6 @@ interface DB {
     fun clearAllTables() {}
 }
 
-/**
- * Migration from schema v1 to v2.
- *
- * v2 adds `read INTEGER NOT NULL DEFAULT 0` to `bookmarked_articles`.
- * All existing rows get `read = 0` (unread) by the SQLite default.
- */
 val Migration_1_2 = object : Migration(1, 2) {
     override fun migrate(connection: SQLiteConnection) {
         connection.execSQL(

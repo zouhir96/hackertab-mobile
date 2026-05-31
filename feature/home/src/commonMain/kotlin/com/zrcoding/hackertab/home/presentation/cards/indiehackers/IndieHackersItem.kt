@@ -16,9 +16,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val IndieHackersBlue = Color(0xFF4799EB)
 
-/**
- * IndieHackers feed card. Meta: score (blue dot) · comments.
- */
 @Composable
 fun IndieHackersItem(
     article: Article,

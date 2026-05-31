@@ -16,11 +16,10 @@ class IOSShareManager : ShareManager {
             applicationActivities = null
         )
 
-        // Configure for iPad - required to prevent crash
         activityViewController.popoverPresentationController?.apply {
             sourceView = rootViewController?.view
             sourceRect = rootViewController?.view?.bounds ?: platform.CoreGraphics.CGRectZero.readValue()
-            permittedArrowDirections = 0u // No arrow
+            permittedArrowDirections = 0u
         }
 
         rootViewController?.presentViewController(
@@ -30,4 +29,3 @@ class IOSShareManager : ShareManager {
         )
     }
 }
-

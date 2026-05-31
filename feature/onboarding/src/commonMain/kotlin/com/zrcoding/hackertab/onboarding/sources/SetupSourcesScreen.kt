@@ -169,12 +169,11 @@ private fun SourceTile(
                 selected = isSelected
             },
     ) {
-        // Check badge — top-end corner
         if (isSelected) {
             Box(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .size(20.dp)
+                    .size(MaterialTheme.dimension.space20)
                     .background(MaterialTheme.colorScheme.primary, CircleShape),
                 contentAlignment = Alignment.Center,
             ) {
@@ -182,7 +181,7 @@ private fun SourceTile(
                     imageVector = Icons.Default.Check,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.size(12.dp),
+                    modifier = Modifier.size(MaterialTheme.dimension.space12),
                 )
             }
         }
@@ -192,9 +191,8 @@ private fun SourceTile(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            // Circular brand-icon block
             if (source != null) {
-                source.Icon(size = 40.dp)
+                source.Icon(size = MaterialTheme.dimension.space40)
             }
             Spacer(modifier = Modifier.height(MaterialTheme.dimension.space8))
             Text(
@@ -209,10 +207,6 @@ private fun SourceTile(
         }
     }
 }
-
-// ---------------------------------------------------------------------------
-// Previews
-// ---------------------------------------------------------------------------
 
 @Preview
 @Composable

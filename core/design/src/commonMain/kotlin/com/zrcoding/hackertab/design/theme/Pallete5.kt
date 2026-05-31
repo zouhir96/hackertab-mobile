@@ -5,24 +5,10 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-/*
- * Palette 5 — "Mint Console"
- *
- * Mood: refined emerald on cool slate; the safe evolution of v4's green.
- * Vibe: GitHub-dark, modern terminal themes (Catppuccin, Tokyo Night).
- * Trade vs current v4 green: same family, but de-neon'd — drops the
- * `#7BFFAA` electric edge for a more grown-up emerald that fares better
- * at small sizes (active tab capsule, badges). Pick this if you like the
- * current direction and just want it to read more "product" and less "demo".
- */
-
-// region Brand
 private val P5Primary = Color(0xFF34D399)
 private val P5PrimaryPressed = Color(0xFF10B981)
 private val P5OnPrimary = Color(0xFF04221A)
-// endregion
 
-// region Neutrals — cool slate (hue ~190)
 private val P5Neutral0 = Color(0xFFFBFCFC)
 private val P5Neutral50 = Color(0xFFF2F6F5)
 private val P5Neutral100 = Color(0xFFE1E9E6)
@@ -37,7 +23,6 @@ private val P5Neutral950 = Color(0xFF08110D)
 private val P5DarkSurface = Color(0xFF13201B)
 private val P5DarkSurfaceVariant = Color(0xFF1A2620)
 private val P5DarkOnSurfaceMuted = Color(0xFF9AAFA4)
-// endregion
 
 val Pallete5LightColors: ColorScheme = lightColorScheme(
     primary = P5Primary,

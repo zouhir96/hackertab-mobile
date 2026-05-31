@@ -14,9 +14,6 @@ import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Lobsters feed card. Meta: score (brand-red dot) · comments.
- */
 @Composable
 fun LobstersItem(
     article: Article,

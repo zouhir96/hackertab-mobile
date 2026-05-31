@@ -38,37 +38,18 @@ import com.zrcoding.hackertab.design.theme.DarkBgElevated
 import com.zrcoding.hackertab.design.theme.HackertabMotion
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.LightBgElevated
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Item descriptor for [HackertabBottomNav] / [HackertabNavRail].
- *
- * **Icon convention for the "Saved" tab**: do NOT use [Icons.Outlined.BookmarkBorder]
- * — that glyph is used by per-card actions and would visually collide with the tab
- * (Issue 2 from the v4 critique). Pass [Icons.AutoMirrored.Outlined.LibraryBooks]
- * or `Icons.Outlined.CollectionsBookmark` instead.
- */
 data class BottomNavItem(
     val id: String,
     val label: String,
     val icon: ImageVector,
 )
 
-/**
- * Hackertab v4 bottom navigation — iOS 26 "Liquid Glass" floating pill.
- *
- * A centered capsule that hovers above content (bottom 18dp), with a refractive
- * rim highlight, a top specular streak, and a brand-tinted glass capsule marking
- * the active tab. Mirrors `.tab-bar` / `.tab-item` in `design/project/styles/app.css`.
- *
- * **Compose Multiplatform 1.9.3 limitation**: real backdrop blur (`Modifier.blur`)
- * is unreliable on iOS Skia and Android < 12. The glass surface is approximated
- * with a translucent `bg-elevated` tint + rim/shadow stack instead of a live
- * backdrop blur. Revisit once CMP exposes a stable cross-platform blur.
- */
 @Composable
 fun HackertabBottomNav(
     items: ImmutableList<BottomNavItem>,
@@ -81,14 +62,10 @@ fun HackertabBottomNav(
     val onBg = colorScheme.onBackground
     val pillShape = RoundedCornerShape(percent = 50)
 
-    // Glass surface: translucent bg-elevated (CSS used 38%; bumped for legibility
-    // since there is no live backdrop blur to separate it from scrolling content).
     val glassFill = (if (isDark) DarkBgElevated else LightBgElevated).copy(alpha = 0.82f)
-    // Rim highlight — brighter at the top, fading down (CSS inset top rim).
     val rimBrush = Brush.verticalGradient(
         colors = listOf(onBg.copy(alpha = 0.14f), onBg.copy(alpha = 0.04f)),
     )
-    // Specular streak across the top half.
     val specularBrush = Brush.verticalGradient(
         colors = listOf(
             (if (isDark) Color.White else onBg).copy(alpha = if (isDark) 0.10f else 0.08f),
@@ -107,15 +84,14 @@ fun HackertabBottomNav(
                 .background(glassFill)
                 .border(width = 1.dp, brush = rimBrush, shape = pillShape),
         ) {
-            // Top specular highlight, clipped to the pill.
             Box(
                 modifier = Modifier
                     .matchParentSize()
                     .background(specularBrush),
             )
             Row(
-                modifier = Modifier.padding(6.dp),
-                horizontalArrangement = Arrangement.spacedBy(2.dp),
+                modifier = Modifier.padding(MaterialTheme.dimension.space6),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space2),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 items.forEach { item ->
@@ -144,7 +120,6 @@ private fun TabItem(
         label = "tabItemColor",
     )
 
-    // Active = brand-tinted glass capsule with a refraction rim + brand glow.
     val activeRim = Brush.verticalGradient(
         colors = listOf(
             Color.White.copy(alpha = 0.32f),
@@ -154,7 +129,7 @@ private fun TabItem(
     val capsuleModifier = if (selected) {
         Modifier
             .shadow(
-                elevation = 6.dp,
+                elevation = MaterialTheme.dimension.space6,
                 shape = itemShape,
                 clip = false,
                 spotColor = colorScheme.primary,
@@ -184,7 +159,7 @@ private fun TabItem(
             imageVector = item.icon,
             contentDescription = item.label,
             tint = contentColor,
-            modifier = Modifier.size(22.dp),
+            modifier = Modifier.size(MaterialTheme.dimension.space20),
         )
         Text(
             text = item.label,
@@ -195,7 +170,7 @@ private fun TabItem(
     }
 }
 
-@Suppress("unused") // referenced by previews and by callers via this object
+@Suppress("unused")
 private object BottomNavSampleItems {
     val Today = BottomNavItem("today", "Today", Icons.Outlined.Home)
     val Saved = BottomNavItem("saved", "Saved", Icons.AutoMirrored.Outlined.LibraryBooks)

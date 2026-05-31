@@ -21,23 +21,14 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.codeSmall
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Compact source-attribution row used in the header of every feed card.
- *
- * Renders: [source's brand block + label] · [time-ago] [optional NEW pill].
- *
- * Issue 6 (critique): when [isFresh] is true, a high-contrast "NEW" pill is
- * appended after the time-ago. This is the *primary* fresh indicator on the
- * card; CardShell renders a 3dp brand bar as a *secondary* signal.
- */
 @Composable
 fun SourceTag(
     source: Source,
@@ -50,10 +41,9 @@ fun SourceTag(
             contentDescription = "${source.label}, $timeAgo${if (isFresh) ", new" else ""}"
         },
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
     ) {
-        // 18dp brand-colored block with the source glyph
-        Source.IconBlock(source = source, size = 18.dp)
+        Source.IconBlock(source = source, size = MaterialTheme.dimension.space16)
 
         Text(
             text = source.label,
@@ -62,10 +52,9 @@ fun SourceTag(
             fontWeight = FontWeight.W600,
         )
 
-        // Separator dot
         Box(
             modifier = Modifier
-                .size(3.dp)
+                .size(MaterialTheme.dimension.space2)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)),
         )
@@ -86,10 +75,10 @@ fun SourceTag(
 private fun FreshPill() {
     Box(
         modifier = Modifier
-            .height(16.dp)
+            .height(MaterialTheme.dimension.space16)
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.primary)
-            .padding(horizontal = 6.dp),
+            .padding(horizontal = MaterialTheme.dimension.space6),
         contentAlignment = Alignment.Center,
     ) {
         Text(
@@ -101,10 +90,6 @@ private fun FreshPill() {
     }
 }
 
-/**
- * Brand-colored block holding a source's glyph. Reusable from both the source
- * rail (22dp) and source tag (18dp).
- */
 @Composable
 internal fun Source.Companion.IconBlock(
     source: Source,
@@ -123,12 +108,12 @@ internal fun Source.Companion.IconBlock(
             Icon(
                 painter = painterResource(iconRes),
                 contentDescription = null,
-                modifier = Modifier.size(size - 6.dp),
+                modifier = Modifier.size(size - MaterialTheme.dimension.space6),
             )
         } else Image(
             painter = painterResource(iconRes),
             contentDescription = null,
-            modifier = Modifier.size(size - 6.dp),
+            modifier = Modifier.size(size - MaterialTheme.dimension.space6),
         )
     }
 }

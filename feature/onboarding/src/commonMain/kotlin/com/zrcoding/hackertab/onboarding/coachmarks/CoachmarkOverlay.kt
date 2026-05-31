@@ -46,19 +46,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.codeSmall
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 // TODO Wave 7+: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
 private const val IS_REDUCED_MOTION = false
 
-/**
- * Spotlight scene definition for [CoachmarkOverlay].
- *
- * Coordinates are dp offsets from the top-left of the overlay. The spotlight
- * is rendered as a transparent rounded rect on top of a scrim; the tooltip is
- * positioned [tooltipBelow] (true) or above the spotlight.
- */
 private data class CoachmarkScene(
     val spotlightTop: Dp,
     val spotlightLeftPad: Dp,
@@ -103,13 +97,6 @@ private val SCENES = listOf(
     ),
 )
 
-/**
- * Wave 5K — full-screen coachmark overlay shown on first arrival at the Home
- * feed after onboarding. Three scenes guide the user through: source rail,
- * pull-to-refresh, and long-press menu. "Skip tour" and "Got it" both exit.
- *
- * Mirrors `design/project/components/Motion.jsx` — Coachmark + CoachmarkScene.
- */
 @Composable
 fun CoachmarkOverlay(
     visible: Boolean,
@@ -128,9 +115,8 @@ fun CoachmarkOverlay(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                // Swallow all touches; scrim absorbs taps outside the controls.
                 .pointerInput(Unit) {
-                    detectTapGestures { /* no-op */ }
+                    detectTapGestures { }
                 }
                 .background(Color.Black.copy(alpha = 0.55f))
                 .semantics {
@@ -139,10 +125,6 @@ fun CoachmarkOverlay(
                         "${scene.title}. ${scene.body}"
                 },
         ) {
-            // Spotlight cut-out (transparent rounded rect over the scrim).
-            // Visually emphasises the area without actually clipping the scrim
-            // (a true cut-out would need a Canvas BlendMode pass; this brighter
-            // outlined rect is the design-spec approximation).
             val spotlightModifier = Modifier
                 .offset(y = scene.spotlightTop)
                 .padding(
@@ -167,12 +149,11 @@ fun CoachmarkOverlay(
                 )
             }
 
-            // Skip tour — top-right of the scrim.
             TextButton(
                 onClick = onDismiss,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(top = 24.dp, end = 12.dp)
+                    .padding(top = MaterialTheme.dimension.space24, end = MaterialTheme.dimension.space12)
                     .semantics {
                         role = Role.Button
                         contentDescription = "Skip tour"
@@ -185,9 +166,8 @@ fun CoachmarkOverlay(
                 )
             }
 
-            // Tooltip card — positioned above or below the spotlight area.
             val tooltipTop = if (scene.tooltipBelow) {
-                scene.spotlightTop + scene.spotlightHeight + 16.dp
+                scene.spotlightTop + scene.spotlightHeight + MaterialTheme.dimension.space16
             } else {
                 (scene.spotlightTop - 140.dp).coerceAtLeast(60.dp)
             }
@@ -195,7 +175,7 @@ fun CoachmarkOverlay(
                 modifier = Modifier
                     .offset(y = tooltipTop)
                     .fillMaxWidth()
-                    .padding(horizontal = 14.dp),
+                    .padding(horizontal = MaterialTheme.dimension.space12),
                 contentAlignment = Alignment.Center,
             ) {
                 TooltipCard(
@@ -223,15 +203,15 @@ private fun Spotlight(width: Dp?, height: Dp) {
     val mod = Modifier
         .then(if (width != null) Modifier.width(width) else Modifier.fillMaxWidth())
         .height(height)
-        .clip(RoundedCornerShape(10.dp))
+        .clip(RoundedCornerShape(MaterialTheme.dimension.space8))
         .border(
             width = 2.dp,
             color = MaterialTheme.colorScheme.primary,
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(MaterialTheme.dimension.space8),
         )
         .background(
             color = Color.White.copy(alpha = 0.08f),
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(MaterialTheme.dimension.space8),
         )
     Box(modifier = mod)
 }
@@ -251,11 +231,11 @@ private fun TooltipCard(
         Box(
             modifier = Modifier
                 .width(260.dp)
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
                 .background(MaterialTheme.colorScheme.inverseSurface)
-                .padding(horizontal = 16.dp, vertical = 14.dp),
+                .padding(horizontal = MaterialTheme.dimension.space16, vertical = MaterialTheme.dimension.space12),
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6)) {
                 Text(
                     text = stepLabel,
                     style = codeSmall,
@@ -271,7 +251,7 @@ private fun TooltipCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.7f),
                 )
-                Spacer(Modifier.height(4.dp))
+                Spacer(Modifier.height(MaterialTheme.dimension.space4))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
@@ -279,14 +259,14 @@ private fun TooltipCard(
                     val interactionSource = remember { MutableInteractionSource() }
                     Box(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(MaterialTheme.dimension.space8))
                             .background(MaterialTheme.colorScheme.primary)
                             .clickable(
                                 interactionSource = interactionSource,
                                 indication = null,
                                 onClick = onAdvance,
                             )
-                            .padding(horizontal = 14.dp, vertical = 8.dp)
+                            .padding(horizontal = MaterialTheme.dimension.space12, vertical = MaterialTheme.dimension.space8)
                             .semantics {
                                 role = Role.Button
                                 contentDescription = "Got it, next step"
@@ -311,15 +291,11 @@ private fun TooltipCard(
 private fun Pointer(downward: Boolean) {
     Box(
         modifier = Modifier
-            .size(12.dp)
+            .size(MaterialTheme.dimension.space12)
             .rotate(if (downward) 225f else 45f)
             .background(MaterialTheme.colorScheme.inverseSurface, RectangleShape),
     )
 }
-
-// -------------------------------------------------------------------------
-// Previews
-// -------------------------------------------------------------------------
 
 @Preview
 @Composable

@@ -70,6 +70,5 @@ private fun menuContactMessageTemplate(data: ContactSupportData): String {
         append(UIDevice.currentDevice.model)
         append("\n")
         append(data.appVersion)
-        // Append app version if needed
     }
 }

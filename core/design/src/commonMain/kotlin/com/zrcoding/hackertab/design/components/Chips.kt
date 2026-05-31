@@ -21,24 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.dimension
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hackertab v4 chip wrappers. These thin wrappers around the M3 chip family
- * apply the design-system color scheme (see `Library.jsx` slug 03.03) and
- * keep the default 48dp tap target — we explicitly do **not** disable
- * `LocalMinimumInteractiveComponentSize`.
- *
- * Selected colors are the Hackertab brand pair: `primary` container with
- * `onPrimary` label. Idle uses `surfaceVariant` / `onSurface`.
- */
-
-/**
- * Filter chip — toggleable selection (e.g. "Today" filter). Wraps M3
- * [FilterChip].
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HackertabFilterChip(
@@ -72,10 +58,6 @@ fun HackertabFilterChip(
     )
 }
 
-/**
- * Input chip — represents a discrete entered value (e.g. a tag in a search
- * field). Optional `onRemove` shows a trailing X. Wraps M3 [InputChip].
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HackertabInputChip(
@@ -98,7 +80,7 @@ fun HackertabInputChip(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Remove",
                     modifier = Modifier
-                        .size(14.dp)
+                        .size(MaterialTheme.dimension.space12)
                         .semantics { role = Role.Button },
                 )
             }
@@ -116,10 +98,6 @@ fun HackertabInputChip(
     )
 }
 
-/**
- * Suggestion chip — non-toggleable, dismissable hint (e.g. "Add a topic").
- * Wraps M3 [SuggestionChip].
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HackertabSuggestionChip(
@@ -150,7 +128,7 @@ fun HackertabSuggestionChip(
 @Composable
 private fun ChipsPreview() {
     HackertabTheme {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8)) {
             HackertabFilterChip(selected = true, onClick = {}, label = "Today")
             HackertabFilterChip(selected = false, onClick = {}, label = "Week")
             HackertabInputChip(selected = false, onClick = {}, label = "Kotlin", onRemove = {})

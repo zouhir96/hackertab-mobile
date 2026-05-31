@@ -12,10 +12,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
-import androidx.compose.material3.Icon
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
 import com.zrcoding.hackertab.design.components.HackertabAppBar
 import com.zrcoding.hackertab.design.components.SectionHeader
 import com.zrcoding.hackertab.design.components.cards.BookmarkCard
@@ -32,7 +34,16 @@ import com.zrcoding.hackertab.design.components.inputs.SegmentedControl
 import com.zrcoding.hackertab.design.components.states.EmptyState
 import com.zrcoding.hackertab.design.components.states.EmptyStateCta
 import com.zrcoding.hackertab.design.components.states.FeedLoadingSkeleton
-import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
+import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.bookmarks_empty_body
+import com.zrcoding.hackertab.design.resources.bookmarks_empty_cta
+import com.zrcoding.hackertab.design.resources.bookmarks_empty_title
+import com.zrcoding.hackertab.design.resources.bookmarks_group_all
+import com.zrcoding.hackertab.design.resources.bookmarks_group_by_date
+import com.zrcoding.hackertab.design.resources.bookmarks_group_by_source
+import com.zrcoding.hackertab.design.resources.bookmarks_search_cd
+import com.zrcoding.hackertab.design.resources.bookmarks_subtitle
+import com.zrcoding.hackertab.design.resources.bookmarks_title
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.BookmarkedArticle
@@ -44,28 +55,12 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.until
-import com.zrcoding.hackertab.design.resources.Res
-import com.zrcoding.hackertab.design.resources.action_share
-import com.zrcoding.hackertab.design.resources.bookmarks_empty_body
-import com.zrcoding.hackertab.design.resources.bookmarks_empty_cta
-import com.zrcoding.hackertab.design.resources.bookmarks_empty_title
-import com.zrcoding.hackertab.design.resources.bookmarks_group_all
-import com.zrcoding.hackertab.design.resources.bookmarks_group_by_date
-import com.zrcoding.hackertab.design.resources.bookmarks_group_by_source
-import com.zrcoding.hackertab.design.resources.bookmarks_search_cd
-import com.zrcoding.hackertab.design.resources.bookmarks_subtitle
-import com.zrcoding.hackertab.design.resources.bookmarks_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import androidx.compose.material3.MaterialTheme
 import kotlin.time.Clock
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.toDuration
-
-// ---------------------------------------------------------------------------
-// Route
-// ---------------------------------------------------------------------------
 
 @Composable
 fun BookmarksRoute(
@@ -85,7 +80,6 @@ fun BookmarksRoute(
         onSearchClick = onNavigateToSearch,
     )
 
-    // Auto-select first bookmark on tablets
     val isTabletSize = LocalIsTabletSize.current
     LaunchedEffect(viewState.bookmarks, isTabletSize) {
         if (isTabletSize && viewState.bookmarks.isNotEmpty()) {
@@ -94,10 +88,6 @@ fun BookmarksRoute(
     }
     TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.BOOKMARKS)
 }
-
-// ---------------------------------------------------------------------------
-// Screen
-// ---------------------------------------------------------------------------
 
 @Composable
 fun BookmarksScreen(
@@ -171,10 +161,6 @@ fun BookmarksScreen(
     }
 }
 
-// ---------------------------------------------------------------------------
-// Grouped list
-// ---------------------------------------------------------------------------
-
 @Composable
 private fun BookmarksList(
     viewState: BookmarksViewState,
@@ -187,7 +173,6 @@ private fun BookmarksList(
         contentPadding = PaddingValues(bottom = MaterialTheme.dimension.space40),
     ) {
         if (viewState.groupBy == GroupBy.ALL) {
-            // Flat list — no section headers
             val items = viewState.groupedBookmarks.values
                 .flatten()
                 .toPersistentList()
@@ -226,10 +211,6 @@ private fun BookmarksList(
         }
     }
 }
-
-// ---------------------------------------------------------------------------
-// Swipe-to-dismiss wrapper
-// ---------------------------------------------------------------------------
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -271,22 +252,9 @@ private fun SwipeToDismissBookmark(
     }
 }
 
-// ---------------------------------------------------------------------------
-// Date label helpers
-// ---------------------------------------------------------------------------
-
-/**
- * Converts a "YYYY-MM-DD" group key into a human-readable label.
- * The ViewModel emits ISO date strings; the screen layer pretty-prints them.
- */
 private fun String.friendlyGroupLabel(): String {
-    // Relies on the format "YYYY-MM-DD" set in ViewModel.dateGroupLabel()
-    return this // Kept as-is for now; Wave 5 can localise.
+    return this
 }
-
-// ---------------------------------------------------------------------------
-// Time-ago extension (kept local, pure KMP)
-// ---------------------------------------------------------------------------
 
 @OptIn(ExperimentalTime::class)
 internal fun LocalDateTime.timeAgoLabel(): String {
@@ -304,10 +272,6 @@ internal fun LocalDateTime.timeAgoLabel(): String {
         else -> "${duration.inWholeDays / 365}y ago"
     }
 }
-
-// ---------------------------------------------------------------------------
-// Previews
-// ---------------------------------------------------------------------------
 
 private fun fakeSavedAt(): LocalDateTime = LocalDateTime(2025, 5, 1, 10, 0, 0)
 

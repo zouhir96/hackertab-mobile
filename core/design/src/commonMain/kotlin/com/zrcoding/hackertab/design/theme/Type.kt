@@ -16,13 +16,6 @@ import com.zrcoding.hackertab.design.resources.geist_regular
 import com.zrcoding.hackertab.design.resources.geist_semibold
 import org.jetbrains.compose.resources.Font
 
-/**
- * Hackertab v4 typography ramp. Sizes mirror the `.t-*` classes in
- * `design/project/styles/tokens.css` (lines 142–159). Fonts:
- *  - Geist Sans (400, 500, 600, 700) — body and headings
- *  - Geist Mono (500, 600) — code-text styles
- */
-
 val GeistSans: FontFamily
     @Composable get() = FontFamily(
         Font(Res.font.geist_regular, FontWeight.W400),
@@ -37,17 +30,6 @@ val GeistMono: FontFamily
         Font(Res.font.geist_mono_semibold, FontWeight.W600),
     )
 
-/**
- * Material 3 typography ramp. Slot mapping follows tokens.css:
- *  - displayLarge/Medium/Small  → .t-display-lg/md/sm
- *  - headlineLarge/Medium/Small → .t-headline-lg/md/sm
- *  - titleLarge/Medium/Small    → .t-title-lg/md/sm
- *  - bodyLarge/Medium/Small     → .t-body-lg/md/sm
- *  - labelLarge/Medium/Small    → .t-label-lg/md/sm
- *
- * Code text styles (`codeMedium`, `codeSmall`) are exposed as top-level vals
- * because M3 Typography has no code slot.
- */
 val Typography: Typography
     @Composable get() {
         val sans = GeistSans
@@ -154,7 +136,6 @@ val Typography: Typography
         )
     }
 
-/** Code-text style — corresponds to `.t-code-md` in tokens.css. */
 val codeMedium: TextStyle
     @Composable get() = TextStyle(
         fontFamily = GeistMono,
@@ -164,7 +145,6 @@ val codeMedium: TextStyle
         letterSpacing = (-0.01).em,
     )
 
-/** Code-text style — corresponds to `.t-code-sm` in tokens.css. */
 val codeSmall: TextStyle
     @Composable get() = TextStyle(
         fontFamily = GeistMono,

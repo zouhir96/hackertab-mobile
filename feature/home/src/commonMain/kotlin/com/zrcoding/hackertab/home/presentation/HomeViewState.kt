@@ -11,7 +11,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentList
 
-/** Temporal bucket used to group feed items in the Today screen. */
 enum class DayBucket(val label: String) {
     TODAY("Today"),
     YESTERDAY("Yesterday"),
@@ -21,53 +20,28 @@ enum class DayBucket(val label: String) {
 
 @Stable
 data class HomeViewState(
-    /**
-     * "all" = aggregated multi-source Today feed.
-     * Any other value = a [Source.id] for the focused-feed mode.
-     */
     val activeSourceId: String = "all",
     val enabledSources: PersistentList<Source> = persistentListOf(),
     val canAddSource: Boolean = false,
     val enabledTopics: PersistentList<Topic> = persistentListOf(),
     val selectedTopic: Topic? = null,
     val canAddTopic: Boolean = false,
-    /**
-     * Feed items grouped by day bucket. Populated after a successful fetch.
-     * Empty map → no items (triggers EmptyState).
-     */
     val articlesByDay: PersistentMap<DayBucket, PersistentList<BaseArticle>> = persistentMapOf(),
     val isLoading: Boolean = true,
     val error: String? = null,
     val canRefresh: Boolean = false,
-    /** Set of article IDs the user has seen in this session (for read-state rendering). */
     val seenArticleIds: PersistentList<String> = persistentListOf(),
-    /** article shown in long-press bottom sheet (null = sheet hidden). */
     val longPressedArticle: BaseArticle? = null,
-    /**
-     * Wave 5L — per-source load state for aggregated "All" mode. Empty in
-     * single-source mode. Failed entries surface inline captions in the feed.
-     */
     val perSourceLoadState: PersistentMap<Source, SourceLoadState> = persistentMapOf(),
-    /**
-     * Wave 5L — true while fewer than 50% of aggregated sources have finished.
-     * Renders a top-of-feed skeleton without hiding already-loaded articles.
-     */
     val isPartialReveal: Boolean = false,
 ) {
-    /** True when the active source is the aggregated "All" view. */
     val isAllSourcesMode: Boolean get() = activeSourceId == "all"
 
-    /** The [Source] corresponding to [activeSourceId], or null when in All mode. */
     val activeSource: Source? get() = Source.fromId(activeSourceId)
 
-    /**
-     * Whether the topic strip should be shown. Shown in "all" mode (multi-source
-     * aggregation) and for individual sources that support topic filtering.
-     */
     val showTopicStrip: Boolean
         get() = isAllSourcesMode || (activeSource?.supportsFilters == true)
 
-    /** Flat list of all articles across all buckets, preserving bucket order. */
     val allArticles: PersistentList<BaseArticle>
         get() {
             val list = mutableListOf<BaseArticle>()

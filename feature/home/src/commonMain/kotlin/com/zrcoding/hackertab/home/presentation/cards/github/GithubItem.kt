@@ -6,10 +6,6 @@ import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.GithubRepo
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * GitHub trending-repo card.
- * Delegates entirely to [RepoCard] from Wave 2C.
- */
 @Composable
 fun GithubItem(
     post: GithubRepo,

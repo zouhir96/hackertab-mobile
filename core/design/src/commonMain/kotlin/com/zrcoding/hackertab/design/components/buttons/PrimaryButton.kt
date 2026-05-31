@@ -20,23 +20,6 @@ import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hackertab v4 primary call-to-action button. Mirrors `Buttons.Primary` in
- * `design/project/components/Library.jsx` (slug 03.04).
- *
- * Anatomy:
- *  - Filled background using `colorScheme.primary` / `onPrimary`.
- *  - Shape is [MaterialTheme.shapes.medium] (10dp) for [ButtonSize.Small] and
- *    [ButtonSize.Medium]; [ButtonSize.Large] uses fully-rounded `CircleShape`.
- *  - Disabled state: 40% container alpha + 60% content alpha.
- *  - Pressed state: 0.97 scale via the shared spring (see [pressScale]).
- *  - Loading state: replaces label/icons with a 16dp spinner; clicks suppressed.
- *
- *  A11y:
- *  - Inherits `Role.Button` from [Button]; we re-assert it for the pressScale
- *    semantics wrapper so `enabled = false` still announces correctly.
- *  - Leading/trailing icons are decorative (`contentDescription = null`).
- */
 @Composable
 fun PrimaryButton(
     text: String,

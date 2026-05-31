@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
@@ -90,7 +89,6 @@ internal fun SettingsMasterScreen(
     ) {
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space16))
 
-        // Screen title
         Text(
             text = stringResource(Res.string.settings_master_title),
             style = MaterialTheme.typography.headlineMedium,
@@ -99,14 +97,12 @@ internal fun SettingsMasterScreen(
 
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space20))
 
-        // Identity / Profile card
         SettingsProfileCard(
             profile = state.profile,
         )
 
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
 
-        // Feed section
         SettingsSectionLabel(text = stringResource(Res.string.settings_master_section_feed))
 
         SettingsCard {
@@ -132,7 +128,6 @@ internal fun SettingsMasterScreen(
 
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space20))
 
-        // App section
         SettingsSectionLabel(text = stringResource(Res.string.settings_master_section_app))
 
         SettingsCard {
@@ -156,7 +151,6 @@ internal fun SettingsMasterScreen(
 
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space40))
 
-        // Version footer
         if (appVersion.isNotBlank()) {
             Text(
                 text = stringResource(Res.string.settings_master_version_footer, appVersion),
@@ -177,7 +171,7 @@ private fun SettingsProfileCard(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(
                 horizontal = MaterialTheme.dimension.space16,
@@ -226,7 +220,7 @@ private fun SettingsCard(content: @Composable () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
             .background(MaterialTheme.colorScheme.surface),
     ) {
         content()
@@ -271,13 +265,11 @@ private fun SettingsRow(
                 imageVector = Icons.Outlined.ChevronRight,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(MaterialTheme.dimension.space20),
             )
         }
     }
 }
-
-// region Previews
 
 @Preview
 @Composable
@@ -318,5 +310,3 @@ private fun SettingsMasterScreenDarkPreview() {
         )
     }
 }
-
-// endregion

@@ -93,7 +93,6 @@ fun SetupTopicsScreen(
     onChipClicked: (ChipData) -> Unit,
     onContinue: () -> Unit,
 ) {
-    // Which category is currently expanded. Saveable across recompositions.
     var expandedCategory by rememberSaveable { mutableStateOf(initialExpandedCategory) }
 
     Column(
@@ -122,7 +121,6 @@ fun SetupTopicsScreen(
         )
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
 
-        // Accordion list — each category is a sticky section header + chip flow
         LazyColumn(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
@@ -247,10 +245,6 @@ private fun TopicChipGrid(
         }
     }
 }
-
-// ---------------------------------------------------------------------------
-// Previews
-// ---------------------------------------------------------------------------
 
 private fun previewState(): SetupTopicsViewState {
     val kotlinChips = listOf(

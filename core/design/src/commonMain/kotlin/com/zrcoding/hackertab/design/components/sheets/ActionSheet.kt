@@ -28,17 +28,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.dimension
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * One row in an [ActionSheet]. The icon is rendered inside a 28×28 chip;
- * the label uses `titleSmall`. Set [isDestructive] to render the row in
- * the error tint.
- */
 data class ActionRow(
     val id: String,
     val icon: ImageVector,
@@ -47,21 +42,6 @@ data class ActionRow(
     val onClick: () -> Unit,
 )
 
-/**
- * Hackertab v4 action sheet. Mirrors `Library.jsx` slug 03.11 (Sheet —
- * actions variant) and is the long-press menu surface for cards.
- *
- * Anatomy:
- *  - M3 [ModalBottomSheet] with the default 32×4dp drag handle and the
- *    standard 300ms emphasized motion.
- *  - Optional [title] in `titleMedium`, `colorScheme.onSurface`.
- *  - Each [ActionRow] renders as a 12dp-padded row with a 28dp icon chip
- *    using `colorScheme.surfaceVariant` and a `titleSmall` label.
- *  - Destructive rows tint icon and label `colorScheme.error`.
- *
- * A11y: [ModalBottomSheet] sets `role = dialog`, `aria-modal`. Each row is a
- * `Role.Button`. Use the row label as TalkBack name (icons are decorative).
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActionSheet(
@@ -85,15 +65,15 @@ fun ActionSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp),
+                .padding(horizontal = MaterialTheme.dimension.space16, vertical = MaterialTheme.dimension.space8),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space2),
         ) {
             if (title != null) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimension.space12, vertical = MaterialTheme.dimension.space12),
                 )
             }
             actions.forEach { action ->
@@ -122,17 +102,17 @@ private fun ActionSheetRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(MaterialTheme.dimension.space8))
             .clickable(role = Role.Button, onClick = onClick)
             .semantics { role = Role.Button }
-            .padding(horizontal = 12.dp, vertical = 12.dp),
+            .padding(horizontal = MaterialTheme.dimension.space12, vertical = MaterialTheme.dimension.space12),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(14.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
     ) {
         Box(
             modifier = Modifier
-                .size(28.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .size(MaterialTheme.dimension.space24)
+                .clip(RoundedCornerShape(MaterialTheme.dimension.space8))
                 .background(MaterialTheme.colorScheme.surfaceVariant),
             contentAlignment = Alignment.Center,
         ) {
@@ -140,7 +120,7 @@ private fun ActionSheetRow(
                 imageVector = action.icon,
                 contentDescription = null,
                 tint = color,
-                modifier = Modifier.size(14.dp),
+                modifier = Modifier.size(MaterialTheme.dimension.space12),
             )
         }
         Text(

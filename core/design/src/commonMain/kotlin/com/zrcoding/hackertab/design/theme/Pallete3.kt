@@ -5,24 +5,10 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-/*
- * Palette 3 — "Midnight Violet"
- *
- * Mood: lavender brand on violet-tinted ink; modern premium dev-tool.
- * Vibe: Linear, Raycast, Vercel — the "this app costs $20/mo" look even
- * though it doesn't.
- * Trade vs current v4 green: maximum differentiation from competing news
- * readers (most of which lean blue or red). Violet is rare on app store
- * shelves so the icon will stand out.
- */
-
-// region Brand
 private val P3Primary = Color(0xFFA78BFA)
 private val P3PrimaryPressed = Color(0xFF8B6FE5)
 private val P3OnPrimary = Color(0xFF15071A)
-// endregion
 
-// region Neutrals — violet-tinted (hue ~280)
 private val P3Neutral0 = Color(0xFFFCFBFE)
 private val P3Neutral50 = Color(0xFFF6F4FB)
 private val P3Neutral100 = Color(0xFFEAE5F4)
@@ -37,7 +23,6 @@ private val P3Neutral950 = Color(0xFF0E0B16)
 private val P3DarkSurface = Color(0xFF1B162A)
 private val P3DarkSurfaceVariant = Color(0xFF221C30)
 private val P3DarkOnSurfaceMuted = Color(0xFFA99CC2)
-// endregion
 
 val Pallete3LightColors: ColorScheme = lightColorScheme(
     primary = P3Primary,

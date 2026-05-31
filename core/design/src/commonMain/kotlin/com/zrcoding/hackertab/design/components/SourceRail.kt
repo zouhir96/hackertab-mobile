@@ -40,6 +40,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import kotlinx.collections.immutable.ImmutableList
@@ -47,19 +48,11 @@ import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/** Pseudo-source id for the "All" rail item that aggregates every enabled source. */
 const val ALL_SOURCES_ID: String = "all"
 
 // TODO Wave 7+: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
 private const val IS_REDUCED_MOTION = false
 
-/**
- * Persistent horizontal source switcher. Replaces the v3 dropdown title.
- * Always visible above the feed; tapping a pill changes the active source
- * with a spring-eased color crossfade.
- *
- * Issue 11 (critique): no `★` prefix on the "All" pill — just the bold label.
- */
 @Composable
 fun SourceRail(
     sources: ImmutableList<Source>,
@@ -70,8 +63,13 @@ fun SourceRail(
 ) {
     LazyRow(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6),
+        contentPadding = PaddingValues(
+            start = MaterialTheme.dimension.space16,
+            end = MaterialTheme.dimension.space16,
+            top = MaterialTheme.dimension.space6,
+            bottom = MaterialTheme.dimension.space12,
+        ),
     ) {
         if (showAllPseudoSource) {
             item(key = ALL_SOURCES_ID) {
@@ -114,7 +112,7 @@ private fun AllPill(selected: Boolean, onClick: () -> Unit) {
 
     Box(
         modifier = Modifier
-            .height(38.dp)
+            .height(MaterialTheme.dimension.space40)
             .scale(if (isPressed) 0.97f else 1f)
             .clip(CircleShape)
             .background(containerColor)
@@ -127,7 +125,7 @@ private fun AllPill(selected: Boolean, onClick: () -> Unit) {
                 indication = null,
                 onClick = onClick,
             )
-            .padding(horizontal = 14.dp)
+            .padding(horizontal = MaterialTheme.dimension.space12)
             .semantics {
                 role = Role.Tab
                 this.selected = selected
@@ -169,7 +167,7 @@ private fun SourcePill(source: Source, selected: Boolean, onClick: () -> Unit) {
 
     Row(
         modifier = Modifier
-            .height(38.dp)
+            .height(MaterialTheme.dimension.space40)
             .scale(if (isPressed) 0.97f else 1f)
             .clip(CircleShape)
             .background(containerColor)
@@ -179,27 +177,26 @@ private fun SourcePill(source: Source, selected: Boolean, onClick: () -> Unit) {
                 indication = null,
                 onClick = onClick,
             )
-            .padding(start = 8.dp, end = 12.dp)
+            .padding(start = MaterialTheme.dimension.space8, end = MaterialTheme.dimension.space12)
             .semantics {
                 role = Role.Tab
                 this.selected = selected
                 contentDescription = "${source.label}, ${if (selected) "selected" else "tap to select"}"
             },
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
     ) {
-        // Brand-colored 22dp block with the source's white glyph
         if (iconTint != Color.Unspecified) {
             Icon(
                 painter = painterResource(iconRes),
                 contentDescription = null,
                 tint = if (iconTint == Color.Unspecified) Color.White else iconTint,
-                modifier = Modifier.size(22.dp),
+                modifier = Modifier.size(MaterialTheme.dimension.space20),
             )
         } else Image(
             painter = painterResource(iconRes),
             contentDescription = null,
-            modifier = Modifier.size(22.dp),
+            modifier = Modifier.size(MaterialTheme.dimension.space20),
         )
         Text(
             text = source.label,

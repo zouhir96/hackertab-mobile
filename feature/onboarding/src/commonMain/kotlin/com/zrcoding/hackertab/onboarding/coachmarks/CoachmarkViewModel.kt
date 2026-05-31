@@ -8,14 +8,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-/**
- * Wave 5K — observes/updates the `coachmarksSeen` flag from [SettingRepository].
- *
- * `initialValue = true` is critical: we don't want the overlay to flash before
- * the first emission from datastore. The post-onboarding writer
- * (OnboardingDoneViewModel) flips it to `false` only when a brand-new user
- * just finished onboarding.
- */
 class CoachmarkViewModel(
     private val settingRepository: SettingRepository,
 ) : ViewModel() {

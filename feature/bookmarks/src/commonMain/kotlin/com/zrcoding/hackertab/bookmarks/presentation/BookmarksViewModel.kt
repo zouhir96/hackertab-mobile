@@ -6,7 +6,6 @@ import com.zrcoding.hackertab.domain.models.BookmarkedArticle
 import com.zrcoding.hackertab.domain.repositories.BookmarkRepository
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.PersistentMap
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
@@ -38,10 +37,6 @@ class BookmarksViewModel(
         }
     }
 
-    // ---------------------------------------------------------------------------
-    // Search
-    // ---------------------------------------------------------------------------
-
     fun onSearchQueryChanged(query: String) {
         _viewState.update { state ->
             state.copy(
@@ -51,10 +46,6 @@ class BookmarksViewModel(
         }
     }
 
-    // ---------------------------------------------------------------------------
-    // Grouping
-    // ---------------------------------------------------------------------------
-
     fun onGroupByChanged(groupBy: GroupBy) {
         _viewState.update { state ->
             state.copy(
@@ -63,10 +54,6 @@ class BookmarksViewModel(
             )
         }
     }
-
-    // ---------------------------------------------------------------------------
-    // Actions
-    // ---------------------------------------------------------------------------
 
     fun removeBookmark(articleId: String) {
         viewModelScope.launch {
@@ -79,10 +66,6 @@ class BookmarksViewModel(
             bookmarkRepository.markRead(articleId)
         }
     }
-
-    // ---------------------------------------------------------------------------
-    // Private helpers
-    // ---------------------------------------------------------------------------
 
     private fun computeGrouped(
         all: PersistentList<BookmarkedArticle>,
@@ -127,15 +110,6 @@ class BookmarksViewModel(
     }
 }
 
-// ---------------------------------------------------------------------------
-// Date grouping helper
-// ---------------------------------------------------------------------------
-
 private fun LocalDateTime.dateGroupLabel(): String {
-    // Simple approach: group by "YYYY-MM-DD" which sorts naturally. The
-    // screen layer can pretty-print "Today / Yesterday / Earlier" via
-    // a secondary formatting pass if needed. Using the date string as the
-    // group key gives stable, correct grouping.
     return "${this.year}-${this.monthNumber.toString().padStart(2, '0')}-${this.dayOfMonth.toString().padStart(2, '0')}"
 }
-

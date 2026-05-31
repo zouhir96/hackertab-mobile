@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabMotion
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.codeMedium
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import com.zrcoding.hackertab.domain.models.Topic
 import kotlinx.collections.immutable.ImmutableList
@@ -47,15 +48,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 // TODO Wave 7+: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
 private const val IS_REDUCED_MOTION = false
 
-/**
- * Secondary horizontal filter strip. Shown below the [SourceRail] when the
- * active source supports filters (or for the "All" multi-source feed).
- *
- * Issue 4 (critique): the active state uses [MaterialTheme.colorScheme.surfaceVariant]
- * + [MaterialTheme.colorScheme.onSurface], NOT the harsh inverted [colorScheme.onBackground]
- * that the v3 design used. The colored topic dot stays full-saturation in both
- * states so the topic identity is always legible.
- */
 @Composable
 fun TopicChipStrip(
     topics: ImmutableList<Topic>,
@@ -67,8 +59,8 @@ fun TopicChipStrip(
 ) {
     LazyRow(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 0.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6),
+        contentPadding = PaddingValues(horizontal = MaterialTheme.dimension.space16, vertical = 0.dp),
     ) {
         items(topics, key = { it.value }) { topic ->
             TopicPill(
@@ -106,7 +98,7 @@ private fun TopicPill(topic: Topic, selected: Boolean, onClick: () -> Unit) {
 
     Row(
         modifier = Modifier
-            .height(30.dp)
+            .height(MaterialTheme.dimension.space32)
             .clip(CircleShape)
             .background(containerColor)
             .let {
@@ -117,18 +109,18 @@ private fun TopicPill(topic: Topic, selected: Boolean, onClick: () -> Unit) {
                 )
             }
             .clickable(onClick = onClick)
-            .padding(horizontal = 12.dp)
+            .padding(horizontal = MaterialTheme.dimension.space12)
             .semantics {
                 role = Role.Tab
                 this.selected = selected
                 contentDescription = "${topic.label}, ${if (selected) "selected" else "tap to filter"}"
             },
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6),
     ) {
         Box(
             modifier = Modifier
-                .size(6.dp)
+                .size(MaterialTheme.dimension.space6)
                 .clip(CircleShape)
                 .background(topic.value.getTagColor()),
         )
@@ -144,7 +136,7 @@ private fun TopicPill(topic: Topic, selected: Boolean, onClick: () -> Unit) {
 private fun AddTopicChip(onClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .size(30.dp)
+            .size(MaterialTheme.dimension.space32)
             .clip(CircleShape)
             .border(
                 BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
@@ -161,7 +153,7 @@ private fun AddTopicChip(onClick: () -> Unit) {
             imageVector = Icons.Outlined.Add,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(14.dp),
+            modifier = Modifier.size(MaterialTheme.dimension.space12),
         )
     }
 }

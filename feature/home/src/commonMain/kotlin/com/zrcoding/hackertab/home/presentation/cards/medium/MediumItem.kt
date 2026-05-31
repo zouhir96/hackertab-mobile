@@ -13,11 +13,6 @@ import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Medium feed card. Meta: claps · comments.
- *
- * Note: package is `mediun` (typo) until Wave 7 renames it to `medium`.
- */
 @Composable
 fun MediumItem(
     article: Article,

@@ -5,24 +5,10 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-/*
- * Palette 4 — "Solar Flare"
- *
- * Mood: bold orange-red on cream / warm dark. HN-orange revival.
- * Vibe: opinionated, energetic, "I'm here to read about new things".
- * Trade vs current v4 green: borrows the cultural memory of Hacker News
- * orange (still the dominant source) and elevates it as the app's voice.
- * Risk: orange will compete with HN source chips — the SourceHackerNews
- * token will need a slight de-saturation if this wins.
- */
-
-// region Brand
 private val P4Primary = Color(0xFFFF6B35)
 private val P4PrimaryPressed = Color(0xFFE5511E)
 private val P4OnPrimary = Color(0xFF1A0904)
-// endregion
 
-// region Neutrals — warm-tinted (hue ~40)
 private val P4Neutral0 = Color(0xFFFEFBF7)
 private val P4Neutral50 = Color(0xFFFAF4ED)
 private val P4Neutral100 = Color(0xFFF0E5D5)
@@ -37,7 +23,6 @@ private val P4Neutral950 = Color(0xFF0F0B06)
 private val P4DarkSurface = Color(0xFF1F1812)
 private val P4DarkSurfaceVariant = Color(0xFF291F13)
 private val P4DarkOnSurfaceMuted = Color(0xFFB59C7A)
-// endregion
 
 val Pallete4LightColors: ColorScheme = lightColorScheme(
     primary = P4Primary,

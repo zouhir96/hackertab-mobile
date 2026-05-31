@@ -19,7 +19,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.components.SourceTag
 import com.zrcoding.hackertab.design.components.getTagColor
 import com.zrcoding.hackertab.design.resources.Res
@@ -27,11 +26,11 @@ import com.zrcoding.hackertab.design.resources.ic_baseline_fork
 import com.zrcoding.hackertab.design.resources.ic_baseline_star
 import com.zrcoding.hackertab.design.theme.codeMedium
 import com.zrcoding.hackertab.design.theme.codeSmall
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.GithubRepo
 import com.zrcoding.hackertab.domain.models.Source
 import org.jetbrains.compose.resources.painterResource
 
-/** GitHub repo card. Mono `owner/repo` with brand-primary repo, lang dot + stars + forks. */
 @Composable
 fun RepoCard(
     repo: GithubRepo,
@@ -54,7 +53,7 @@ fun RepoCard(
         },
     ) {
         SourceTag(source = Source.GITHUB, timeAgo = timeAgo, isFresh = isFresh)
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(MaterialTheme.dimension.space8))
         Row(verticalAlignment = Alignment.Bottom) {
             Text(
                 text = repo.owner,
@@ -66,7 +65,7 @@ fun RepoCard(
                 text = "/",
                 style = codeMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 2.dp),
+                modifier = Modifier.padding(horizontal = MaterialTheme.dimension.space2),
             )
             Text(
                 text = repo.title,
@@ -76,7 +75,7 @@ fun RepoCard(
             )
         }
         if (repo.description.isNotBlank()) {
-            Spacer(Modifier.height(6.dp))
+            Spacer(Modifier.height(MaterialTheme.dimension.space6))
             Text(
                 text = repo.description.trim(),
                 style = MaterialTheme.typography.bodyMedium,
@@ -84,20 +83,19 @@ fun RepoCard(
                 maxLines = 3,
             )
         }
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(MaterialTheme.dimension.space12))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
         ) {
-            // Language dot + name
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6),
             ) {
                 androidx.compose.foundation.layout.Box(
                     modifier = Modifier
-                        .size(8.dp)
+                        .size(MaterialTheme.dimension.space8)
                         .clip(CircleShape)
                         .background(repo.programmingLanguage.getTagColor()),
                 )
@@ -107,16 +105,15 @@ fun RepoCard(
                     color = MaterialTheme.colorScheme.onSurface,
                 )
             }
-            // Stars
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4),
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_baseline_star),
                     contentDescription = "stars",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(13.dp),
+                    modifier = Modifier.size(MaterialTheme.dimension.space12),
                 )
                 Text(
                     text = formatCount(repo.stars),
@@ -124,16 +121,15 @@ fun RepoCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            // Forks
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4),
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_baseline_fork),
                     contentDescription = "forks",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(13.dp),
+                    modifier = Modifier.size(MaterialTheme.dimension.space12),
                 )
                 Text(
                     text = formatCount(repo.forks),

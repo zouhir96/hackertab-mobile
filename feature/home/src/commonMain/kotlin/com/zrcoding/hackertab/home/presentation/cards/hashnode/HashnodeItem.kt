@@ -13,9 +13,6 @@ import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hashnode feed card. Meta: comments · reactions.
- */
 @Composable
 fun HashnodeItem(
     article: Article,

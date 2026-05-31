@@ -28,7 +28,6 @@ class SettingSourcesViewModel(
     private val _viewState = MutableStateFlow<PersistentList<ChipData>>(persistentListOf())
     val viewState = _viewState.asStateFlow()
 
-    /** One-shot event: true when the min-1-source guard was triggered. */
     private val _minOneSourceViolation = MutableStateFlow(false)
     val minOneSourceViolation = _minOneSourceViolation.asStateFlow()
 

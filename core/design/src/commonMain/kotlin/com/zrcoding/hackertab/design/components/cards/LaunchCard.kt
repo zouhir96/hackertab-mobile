@@ -35,18 +35,12 @@ import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.components.SourceTag
 import com.zrcoding.hackertab.design.theme.codeMedium
 import com.zrcoding.hackertab.design.theme.codeSmall
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ProductHunt
 import com.zrcoding.hackertab.domain.models.Source
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
-/**
- * ProductHunt launch card. Thumbnail + title + tagline + vertical upvote pill.
- *
- * Issue 9 (critique): the thumbnail uses the real ProductHunt image via
- * Kamel ([asyncPainterResource]) — NOT a fake gradient placeholder. The
- * gradient is the *fallback* if Kamel reports an error.
- */
 @Composable
 fun LaunchCard(
     product: ProductHunt,
@@ -69,17 +63,16 @@ fun LaunchCard(
         },
     ) {
         SourceTag(source = Source.PRODUCTHUNT, timeAgo = timeAgo, isFresh = isFresh)
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(MaterialTheme.dimension.space12))
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
             verticalAlignment = Alignment.Top,
         ) {
-            // Thumbnail (60×60dp) with gradient fallback
             Box(
                 modifier = Modifier
                     .size(60.dp)
-                    .clip(RoundedCornerShape(14.dp))
+                    .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
                     .background(
                         Brush.linearGradient(listOf(Color(0xFFFF7A59), Color(0xFFDA552F)))
                     ),
@@ -90,7 +83,6 @@ fun LaunchCard(
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     onLoading = {
-                        // Keep gradient visible while loading
                     },
                     onFailure = {
                         Text(
@@ -103,10 +95,9 @@ fun LaunchCard(
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
-            // Title + tagline
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space2),
             ) {
                 Text(
                     text = product.title,
@@ -123,17 +114,16 @@ fun LaunchCard(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-            // Vertical upvote pill
             Column(
                 modifier = Modifier
-                    .width(48.dp)
-                    .clip(RoundedCornerShape(12.dp))
+                    .width(MaterialTheme.dimension.space48)
+                    .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
                     .border(
                         1.dp,
                         MaterialTheme.colorScheme.outline,
-                        RoundedCornerShape(12.dp)
+                        RoundedCornerShape(MaterialTheme.dimension.space12)
                     )
-                    .padding(vertical = 4.dp),
+                    .padding(vertical = MaterialTheme.dimension.space4),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
@@ -141,7 +131,7 @@ fun LaunchCard(
                     imageVector = Icons.Filled.ArrowUpward,
                     contentDescription = "upvotes",
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(MaterialTheme.dimension.space16),
                 )
                 Text(
                     text = "${product.reactions}",
@@ -151,23 +141,23 @@ fun LaunchCard(
                 )
             }
         }
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(MaterialTheme.dimension.space12))
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(MaterialTheme.dimension.space8))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4),
             ) {
                 Icon(
                     imageVector = Icons.Outlined.ChatBubbleOutline,
                     contentDescription = "comments",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(13.dp),
+                    modifier = Modifier.size(MaterialTheme.dimension.space12),
                 )
                 Text(
                     text = "${product.commentsCount}",

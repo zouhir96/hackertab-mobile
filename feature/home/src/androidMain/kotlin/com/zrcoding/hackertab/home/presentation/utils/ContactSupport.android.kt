@@ -15,7 +15,7 @@ class AndroidContactSupport(private val context: Activity) : ContactSupport{
             intent.data = Uri.parse("mailto:${data.email}")
             intent.putExtra(Intent.EXTRA_SUBJECT, data.subject)
             intent.putExtra(Intent.EXTRA_TEXT, menuContactMessageTemplate(data))
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             // TODO Replace by composable alert.
@@ -44,6 +44,5 @@ private fun menuContactMessageTemplate(data: ContactSupportData): String {
         append(" ").append(Build.MODEL)
         append("\n")
         append(data.appVersion)
-        //b append(BuildConfig.VERSION_NAME)
     }
 }

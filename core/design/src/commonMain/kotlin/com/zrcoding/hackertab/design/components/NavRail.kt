@@ -26,10 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.dimension
 import kotlinx.collections.immutable.ImmutableList
 
-/**
- * Tablet variant of [HackertabBottomNav]. 84dp wide vertical rail. Used by the
- * adaptive tablet layout (≥ 600dp width) instead of the bottom navigation bar.
- */
 @Composable
 fun HackertabNavRail(
     items: ImmutableList<BottomNavItem>,
@@ -47,7 +43,7 @@ fun HackertabNavRail(
         Column(
             modifier = Modifier
                 .width(84.dp)
-                .padding(vertical = 24.dp, horizontal = 12.dp),
+                .padding(vertical = MaterialTheme.dimension.space24, horizontal = MaterialTheme.dimension.space12),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
         ) {
@@ -59,7 +55,7 @@ fun HackertabNavRail(
                 val selected = item.id == activeId
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4),
                     modifier = Modifier
                         .width(60.dp)
                         .clip(MaterialTheme.shapes.medium)
@@ -68,7 +64,7 @@ fun HackertabNavRail(
                             else androidx.compose.ui.graphics.Color.Transparent
                         )
                         .clickable { onSelect(item.id) }
-                        .padding(vertical = 10.dp)
+                        .padding(vertical = MaterialTheme.dimension.space8)
                         .semantics {
                             role = Role.Tab
                             this.selected = selected
@@ -79,7 +75,7 @@ fun HackertabNavRail(
                         contentDescription = item.label,
                         tint = if (selected) MaterialTheme.colorScheme.primary
                         else MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(22.dp),
+                        modifier = Modifier.size(MaterialTheme.dimension.space20),
                     )
                     Text(
                         text = item.label,

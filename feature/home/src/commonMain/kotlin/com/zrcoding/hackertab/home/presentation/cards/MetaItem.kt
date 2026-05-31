@@ -14,16 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.codeSmall
+import com.zrcoding.hackertab.design.theme.dimension
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
-/**
- * Small icon+text meta chip used inside `ArticleCard.metaContent` slots
- * by the per-source feed cards. Renders an inline icon (12.dp) followed
- * by short label text in `codeSmall` typography.
- */
 @Composable
 internal fun MetaIconText(
     icon: DrawableResource,
@@ -33,22 +28,18 @@ internal fun MetaIconText(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4),
     ) {
         Icon(
             painter = painterResource(icon),
             contentDescription = null,
             tint = iconTint,
-            modifier = Modifier.size(12.dp),
+            modifier = Modifier.size(MaterialTheme.dimension.space12),
         )
         Text(text = text, style = codeSmall, color = color)
     }
 }
 
-/**
- * Score-style meta with a colored circle dot followed by a label.
- * Used by Lobsters, Reddit, IndieHackers — variants of the same pattern.
- */
 @Composable
 internal fun MetaDotText(
     text: String,
@@ -56,11 +47,11 @@ internal fun MetaDotText(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4),
     ) {
         Box(
             modifier = Modifier
-                .size(6.dp)
+                .size(MaterialTheme.dimension.space6)
                 .clip(CircleShape)
                 .background(color),
         )

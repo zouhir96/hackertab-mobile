@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
@@ -110,26 +109,24 @@ internal fun SettingsAboutScreen(
             .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal),
     ) {
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space16))
-        // Identity card with logo + version
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(MaterialTheme.dimension.space20),
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                // Logo placeholder — 40dp branded block
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(MaterialTheme.dimension.space24)
                             .background(
                                 color = BrandPrimary,
-                                shape = RoundedCornerShape(6.dp),
+                                shape = RoundedCornerShape(MaterialTheme.dimension.space6),
                             )
                     )
                     Text(
@@ -151,11 +148,10 @@ internal fun SettingsAboutScreen(
 
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space20))
 
-        // Link rows
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
                 .background(MaterialTheme.colorScheme.surface),
         ) {
             AboutRow(
@@ -190,11 +186,10 @@ internal fun SettingsAboutScreen(
 
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space16))
 
-        // Show tour again row — Issue 15 fix
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
                 .background(MaterialTheme.colorScheme.surface),
         ) {
             AboutRow(
@@ -232,12 +227,10 @@ private fun AboutRow(
             imageVector = Icons.Outlined.ChevronRight,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(20.dp),
+            modifier = Modifier.size(MaterialTheme.dimension.space20),
         )
     }
 }
-
-// region Previews
 
 @Preview
 @Composable
@@ -268,5 +261,3 @@ private fun SettingsAboutScreenDarkPreview() {
         )
     }
 }
-
-// endregion

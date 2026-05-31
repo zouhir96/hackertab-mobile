@@ -19,11 +19,7 @@ val dataModule = module {
     singleOf(::ArticleRepositoryImpl) bind ArticleRepository::class
     singleOf(::SettingRepositoryImpl) bind SettingRepository::class
     singleOf(::BookmarkRepositoryImpl) bind BookmarkRepository::class
-    // Wave 3G — aggregated feed (parallel fan-out across all enabled sources)
     singleOf(::AggregatedArticleRepositoryImpl) bind AggregatedArticleRepository::class
 }
 
-/**
- * Provides the platform-specific dependencies.
- */
 internal expect val platformModule: Module

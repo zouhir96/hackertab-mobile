@@ -23,7 +23,6 @@ import com.zrcoding.hackertab.domain.usecases.GetAggregatedFeedUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedSourcesUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedTopicsUseCase
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
@@ -41,11 +40,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.time.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
@@ -65,7 +64,6 @@ class HomeViewModel(
     private val refreshTrigger = MutableSharedFlow<Unit>()
 
     init {
-        // Observe enabled sources & topics; keep activeSourceId stable when possible
         viewModelScope.launch {
             combine(
                 observeSelectedSourcesUseCase(),
@@ -78,7 +76,6 @@ class HomeViewModel(
                             topics.isNotEmpty() -> topics.first()
                             else -> null
                         }
-                        // Keep activeSourceId if still valid; otherwise reset to "all"
                         val newActiveSourceId = when {
                             state.activeSourceId == "all" -> "all"
                             sources.any { it.id == state.activeSourceId } -> state.activeSourceId
@@ -100,9 +97,6 @@ class HomeViewModel(
                 }
         }
 
-        // Fetch articles whenever activeSourceId, selectedTopic, or refresh changes.
-        // For "all" mode this is a Flow that emits incrementally as each source
-        // completes (Wave 5L). For single-source it's a one-shot emission.
         viewModelScope.launch {
             val fetchFlow: Flow<List<BaseArticle>> = combine(
                 refreshTrigger.onStart { emit(Unit) },
@@ -193,11 +187,6 @@ class HomeViewModel(
         val sources: PersistentList<Source>,
     )
 
-    /**
-     * Wave 5L — observe the aggregator Flow. Each emission updates view-state
-     * (per-source state, partial-reveal flag, error message) and produces the
-     * latest merged article list for the downstream bookmark-merge stage.
-     */
     private fun observeAggregatedFlow(
         sources: PersistentList<Source>,
         topic: Topic?,
@@ -225,7 +214,6 @@ class HomeViewModel(
             )
         }
 
-        // Record last-visited when the aggregated feed has produced any results
         if (allDone && result.articles.isNotEmpty()) {
             settingRepository.setLastVisitedAt(
                 Clock.System.now().toEpochMilliseconds(),
@@ -233,10 +221,6 @@ class HomeViewModel(
         }
         result.articles
     }
-
-    // -------------------------------------------------------------------------
-    // Public API
-    // -------------------------------------------------------------------------
 
     fun onSourceSelected(sourceId: String) {
         if (_viewState.value.activeSourceId == sourceId) return
@@ -250,12 +234,10 @@ class HomeViewModel(
         logTopicFilterChanged(topic)
     }
 
-    /** Pull-to-refresh and refresh-button handler. Replaces the old onRefreshBtnClick. */
     fun refresh() {
         viewModelScope.launch { refreshTrigger.emit(Unit) }
     }
 
-    /** Kept for backward compat with existing callers until Wave 4 wires the new name. */
     fun onRefreshBtnClick() = refresh()
 
     fun toggleBookmark(article: BaseArticle) {
@@ -266,7 +248,6 @@ class HomeViewModel(
             } else {
                 val source = when {
                     _viewState.value.isAllSourcesMode -> {
-                        // For aggregated feed, determine source from article type / source field
                         (article as? Article)?.source?.name ?: "unknown"
                     }
                     else -> _viewState.value.activeSource?.name ?: return@launch
@@ -276,16 +257,10 @@ class HomeViewModel(
         }
     }
 
-    /**
-     * Mark an article as read in this session. Bookmarked articles will have
-     * their `read` column updated once Wave 3H (Bookmarks) lands the Room
-     * migration. For non-bookmarked articles we track a session-only seen-set.
-     */
     fun markRead(articleId: String) {
         viewModelScope.launch {
             val isBookmarked = bookmarkRepository.isBookmarked(articleId)
             if (!isBookmarked) {
-                // Session-only: track in seen-set
                 _viewState.update { state ->
                     state.copy(
                         seenArticleIds = (state.seenArticleIds + articleId).toPersistentList(),
@@ -303,10 +278,6 @@ class HomeViewModel(
     fun dismissLongPressSheet() {
         _viewState.update { it.copy(longPressedArticle = null) }
     }
-
-    // -------------------------------------------------------------------------
-    // Private helpers
-    // -------------------------------------------------------------------------
 
     private sealed interface FetchResult {
         data class Success(val articles: List<BaseArticle>) : FetchResult

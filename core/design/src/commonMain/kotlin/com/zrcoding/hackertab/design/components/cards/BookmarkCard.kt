@@ -2,7 +2,6 @@ package com.zrcoding.hackertab.design.components.cards
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,11 +30,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.components.Icon
 import com.zrcoding.hackertab.design.theme.codeSmall
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.BookmarkedArticle
 import com.zrcoding.hackertab.domain.models.Source
 import org.jetbrains.compose.resources.painterResource
 
-/** Bookmark list-row variant. Used by the Bookmarks screen. */
 @Composable
 fun BookmarkCard(
     bookmark: BookmarkedArticle,
@@ -50,8 +49,8 @@ fun BookmarkCard(
 
     Card(
         modifier = modifier
-            .padding(horizontal = 14.dp)
-            .padding(bottom = 6.dp)
+            .padding(horizontal = MaterialTheme.dimension.space12)
+            .padding(bottom = MaterialTheme.dimension.space6)
             .fillMaxWidth()
             .alpha(if (isUnread) 1f else 0.6f)
             .semantics(mergeDescendants = true) {
@@ -67,15 +66,14 @@ fun BookmarkCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 14.dp, horizontal = 16.dp),
+                .padding(vertical = MaterialTheme.dimension.space12, horizontal = MaterialTheme.dimension.space16),
             verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
         ) {
-            // Source brand block
             if (source != null) {
                 Box(
                     modifier = Modifier
-                        .size(30.dp)
+                        .size(MaterialTheme.dimension.space32)
                         .clip(MaterialTheme.shapes.small)
                         .background(source.bookmarkBrandColor()),
                     contentAlignment = Alignment.Center,
@@ -85,18 +83,18 @@ fun BookmarkCard(
                         painter = painterResource(iconRes),
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier.size(MaterialTheme.dimension.space16),
                     )
                 }
             }
             Column(
                 modifier = Modifier.weight(1f),
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6)) {
                     if (isUnread) {
                         Box(
                             modifier = Modifier
-                                .size(5.dp)
+                                .size(MaterialTheme.dimension.space4)
                                 .clip(CircleShape)
                                 .background(MaterialTheme.colorScheme.primary),
                         )
@@ -113,25 +111,24 @@ fun BookmarkCard(
                     text = "$sourceLabel · $timeAgo",
                     style = codeSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 3.dp),
+                    modifier = Modifier.padding(top = MaterialTheme.dimension.space2),
                 )
             }
             IconButton(
                 onClick = onMoreClick,
-                modifier = Modifier.size(48.dp),
+                modifier = Modifier.size(MaterialTheme.dimension.space48),
             ) {
                 Icon(
                     imageVector = Icons.Outlined.MoreVert,
                     contentDescription = "More actions",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(18.dp),
+                    modifier = Modifier.size(MaterialTheme.dimension.space16),
                 )
             }
         }
     }
 }
 
-/** Local clone of the brand-color map; intentionally duplicated so cards/ has no dep on rail/. */
 private fun Source.bookmarkBrandColor(): Color = when (this) {
     Source.GITHUB -> Color(0xFF181717)
     Source.HACKER_NEWS -> Color(0xFFFF6600)
@@ -147,5 +144,4 @@ private fun Source.bookmarkBrandColor(): Color = when (this) {
     Source.CONFERENCES -> Color(0xFF6E56CF)
 }
 
-/** Lightweight placeholder. Wave 3 home/bookmarks VMs supply the real time-ago. */
 private fun BookmarkedArticle.timeAgoLabel(): String = "saved"

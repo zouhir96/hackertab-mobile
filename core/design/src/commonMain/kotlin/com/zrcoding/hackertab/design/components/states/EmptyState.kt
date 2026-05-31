@@ -34,24 +34,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hackertab v4 EmptyState component.
- *
- * Visual reference: `design/project/components/Library.jsx` line 142-153
- * (`EmptyState/ErrorState/LoadingSkeleton`) and `Screens.jsx` lines 426-445
- * (`BookmarksEmpty`).
- *
- * Anatomy:
- * - 80×80 icon container with `surfaceVariant` background and 24dp radius.
- * - Headline (`headlineSmall`) + optional body (`bodyMedium`).
- * - 0–2 CTAs: primary filled brand-primary, secondary outlined ghost.
- *
- * A11y: marked as a polite live region so screen readers announce the
- * transition from loading to empty.
- */
 @Composable
 fun EmptyState(
     icon: ImageVector,
@@ -66,7 +52,7 @@ fun EmptyState(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 40.dp)
+            .padding(horizontal = MaterialTheme.dimension.space40)
             .semantics {
                 liveRegion = LiveRegionMode.Polite
                 contentDescription = a11yLabel
@@ -79,7 +65,7 @@ fun EmptyState(
                 .size(80.dp)
                 .background(
                     color = MaterialTheme.colorScheme.surfaceVariant,
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(MaterialTheme.dimension.space24),
                 ),
             contentAlignment = Alignment.Center,
         ) {
@@ -87,11 +73,11 @@ fun EmptyState(
                 imageVector = icon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(32.dp),
+                modifier = Modifier.size(MaterialTheme.dimension.space32),
             )
         }
 
-        Spacer(modifier = Modifier.height(22.dp))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space20))
 
         Text(
             text = title,
@@ -101,7 +87,7 @@ fun EmptyState(
         )
 
         if (!body.isNullOrEmpty()) {
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimension.space6))
             Text(
                 text = body,
                 style = MaterialTheme.typography.bodyMedium,
@@ -112,15 +98,15 @@ fun EmptyState(
         }
 
         if (primaryCta != null || secondaryCta != null) {
-            Spacer(modifier = Modifier.height(22.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Spacer(modifier = Modifier.height(MaterialTheme.dimension.space20))
+            Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8)) {
                 secondaryCta?.let { cta ->
                     OutlinedButton(
                         onClick = cta.onClick,
-                        modifier = Modifier.height(42.dp),
+                        modifier = Modifier.height(MaterialTheme.dimension.space40),
                         shape = CircleShape,
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                        contentPadding = PaddingValues(horizontal = 18.dp),
+                        contentPadding = PaddingValues(horizontal = MaterialTheme.dimension.space16),
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = MaterialTheme.colorScheme.onBackground,
                         ),
@@ -134,9 +120,9 @@ fun EmptyState(
                 primaryCta?.let { cta ->
                     Button(
                         onClick = cta.onClick,
-                        modifier = Modifier.height(42.dp),
+                        modifier = Modifier.height(MaterialTheme.dimension.space40),
                         shape = CircleShape,
-                        contentPadding = PaddingValues(horizontal = 18.dp),
+                        contentPadding = PaddingValues(horizontal = MaterialTheme.dimension.space16),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary,
@@ -154,7 +140,6 @@ fun EmptyState(
     }
 }
 
-/** CTA descriptor for [EmptyState]. */
 data class EmptyStateCta(val label: String, val onClick: () -> Unit)
 
 @Preview

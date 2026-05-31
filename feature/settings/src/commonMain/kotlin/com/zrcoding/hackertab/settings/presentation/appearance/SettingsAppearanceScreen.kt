@@ -91,7 +91,6 @@ internal fun SettingsAppearanceScreen(
 
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
 
-        // Side-by-side preview tiles
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
@@ -114,11 +113,10 @@ internal fun SettingsAppearanceScreen(
 
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space16))
 
-        // Theme selection rows
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
                 .background(MaterialTheme.colorScheme.surface),
         ) {
             ThemeOptionRow(
@@ -168,11 +166,11 @@ private fun ThemePreviewTile(
 
     Column(
         modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
             .border(
                 width = if (isSelected) 2.dp else 1.dp,
                 color = borderColor,
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(MaterialTheme.dimension.space12),
             )
             .clickable(role = Role.RadioButton, onClick = onClick)
             .semantics { selected = isSelected }
@@ -180,36 +178,35 @@ private fun ThemePreviewTile(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
     ) {
-        // Mini preview mockup
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(80.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(MaterialTheme.dimension.space8))
                 .background(bg),
         ) {
-            Column(modifier = Modifier.padding(8.dp)) {
+            Column(modifier = Modifier.padding(MaterialTheme.dimension.space8)) {
                 Box(
                     modifier = Modifier
-                        .height(8.dp)
+                        .height(MaterialTheme.dimension.space8)
                         .fillMaxWidth(0.7f)
-                        .clip(RoundedCornerShape(4.dp))
+                        .clip(RoundedCornerShape(MaterialTheme.dimension.space4))
                         .background(surface),
                 )
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(MaterialTheme.dimension.space6))
                 Box(
                     modifier = Modifier
-                        .height(6.dp)
+                        .height(MaterialTheme.dimension.space6)
                         .fillMaxWidth(0.5f)
-                        .clip(RoundedCornerShape(4.dp))
+                        .clip(RoundedCornerShape(MaterialTheme.dimension.space4))
                         .background(surface),
                 )
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(MaterialTheme.dimension.space6))
                 Box(
                     modifier = Modifier
-                        .height(6.dp)
+                        .height(MaterialTheme.dimension.space6)
                         .fillMaxWidth(0.4f)
-                        .clip(RoundedCornerShape(4.dp))
+                        .clip(RoundedCornerShape(MaterialTheme.dimension.space4))
                         .background(surface),
                 )
             }
@@ -250,13 +247,11 @@ private fun ThemeOptionRow(
                 imageVector = Icons.Outlined.Check,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(MaterialTheme.dimension.space20),
             )
         }
     }
 }
-
-// region Previews
 
 @Preview
 @Composable
@@ -279,5 +274,3 @@ private fun SettingsAppearanceScreenDarkPreview() {
         )
     }
 }
-
-// endregion

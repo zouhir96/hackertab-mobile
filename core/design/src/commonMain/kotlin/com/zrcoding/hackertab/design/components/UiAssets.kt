@@ -13,7 +13,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.ic_conferences
 import com.zrcoding.hackertab.design.resources.ic_devto
@@ -57,7 +56,7 @@ fun Source.Icon(size: Dp = MaterialTheme.dimension.space40) {
     ) {
         Image(
             modifier = Modifier
-                .size(size - 2.dp)
+                .size(size - MaterialTheme.dimension.space2)
                 .clip(CircleShape),
             painter = painterResource(Icon().first),
             contentScale = ContentScale.FillBounds,
@@ -66,14 +65,7 @@ fun Source.Icon(size: Dp = MaterialTheme.dimension.space40) {
     }
 }
 
-/**
- * Tag → language-color map consumed by [String.getTagColor]. Preserves the
- * v3 22-entry baseline (Critique Issue 8 alignment) and adds the Wave-1 token
- * additions (rust, csharp, html, css, shell, elixir, haskell, scala, clojure,
- * svelte) as a superset.
- */
 val tags = mapOf(
-    // v3-original 22-entry baseline (Critique Issue 8)
     "python" to Color((0XFF3572A5)),
     "javascript" to Color((0XFFF1E05A)),
     "cplusplus" to Color((0XFFF34B7D)),
@@ -96,7 +88,6 @@ val tags = mapOf(
     "android" to Color((0XFF30D880)),
     "flutter" to Color((0XFF67B1F1)),
     "dart" to Color((0XFF045797)),
-    // Wave 1 v4 additions — GitHub-Linguist canonical colors
     "rust" to Color(0xFFDEA584),
     "csharp" to Color(0xFF178600),
     "c#" to Color(0xFF178600),

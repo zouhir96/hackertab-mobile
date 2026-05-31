@@ -8,15 +8,6 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import com.zrcoding.hackertab.domain.models.ThemeMode
 
-/**
- * Hackertab v4 theme. Wraps Material 3's [MaterialTheme] with the
- * Hackertab token set (Color.kt, Type.kt, Shape.kt, Dimens.kt, Motion.kt).
- *
- * v4 introduces user-controlled [ThemeMode] so the app honours one of
- * three modes (LIGHT / DARK / SYSTEM). The legacy boolean signature is
- * retained as a `@Deprecated` overload for the duration of Wave 1 migration.
- */
-
 private val LightColors: ColorScheme = lightColorScheme(
     primary = BrandPrimary,
     onPrimary = BrandOnPrimary,
@@ -71,10 +62,6 @@ private val DarkColors: ColorScheme = darkColorScheme(
     scrim = Neutral950,
 )
 
-/**
- * v4 theme entry-point. Use [themeMode] to honour user preference; defaults
- * to [ThemeMode.SYSTEM] which reads the platform dark-mode flag.
- */
 @Composable
 fun HackertabTheme(
     themeMode: ThemeMode = ThemeMode.SYSTEM,
@@ -95,10 +82,6 @@ fun HackertabTheme(
     )
 }
 
-/**
- * Legacy v3 entry-point. Wave 1 migrates call-sites to the [ThemeMode]
- * overload above; this overload is removed in Wave 7.
- */
 @Deprecated(
     message = "Wave 1 migration: use the ThemeMode overload.",
     replaceWith = ReplaceWith(
@@ -117,19 +100,9 @@ fun HackertabTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
     )
 }
 
-/**
- * Convenience accessor parallel to [MaterialTheme.colorScheme].
- * Call sites read `MaterialTheme.dimension.space16` instead of constructing
- * a [Dimens] each time.
- */
 val MaterialTheme.dimension: Dimens
     get() = Dimens()
 
-/**
- * M2 parity accessor — kept for the duration of Wave 1 migration so
- * legacy `androidx.compose.material.MaterialTheme.dimension.*` call sites
- * still resolve. Removed in Wave 7.
- */
 @Suppress("unused")
 @Deprecated(
     message = "Wave 1 migration: switch to androidx.compose.material3.MaterialTheme.",

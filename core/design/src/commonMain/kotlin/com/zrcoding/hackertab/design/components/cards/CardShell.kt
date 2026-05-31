@@ -27,23 +27,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
+import com.zrcoding.hackertab.design.theme.dimension
 
 // TODO Wave 7+: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
 private const val IS_REDUCED_MOTION = false
 
-/**
- * Hackertab v4 card chrome. Hosts every feed-card variant
- * (Article / Repo / Launch / Conference / Bookmark).
- *
- * Issue 6 (critique, secondary signal): when [isFresh], a 3dp brand-primary
- * vertical bar appears on the left edge as a quiet reinforcement. The
- * primary fresh indicator is the "NEW" pill rendered by [SourceTag] inside
- * the card content.
- *
- * Issue 7 (critique): when [isRead], the card dims to 0.78 alpha — NOT 0.65
- * (which the v3 implementation used and which the brief flagged as too
- * aggressive on muted body text).
- */
 @Composable
 fun CardShell(
     isFresh: Boolean = false,
@@ -66,8 +54,8 @@ fun CardShell(
 
     Card(
         modifier = modifier
-            .padding(horizontal = 14.dp)
-            .padding(bottom = 8.dp)
+            .padding(horizontal = MaterialTheme.dimension.space12)
+            .padding(bottom = MaterialTheme.dimension.space8)
             .fillMaxWidth()
             .scale(scale)
             .alpha(if (isRead) 0.78f else 1f)
@@ -89,7 +77,7 @@ fun CardShell(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 18.dp, end = 16.dp, top = 14.dp, bottom = 14.dp),
+                    .padding(start = MaterialTheme.dimension.space16, end = MaterialTheme.dimension.space16, top = MaterialTheme.dimension.space12, bottom = MaterialTheme.dimension.space12),
                 content = content,
             )
         }
@@ -100,12 +88,12 @@ fun CardShell(
 private fun FreshAccentBar() {
     Box(
         modifier = Modifier
-            .padding(top = 14.dp)
-            .width(3.dp)
-            .height(16.dp)
+            .padding(top = MaterialTheme.dimension.space12)
+            .width(MaterialTheme.dimension.space2)
+            .height(MaterialTheme.dimension.space16)
             .background(
                 color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(topEnd = 3.dp, bottomEnd = 3.dp),
+                shape = RoundedCornerShape(topEnd = MaterialTheme.dimension.space2, bottomEnd = MaterialTheme.dimension.space2),
             ),
     )
 }

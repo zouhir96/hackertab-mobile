@@ -7,11 +7,6 @@ import com.zrcoding.hackertab.domain.models.Conference
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Upcoming-events / conferences card.
- * Delegates to [ConferenceCard] from Wave 2C which renders calendar-block date,
- * location row, and tags.
- */
 @Composable
 fun ConferenceItem(
     conf: Conference,

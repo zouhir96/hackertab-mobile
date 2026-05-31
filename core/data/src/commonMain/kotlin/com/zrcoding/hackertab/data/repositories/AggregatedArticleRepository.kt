@@ -25,18 +25,6 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-/**
- * Wave 5L aggregator polish — parallel fan-out with:
- *  - Semaphore-capped concurrency (6 in-flight max).
- *  - 5-minute per-source response cache.
- *  - URL-based de-duplication (lowercase, strip query/fragment, trim trailing /).
- *  - Stable source-priority tiebreaker when publishedAt ties / is absent.
- *  - Per-source load state surfaced for partial-reveal UI (Issue 3 / E6).
- *
- * The Flow emits once on subscription (all sources Loading, articles empty),
- * then once per source completion. Each emission reflects all sources that
- * have completed so far.
- */
 @OptIn(ExperimentalTime::class)
 class AggregatedArticleRepositoryImpl(
     private val articleRepository: ArticleRepository,
@@ -52,7 +40,7 @@ class AggregatedArticleRepositoryImpl(
     ): Flow<AggregatedFeedResult> = channelFlow {
         if (sources.isEmpty()) {
             send(AggregatedFeedResult(emptyList(), emptyMap(), isPartialReveal = false))
-            awaitClose { /* nothing */ }
+            awaitClose { }
             return@channelFlow
         }
 
@@ -63,7 +51,6 @@ class AggregatedArticleRepositoryImpl(
         }
         val resultsBySource = mutableMapOf<Source, List<BaseArticle>>()
 
-        // Initial Loading emission so the UI can show the skeleton immediately.
         send(
             AggregatedFeedResult(
                 articles = emptyList(),
@@ -119,7 +106,6 @@ class AggregatedArticleRepositoryImpl(
         }
 
         val fresh = fetchForSource(source, topic)
-        // Only cache successes; failures should be re-tried on next observe.
         if (fresh is Resource.Success) {
             cacheMutex.withLock {
                 cache[key] = now to fresh
@@ -151,7 +137,6 @@ class AggregatedArticleRepositoryImpl(
     ): List<BaseArticle> {
         val flat = resultsBySource.flatMap { (source, list) -> list.map { source to it } }
 
-        // Dedup by canonical URL — keep first encountered (source priority wins).
         val seen = mutableSetOf<String>()
         val ordered = flat.sortedBy { (source, _) -> SOURCE_PRIORITY[source] ?: Int.MAX_VALUE }
         val deduped = ordered.filter { (_, article) ->
@@ -159,7 +144,6 @@ class AggregatedArticleRepositoryImpl(
             if (key.isEmpty()) true else seen.add(key)
         }
 
-        // Final sort: publishedAt desc, ties broken by source priority asc.
         return deduped.sortedWith(
             compareByDescending<Pair<Source, BaseArticle>> { (_, article) ->
                 publishedAtKey(article)
@@ -190,7 +174,6 @@ class AggregatedArticleRepositoryImpl(
         private const val MAX_PARALLEL = 6
         private val CACHE_TTL = 5.minutes
 
-        /** Source priority — earlier sources win URL-dedup ties and timestamp ties. */
         private val SOURCE_PRIORITY: Map<Source, Int> = listOf(
             Source.GITHUB, Source.HACKER_NEWS, Source.DEVTO, Source.PRODUCTHUNT,
             Source.REDDIT, Source.LOBSTERS, Source.HASH_NODE, Source.FREE_CODE_CAMP,

@@ -33,17 +33,6 @@ import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hackertab v4 top app bar. 52dp tall, no elevation, surface-tinted.
- *
- * Three modes (mutually exclusive at the call site):
- *  - [wordmark] = true → renders the Hackertab brand mark.
- *  - [title] non-null → renders title (and optional [subtitle]).
- *  - none of the above → empty leading area; useful when the [leading] slot
- *    carries the full identity (e.g. on the WebView modal).
- *
- * Trailing slot accepts up to 3 [IconButton]s.
- */
 @Composable
 fun HackertabAppBar(
     title: String? = null,
@@ -89,10 +78,10 @@ private fun WordmarkContent() {
             painter = painterResource(Res.drawable.ic_hackertab),
             contentDescription = null,
             modifier = Modifier
-                .size(16.dp)
+                .size(MaterialTheme.dimension.space16)
                 .background(
                     color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(5.dp),
+                    shape = RoundedCornerShape(MaterialTheme.dimension.space4),
                 ),
         )
         Text(
@@ -128,7 +117,6 @@ private fun TitleContent(title: String, subtitle: String?) {
     }
 }
 
-// region Previews
 @Preview
 @Composable
 private fun AppBarWordmarkLight() {
@@ -154,4 +142,3 @@ private fun AppBarTitleDark() {
         HackertabAppBar(title = "Bookmarks", subtitle = "12 saved · 3 unread")
     }
 }
-// endregion

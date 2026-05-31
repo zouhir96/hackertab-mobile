@@ -18,15 +18,9 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.dimension
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hackertab v4 text button — no chrome, brand-primary label. Used for inline
- * actions ("Skip", "View all"). Mirrors `Library.jsx` slug 03.04.
- *
- * Single size — height/typography align with [ButtonSize.Medium], horizontal
- * padding fixed at 14dp (per the JSX reference).
- */
 @Composable
 fun HackertabTextButton(
     text: String,
@@ -58,7 +52,7 @@ fun HackertabTextButton(
         interactionSource = interactionSource,
         shape = MaterialTheme.shapes.medium,
         colors = colors,
-        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
+        contentPadding = PaddingValues(horizontal = MaterialTheme.dimension.space12, vertical = 0.dp),
     ) {
         CompositionLocalProvider(LocalTextStyle provides size.textStyle()) {
             ButtonContentRow(

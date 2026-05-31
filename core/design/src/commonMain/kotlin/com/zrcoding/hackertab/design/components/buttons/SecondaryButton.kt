@@ -22,17 +22,6 @@ import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hackertab v4 secondary button — ghost surface with a 1dp outline. See
- * `Library.jsx` slug 03.04 for visual reference.
- *
- * Differences from [PrimaryButton]:
- *  - Transparent container, `colorScheme.outline` border, `colorScheme.onSurface`
- *    content.
- *  - Disabled: 40% alpha applied to border, content and (no) container.
- *
- * Same press scale, sizing and loading behaviour as [PrimaryButton].
- */
 @Composable
 fun SecondaryButton(
     text: String,

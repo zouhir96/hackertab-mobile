@@ -27,23 +27,10 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hackertab v4 OfflineChip — a pinned row used at the top of feeds when the
- * device is offline.
- *
- * Visual reference: `design/project/components/Screens.jsx` lines 759-765
- * (`ErrorState noNet` row).
- *
- * Anatomy:
- * - 14dp horizontal margin / 8dp bottom margin / 12dp radius.
- * - `surfaceVariant` background, 10/14 padding, 10dp gap.
- * - WifiOff icon (16dp) tinted with `colorScheme.error`.
- * - "No internet connection" text in `bodySmall`, weight 1f.
- * - Retry pill: 28dp tall, 0/10dp padding, 1dp `outline` border, fully rounded.
- */
 @Composable
 fun OfflineChip(
     onRetry: () -> Unit,
@@ -54,25 +41,25 @@ fun OfflineChip(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 14.dp)
-            .padding(bottom = 8.dp)
+            .padding(horizontal = MaterialTheme.dimension.space12)
+            .padding(bottom = MaterialTheme.dimension.space8)
             .background(
                 color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(MaterialTheme.dimension.space12),
             )
-            .padding(horizontal = 14.dp, vertical = 10.dp)
+            .padding(horizontal = MaterialTheme.dimension.space12, vertical = MaterialTheme.dimension.space8)
             .semantics {
                 liveRegion = LiveRegionMode.Polite
                 contentDescription = label
             },
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
     ) {
         Icon(
             imageVector = Icons.Outlined.WifiOff,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.error,
-            modifier = Modifier.size(16.dp),
+            modifier = Modifier.size(MaterialTheme.dimension.space16),
         )
         Text(
             text = label,
@@ -82,10 +69,10 @@ fun OfflineChip(
         )
         OutlinedButton(
             onClick = onRetry,
-            modifier = Modifier.height(28.dp),
+            modifier = Modifier.height(MaterialTheme.dimension.space24),
             shape = CircleShape,
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
+            contentPadding = PaddingValues(horizontal = MaterialTheme.dimension.space8, vertical = 0.dp),
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = MaterialTheme.colorScheme.onBackground,
             ),

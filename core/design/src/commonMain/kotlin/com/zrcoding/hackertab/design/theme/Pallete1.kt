@@ -5,22 +5,10 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-/*
- * Palette 1 — "Sunset Terminal"
- *
- * Mood: warm amber on cream paper / deep walnut dark mode.
- * Vibe: late-night terminal under a desk lamp; cosy IDE (Warp / iTerm warm theme).
- * Trade vs current v4 green: less "Matrix", more "long-reading session".
- * Amber sits well between HN-orange and yellow source chips without clashing.
- */
-
-// region Brand
 private val P1Primary = Color(0xFFF4A02C)
 private val P1PrimaryPressed = Color(0xFFD8861A)
 private val P1OnPrimary = Color(0xFF1A1006)
-// endregion
 
-// region Neutrals — warm-tinted (hue ~50)
 private val P1Neutral0 = Color(0xFFFEFBF6)
 private val P1Neutral50 = Color(0xFFFAF5EB)
 private val P1Neutral100 = Color(0xFFF1E9D8)
@@ -35,7 +23,6 @@ private val P1Neutral950 = Color(0xFF11100B)
 private val P1DarkSurface = Color(0xFF1F1B14)
 private val P1DarkSurfaceVariant = Color(0xFF2A2418)
 private val P1DarkOnSurfaceMuted = Color(0xFFB5A688)
-// endregion
 
 val Pallete1LightColors: ColorScheme = lightColorScheme(
     primary = P1Primary,

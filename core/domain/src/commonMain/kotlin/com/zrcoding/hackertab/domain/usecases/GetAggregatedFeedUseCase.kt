@@ -6,10 +6,6 @@ import com.zrcoding.hackertab.domain.repositories.AggregatedArticleRepository
 import com.zrcoding.hackertab.domain.repositories.AggregatedFeedResult
 import kotlinx.coroutines.flow.Flow
 
-/**
- * Wraps [AggregatedArticleRepository.observeAggregatedFeed] with standard
- * use-case protocol. Invoked from `HomeViewModel` when `activeSourceId == "all"`.
- */
 class GetAggregatedFeedUseCase(
     private val aggregatedArticleRepository: AggregatedArticleRepository,
 ) {

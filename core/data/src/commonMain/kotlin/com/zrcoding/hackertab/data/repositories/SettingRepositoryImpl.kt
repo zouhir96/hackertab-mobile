@@ -13,7 +13,6 @@ import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
@@ -87,8 +86,6 @@ class SettingRepositoryImpl(
         dataStore.edit { it[KEY_PROFILE] = profile.name }
     }
 
-    // region Wave 3I — theme mode
-
     override fun observeThemeMode(): Flow<ThemeMode> {
         return dataStore.data.map { prefs ->
             val raw = prefs[SettingsKeys.KEY_THEME_MODE]
@@ -104,17 +101,6 @@ class SettingRepositoryImpl(
         dataStore.edit { it[SettingsKeys.KEY_THEME_MODE] = mode.name }
     }
 
-    // endregion
-
-    // region Wave 3F — coachmarks_seen
-
-    /**
-     * Emits the current coachmarks-seen flag. Default = **true** so that
-     * existing users (who already completed the old onboarding) are NOT shown
-     * coachmarks. New users completing the redesigned onboarding explicitly
-     * call [setCoachmarksSeen](false) before navigating to the feed, which
-     * triggers the Wave-5 coachmark overlay on first Home load.
-     */
     override fun observeCoachmarksSeen(): Flow<Boolean> {
         return dataStore.data.map { prefs ->
             prefs[SettingsKeys.KEY_COACHMARKS_SEEN] ?: true
@@ -125,14 +111,9 @@ class SettingRepositoryImpl(
         dataStore.edit { it[SettingsKeys.KEY_COACHMARKS_SEEN] = seen }
     }
 
-    // Wave 3I — coachmark replay (Issue 15) — sugar over setCoachmarksSeen(false)
     override suspend fun resetCoachmarks() {
         setCoachmarksSeen(false)
     }
-
-    // endregion
-
-    // region Wave 3G — last visited timestamp (epoch millis, for "new since last visit" badges)
 
     override suspend fun getLastVisitedAt(): Long {
         return dataStore.data.map { it[SettingsKeys.KEY_LAST_VISITED_AT] ?: 0L }.firstOrNull() ?: 0L
@@ -141,8 +122,6 @@ class SettingRepositoryImpl(
     override suspend fun setLastVisitedAt(epochMillis: Long) {
         dataStore.edit { it[SettingsKeys.KEY_LAST_VISITED_AT] = epochMillis }
     }
-
-    // endregion
 
     private fun getSavedIds(key: Preferences.Key<String>): Flow<List<String>> {
         return dataStore.data.map { it.fromSavedJsonToList(key) }

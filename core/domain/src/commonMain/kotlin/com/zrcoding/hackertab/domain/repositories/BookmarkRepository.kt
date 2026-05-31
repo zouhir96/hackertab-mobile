@@ -15,7 +15,6 @@ interface BookmarkRepository {
 
     fun observeBookmarkedIds(): Flow<Set<String>>
 
-    /** Mark a saved bookmark as read (opened). Added in schema v2. */
     suspend fun markRead(articleId: String)
 }
 

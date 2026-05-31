@@ -9,9 +9,6 @@ import com.zrcoding.hackertab.home.presentation.utils.timeAgo
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * HackerNoon feed card. Tags-only meta (rendered by `ArticleCard`).
- */
 @Composable
 fun HackerNoonItem(
     article: Article,

@@ -6,11 +6,6 @@ import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.domain.models.ProductHunt
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Product Hunt launch card.
- * Delegates to [LaunchCard] from Wave 2C: thumbnail + title + tagline +
- * vertical upvote pill + comments. Image loaded via Kamel (Issue 9).
- */
 @Composable
 fun ProductHuntItem(
     product: ProductHunt,

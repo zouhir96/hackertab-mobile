@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.ripple
@@ -28,18 +27,6 @@ import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Hackertab v4 icon-only action button — see `Library.jsx` slug 03.04
- * (the trailing icon swatch). Used for card actions (bookmark, kebab) and
- * compact toolbars.
- *
- * Anatomy:
- *  - Circular `backgroundColor` swatch, default 42×42dp.
- *  - Icon centered, 18dp by default, tinted `colorScheme.onSurface`.
- *  - 0.97 press scale via the shared spring.
- *  - `Modifier.minimumInteractiveComponentSize()` ensures the tap target is
- *    at least 48dp regardless of [size].
- */
 @Composable
 fun IconActionButton(
     icon: ImageVector,

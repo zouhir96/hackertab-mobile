@@ -24,7 +24,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.design.components.HackertabAppBar
@@ -40,17 +39,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-// ---------------------------------------------------------------------------
-// Route
-// ---------------------------------------------------------------------------
-
-/**
- * Route entry point for the bookmarks search screen.
- *
- * Shares the [BookmarksViewModel] with [BookmarksRoute] — the parent nav
- * host must ensure the same VM instance is provided (e.g. scoped to the
- * bookmarks nav graph).
- */
 @Composable
 fun BookmarksSearchRoute(
     onNavigateBack: () -> Unit,
@@ -73,10 +61,6 @@ fun BookmarksSearchRoute(
     TrackScreenViewEvent(screenName = "BookmarksSearch")
 }
 
-// ---------------------------------------------------------------------------
-// Screen
-// ---------------------------------------------------------------------------
-
 @Composable
 fun BookmarksSearchScreen(
     query: String,
@@ -90,7 +74,6 @@ fun BookmarksSearchScreen(
 ) {
     val focusRequester = remember { FocusRequester() }
 
-    // Auto-focus the search field when the screen opens
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
@@ -108,7 +91,6 @@ fun BookmarksSearchScreen(
             },
         )
 
-        // Search input
         HackertabTextField(
             value = query,
             onValueChange = onQueryChange,
@@ -122,7 +104,6 @@ fun BookmarksSearchScreen(
                 .focusRequester(focusRequester),
         )
 
-        // Result count label (shown only when there is a non-empty query)
         if (query.isNotBlank()) {
             val plural = if (results.size != 1) "s" else ""
             Text(
@@ -131,7 +112,7 @@ fun BookmarksSearchScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .padding(horizontal = MaterialTheme.dimension.space16)
-                    .padding(bottom = 8.dp),
+                    .padding(bottom = MaterialTheme.dimension.space8),
             )
         }
 
@@ -167,29 +148,8 @@ fun BookmarksSearchScreen(
     }
 }
 
-// ---------------------------------------------------------------------------
-// Highlighted title helper
-// ---------------------------------------------------------------------------
-
-/**
- * Returns a copy of [BookmarkedArticle] whose title has highlighted spans for
- * the search [query]. The actual highlighted rendering is done inside
- * [BookmarkCard] which uses [BookmarkedArticle.title] as a plain `String`.
- *
- * For Wave 3 we embed the highlight via a custom wrapper that provides an
- * AnnotatedString-aware overload, but since [BookmarkCard] only accepts a
- * plain [BookmarkedArticle], we instead build a composable overlay at the
- * call site through [HighlightedTitleText].
- *
- * The article object is returned unchanged — highlight rendering is
- * achieved in [HighlightedTitleText] below.
- */
 private fun BookmarkedArticle.withHighlightedTitle(query: String): BookmarkedArticle = this
 
-/**
- * Builds an [androidx.compose.ui.text.AnnotatedString] where every occurrence
- * of [query] in [text] is wrapped with a [primaryContainer] background span.
- */
 @Composable
 internal fun highlightedText(
     text: String,
@@ -215,10 +175,6 @@ internal fun highlightedText(
         }
     }
 }
-
-// ---------------------------------------------------------------------------
-// Previews
-// ---------------------------------------------------------------------------
 
 private val previewBookmarks = persistentListOf(
     BookmarkedArticle(

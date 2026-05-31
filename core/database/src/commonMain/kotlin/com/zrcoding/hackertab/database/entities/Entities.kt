@@ -11,6 +11,5 @@ data class BookmarkedArticleEntity(
     val url: String,
     @ColumnInfo(name = "saved_at") val savedAt: Long,
     val source: String,
-    /** Whether the user has opened/read this bookmark. Defaults to false (unread). Added in schema v2. */
     val read: Boolean = false,
 )

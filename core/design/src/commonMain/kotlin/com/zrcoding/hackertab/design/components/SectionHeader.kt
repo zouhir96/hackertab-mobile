@@ -11,19 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.codeSmall
+import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Day-group / list-section heading. Sticky-friendly.
- *
- * @param showCount when true and [count] is non-null and > 0, renders an
- *   `"$count ITEMS"` mono uppercase label on the right. Default false per
- *   v4 critique Issue 5 — counts are noise on the unfiltered Today feed.
- */
 @Composable
 fun SectionHeader(
     label: String,
@@ -34,7 +27,12 @@ fun SectionHeader(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 22.dp, bottom = 10.dp, start = 20.dp, end = 20.dp),
+            .padding(
+                top = MaterialTheme.dimension.space20,
+                bottom = MaterialTheme.dimension.space8,
+                start = MaterialTheme.dimension.space20,
+                end = MaterialTheme.dimension.space20,
+            ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom,
     ) {

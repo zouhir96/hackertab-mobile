@@ -27,30 +27,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabMotion
 import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.dimension
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * One option in a [SegmentedControl] row.
- */
 data class SegmentOption(val id: String, val label: String)
 
-/**
- * Hackertab v4 segmented control — a row of pill-shaped tabs. Used in
- * `SettingsScreen` (theme picker) and the home screen filter row.
- *
- * Anatomy:
- *  - 32dp tall pills with 14dp horizontal padding, fully rounded.
- *  - Selected: filled `colorScheme.onBackground`, label `colorScheme.background`,
- *    weight 500.
- *  - Idle: transparent with a 1dp `colorScheme.outlineVariant` border, label
- *    `colorScheme.onSurfaceVariant`.
- *  - Color crossfade animates over [HackertabMotion.fast] (200ms) using the
- *    standard easing.
- *
- * A11y: each pill is `Role.Tab` with `selected = (id == selectedId)`.
- */
 @Composable
 fun SegmentedControl(
     options: ImmutableList<SegmentOption>,
@@ -59,8 +42,8 @@ fun SegmentedControl(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.padding(horizontal = 4.dp),
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = modifier.padding(horizontal = MaterialTheme.dimension.space4),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         options.forEach { option ->
@@ -110,7 +93,7 @@ private fun SegmentPill(
 
     Box(
         modifier = Modifier
-            .height(32.dp)
+            .height(MaterialTheme.dimension.space32)
             .clip(CircleShape)
             .background(containerColor)
             .let { base -> if (borderStroke != null) base.border(borderStroke, CircleShape) else base }
@@ -119,7 +102,7 @@ private fun SegmentPill(
                 role = Role.Tab
                 this.selected = isSelected
             }
-            .padding(horizontal = 14.dp),
+            .padding(horizontal = MaterialTheme.dimension.space12),
         contentAlignment = Alignment.Center,
     ) {
         Text(
