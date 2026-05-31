@@ -8,8 +8,10 @@ import com.zrcoding.hackertab.home.homeModule
 import com.zrcoding.hackertab.network.networkModule
 import com.zrcoding.hackertab.onboarding.onboardingModule
 import com.zrcoding.hackertab.settings.settingsModule
+import com.zrcoding.hackertab.shared.app.AppViewModel
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 /**
@@ -33,9 +35,10 @@ fun initKoin(appModule: Module = module { }) {
 }
 
 internal val appModules = listOf(
+    module { viewModelOf(::AppViewModel) },
+    onboardingModule,
     homeModule,
     settingsModule,
-    onboardingModule,
     bookmarksModule,
     networkModule,
     dataModule,

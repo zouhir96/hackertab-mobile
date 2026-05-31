@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.design.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,11 +20,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.codeSmall
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.ThemeMode
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -104,21 +108,26 @@ private fun FreshPill() {
 @Composable
 internal fun Source.Companion.IconBlock(
     source: Source,
-    size: androidx.compose.ui.unit.Dp,
+    size: Dp,
     modifier: Modifier = Modifier,
 ) {
     val (iconRes, iconTint) = source.Icon()
     Box(
         modifier = modifier
             .size(size)
-            .clip(androidx.compose.foundation.shape.RoundedCornerShape(5.dp))
+            .clip(MaterialTheme.shapes.small)
             .background(source.tagBrandColor()),
         contentAlignment = Alignment.Center,
     ) {
-        androidx.compose.material3.Icon(
-            painter = org.jetbrains.compose.resources.painterResource(iconRes),
+        if (iconTint != Color.Unspecified) {
+            Icon(
+                painter = painterResource(iconRes),
+                contentDescription = null,
+                modifier = Modifier.size(size - 6.dp),
+            )
+        } else Image(
+            painter = painterResource(iconRes),
             contentDescription = null,
-            tint = if (iconTint == Color.Unspecified) Color.White else iconTint,
             modifier = Modifier.size(size - 6.dp),
         )
     }
@@ -129,10 +138,10 @@ private fun Source.tagBrandColor(): Color = when (this) {
     Source.HACKER_NEWS -> Color(0xFFFF6600)
     Source.REDDIT -> Color(0xFFFF4500)
     Source.PRODUCTHUNT -> Color(0xFFDA552F)
-    Source.DEVTO -> Color(0xFF0A0A0A)
+    Source.DEVTO -> Color(0x1A0A0A0A)
     Source.LOBSTERS -> Color(0xFFAC130D)
     Source.HASH_NODE -> Color(0xFF2962FF)
-    Source.FREE_CODE_CAMP -> Color(0xFF0A0A23)
+    Source.FREE_CODE_CAMP -> Color(0x1A0A0A23)
     Source.INDIE_HACKERS -> Color(0xFF0E2439)
     Source.MEDIUM -> Color(0xFF00AB6C)
     Source.HACKER_NOON -> Color(0xFF00B14F)

@@ -3,11 +3,11 @@ package com.zrcoding.hackertab.settings.presentation.about
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,7 +44,6 @@ import com.zrcoding.hackertab.design.resources.settings_about_row_privacy
 import com.zrcoding.hackertab.design.resources.settings_about_row_rate
 import com.zrcoding.hackertab.design.resources.settings_about_row_show_tour
 import com.zrcoding.hackertab.design.resources.settings_about_row_source_code
-import com.zrcoding.hackertab.design.resources.settings_about_title
 import com.zrcoding.hackertab.design.resources.settings_about_tour_reset_confirmation
 import com.zrcoding.hackertab.design.resources.settings_about_version
 import com.zrcoding.hackertab.design.theme.BrandPrimary
@@ -107,20 +106,10 @@ internal fun SettingsAboutScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
             .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal),
     ) {
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space16))
-
-        Text(
-            text = stringResource(Res.string.settings_about_title),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-        )
-
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
-
         // Identity card with logo + version
         Box(
             modifier = Modifier

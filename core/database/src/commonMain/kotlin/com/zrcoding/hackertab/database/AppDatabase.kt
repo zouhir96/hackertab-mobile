@@ -5,7 +5,8 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.SQLiteConnection
+import androidx.sqlite.execSQL
 import com.zrcoding.hackertab.database.daos.BookmarkedArticleDao
 import com.zrcoding.hackertab.database.entities.BookmarkedArticleEntity
 
@@ -30,8 +31,8 @@ interface DB {
  * All existing rows get `read = 0` (unread) by the SQLite default.
  */
 val Migration_1_2 = object : Migration(1, 2) {
-    override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL(
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL(
             "ALTER TABLE bookmarked_articles ADD COLUMN read INTEGER NOT NULL DEFAULT 0"
         )
     }

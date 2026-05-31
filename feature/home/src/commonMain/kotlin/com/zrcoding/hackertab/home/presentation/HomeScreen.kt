@@ -5,7 +5,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -13,20 +12,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Layers
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -34,17 +26,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
-import com.zrcoding.hackertab.design.components.HackertabAppBar
 import com.zrcoding.hackertab.design.components.SectionHeader
 import com.zrcoding.hackertab.design.components.SourceRail
 import com.zrcoding.hackertab.design.components.TopicChipStrip
@@ -52,7 +41,14 @@ import com.zrcoding.hackertab.design.components.states.EmptyState
 import com.zrcoding.hackertab.design.components.states.EmptyStateCta
 import com.zrcoding.hackertab.design.components.states.ErrorState
 import com.zrcoding.hackertab.design.components.states.FeedLoadingSkeleton
-import com.zrcoding.hackertab.design.components.states.HackertabSnackbarHost
+import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.home_empty_filter_body
+import com.zrcoding.hackertab.design.resources.home_empty_filter_cta_clear
+import com.zrcoding.hackertab.design.resources.home_empty_filter_cta_see_all
+import com.zrcoding.hackertab.design.resources.home_empty_filter_title
+import com.zrcoding.hackertab.design.resources.home_empty_no_sources_body
+import com.zrcoding.hackertab.design.resources.home_empty_no_sources_cta
+import com.zrcoding.hackertab.design.resources.home_empty_no_sources_title
 import com.zrcoding.hackertab.design.theme.HackertabMotion
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.codeSmall
@@ -78,14 +74,6 @@ import com.zrcoding.hackertab.home.presentation.cards.producthunt.ProductHuntIte
 import com.zrcoding.hackertab.home.presentation.cards.reddit.RedditItem
 import com.zrcoding.hackertab.home.presentation.utils.ShareData
 import com.zrcoding.hackertab.home.presentation.utils.ShareManager
-import com.zrcoding.hackertab.design.resources.Res
-import com.zrcoding.hackertab.design.resources.home_empty_filter_body
-import com.zrcoding.hackertab.design.resources.home_empty_filter_cta_clear
-import com.zrcoding.hackertab.design.resources.home_empty_filter_cta_see_all
-import com.zrcoding.hackertab.design.resources.home_empty_filter_title
-import com.zrcoding.hackertab.design.resources.home_empty_no_sources_body
-import com.zrcoding.hackertab.design.resources.home_empty_no_sources_cta
-import com.zrcoding.hackertab.design.resources.home_empty_no_sources_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
@@ -104,7 +92,6 @@ fun HomeRoute(
 ) {
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
     val shareManager: ShareManager = koinInject()
-    val snackbarHostState = remember { SnackbarHostState() }
 
     // Auto-select first article on tablets
     val isTabletSize = LocalIsTabletSize.current
@@ -116,7 +103,6 @@ fun HomeRoute(
 
     HomeScreen(
         viewState = viewState,
-        snackbarHostState = snackbarHostState,
         onSourceSelected = viewModel::onSourceSelected,
         onTopicSelected = viewModel::onTopicSelected,
         onRefresh = viewModel::refresh,
@@ -158,7 +144,6 @@ fun HomeRoute(
 @Composable
 internal fun HomeScreen(
     viewState: HomeViewState,
-    snackbarHostState: SnackbarHostState,
     onSourceSelected: (String) -> Unit,
     onTopicSelected: (com.zrcoding.hackertab.domain.models.Topic) -> Unit,
     onRefresh: () -> Unit,
@@ -171,66 +156,43 @@ internal fun HomeScreen(
 ) {
     val pullRefreshState = rememberPullToRefreshState()
 
-    Scaffold(
-        topBar = {
-            HackertabAppBar(
-                wordmark = true,
-                trailing = {
-                    // Issue 14: no search icon in the feed AppBar
-                    IconButton(onClick = onRefresh) {
-                        Icon(
-                            imageVector = Icons.Outlined.Refresh,
-                            contentDescription = "Refresh feed",
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
-                    }
-                },
-            )
-        },
-        snackbarHost = { HackertabSnackbarHost(hostState = snackbarHostState) },
-        // BottomNav is provided by MainNavHost's outer Scaffold (see shared/navigation).
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-        ) {
-            // Source rail — Issue 11: plain "All" (no ★), SourceRail handles it
-            SourceRail(
-                sources = viewState.enabledSources,
-                activeSourceId = viewState.activeSourceId,
-                onSelect = onSourceSelected,
+    Column(modifier = Modifier.fillMaxSize(),) {
+        // Source rail — Issue 11: plain "All" (no ★), SourceRail handles it
+        SourceRail(
+            sources = viewState.enabledSources,
+            activeSourceId = viewState.activeSourceId,
+            onSelect = onSourceSelected,
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        // Topic chip strip — shown for "All" mode and for filterable sources
+        if (viewState.showTopicStrip && viewState.enabledTopics.isNotEmpty()) {
+            TopicChipStrip(
+                topics = viewState.enabledTopics,
+                activeTopicId = viewState.selectedTopic?.value,
+                onSelect = onTopicSelected,
+                canAddTopic = viewState.canAddTopic,
+                onAddTopic = onNavigateToTopicsSettings,
                 modifier = Modifier.fillMaxWidth(),
             )
+            Spacer(Modifier.height(4.dp))
+        }
 
-            // Topic chip strip — shown for "All" mode and for filterable sources
-            if (viewState.showTopicStrip && viewState.enabledTopics.isNotEmpty()) {
-                TopicChipStrip(
-                    topics = viewState.enabledTopics,
-                    activeTopicId = viewState.selectedTopic?.value,
-                    onSelect = onTopicSelected,
-                    canAddTopic = viewState.canAddTopic,
-                    onAddTopic = onNavigateToTopicsSettings,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                Spacer(Modifier.height(4.dp))
-            }
-
-            // Body — M7: Crossfade between skeleton and feed content on isLoading toggle
-            PullToRefreshBox(
-                isRefreshing = viewState.isLoading,
-                onRefresh = onRefresh,
-                state = pullRefreshState,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                Crossfade(
-                    targetState = viewState.isLoading,
-                    animationSpec = if (IS_REDUCED_MOTION) tween(0) else tween(
-                        durationMillis = HackertabMotion.fast,
-                        easing = HackertabMotion.deceleratedEasing,
-                    ),
-                    label = "feed-loading-crossfade",
-                ) { isLoading ->
+        // Body — M7: Crossfade between skeleton and feed content on isLoading toggle
+        PullToRefreshBox(
+            isRefreshing = viewState.isLoading,
+            onRefresh = onRefresh,
+            state = pullRefreshState,
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            Crossfade(
+                targetState = viewState.isLoading,
+                animationSpec = if (IS_REDUCED_MOTION) tween(0) else tween(
+                    durationMillis = HackertabMotion.fast,
+                    easing = HackertabMotion.deceleratedEasing,
+                ),
+                label = "feed-loading-crossfade",
+            ) { isLoading ->
                 when {
                     isLoading -> {
                         FeedLoadingSkeleton(
@@ -346,8 +308,7 @@ internal fun HomeScreen(
                         }
                     }
                 }
-                } // end Crossfade content
-            }
+            } // end Crossfade content
         }
     }
 }
@@ -533,7 +494,6 @@ private fun HomeScreenLightPreview() {
                 isLoading = false,
                 articlesByDay = kotlinx.collections.immutable.persistentMapOf(),
             ),
-            snackbarHostState = remember { SnackbarHostState() },
             onSourceSelected = {},
             onTopicSelected = {},
             onRefresh = {},
@@ -559,7 +519,6 @@ private fun HomeScreenLoadingDarkPreview() {
                 ),
                 isLoading = true,
             ),
-            snackbarHostState = remember { SnackbarHostState() },
             onSourceSelected = {},
             onTopicSelected = {},
             onRefresh = {},

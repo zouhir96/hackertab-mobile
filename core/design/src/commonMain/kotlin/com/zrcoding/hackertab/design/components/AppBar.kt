@@ -1,8 +1,8 @@
 package com.zrcoding.hackertab.design.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
@@ -26,9 +25,12 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.ic_hackertab
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ThemeMode
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -55,7 +57,6 @@ fun HackertabAppBar(
         modifier = modifier
             .fillMaxWidth()
             .height(52.dp)
-            .background(MaterialTheme.colorScheme.surface)
             .padding(horizontal = MaterialTheme.dimension.space16),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -84,7 +85,9 @@ private fun WordmarkContent() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
     ) {
-        Box(
+        Image(
+            painter = painterResource(Res.drawable.ic_hackertab),
+            contentDescription = null,
             modifier = Modifier
                 .size(16.dp)
                 .background(

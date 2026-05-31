@@ -85,7 +85,7 @@ fun HackertabTheme(
         ThemeMode.DARK -> true
         ThemeMode.SYSTEM -> isSystemInDarkTheme()
     }
-    val colorScheme = if (darkTheme) DarkColors else LightColors
+    val colorScheme = if (darkTheme) Pallete2DarkColors else Pallete2LightColors
 
     MaterialTheme(
         colorScheme = colorScheme,

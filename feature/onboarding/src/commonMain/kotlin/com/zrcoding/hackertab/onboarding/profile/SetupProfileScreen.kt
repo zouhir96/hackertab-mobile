@@ -1,7 +1,6 @@
 package com.zrcoding.hackertab.onboarding.profile
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -96,9 +94,7 @@ fun SetupProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal)
-            .safeDrawingPadding(),
+            .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal),
     ) {
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space8))
         OnboardingStepIndicator(
@@ -133,7 +129,7 @@ fun SetupProfileScreen(
                 val meta = profileMeta[profile]
                 Card(
                     onClick = { onProfileSelected(profile) },
-                    modifier = Modifier.aspectRatio(1f / 1.15f),
+                    modifier = Modifier.aspectRatio(1f / 0.55f),
                     shape = MaterialTheme.shapes.large,
                     colors = CardDefaults.cardColors(
                         containerColor = if (isSelected) {

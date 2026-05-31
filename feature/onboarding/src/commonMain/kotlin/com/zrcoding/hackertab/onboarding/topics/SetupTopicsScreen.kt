@@ -16,16 +16,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,7 +59,6 @@ import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.Profile
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
@@ -100,9 +99,7 @@ fun SetupTopicsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal)
-            .safeDrawingPadding(),
+            .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal),
     ) {
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space8))
         OnboardingStepIndicator(
@@ -128,7 +125,7 @@ fun SetupTopicsScreen(
         // Accordion list — each category is a sticky section header + chip flow
         LazyColumn(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(0.dp),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
         ) {
             state.topics.forEach { (category, chips) ->
                 val isExpanded = expandedCategory == category
@@ -156,12 +153,6 @@ fun SetupTopicsScreen(
                             onChipClicked = onChipClicked,
                         )
                     }
-                }
-
-                item(key = "divider_$category") {
-                    HorizontalDivider(
-                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
-                    )
                 }
             }
         }
@@ -197,7 +188,7 @@ private fun TopicCategoryHeader(
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
             .clickable(onClick = onClick)
-            .padding(vertical = MaterialTheme.dimension.space12)
+            .padding(vertical = MaterialTheme.dimension.space12, horizontal = MaterialTheme.dimension.space8)
             .semantics {
                 if (isExpanded) collapse { onClick(); true }
                 else expand { onClick(); true }
@@ -238,19 +229,21 @@ private fun TopicChipGrid(
     onChipClicked: (ChipData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    FlowRow(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = MaterialTheme.dimension.space12),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
-    ) {
-        chips.forEach { chip ->
-            HackertabFilterChip(
-                selected = chip.selected,
-                onClick = { onChipClicked(chip) },
-                label = chip.name,
-            )
+    CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
+        FlowRow(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(bottom = MaterialTheme.dimension.space12),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4),
+        ) {
+            chips.forEach { chip ->
+                HackertabFilterChip(
+                    selected = chip.selected,
+                    onClick = { onChipClicked(chip) },
+                    label = chip.name,
+                )
+            }
         }
     }
 }

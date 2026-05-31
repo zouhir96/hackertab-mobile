@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,7 +21,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,8 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -191,20 +189,18 @@ private fun SourcePill(source: Source, selected: Boolean, onClick: () -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         // Brand-colored 22dp block with the source's white glyph
-        Box(
-            modifier = Modifier
-                .size(22.dp)
-                .clip(RoundedCornerShape(5.dp))
-                .background(source.brandColor()),
-            contentAlignment = Alignment.Center,
-        ) {
+        if (iconTint != Color.Unspecified) {
             Icon(
                 painter = painterResource(iconRes),
                 contentDescription = null,
                 tint = if (iconTint == Color.Unspecified) Color.White else iconTint,
-                modifier = Modifier.size(14.dp),
+                modifier = Modifier.size(22.dp),
             )
-        }
+        } else Image(
+            painter = painterResource(iconRes),
+            contentDescription = null,
+            modifier = Modifier.size(22.dp),
+        )
         Text(
             text = source.label,
             style = MaterialTheme.typography.labelLarge,
@@ -217,25 +213,6 @@ private fun SourcePill(source: Source, selected: Boolean, onClick: () -> Unit) {
 @Composable
 private fun pillBorder(): BorderStroke =
     BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
-
-/**
- * Returns the source's brand color used as the rail-pill icon-block background.
- * Mirrors the values in `design/project/components/data.js`.
- */
-private fun Source.brandColor(): Color = when (this) {
-    Source.GITHUB -> Color(0xFF181717)
-    Source.HACKER_NEWS -> Color(0xFFFF6600)
-    Source.REDDIT -> Color(0xFFFF4500)
-    Source.PRODUCTHUNT -> Color(0xFFDA552F)
-    Source.DEVTO -> Color(0xFF0A0A0A)
-    Source.LOBSTERS -> Color(0xFFAC130D)
-    Source.HASH_NODE -> Color(0xFF2962FF)
-    Source.FREE_CODE_CAMP -> Color(0xFF0A0A23)
-    Source.INDIE_HACKERS -> Color(0xFF0E2439)
-    Source.MEDIUM -> Color(0xFF00AB6C)
-    Source.HACKER_NOON -> Color(0xFF00B14F)
-    Source.CONFERENCES -> Color(0xFF6E56CF)
-}
 
 @Preview
 @Composable

@@ -27,17 +27,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.resources.Res
-import com.zrcoding.hackertab.design.resources.settings_master_profile_change
 import com.zrcoding.hackertab.design.resources.settings_master_profile_setup_as
 import com.zrcoding.hackertab.design.resources.settings_master_row_about
 import com.zrcoding.hackertab.design.resources.settings_master_row_appearance
-import com.zrcoding.hackertab.design.resources.settings_master_row_send_feedback
 import com.zrcoding.hackertab.design.resources.settings_master_row_sources
 import com.zrcoding.hackertab.design.resources.settings_master_row_topics
 import com.zrcoding.hackertab.design.resources.settings_master_section_app
@@ -61,8 +58,6 @@ fun SettingsMasterRoute(
     onNavigateToSources: () -> Unit = {},
     onNavigateToAppearance: () -> Unit = {},
     onNavigateToAbout: () -> Unit = {},
-    onNavigateToProfile: () -> Unit = {},
-    onSendFeedback: () -> Unit = {},
     appVersion: String = "",
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -73,8 +68,6 @@ fun SettingsMasterRoute(
         onNavigateToSources = onNavigateToSources,
         onNavigateToAppearance = onNavigateToAppearance,
         onNavigateToAbout = onNavigateToAbout,
-        onNavigateToProfile = onNavigateToProfile,
-        onSendFeedback = onSendFeedback,
         appVersion = appVersion,
     )
     TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.SETTINGS_MASTER)
@@ -87,14 +80,11 @@ internal fun SettingsMasterScreen(
     onNavigateToSources: () -> Unit,
     onNavigateToAppearance: () -> Unit,
     onNavigateToAbout: () -> Unit,
-    onNavigateToProfile: () -> Unit,
-    onSendFeedback: () -> Unit,
     appVersion: String,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
             .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal),
     ) {
@@ -112,7 +102,6 @@ internal fun SettingsMasterScreen(
         // Identity / Profile card
         SettingsProfileCard(
             profile = state.profile,
-            onChangeClick = onNavigateToProfile,
         )
 
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
@@ -163,11 +152,6 @@ internal fun SettingsMasterScreen(
                 color = MaterialTheme.colorScheme.outlineVariant,
                 modifier = Modifier.padding(horizontal = MaterialTheme.dimension.space16),
             )
-            SettingsRow(
-                label = stringResource(Res.string.settings_master_row_send_feedback),
-                onClick = onSendFeedback,
-                showChevron = false,
-            )
         }
 
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space40))
@@ -189,7 +173,6 @@ internal fun SettingsMasterScreen(
 @Composable
 private fun SettingsProfileCard(
     profile: Profile?,
-    onChangeClick: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -221,16 +204,6 @@ private fun SettingsProfileCard(
                     )
                 }
             }
-            Text(
-                text = stringResource(Res.string.settings_master_profile_change),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.primary,
-                textDecoration = TextDecoration.Underline,
-                modifier = Modifier.clickable(
-                    role = Role.Button,
-                    onClick = onChangeClick,
-                ),
-            )
         }
     }
 }
@@ -321,8 +294,6 @@ private fun SettingsMasterScreenLightPreview() {
             onNavigateToSources = {},
             onNavigateToAppearance = {},
             onNavigateToAbout = {},
-            onNavigateToProfile = {},
-            onSendFeedback = {},
             appVersion = "4.0.0",
         )
     }
@@ -343,8 +314,6 @@ private fun SettingsMasterScreenDarkPreview() {
             onNavigateToSources = {},
             onNavigateToAppearance = {},
             onNavigateToAbout = {},
-            onNavigateToProfile = {},
-            onSendFeedback = {},
             appVersion = "4.0.0",
         )
     }

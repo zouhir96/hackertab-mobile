@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.zrcoding.hackertab.shared.HackertabKmpApp
+import com.zrcoding.hackertab.shared.app.HackertabApp
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 
@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            HackertabKmpApp()
+            HackertabApp()
         }
     }
 }

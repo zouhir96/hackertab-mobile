@@ -73,7 +73,6 @@ internal fun SettingsAppearanceScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal),
     ) {
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space16))
@@ -159,7 +158,7 @@ private fun ThemePreviewTile(
 ) {
     val bg = if (isDark) DarkBg else LightBg
     val surface = if (isDark) DarkSurface else LightSurface
-    val textColor = if (isDark) Neutral400 else Neutral900
+    if (isDark) Neutral400 else Neutral900
 
     val borderColor = if (isSelected) {
         MaterialTheme.colorScheme.primary
