@@ -2,7 +2,6 @@ package com.zrcoding.hackertab.design.components.cards
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -29,9 +28,6 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.theme.dimension
 
-// TODO Wave 7+: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
-private const val IS_REDUCED_MOTION = false
-
 @Composable
 fun CardShell(
     isFresh: Boolean = false,
@@ -45,7 +41,7 @@ fun CardShell(
     val pressed by interactionSource.collectIsPressedAsState()
     val scale by animateFloatAsState(
         targetValue = if (pressed) 0.98f else 1f,
-        animationSpec = if (IS_REDUCED_MOTION) snap() else spring(
+        animationSpec = spring(
             stiffness = Spring.StiffnessHigh,
             dampingRatio = Spring.DampingRatioMediumBouncy,
         ),

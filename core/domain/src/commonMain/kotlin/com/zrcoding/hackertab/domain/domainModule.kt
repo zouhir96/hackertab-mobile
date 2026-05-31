@@ -1,6 +1,5 @@
 package com.zrcoding.hackertab.domain
 
-import com.zrcoding.hackertab.domain.usecases.GetAggregatedFeedUseCase
 import com.zrcoding.hackertab.domain.usecases.GetStartDestinationUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedSourcesUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedTopicsUseCase
@@ -11,5 +10,4 @@ val domainModule = module {
     factoryOf(::ObserveSelectedTopicsUseCase)
     factoryOf(::ObserveSelectedSourcesUseCase)
     factoryOf(::GetStartDestinationUseCase)
-    factoryOf(::GetAggregatedFeedUseCase)
 }

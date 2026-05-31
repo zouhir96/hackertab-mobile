@@ -1,7 +1,6 @@
 package com.zrcoding.hackertab.design.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -45,9 +44,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-// TODO Wave 7+: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
-private const val IS_REDUCED_MOTION = false
-
 @Composable
 fun TopicChipStrip(
     topics: ImmutableList<Topic>,
@@ -82,7 +78,7 @@ private fun TopicPill(topic: Topic, selected: Boolean, onClick: () -> Unit) {
     val containerColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.surfaceVariant
         else Color.Transparent,
-        animationSpec = if (IS_REDUCED_MOTION) snap() else tween(
+        animationSpec = tween(
             durationMillis = HackertabMotion.fast,
             easing = HackertabMotion.standardEasing,
         ),
@@ -90,7 +86,7 @@ private fun TopicPill(topic: Topic, selected: Boolean, onClick: () -> Unit) {
     val contentColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.onSurface
         else MaterialTheme.colorScheme.onSurfaceVariant,
-        animationSpec = if (IS_REDUCED_MOTION) snap() else tween(
+        animationSpec = tween(
             durationMillis = HackertabMotion.fast,
             easing = HackertabMotion.standardEasing,
         ),

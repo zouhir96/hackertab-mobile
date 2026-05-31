@@ -1,7 +1,6 @@
 package com.zrcoding.hackertab.design.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -50,9 +49,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val ALL_SOURCES_ID: String = "all"
 
-// TODO Wave 7+: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
-private const val IS_REDUCED_MOTION = false
-
 @Composable
 fun SourceRail(
     sources: ImmutableList<Source>,
@@ -94,7 +90,7 @@ private fun AllPill(selected: Boolean, onClick: () -> Unit) {
     val containerColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.primary
         else Color.Transparent,
-        animationSpec = if (IS_REDUCED_MOTION) snap() else spring(
+        animationSpec = spring(
             stiffness = 380f,
             dampingRatio = 0.5f,
         ),
@@ -102,7 +98,7 @@ private fun AllPill(selected: Boolean, onClick: () -> Unit) {
     val contentColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.onPrimary
         else MaterialTheme.colorScheme.onSurface,
-        animationSpec = if (IS_REDUCED_MOTION) snap() else spring(
+        animationSpec = spring(
             stiffness = 380f,
             dampingRatio = 0.5f,
         ),
@@ -147,7 +143,7 @@ private fun SourcePill(source: Source, selected: Boolean, onClick: () -> Unit) {
     val containerColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.primary
         else Color.Transparent,
-        animationSpec = if (IS_REDUCED_MOTION) snap() else spring(
+        animationSpec = spring(
             stiffness = 380f,
             dampingRatio = 0.5f,
         ),
@@ -155,7 +151,7 @@ private fun SourcePill(source: Source, selected: Boolean, onClick: () -> Unit) {
     val contentColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.onPrimary
         else MaterialTheme.colorScheme.onSurface,
-        animationSpec = if (IS_REDUCED_MOTION) snap() else spring(
+        animationSpec = spring(
             stiffness = 380f,
             dampingRatio = 0.5f,
         ),

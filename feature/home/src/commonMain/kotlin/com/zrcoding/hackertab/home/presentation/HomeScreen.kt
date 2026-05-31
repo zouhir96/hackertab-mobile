@@ -61,6 +61,7 @@ import com.zrcoding.hackertab.domain.models.ProductHunt
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.SourceLoadState
 import com.zrcoding.hackertab.domain.models.ThemeMode
+import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.home.presentation.cards.conferences.ConferenceItem
 import com.zrcoding.hackertab.home.presentation.cards.devto.DevtoItem
 import com.zrcoding.hackertab.home.presentation.cards.freecodecamp.FreeCodeCampItem
@@ -80,15 +81,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
-// TODO v4.1: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
-private const val IS_REDUCED_MOTION = false
-
 @Composable
 fun HomeRoute(
     onNavigateToWebView: (String) -> Unit,
     onNavigateToTopicsSettings: () -> Unit,
     onNavigateToSourcesSettings: () -> Unit,
-    onNavigateToBookmarks: () -> Unit,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
@@ -144,7 +141,7 @@ fun HomeRoute(
 internal fun HomeScreen(
     viewState: HomeViewState,
     onSourceSelected: (String) -> Unit,
-    onTopicSelected: (com.zrcoding.hackertab.domain.models.Topic) -> Unit,
+    onTopicSelected: (Topic) -> Unit,
     onRefresh: () -> Unit,
     onNavigateToSourcesSettings: () -> Unit,
     onNavigateToTopicsSettings: () -> Unit,
@@ -183,7 +180,7 @@ internal fun HomeScreen(
         ) {
             Crossfade(
                 targetState = viewState.isLoading,
-                animationSpec = if (IS_REDUCED_MOTION) tween(0) else tween(
+                animationSpec = tween(
                     durationMillis = HackertabMotion.fast,
                     easing = HackertabMotion.deceleratedEasing,
                 ),
@@ -271,7 +268,6 @@ internal fun HomeScreen(
                                 feedItems(
                                     items = items,
                                     seenIds = viewState.seenArticleIds,
-                                    lastVisitedEpoch = 0L, // TODO: pass from viewState once surfaced
                                     onCardClick = onCardClick,
                                     onBookmarkClick = onBookmarkClick,
                                     onShareClick = onShareClick,
@@ -307,7 +303,6 @@ internal fun HomeScreen(
 private fun LazyListScope.feedItems(
     items: List<BaseArticle>,
     seenIds: List<String>,
-    lastVisitedEpoch: Long,
     onCardClick: (BaseArticle) -> Unit,
     onBookmarkClick: (BaseArticle) -> Unit,
     onShareClick: (BaseArticle) -> Unit,
@@ -341,7 +336,7 @@ private fun StaggeredFeedCardEntry(
     onShareClick: (BaseArticle) -> Unit,
     onLongPress: (BaseArticle) -> Unit,
 ) {
-    val shouldStagger = !IS_REDUCED_MOTION && absoluteIndex < 6
+    val shouldStagger = absoluteIndex < 6
     var visible by rememberSaveable(article.id) { mutableStateOf(!shouldStagger) }
     LaunchedEffect(article.id) {
         if (!visible) {
@@ -465,11 +460,11 @@ private fun HomeScreenLightPreview() {
                     Source.GITHUB, Source.HACKER_NEWS, Source.DEVTO,
                 ),
                 enabledTopics = kotlinx.collections.immutable.persistentListOf(
-                    com.zrcoding.hackertab.domain.models.Topic(
+                    Topic(
                         value = "kotlin", label = "Kotlin", category = "mobile"
                     ),
                 ),
-                selectedTopic = com.zrcoding.hackertab.domain.models.Topic(
+                selectedTopic = Topic(
                     value = "kotlin", label = "Kotlin", category = "mobile"
                 ),
                 isLoading = false,

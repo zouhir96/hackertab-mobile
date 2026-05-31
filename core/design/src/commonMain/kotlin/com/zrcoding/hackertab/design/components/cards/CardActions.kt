@@ -22,9 +22,6 @@ import androidx.compose.ui.draw.scale
 import com.zrcoding.hackertab.design.theme.HackertabMotion
 import com.zrcoding.hackertab.design.theme.dimension
 
-// TODO Wave 7+: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
-private const val IS_REDUCED_MOTION = false
-
 @Composable
 fun CardActions(
     isBookmarked: Boolean,
@@ -55,7 +52,7 @@ fun CardActions(
 private fun BookmarkButton(isBookmarked: Boolean, onClick: () -> Unit) {
     val pulse = remember { Animatable(1f) }
     LaunchedEffect(isBookmarked) {
-        if (isBookmarked && !IS_REDUCED_MOTION) {
+        if (isBookmarked) {
             pulse.animateTo(1.15f, animationSpec = tween(120, easing = HackertabMotion.emphasizedEasing))
             pulse.animateTo(1f, animationSpec = tween(120, easing = HackertabMotion.emphasizedEasing))
         }

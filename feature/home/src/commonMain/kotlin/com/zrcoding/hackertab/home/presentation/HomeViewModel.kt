@@ -15,11 +15,11 @@ import com.zrcoding.hackertab.domain.models.Resource
 import com.zrcoding.hackertab.domain.models.Source
 import com.zrcoding.hackertab.domain.models.SourceLoadState
 import com.zrcoding.hackertab.domain.models.Topic
+import com.zrcoding.hackertab.domain.repositories.AggregatedArticleRepository
 import com.zrcoding.hackertab.domain.repositories.AggregatedFeedResult
 import com.zrcoding.hackertab.domain.repositories.ArticleRepository
 import com.zrcoding.hackertab.domain.repositories.BookmarkRepository
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
-import com.zrcoding.hackertab.domain.usecases.GetAggregatedFeedUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedSourcesUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedTopicsUseCase
 import kotlinx.collections.immutable.PersistentList
@@ -54,7 +54,7 @@ class HomeViewModel(
     private val bookmarkRepository: BookmarkRepository,
     private val articleRepository: ArticleRepository,
     private val settingRepository: SettingRepository,
-    private val getAggregatedFeedUseCase: GetAggregatedFeedUseCase,
+    private val aggregatedArticleRepository: AggregatedArticleRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
@@ -190,7 +190,7 @@ class HomeViewModel(
     private fun observeAggregatedFlow(
         sources: PersistentList<Source>,
         topic: Topic?,
-    ): Flow<List<BaseArticle>> = getAggregatedFeedUseCase(
+    ): Flow<List<BaseArticle>> = aggregatedArticleRepository.observeAggregatedFeed(
         sources = sources,
         topic = topic,
     ).map { result: AggregatedFeedResult ->
@@ -260,14 +260,15 @@ class HomeViewModel(
     fun markRead(articleId: String) {
         viewModelScope.launch {
             val isBookmarked = bookmarkRepository.isBookmarked(articleId)
-            if (!isBookmarked) {
+            if (isBookmarked) {
+                bookmarkRepository.markRead(articleId)
+            } else {
                 _viewState.update { state ->
                     state.copy(
                         seenArticleIds = (state.seenArticleIds + articleId).toPersistentList(),
                     )
                 }
             }
-            // TODO Wave 3H: if bookmarked, call bookmarkRepository.markRead(articleId)
         }
     }
 

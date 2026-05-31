@@ -50,9 +50,6 @@ import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-// TODO Wave 7+: CMP has no cross-platform reduce-motion flag; degrade per-platform via expect/actual.
-private const val IS_REDUCED_MOTION = false
-
 private data class CoachmarkScene(
     val spotlightTop: Dp,
     val spotlightLeftPad: Dp,
@@ -107,8 +104,8 @@ fun CoachmarkOverlay(
 
     AnimatedVisibility(
         visible = visible,
-        enter = fadeIn(animationSpec = tween(durationMillis = if (IS_REDUCED_MOTION) 0 else 200)),
-        exit = fadeOut(animationSpec = tween(durationMillis = if (IS_REDUCED_MOTION) 0 else 200)),
+        enter = fadeIn(animationSpec = tween(durationMillis = 200)),
+        exit = fadeOut(animationSpec = tween(durationMillis = 200)),
         modifier = modifier,
     ) {
         val scene = SCENES.getOrNull(currentStep - 1) ?: return@AnimatedVisibility

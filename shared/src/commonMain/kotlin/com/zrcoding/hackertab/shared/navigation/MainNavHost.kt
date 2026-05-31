@@ -299,10 +299,6 @@ fun MainNavHost(
                                     onNavigateToSourcesSettings = {
                                         backStack.add(SettingsSourcesScreen)
                                     },
-                                    onNavigateToBookmarks = {
-                                        backStack.removeAll { it is WebViewScreen }
-                                        backStack.add(BookmarksScreen)
-                                    }
                                 )
                             }
                             entry<SettingsMasterScreen>(
