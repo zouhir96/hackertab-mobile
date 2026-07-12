@@ -11,6 +11,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,22 +29,30 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.zrcoding.hackertab.design.components.LocalCoachmarkAnchors
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.codeSmall
 import com.zrcoding.hackertab.design.theme.dimension
@@ -51,12 +60,6 @@ import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private data class CoachmarkScene(
-    val spotlightTop: Dp,
-    val spotlightLeftPad: Dp,
-    val spotlightRightPad: Dp,
-    val spotlightHeight: Dp,
-    val spotlightWidth: Dp? = null,
-    val centered: Boolean = false,
     val title: String,
     val body: String,
     val tooltipBelow: Boolean,
@@ -64,35 +67,42 @@ private data class CoachmarkScene(
 
 private val SCENES = listOf(
     CoachmarkScene(
-        spotlightTop = 100.dp,
-        spotlightLeftPad = 14.dp,
-        spotlightRightPad = 14.dp,
-        spotlightHeight = 38.dp,
         title = "Tap a source",
-        body = "Switch from All → GitHub, HN, etc. via the rail under the title.",
+        body = "Switch between GitHub, HN, and more via the rail at the top.",
         tooltipBelow = true,
     ),
     CoachmarkScene(
-        spotlightTop = 300.dp,
-        spotlightLeftPad = 0.dp,
-        spotlightRightPad = 0.dp,
-        spotlightHeight = 60.dp,
-        spotlightWidth = 60.dp,
-        centered = true,
         title = "Pull down to refresh",
         body = "Drag the feed down. The Hackertab spinner shows while we fetch.",
         tooltipBelow = false,
     ),
     CoachmarkScene(
-        spotlightTop = 200.dp,
-        spotlightLeftPad = 14.dp,
-        spotlightRightPad = 14.dp,
-        spotlightHeight = 120.dp,
         title = "Long-press a card",
         body = "Hold any card for Save · Share · Open · Copy link.",
         tooltipBelow = true,
     ),
 )
+
+private data class SpotlightBounds(
+    val left: Dp,
+    val top: Dp,
+    val width: Dp,
+    val height: Dp,
+)
+
+private fun Rect.toSpotlightBounds(
+    density: Density,
+    origin: Offset,
+    inflate: Dp,
+): SpotlightBounds = with(density) {
+    val inflatePx = inflate.toPx()
+    SpotlightBounds(
+        left = (left - origin.x - inflatePx).toDp(),
+        top = (top - origin.y - inflatePx).toDp(),
+        width = (width + 2 * inflatePx).toDp(),
+        height = (height + 2 * inflatePx).toDp(),
+    )
+}
 
 @Composable
 fun CoachmarkOverlay(
@@ -101,6 +111,7 @@ fun CoachmarkOverlay(
     modifier: Modifier = Modifier,
 ) {
     var currentStep by remember { mutableIntStateOf(1) }
+    val anchors = LocalCoachmarkAnchors.current
 
     AnimatedVisibility(
         visible = visible,
@@ -109,9 +120,13 @@ fun CoachmarkOverlay(
         modifier = modifier,
     ) {
         val scene = SCENES.getOrNull(currentStep - 1) ?: return@AnimatedVisibility
-        Box(
+        val density = LocalDensity.current
+        var overlayOrigin by remember { mutableStateOf(Offset.Zero) }
+
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
+                .onGloballyPositioned { overlayOrigin = it.boundsInRoot().topLeft }
                 .pointerInput(Unit) {
                     detectTapGestures { }
                 }
@@ -122,27 +137,48 @@ fun CoachmarkOverlay(
                         "${scene.title}. ${scene.body}"
                 },
         ) {
-            val spotlightModifier = Modifier
-                .offset(y = scene.spotlightTop)
-                .padding(
-                    start = scene.spotlightLeftPad,
-                    end = scene.spotlightRightPad,
-                )
-                .then(
-                    if (scene.centered && scene.spotlightWidth != null) {
-                        Modifier.fillMaxWidth().padding(horizontal = 0.dp)
-                    } else {
-                        Modifier.fillMaxWidth()
-                    },
+            val spotlight = when (currentStep) {
+                1 -> anchors.sourceRail
+                    ?.toSpotlightBounds(density, overlayOrigin, inflate = 4.dp)
+                    ?: SpotlightBounds(
+                        left = 14.dp,
+                        top = 8.dp,
+                        width = maxWidth - 28.dp,
+                        height = 44.dp,
+                    )
+
+                2 -> anchors.feed?.let { feed ->
+                    val size = 60.dp
+                    with(density) {
+                        SpotlightBounds(
+                            left = (feed.center.x - overlayOrigin.x).toDp() - size / 2,
+                            top = (feed.top - overlayOrigin.y).toDp() +
+                                (feed.height.toDp() - size) / 2,
+                            width = size,
+                            height = size,
+                        )
+                    }
+                } ?: SpotlightBounds(
+                    left = (maxWidth - 60.dp) / 2,
+                    top = 300.dp,
+                    width = 60.dp,
+                    height = 60.dp,
                 )
 
-            Box(
-                modifier = spotlightModifier,
-                contentAlignment = if (scene.centered) Alignment.TopCenter else Alignment.TopStart,
-            ) {
+                else -> anchors.firstCard
+                    ?.toSpotlightBounds(density, overlayOrigin, inflate = 4.dp)
+                    ?: SpotlightBounds(
+                        left = 14.dp,
+                        top = 200.dp,
+                        width = maxWidth - 28.dp,
+                        height = 120.dp,
+                    )
+            }
+
+            Box(modifier = Modifier.offset(x = spotlight.left, y = spotlight.top)) {
                 Spotlight(
-                    width = scene.spotlightWidth,
-                    height = scene.spotlightHeight,
+                    width = spotlight.width,
+                    height = spotlight.height,
                 )
             }
 
@@ -164,9 +200,9 @@ fun CoachmarkOverlay(
             }
 
             val tooltipTop = if (scene.tooltipBelow) {
-                scene.spotlightTop + scene.spotlightHeight + MaterialTheme.dimension.space16
+                spotlight.top + spotlight.height + MaterialTheme.dimension.space16
             } else {
-                (scene.spotlightTop - 140.dp).coerceAtLeast(60.dp)
+                (spotlight.top - 140.dp).coerceAtLeast(60.dp)
             }
             Box(
                 modifier = Modifier
@@ -196,9 +232,9 @@ fun CoachmarkOverlay(
 }
 
 @Composable
-private fun Spotlight(width: Dp?, height: Dp) {
+private fun Spotlight(width: Dp, height: Dp) {
     val mod = Modifier
-        .then(if (width != null) Modifier.width(width) else Modifier.fillMaxWidth())
+        .width(width)
         .height(height)
         .clip(RoundedCornerShape(MaterialTheme.dimension.space8))
         .border(

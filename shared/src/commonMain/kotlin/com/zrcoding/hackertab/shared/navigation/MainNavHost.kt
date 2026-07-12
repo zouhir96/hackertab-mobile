@@ -45,6 +45,8 @@ import com.zrcoding.hackertab.bookmarks.presentation.BookmarksRoute
 import com.zrcoding.hackertab.bookmarks.presentation.BookmarksSearchRoute
 import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
 import com.zrcoding.hackertab.design.components.BottomNavItem
+import com.zrcoding.hackertab.design.components.CoachmarkAnchors
+import com.zrcoding.hackertab.design.components.LocalCoachmarkAnchors
 import com.zrcoding.hackertab.design.components.HackertabBottomNav
 import com.zrcoding.hackertab.design.components.HackertabNavRail
 import com.zrcoding.hackertab.design.components.WebViewRoute
@@ -210,7 +212,12 @@ fun MainNavHost(
     val coachmarksSeen by coachmarkViewModel.coachmarksSeen.collectAsStateWithLifecycle()
     val isOnHome by remember { derivedStateOf { tip is HomeScreen } }
 
-    CompositionLocalProvider(LocalIsTabletSize provides isTabletSize) {
+    val coachmarkAnchors = remember { CoachmarkAnchors() }
+
+    CompositionLocalProvider(
+        LocalIsTabletSize provides isTabletSize,
+        LocalCoachmarkAnchors provides coachmarkAnchors,
+    ) {
         Box(modifier = modifier.fillMaxSize()) {
             Row(modifier = Modifier.fillMaxSize()) {
                 if (isTabletSize && isTopLevel) {

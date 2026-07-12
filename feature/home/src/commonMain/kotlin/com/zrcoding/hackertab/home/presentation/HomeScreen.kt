@@ -2,6 +2,7 @@ package com.zrcoding.hackertab.home.presentation
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -24,11 +25,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
+import com.zrcoding.hackertab.design.components.LocalCoachmarkAnchors
 import com.zrcoding.hackertab.design.components.SourceRail
 import com.zrcoding.hackertab.design.components.TopicChipStrip
 import com.zrcoding.hackertab.design.components.cards.ArticleCard
@@ -143,13 +147,16 @@ internal fun HomeScreen(
     onLongPress: (BaseArticle) -> Unit,
 ) {
     val pullRefreshState = rememberPullToRefreshState()
+    val coachmarkAnchors = LocalCoachmarkAnchors.current
 
     Column(modifier = Modifier.fillMaxSize()) {
         SourceRail(
             sources = viewState.enabledSources,
             activeSourceId = viewState.activeSourceId,
             onSelect = onSourceSelected,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { coachmarkAnchors.sourceRail = it.boundsInRoot() },
         )
 
         if (viewState.showTopicStrip && viewState.enabledTopics.isNotEmpty()) {
@@ -168,7 +175,9 @@ internal fun HomeScreen(
             isRefreshing = viewState.isLoading,
             onRefresh = onRefresh,
             state = pullRefreshState,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .onGloballyPositioned { coachmarkAnchors.feed = it.boundsInRoot() },
         ) {
             Crossfade(
                 targetState = viewState.isLoading,
@@ -271,12 +280,21 @@ private fun LazyListScope.feedItems(
     itemsIndexed(
         items = items,
         key = { _, item -> item.id },
-    ) { _, article ->
-        article.ToFeedCard(
-            onClick = { onCardClick(article) },
-            onBookmarkClick = { onBookmarkClick(article) },
-            onLongClick = { onLongPress(article) },
-        )
+    ) { index, article ->
+        val coachmarkAnchors = LocalCoachmarkAnchors.current
+        Box(
+            modifier = if (index == 0) {
+                Modifier.onGloballyPositioned { coachmarkAnchors.firstCard = it.boundsInRoot() }
+            } else {
+                Modifier
+            },
+        ) {
+            article.ToFeedCard(
+                onClick = { onCardClick(article) },
+                onBookmarkClick = { onBookmarkClick(article) },
+                onLongClick = { onLongPress(article) },
+            )
+        }
     }
 }
 
