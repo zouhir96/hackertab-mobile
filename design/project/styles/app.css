@@ -1,0 +1,172 @@
+/* Reusable app-shell styles for screen artboards */
+
+.section-title {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--on-surface-muted);
+  margin: 0 0 6px 0;
+}
+
+.section-rule {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 0 0 18px 0;
+}
+
+.swatch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+.swatch-chip {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(0,0,0,.06);
+  flex-shrink: 0;
+}
+.swatch-name { font: 500 13px var(--font-sans); color: var(--on-surface); }
+.swatch-token { font: 500 11px var(--font-mono); color: var(--on-surface-muted); margin-top: 2px; }
+
+/* Phone screen wrapper — black background, no chrome */
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  color: var(--on-bg);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Status bar mock */
+.status-bar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px 0 24px;
+  font: 600 15px var(--font-sans);
+  color: var(--on-bg);
+  flex-shrink: 0;
+}
+.status-bar .right { display: flex; align-items: center; gap: 6px; }
+
+/* App bar */
+.app-bar {
+  height: 52px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.app-bar .wordmark {
+  font: 600 18px var(--font-sans);
+  letter-spacing: -0.02em;
+  color: var(--on-bg);
+  display: flex; align-items: center; gap: 8px;
+}
+.app-bar .wordmark .logo-dot {
+  width: 18px; height: 18px;
+  border-radius: 5px;
+  background: var(--brand-primary);
+  position: relative;
+}
+.app-bar .wordmark .logo-dot::after {
+  content: ""; position: absolute;
+  inset: 4px 5px 4px 4px;
+  background: var(--neutral-950);
+  border-radius: 1px;
+  clip-path: polygon(0 0, 60% 0, 100% 50%, 60% 100%, 0 100%, 40% 50%);
+}
+.app-bar-icon {
+  width: 36px; height: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-full);
+  color: var(--on-surface);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.app-bar-icon:hover { background: var(--surface-variant); }
+
+/* Bottom tab bar — iOS 26 Liquid Glass
+   Floating pill that hovers above content. Refractive backdrop,
+   rim highlight, brand-tinted active capsule that "lenses" through.
+*/
+.tab-bar {
+  position: absolute;
+  left: 50%; bottom: 18px;
+  transform: translateX(-50%);
+  height: 62px;
+  padding: 6px;
+  display: flex;
+  gap: 2px;
+  z-index: 10;
+  border-radius: 999px;
+  /* Glass surface */
+  background: color-mix(in oklab, var(--bg-elevated) 38%, transparent);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  /* Rim + shadow stack — top rim highlight, inner glow, drop shadow */
+  box-shadow:
+    inset 0 1px 0 0 color-mix(in oklab, var(--on-bg) 14%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, var(--on-bg) 6%, transparent),
+    inset 0 -1px 0 0 color-mix(in oklab, var(--on-bg) 4%, transparent),
+    0 8px 24px rgba(0,0,0,.12),
+    0 2px 6px rgba(0,0,0,.08);
+}
+/* Specular streak across the top */
+.tab-bar::before {
+  content: "";
+  position: absolute;
+  inset: 1px 1px auto 1px;
+  height: 50%;
+  border-radius: 999px 999px 80px 80px / 999px 999px 40px 40px;
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--on-bg) 8%, transparent) 0%,
+    transparent 70%);
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+.theme-dark .tab-bar::before {
+  background: linear-gradient(180deg,
+    rgba(255,255,255,.10) 0%,
+    transparent 70%);
+}
+.tab-item {
+  position: relative;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 1px;
+  width: 76px; height: 50px;
+  border-radius: 999px;
+  color: var(--on-surface-muted);
+  font: 500 10px var(--font-sans);
+  letter-spacing: .005em;
+  background: transparent; border: 0;
+  cursor: pointer;
+  padding: 0;
+  transition: color 200ms var(--easing-standard);
+}
+/* Active = brand-tinted glass capsule with refraction rim */
+.tab-item.active {
+  color: var(--brand-on-primary);
+  background: color-mix(in oklab, var(--brand-primary) 88%, transparent);
+  box-shadow:
+    inset 0 1px 0 0 color-mix(in oklab, #fff 32%, transparent),
+    inset 0 -1px 0 0 color-mix(in oklab, var(--brand-primary) 30%, transparent),
+    0 2px 8px color-mix(in oklab, var(--brand-primary) 35%, transparent);
+}
+.tab-item .ico {
+  width: 22px; height: 22px;
+  display: inline-flex; align-items: center; justify-content: center;
+}

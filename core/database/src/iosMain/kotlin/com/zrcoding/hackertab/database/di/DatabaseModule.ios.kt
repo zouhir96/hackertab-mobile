@@ -2,6 +2,7 @@ package com.zrcoding.hackertab.database.di
 
 import androidx.room.Room
 import com.zrcoding.hackertab.database.AppDatabase
+import com.zrcoding.hackertab.database.Migration_1_2
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -14,6 +15,7 @@ actual val databaseModule = module {
     single<AppDatabase> {
         val dbFilePath = documentDirectory() + "/$DATABASE_NAME"
         Room.databaseBuilder<AppDatabase>(name = dbFilePath)
+            .addMigrations(Migration_1_2)
             .fallbackToDestructiveMigration(true)
             .setDriver(_root_ide_package_.androidx.sqlite.driver.bundled.BundledSQLiteDriver())
             .setQueryCoroutineContext(Dispatchers.IO)

@@ -7,6 +7,7 @@ data class BookmarkedArticle(
     val title: String,
     val url: String,
     val savedAt: LocalDateTime,
-    val source: String
+    val source: String,
+    val read: Boolean = false,
 )
 

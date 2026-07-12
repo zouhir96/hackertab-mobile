@@ -10,5 +10,6 @@ data class BookmarkedArticleEntity(
     val title: String,
     val url: String,
     @ColumnInfo(name = "saved_at") val savedAt: Long,
-    val source: String
+    val source: String,
+    val read: Boolean = false,
 )

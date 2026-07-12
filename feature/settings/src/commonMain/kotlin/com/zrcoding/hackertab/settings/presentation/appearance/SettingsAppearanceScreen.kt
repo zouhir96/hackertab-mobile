@@ -1,0 +1,481 @@
+package com.zrcoding.hackertab.settings.presentation.appearance
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
+import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.settings_appearance_dark
+import com.zrcoding.hackertab.design.resources.settings_appearance_description
+import com.zrcoding.hackertab.design.resources.settings_appearance_font_geist
+import com.zrcoding.hackertab.design.resources.settings_appearance_font_inter
+import com.zrcoding.hackertab.design.resources.settings_appearance_font_jetbrains_mono
+import com.zrcoding.hackertab.design.resources.settings_appearance_font_nunito
+import com.zrcoding.hackertab.design.resources.settings_appearance_font_sample
+import com.zrcoding.hackertab.design.resources.settings_appearance_font_title
+import com.zrcoding.hackertab.design.resources.settings_appearance_light
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_amber
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_cyan
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_default
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_emerald
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_orange
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_title
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_violet
+import com.zrcoding.hackertab.design.resources.settings_appearance_system
+import com.zrcoding.hackertab.design.resources.settings_appearance_title
+import com.zrcoding.hackertab.design.theme.DarkBg
+import com.zrcoding.hackertab.design.theme.DarkSurface
+import com.zrcoding.hackertab.design.theme.HackertabTheme
+import com.zrcoding.hackertab.design.theme.LightBg
+import com.zrcoding.hackertab.design.theme.LightSurface
+import com.zrcoding.hackertab.design.theme.Neutral400
+import com.zrcoding.hackertab.design.theme.Neutral900
+import com.zrcoding.hackertab.design.theme.dimension
+import com.zrcoding.hackertab.design.theme.toFontFamily
+import com.zrcoding.hackertab.design.theme.toLightColorScheme
+import com.zrcoding.hackertab.domain.models.ThemeFont
+import com.zrcoding.hackertab.domain.models.ThemeMode
+import com.zrcoding.hackertab.domain.models.ThemePalette
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
+
+@Composable
+fun SettingsAppearanceRoute(
+    viewModel: SettingsAppearanceViewModel = koinViewModel(),
+) {
+    val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
+    val themePalette by viewModel.themePalette.collectAsStateWithLifecycle()
+    val themeFont by viewModel.themeFont.collectAsStateWithLifecycle()
+
+    SettingsAppearanceScreen(
+        selectedMode = themeMode,
+        onSelectMode = viewModel::setThemeMode,
+        selectedPalette = themePalette,
+        onSelectPalette = viewModel::setThemePalette,
+        selectedFont = themeFont,
+        onSelectFont = viewModel::setThemeFont,
+    )
+    TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.SETTINGS_APPEARANCE)
+}
+
+@Composable
+internal fun SettingsAppearanceScreen(
+    selectedMode: ThemeMode,
+    onSelectMode: (ThemeMode) -> Unit,
+    selectedPalette: ThemePalette,
+    onSelectPalette: (ThemePalette) -> Unit,
+    selectedFont: ThemeFont,
+    onSelectFont: (ThemeFont) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal)
+            .padding(bottom = MaterialTheme.dimension.space20),
+    ) {
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space16))
+
+        Text(
+            text = stringResource(Res.string.settings_appearance_title),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space8))
+        Text(
+            text = stringResource(Res.string.settings_appearance_description),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
+        ) {
+            ThemePreviewTile(
+                modifier = Modifier.weight(1f),
+                label = stringResource(Res.string.settings_appearance_light),
+                isDark = false,
+                isSelected = selectedMode == ThemeMode.LIGHT,
+                onClick = { onSelectMode(ThemeMode.LIGHT) },
+            )
+            ThemePreviewTile(
+                modifier = Modifier.weight(1f),
+                label = stringResource(Res.string.settings_appearance_dark),
+                isDark = true,
+                isSelected = selectedMode == ThemeMode.DARK,
+                onClick = { onSelectMode(ThemeMode.DARK) },
+            )
+        }
+
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space16))
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
+                .background(MaterialTheme.colorScheme.surface),
+        ) {
+            ThemeOptionRow(
+                labelRes = Res.string.settings_appearance_light,
+                isSelected = selectedMode == ThemeMode.LIGHT,
+                onClick = { onSelectMode(ThemeMode.LIGHT) },
+            )
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.outlineVariant,
+                modifier = Modifier.padding(horizontal = MaterialTheme.dimension.space16),
+            )
+            ThemeOptionRow(
+                labelRes = Res.string.settings_appearance_dark,
+                isSelected = selectedMode == ThemeMode.DARK,
+                onClick = { onSelectMode(ThemeMode.DARK) },
+            )
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.outlineVariant,
+                modifier = Modifier.padding(horizontal = MaterialTheme.dimension.space16),
+            )
+            ThemeOptionRow(
+                labelRes = Res.string.settings_appearance_system,
+                isSelected = selectedMode == ThemeMode.SYSTEM,
+                onClick = { onSelectMode(ThemeMode.SYSTEM) },
+            )
+        }
+
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
+
+        Text(
+            text = stringResource(Res.string.settings_appearance_palette_title),
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space12))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
+        ) {
+            ThemePalette.entries.forEach { palette ->
+                PaletteSwatch(
+                    modifier = Modifier.weight(1f),
+                    palette = palette,
+                    isSelected = palette == selectedPalette,
+                    onClick = { onSelectPalette(palette) },
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
+
+        Text(
+            text = stringResource(Res.string.settings_appearance_font_title),
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space12))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
+                .background(MaterialTheme.colorScheme.surface),
+        ) {
+            ThemeFont.entries.forEachIndexed { index, font ->
+                if (index > 0) {
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        modifier = Modifier.padding(horizontal = MaterialTheme.dimension.space16),
+                    )
+                }
+                FontOptionRow(
+                    font = font,
+                    isSelected = font == selectedFont,
+                    onClick = { onSelectFont(font) },
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
+    }
+}
+
+@Composable
+private fun FontOptionRow(
+    font: ThemeFont,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+) {
+    val fontFamily = font.toFontFamily()
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(role = Role.RadioButton, onClick = onClick)
+            .semantics { selected = isSelected }
+            .padding(
+                horizontal = MaterialTheme.dimension.space16,
+                vertical = MaterialTheme.dimension.space16,
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(font.labelRes()),
+            style = MaterialTheme.typography.bodyMedium.copy(fontFamily = fontFamily),
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
+        ) {
+            Text(
+                text = stringResource(Res.string.settings_appearance_font_sample),
+                style = MaterialTheme.typography.titleLarge.copy(fontFamily = fontFamily),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            if (isSelected) {
+                Icon(
+                    imageVector = Icons.Outlined.Check,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(MaterialTheme.dimension.space20),
+                )
+            }
+        }
+    }
+}
+
+private fun ThemeFont.labelRes(): StringResource = when (this) {
+    ThemeFont.GEIST -> Res.string.settings_appearance_font_geist
+    ThemeFont.INTER -> Res.string.settings_appearance_font_inter
+    ThemeFont.NUNITO -> Res.string.settings_appearance_font_nunito
+    ThemeFont.JETBRAINS_MONO -> Res.string.settings_appearance_font_jetbrains_mono
+}
+
+@Composable
+private fun PaletteSwatch(
+    modifier: Modifier = Modifier,
+    palette: ThemePalette,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+) {
+    val swatchColors = palette.toLightColorScheme()
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(MaterialTheme.dimension.space8))
+            .clickable(role = Role.RadioButton, onClick = onClick)
+            .semantics { selected = isSelected }
+            .padding(vertical = MaterialTheme.dimension.space8),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6),
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .border(
+                    width = if (isSelected) 2.dp else 1.dp,
+                    color = if (isSelected) {
+                        MaterialTheme.colorScheme.onBackground
+                    } else {
+                        MaterialTheme.colorScheme.outlineVariant
+                    },
+                    shape = CircleShape,
+                )
+                .background(swatchColors.primary),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (isSelected) {
+                Icon(
+                    imageVector = Icons.Outlined.Check,
+                    contentDescription = null,
+                    tint = swatchColors.onPrimary,
+                    modifier = Modifier.size(MaterialTheme.dimension.space20),
+                )
+            }
+        }
+        Text(
+            text = stringResource(palette.labelRes()),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onBackground,
+            maxLines = 1,
+        )
+    }
+}
+
+private fun ThemePalette.labelRes(): StringResource = when (this) {
+    ThemePalette.DEFAULT -> Res.string.settings_appearance_palette_default
+    ThemePalette.AMBER -> Res.string.settings_appearance_palette_amber
+    ThemePalette.CYAN -> Res.string.settings_appearance_palette_cyan
+    ThemePalette.VIOLET -> Res.string.settings_appearance_palette_violet
+    ThemePalette.ORANGE -> Res.string.settings_appearance_palette_orange
+    ThemePalette.EMERALD -> Res.string.settings_appearance_palette_emerald
+}
+
+@Composable
+private fun ThemePreviewTile(
+    modifier: Modifier = Modifier,
+    label: String,
+    isDark: Boolean,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+) {
+    val bg = if (isDark) DarkBg else LightBg
+    val surface = if (isDark) DarkSurface else LightSurface
+    if (isDark) Neutral400 else Neutral900
+
+    val borderColor = if (isSelected) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.outlineVariant
+    }
+
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
+            .border(
+                width = if (isSelected) 2.dp else 1.dp,
+                color = borderColor,
+                shape = RoundedCornerShape(MaterialTheme.dimension.space12),
+            )
+            .clickable(role = Role.RadioButton, onClick = onClick)
+            .semantics { selected = isSelected }
+            .padding(MaterialTheme.dimension.space12),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .clip(RoundedCornerShape(MaterialTheme.dimension.space8))
+                .background(bg),
+        ) {
+            Column(modifier = Modifier.padding(MaterialTheme.dimension.space8)) {
+                Box(
+                    modifier = Modifier
+                        .height(MaterialTheme.dimension.space8)
+                        .fillMaxWidth(0.7f)
+                        .clip(RoundedCornerShape(MaterialTheme.dimension.space4))
+                        .background(surface),
+                )
+                Spacer(modifier = Modifier.height(MaterialTheme.dimension.space6))
+                Box(
+                    modifier = Modifier
+                        .height(MaterialTheme.dimension.space6)
+                        .fillMaxWidth(0.5f)
+                        .clip(RoundedCornerShape(MaterialTheme.dimension.space4))
+                        .background(surface),
+                )
+                Spacer(modifier = Modifier.height(MaterialTheme.dimension.space6))
+                Box(
+                    modifier = Modifier
+                        .height(MaterialTheme.dimension.space6)
+                        .fillMaxWidth(0.4f)
+                        .clip(RoundedCornerShape(MaterialTheme.dimension.space4))
+                        .background(surface),
+                )
+            }
+        }
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+    }
+}
+
+@Composable
+private fun ThemeOptionRow(
+    labelRes: StringResource,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(role = Role.RadioButton, onClick = onClick)
+            .semantics { selected = isSelected }
+            .padding(
+                horizontal = MaterialTheme.dimension.space16,
+                vertical = MaterialTheme.dimension.space16,
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(labelRes),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+        if (isSelected) {
+            Icon(
+                imageVector = Icons.Outlined.Check,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(MaterialTheme.dimension.space20),
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun SettingsAppearanceScreenLightPreview() {
+    HackertabTheme(themeMode = ThemeMode.LIGHT) {
+        SettingsAppearanceScreen(
+            selectedMode = ThemeMode.LIGHT,
+            onSelectMode = {},
+            selectedPalette = ThemePalette.DEFAULT,
+            onSelectPalette = {},
+            selectedFont = ThemeFont.GEIST,
+            onSelectFont = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SettingsAppearanceScreenDarkPreview() {
+    HackertabTheme(themeMode = ThemeMode.DARK) {
+        SettingsAppearanceScreen(
+            selectedMode = ThemeMode.DARK,
+            onSelectMode = {},
+            selectedPalette = ThemePalette.DEFAULT,
+            onSelectPalette = {},
+            selectedFont = ThemeFont.GEIST,
+            onSelectFont = {},
+        )
+    }
+}

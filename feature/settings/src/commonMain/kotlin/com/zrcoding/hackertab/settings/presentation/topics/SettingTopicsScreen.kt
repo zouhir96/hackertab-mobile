@@ -10,12 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -30,12 +30,14 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
+import com.zrcoding.hackertab.design.components.ChipData
 import com.zrcoding.hackertab.design.components.ChipGroup
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.setting_topics_screen_description
 import com.zrcoding.hackertab.design.resources.setting_topics_screen_title
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.settings.presentation.common.SettingScreen
+import kotlinx.collections.immutable.PersistentList
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -50,40 +52,51 @@ fun SettingTopicsRoute(
         var expandedCategory by remember { mutableStateOf<String?>(null) }
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = MaterialTheme.dimension.extraBig),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium)
+            contentPadding = PaddingValues(bottom = MaterialTheme.dimension.space40),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8)
         ) {
             items(
                 items = topics,
                 key = { it.first }
             ) { (category, chips) ->
                 val expanded by derivedStateOf { expandedCategory == category }
+                val selectedCount by derivedStateOf { chips.count { it.selected } }
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small)
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4)
                 ) {
                     Row(
-                        modifier = Modifier.clickable {
-                            expandedCategory = if (expandedCategory == category) {
-                                null
-                            } else {
-                                category
-                            }
-                        },
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                expandedCategory = if (expandedCategory == category) {
+                                    null
+                                } else {
+                                    category
+                                }
+                            },
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = category.capitalize(Locale("en")),
-                            style = MaterialTheme.typography.h6,
-                            color = MaterialTheme.colors.onBackground
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.weight(1f),
                         )
+                        if (selectedCount > 0) {
+                            Text(
+                                text = "$selectedCount",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                        }
                         Icon(
                             imageVector = if (expanded) {
                                 Icons.Default.ArrowDropUp
                             } else Icons.Default.ArrowDropDown,
                             contentDescription = null,
-                            tint = MaterialTheme.colors.onBackground
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                     AnimatedVisibility(visible = expanded) {

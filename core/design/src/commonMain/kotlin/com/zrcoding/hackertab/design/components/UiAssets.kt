@@ -5,7 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,7 +13,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.ic_conferences
 import com.zrcoding.hackertab.design.resources.ic_devto
@@ -33,22 +32,22 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun Source.Icon() = when (this) {
-    Source.DEVTO -> Res.drawable.ic_devto to MaterialTheme.colors.onBackground
-    Source.FREE_CODE_CAMP -> Res.drawable.ic_freecodecamp to MaterialTheme.colors.onBackground
-    Source.GITHUB -> Res.drawable.ic_github to MaterialTheme.colors.onBackground
+    Source.DEVTO -> Res.drawable.ic_devto to MaterialTheme.colorScheme.onBackground
+    Source.FREE_CODE_CAMP -> Res.drawable.ic_freecodecamp to MaterialTheme.colorScheme.onBackground
+    Source.GITHUB -> Res.drawable.ic_github to MaterialTheme.colorScheme.onBackground
     Source.HACKER_NEWS -> Res.drawable.ic_hackernews to Color.Unspecified
     Source.HACKER_NOON -> Res.drawable.ic_hacker_noon to Color.Unspecified
     Source.HASH_NODE -> Res.drawable.ic_hashnode to Color.Unspecified
-    Source.INDIE_HACKERS -> Res.drawable.ic_indie_hackers to MaterialTheme.colors.onBackground
+    Source.INDIE_HACKERS -> Res.drawable.ic_indie_hackers to MaterialTheme.colorScheme.onBackground
     Source.LOBSTERS -> Res.drawable.ic_lobsters to Color.Unspecified
-    Source.MEDIUM -> Res.drawable.ic_medium to MaterialTheme.colors.onBackground
+    Source.MEDIUM -> Res.drawable.ic_medium to MaterialTheme.colorScheme.onBackground
     Source.PRODUCTHUNT -> Res.drawable.ic_product_hunt to Color.Unspecified
     Source.REDDIT -> Res.drawable.ic_reddit to Color.Unspecified
-    Source.CONFERENCES -> Res.drawable.ic_conferences to MaterialTheme.colors.onBackground
+    Source.CONFERENCES -> Res.drawable.ic_conferences to MaterialTheme.colorScheme.onBackground
 }
 
 @Composable
-fun Source.Icon(size: Dp = MaterialTheme.dimension.extraBig) {
+fun Source.Icon(size: Dp = MaterialTheme.dimension.space40) {
     Box(
         modifier = Modifier
             .background(Color.White, CircleShape)
@@ -57,7 +56,7 @@ fun Source.Icon(size: Dp = MaterialTheme.dimension.extraBig) {
     ) {
         Image(
             modifier = Modifier
-                .size(size - 2.dp)
+                .size(size - MaterialTheme.dimension.space2)
                 .clip(CircleShape),
             painter = painterResource(Icon().first),
             contentScale = ContentScale.FillBounds,
@@ -89,4 +88,15 @@ val tags = mapOf(
     "android" to Color((0XFF30D880)),
     "flutter" to Color((0XFF67B1F1)),
     "dart" to Color((0XFF045797)),
+    "rust" to Color(0xFFDEA584),
+    "csharp" to Color(0xFF178600),
+    "c#" to Color(0xFF178600),
+    "html" to Color(0xFFE34C26),
+    "css" to Color(0xFF563D7C),
+    "shell" to Color(0xFF89E051),
+    "elixir" to Color(0xFF6E4A7E),
+    "haskell" to Color(0xFF5E5086),
+    "scala" to Color(0xFFC22D40),
+    "clojure" to Color(0xFFDB5855),
+    "svelte" to Color(0xFFFF3E00),
 )

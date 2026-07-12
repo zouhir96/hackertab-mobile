@@ -73,7 +73,6 @@ fun ProductHuntDto.toProductHunt() = ProductHunt(
     tags = tags
 )
 
-// Bookmark mappers
 @OptIn(ExperimentalTime::class)
 fun BookmarkedArticleEntity.toBookmarkedArticle() = BookmarkedArticle(
     id = id,
@@ -81,7 +80,8 @@ fun BookmarkedArticleEntity.toBookmarkedArticle() = BookmarkedArticle(
     url = url,
     savedAt = Instant.fromEpochMilliseconds(savedAt)
         .toLocalDateTime(TimeZone.currentSystemDefault()),
-    source = source
+    source = Source.valueOf(source).label,
+    read = read,
 )
 
 @OptIn(ExperimentalTime::class)

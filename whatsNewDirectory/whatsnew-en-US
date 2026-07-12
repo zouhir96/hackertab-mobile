@@ -1,8 +1,10 @@
-We’re back with a big update. Here’s what’s new in this release:
+Hackertab 4.0 is here — a complete redesign!
 
-- New source HackerNoon and 49 new in-depth topics like Jetpack compose, React, Tailwind, AWS, TDD….
-- Now you can save your favorite articles and read them later.
-- Now you can read articles directly in the app without leaving the app.
-- Now you can share articles with your friends.
+- Brand-new Material 3 design with bottom navigation
+- Make it yours: Light/Dark theme, 6 color palettes and 4 fonts
+- A guided tour to help you discover the new feed
+- Smarter bookmarks: search, grouping and unread indicators
+- Pull to refresh, long-press card actions, smoother animations
+- Better accessibility and improved tablet support
 
-Update now and enjoy a better, smarter HackerTab experience!
+Update now and enjoy the new HackerTab experience!

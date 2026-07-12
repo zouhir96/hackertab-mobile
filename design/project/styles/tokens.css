@@ -1,0 +1,171 @@
+/* Hackertab v4 — Design tokens
+   Single source of truth for both themes. Light is warm-paper white,
+   dark is true near-black with a 1% green tint. Accent is electric
+   terminal green; no rainbow gradients, no Material-default purple.
+*/
+
+:root {
+  /* === Brand & accent === */
+  --brand-primary: oklch(78% 0.19 145);          /* electric terminal green */
+  --brand-primary-pressed: oklch(72% 0.19 145);
+  --brand-on-primary: oklch(15% 0.01 145);
+
+  /* === Neutral ramp (cool-warm hybrid, hue 95 = paper) === */
+  --neutral-0:  oklch(99% 0.003 95);
+  --neutral-50: oklch(97% 0.004 95);
+  --neutral-100: oklch(94% 0.005 95);
+  --neutral-200: oklch(89% 0.006 95);
+  --neutral-300: oklch(80% 0.008 95);
+  --neutral-400: oklch(65% 0.010 95);
+  --neutral-500: oklch(50% 0.010 95);
+  --neutral-600: oklch(38% 0.010 95);
+  --neutral-700: oklch(28% 0.010 95);
+  --neutral-800: oklch(20% 0.008 95);
+  --neutral-900: oklch(14% 0.006 145);
+  --neutral-950: oklch(9%  0.005 145);
+
+  /* === Semantic === */
+  --success: oklch(72% 0.18 150);
+  --warning: oklch(78% 0.15 75);
+  --error:   oklch(65% 0.20 25);
+  --info:    oklch(70% 0.13 240);
+
+  /* === Source brand colors (preserved identity) === */
+  --src-github:       #181717;
+  --src-hackernews:   #ff6600;
+  --src-reddit:       #ff4500;
+  --src-producthunt:  #da552f;
+  --src-devto:        #0a0a0a;
+  --src-lobsters:     #ac130d;
+  --src-hashnode:     #2962ff;
+  --src-freecodecamp: #0a0a23;
+  --src-indiehackers: #0e2439;
+  --src-medium:       #00ab6c;
+  --src-hackernoon:   #00fe00;
+  --src-conferences:  #6e56cf;
+
+  /* === Language tag colors (refreshed, preserved mapping) === */
+  --tag-javascript: #f7df1e;
+  --tag-typescript: #3178c6;
+  --tag-python:     #3572a5;
+  --tag-rust:       #dea584;
+  --tag-go:         #00add8;
+  --tag-kotlin:     #a97bff;
+  --tag-java:       #ed8b00;
+  --tag-swift:      #f05138;
+  --tag-cpp:        #f34b7d;
+  --tag-csharp:     #178600;
+  --tag-ruby:       #701516;
+  --tag-php:        #4f5d95;
+  --tag-dart:       #00b4ab;
+  --tag-html:       #e34c26;
+  --tag-css:        #563d7c;
+  --tag-shell:      #89e051;
+  --tag-elixir:     #6e4a7e;
+  --tag-haskell:    #5e5086;
+  --tag-scala:      #c22d40;
+  --tag-clojure:    #db5855;
+  --tag-vue:        #41b883;
+  --tag-svelte:     #ff3e00;
+
+  /* === Spacing === */
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-64: 64px;
+
+  /* === Radius === */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 999px;
+
+  /* === Motion === */
+  --duration-instant: 100ms;
+  --duration-fast:    200ms;
+  --duration-standard:300ms;
+  --duration-slow:    500ms;
+  --easing-standard:  cubic-bezier(.2,.0,.0,1);
+  --easing-emphasized:cubic-bezier(.3,0,.0,1);
+  --easing-decel:     cubic-bezier(0,0,.2,1);
+
+  /* === Type === */
+  --font-sans: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* ---------- LIGHT (default) ---------- */
+:root, .theme-light {
+  --bg:            var(--neutral-50);
+  --bg-elevated:   var(--neutral-0);
+  --bg-overlay:    rgba(20, 20, 18, 0.5);
+  --surface:       var(--neutral-0);
+  --surface-variant: var(--neutral-100);
+  --on-bg:         var(--neutral-900);
+  --on-surface:    var(--neutral-900);
+  --on-surface-muted: var(--neutral-500);
+  --on-surface-faint: var(--neutral-400);
+  --border:        var(--neutral-200);
+  --border-subtle: var(--neutral-100);
+  --shadow-1: 0 1px 2px rgba(20,20,18,.04), 0 1px 1px rgba(20,20,18,.02);
+  --shadow-2: 0 2px 8px rgba(20,20,18,.06), 0 1px 2px rgba(20,20,18,.03);
+  --shadow-3: 0 8px 24px rgba(20,20,18,.08), 0 2px 6px rgba(20,20,18,.04);
+}
+
+/* ---------- DARK ---------- */
+.theme-dark {
+  --bg:            var(--neutral-950);
+  --bg-elevated:   var(--neutral-900);
+  --bg-overlay:    rgba(0, 0, 0, 0.6);
+  --surface:       oklch(13% 0.006 145);
+  --surface-variant: oklch(17% 0.007 145);
+  --on-bg:         var(--neutral-50);
+  --on-surface:    var(--neutral-50);
+  --on-surface-muted: var(--neutral-400);
+  --on-surface-faint: var(--neutral-500);
+  --border:        oklch(22% 0.008 145);
+  --border-subtle: oklch(17% 0.007 145);
+  --shadow-1: 0 1px 2px rgba(0,0,0,.4);
+  --shadow-2: 0 4px 16px rgba(0,0,0,.5);
+  --shadow-3: 0 12px 32px rgba(0,0,0,.55);
+}
+
+/* === Type ramp === */
+.t-display-lg { font-family: var(--font-sans); font-weight: 600; font-size: 56px; line-height: 1.04; letter-spacing: -0.04em; }
+.t-display-md { font-family: var(--font-sans); font-weight: 600; font-size: 44px; line-height: 1.06; letter-spacing: -0.035em; }
+.t-display-sm { font-family: var(--font-sans); font-weight: 600; font-size: 34px; line-height: 1.08; letter-spacing: -0.03em; }
+.t-headline-lg { font-family: var(--font-sans); font-weight: 600; font-size: 28px; line-height: 1.15; letter-spacing: -0.02em; }
+.t-headline-md { font-family: var(--font-sans); font-weight: 600; font-size: 22px; line-height: 1.2; letter-spacing: -0.015em; }
+.t-headline-sm { font-family: var(--font-sans); font-weight: 600; font-size: 18px; line-height: 1.25; letter-spacing: -0.01em; }
+.t-title-lg { font-family: var(--font-sans); font-weight: 600; font-size: 17px; line-height: 1.3; letter-spacing: -0.005em; }
+.t-title-md { font-family: var(--font-sans); font-weight: 600; font-size: 15px; line-height: 1.35; }
+.t-title-sm { font-family: var(--font-sans); font-weight: 600; font-size: 13px; line-height: 1.35; }
+.t-body-lg  { font-family: var(--font-sans); font-weight: 400; font-size: 16px; line-height: 1.45; }
+.t-body-md  { font-family: var(--font-sans); font-weight: 400; font-size: 14px; line-height: 1.45; }
+.t-body-sm  { font-family: var(--font-sans); font-weight: 400; font-size: 13px; line-height: 1.4; }
+.t-label-lg { font-family: var(--font-sans); font-weight: 500; font-size: 14px; line-height: 1.2; letter-spacing: 0; }
+.t-label-md { font-family: var(--font-sans); font-weight: 500; font-size: 12px; line-height: 1.2; letter-spacing: 0.01em; }
+.t-label-sm { font-family: var(--font-sans); font-weight: 500; font-size: 11px; line-height: 1.2; letter-spacing: 0.02em; text-transform: uppercase; }
+.t-code-md  { font-family: var(--font-mono); font-weight: 500; font-size: 13px; line-height: 1.35; letter-spacing: -0.01em; }
+.t-code-sm  { font-family: var(--font-mono); font-weight: 500; font-size: 11px; line-height: 1.3; letter-spacing: 0; }
+
+/* === Resets / base === */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--on-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+button { font-family: inherit; }

@@ -38,5 +38,9 @@ class BookmarkRepositoryImpl(
             entities.map { it.id }.toSet()
         }
     }
+
+    override suspend fun markRead(articleId: String) {
+        database.bookmarkedArticleDao().markRead(articleId)
+    }
 }
 

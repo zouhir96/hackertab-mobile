@@ -15,12 +15,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -59,7 +60,7 @@ fun Source.toChipData(selected: Boolean = false) = ChipData(
     id = id,
     name = label,
     analyticsTag = analyticsTag,
-    image = { Icon(size = MaterialTheme.dimension.bigger) },
+    image = { Icon(size = 24.dp) },
     selected = selected
 )
 
@@ -91,7 +92,7 @@ object ChipStateHandler {
         clickedChip: ChipData
     ): PersistentList<ChipData> {
         val indexOfItem = currentState.indexOf(clickedChip)
-        if (indexOfItem == -1) throw IllegalArgumentException("Item doesn't exist in the list")
+        if (indexOfItem == -1) return currentState
 
         return currentState.toMutableList()
             .apply {
@@ -110,26 +111,28 @@ fun Chip(
     onClick: (ChipData) -> Unit,
 ) {
     Card(
-        shape = RoundedCornerShape(MaterialTheme.dimension.big),
-        backgroundColor = if (isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.surface
+        shape = RoundedCornerShape(MaterialTheme.dimension.space20),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+        )
     ) {
         Row(
             modifier = Modifier
                 .clickable { onClick(chipData) }
-                .padding(horizontal = MaterialTheme.dimension.large),
+                .padding(horizontal = MaterialTheme.dimension.space12),
             verticalAlignment = Alignment.CenterVertically
         ) {
             chipData.image?.let {
                 it.invoke()
-                Spacer(modifier = Modifier.width(MaterialTheme.dimension.small))
+                Spacer(modifier = Modifier.width(MaterialTheme.dimension.space4))
             }
             Text(
-                modifier = Modifier.padding(vertical = MaterialTheme.dimension.medium),
+                modifier = Modifier.padding(vertical = MaterialTheme.dimension.space8),
                 text = chipData.name,
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 color = if (isSelected) {
                     Color.White
-                } else MaterialTheme.colors.onBackground
+                } else MaterialTheme.colorScheme.onBackground
             )
         }
     }
@@ -144,8 +147,8 @@ fun ChipGroup(
 ) {
     FlowRow(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
     ) {
         chips.forEach { chip ->
             Chip(
@@ -179,19 +182,19 @@ fun TextWithStartIcon(
     modifier: Modifier = Modifier,
     text: String,
     textColor: Color = Color.Gray,
-    textStyle: TextStyle = MaterialTheme.typography.caption,
+    textStyle: TextStyle = MaterialTheme.typography.bodySmall,
     textDecoration: TextDecoration = TextDecoration.None,
     icon: DrawableResource,
     tint: Color = Color.Gray
 ) {
     Row(
-        modifier = modifier.padding(end = MaterialTheme.dimension.medium),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.small),
+        modifier = modifier.padding(end = MaterialTheme.dimension.space8),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4),
         verticalAlignment = Alignment.CenterVertically
     ) {
         val iconSize = if (icon == Res.drawable.ic_ellipse) {
-            MaterialTheme.dimension.medium
-        } else MaterialTheme.dimension.default
+            MaterialTheme.dimension.space8
+        } else MaterialTheme.dimension.space16
         Icon(
             painter = painterResource(icon),
             contentDescription = "",
@@ -223,7 +226,7 @@ private fun TextWithStartIconPreview() {
 @Composable
 fun FullScreenViewWithCenterText(
     text: String,
-    textStyle: TextStyle = MaterialTheme.typography.body1
+    textStyle: TextStyle = MaterialTheme.typography.bodyLarge
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -245,7 +248,7 @@ private fun FullScreenViewWithCenterTextPreview() {
     HackertabTheme {
         FullScreenViewWithCenterText(
             text = "github",
-            textStyle = MaterialTheme.typography.body1
+            textStyle = MaterialTheme.typography.bodyLarge
         )
     }
 }
@@ -266,23 +269,23 @@ fun ErrorMsgWithBtn(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colors.onBackground
+            color = MaterialTheme.colorScheme.onBackground
         )
         if (btnText != null) {
             OutlinedButton(
-                modifier = Modifier.padding(horizontal = MaterialTheme.dimension.big),
+                modifier = Modifier.padding(horizontal = MaterialTheme.dimension.space20),
                 onClick = onBtnClicked,
                 shape = CircleShape,
-                border = BorderStroke(1.dp, MaterialTheme.colors.onBackground),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MaterialTheme.colors.onBackground
+                    contentColor = MaterialTheme.colorScheme.onBackground
                 ),
             ) {
                 Text(
                     text = stringResource(btnText),
-                    style = MaterialTheme.typography.button,
+                    style = MaterialTheme.typography.labelLarge,
                     textAlign = TextAlign.Center,
                 )
             }

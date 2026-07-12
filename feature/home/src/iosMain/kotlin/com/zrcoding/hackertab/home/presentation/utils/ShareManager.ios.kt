@@ -1,16 +1,26 @@
 package com.zrcoding.hackertab.home.presentation.utils
 
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.readValue
 import platform.UIKit.UIActivityViewController
 import platform.UIKit.UIApplication
+import platform.UIKit.popoverPresentationController
 
 class IOSShareManager : ShareManager {
 
+    @OptIn(ExperimentalForeignApi::class)
     override fun share(data: ShareData) {
         val rootViewController = UIApplication.sharedApplication.keyWindow?.rootViewController
         val activityViewController = UIActivityViewController(
             activityItems = listOf(generateShareText(data)),
             applicationActivities = null
         )
+
+        activityViewController.popoverPresentationController?.apply {
+            sourceView = rootViewController?.view
+            sourceRect = rootViewController?.view?.bounds ?: platform.CoreGraphics.CGRectZero.readValue()
+            permittedArrowDirections = 0u
+        }
 
         rootViewController?.presentViewController(
             viewControllerToPresent = activityViewController,
@@ -19,4 +29,3 @@ class IOSShareManager : ShareManager {
         )
     }
 }
-

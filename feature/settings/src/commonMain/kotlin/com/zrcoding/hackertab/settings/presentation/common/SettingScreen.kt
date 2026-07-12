@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.zrcoding.hackertab.design.resources.Res
@@ -28,22 +28,22 @@ fun SettingScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
-            .padding(top = MaterialTheme.dimension.default)
+            .background(MaterialTheme.colorScheme.background)
+            .padding(top = MaterialTheme.dimension.space16)
             .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal)
     ) {
         Text(
             text = stringResource(title),
-            style = MaterialTheme.typography.h5,
-            color = MaterialTheme.colors.onBackground
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onBackground
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.medium))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space8))
         Text(
             text = stringResource(description),
-            style = MaterialTheme.typography.body2,
-            color = MaterialTheme.colors.onBackground
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimension.big))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space20))
         content()
     }
 }

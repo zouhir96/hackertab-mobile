@@ -21,4 +21,7 @@ interface BookmarkedArticleDao {
 
     @Query("DELETE FROM bookmarked_articles WHERE id = :id")
     suspend fun deleteById(id: String)
+
+    @Query("UPDATE bookmarked_articles SET read = 1 WHERE id = :id")
+    suspend fun markRead(id: String)
 }

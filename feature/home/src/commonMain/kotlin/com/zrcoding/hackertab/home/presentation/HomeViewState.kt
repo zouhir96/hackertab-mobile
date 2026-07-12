@@ -9,8 +9,8 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Stable
 data class HomeViewState(
+    val activeSourceId: String = "",
     val enabledSources: PersistentList<Source> = persistentListOf(),
-    val selectedSource: Source? = null,
     val canAddSource: Boolean = false,
     val enabledTopics: PersistentList<Topic> = persistentListOf(),
     val selectedTopic: Topic? = null,
@@ -19,4 +19,14 @@ data class HomeViewState(
     val isLoading: Boolean = true,
     val error: String? = null,
     val canRefresh: Boolean = false,
-)
+    val seenArticleIds: PersistentList<String> = persistentListOf(),
+    val longPressedArticle: BaseArticle? = null,
+) {
+    val activeSource: Source? get() = Source.fromId(activeSourceId)
+
+    val showTopicStrip: Boolean
+        get() = activeSource?.supportsFilters == true
+
+    val needsTopicSetup: Boolean
+        get() = showTopicStrip && enabledTopics.isEmpty()
+}

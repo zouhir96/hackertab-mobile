@@ -32,4 +32,7 @@ class AppConfigImpl: AppConfig {
 
     override val isDebug: Boolean
         get() = BuildConfig.DEBUG
+
+    override val storeUrl: String
+        get() = "https://play.google.com/store/apps/details?id=com.zrcoding.hackertab"
 }

@@ -19,6 +19,7 @@ class ComposeMultiplatformConventionPlugin : Plugin<Project> {
                 implementation(composeDeps.runtime)
                 implementation(composeDeps.foundation)
                 implementation(composeDeps.material)
+                implementation(composeDeps.material3)
                 implementation(composeDeps.ui)
                 implementation(composeDeps.components.resources)
                 implementation(composeDeps.components.uiToolingPreview)

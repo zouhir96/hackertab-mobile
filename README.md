@@ -57,8 +57,11 @@ details.
 
 ## 🔨 Stack
 
-- Kotlin(2.0.0), coroutines
-- Kotlin multi-platform & Compose multi-platform
+- Kotlin 2.3.0, coroutines
+- Kotlin Multiplatform & Compose Multiplatform 1.9.3 + Material 3
+- Bundled fonts: Geist Sans & Geist Mono (default), plus user-selectable Inter, Nunito and
+  JetBrains Mono
+- Bottom-navigation-based information architecture (Today · Bookmarks · Settings)
 - Clean architecture / MVVM
 - Multi-Module architecture
 - Dependency injection - Koin
@@ -74,20 +77,38 @@ details.
 
 ### Features
 
-- [x] 11 sources of news: Github, Hackernews, Conferences, Devto, Producthunt, Reddit, Lobsters,
-      Hashnode, Freecodecamp, IndieHackers and Medium.
-- [x] 26 Topics to follow: Android, Kotlin, Java, JavaScript, TypeScript ...
-- [x] Onboarding and app setup
-- [x] Possibility to configure which sources to follow.
-- [x] Possibility to configure which topics to follow.
-- [x] Contact support by email.
-- [x] Support large screens (Tablet and Ipad).
-- [x] System light/dark mode support.
-- [x] Migrate to Kotlin multiplatform and compose multiplatform.
+- [x] 12 sources of news: Github, Hackernews, Conferences, Devto, Producthunt, Reddit, Lobsters,
+      Hashnode, Freecodecamp, IndieHackers, HackerNoon and Medium.
+- [x] 26+ Topics to follow: Android, Kotlin, Java, JavaScript, TypeScript ...
+- [x] Profile-aware onboarding (Mobile / Frontend / Backend / Data / Fullstack).
+- [x] **Today** feed with a per-source rail and inline topic filtering, pull-to-refresh and
+      long-press card actions (Save · Share · Open in browser).
+- [x] Searchable Bookmarks with swipe-to-delete, grouping (All / By source / By date) and
+      read/unread indicators.
+- [x] Appearance customization: Light · Dark · System theme, 6 color palettes and 4 fonts —
+      all switch live, no restart.
+- [x] Post-onboarding guided tour anchored to the real layout, replayable from Settings → About.
+- [x] Configure which sources / topics to follow.
+- [x] About screen: send feedback by email, source code, privacy policy, rate us.
+- [x] Support large screens (Tablet & iPad) with adaptive NavRail + list-detail.
 
-### Development
+### What's new in v4
 
-- [ ] Add offline first support
+The v4 release is a full visual and structural redesign:
+
+- New Material 3 design system with a shared component library (cards, rails, chips, states)
+  in `core/design`.
+- Bottom-navigation IA replaces the legacy drawer (Today · Bookmarks · Settings).
+- **Today** feed with a per-source rail, inline topic filtering and pull-to-refresh.
+- Bookmarks tab gains search, swipe actions, group-by chips, and read/unread badges.
+- Appearance screen: Light · Dark · System theme, 6 color palettes (brand default, amber, cyan,
+  violet, orange, emerald) and 4 fonts (Geist, Inter, Nunito, JetBrains Mono) — persisted and
+  applied live.
+- Profile-aware onboarding flow with a guided tour on first feed visit, replayable from
+  Settings → About.
+- Functional About screen: send feedback, source code, privacy policy, rate us.
+- Long-press action sheet on cards: Save · Share · Open in browser.
+- WCAG 2.1 AA accessibility pass and adaptive tablet layout.
 
 ## 🧩 Requirements
 

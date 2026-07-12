@@ -50,7 +50,6 @@ class SettingTopicsViewModel(
     }
 
     fun onChipClicked(topic: ChipData) {
-        // if (_viewState.value.count { it.selected } <= 1 && topic.selected) return
         viewModelScope.launch {
             if (topic.selected) {
                 settingRepository.removeTopic(id = topic.id)

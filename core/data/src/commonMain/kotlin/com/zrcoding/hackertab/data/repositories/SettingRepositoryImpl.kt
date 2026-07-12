@@ -4,14 +4,17 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.zrcoding.hackertab.data.datastore.SettingsKeys
 import com.zrcoding.hackertab.data.resources.Res
 import com.zrcoding.hackertab.domain.models.Profile
+import com.zrcoding.hackertab.domain.models.ThemeFont
+import com.zrcoding.hackertab.domain.models.ThemeMode
+import com.zrcoding.hackertab.domain.models.ThemePalette
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
@@ -83,6 +86,73 @@ class SettingRepositoryImpl(
 
     override suspend fun saveProfile(profile: Profile) {
         dataStore.edit { it[KEY_PROFILE] = profile.name }
+    }
+
+    override fun observeThemeMode(): Flow<ThemeMode> {
+        return dataStore.data.map { prefs ->
+            val raw = prefs[SettingsKeys.KEY_THEME_MODE]
+            if (raw != null) {
+                runCatching { ThemeMode.valueOf(raw) }.getOrDefault(ThemeMode.SYSTEM)
+            } else {
+                ThemeMode.SYSTEM
+            }
+        }
+    }
+
+    override suspend fun setThemeMode(mode: ThemeMode) {
+        dataStore.edit { it[SettingsKeys.KEY_THEME_MODE] = mode.name }
+    }
+
+    override fun observeThemePalette(): Flow<ThemePalette> {
+        return dataStore.data.map { prefs ->
+            val raw = prefs[SettingsKeys.KEY_THEME_PALETTE]
+            if (raw != null) {
+                runCatching { ThemePalette.valueOf(raw) }.getOrDefault(ThemePalette.DEFAULT)
+            } else {
+                ThemePalette.DEFAULT
+            }
+        }
+    }
+
+    override suspend fun setThemePalette(palette: ThemePalette) {
+        dataStore.edit { it[SettingsKeys.KEY_THEME_PALETTE] = palette.name }
+    }
+
+    override fun observeThemeFont(): Flow<ThemeFont> {
+        return dataStore.data.map { prefs ->
+            val raw = prefs[SettingsKeys.KEY_THEME_FONT]
+            if (raw != null) {
+                runCatching { ThemeFont.valueOf(raw) }.getOrDefault(ThemeFont.GEIST)
+            } else {
+                ThemeFont.GEIST
+            }
+        }
+    }
+
+    override suspend fun setThemeFont(font: ThemeFont) {
+        dataStore.edit { it[SettingsKeys.KEY_THEME_FONT] = font.name }
+    }
+
+    override fun observeCoachmarksSeen(): Flow<Boolean> {
+        return dataStore.data.map { prefs ->
+            prefs[SettingsKeys.KEY_COACHMARKS_SEEN] ?: true
+        }
+    }
+
+    override suspend fun setCoachmarksSeen(seen: Boolean) {
+        dataStore.edit { it[SettingsKeys.KEY_COACHMARKS_SEEN] = seen }
+    }
+
+    override suspend fun resetCoachmarks() {
+        setCoachmarksSeen(false)
+    }
+
+    override suspend fun getLastVisitedAt(): Long {
+        return dataStore.data.map { it[SettingsKeys.KEY_LAST_VISITED_AT] ?: 0L }.firstOrNull() ?: 0L
+    }
+
+    override suspend fun setLastVisitedAt(epochMillis: Long) {
+        dataStore.edit { it[SettingsKeys.KEY_LAST_VISITED_AT] = epochMillis }
     }
 
     private fun getSavedIds(key: Preferences.Key<String>): Flow<List<String>> {
