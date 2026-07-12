@@ -59,7 +59,8 @@ details.
 
 - Kotlin 2.3.0, coroutines
 - Kotlin Multiplatform & Compose Multiplatform 1.9.3 + Material 3
-- Geist Sans & Geist Mono custom fonts
+- Bundled fonts: Geist Sans & Geist Mono (default), plus user-selectable Inter, Nunito and
+  JetBrains Mono
 - Bottom-navigation-based information architecture (Today · Bookmarks · Settings)
 - Clean architecture / MVVM
 - Multi-Module architecture
@@ -80,36 +81,34 @@ details.
       Hashnode, Freecodecamp, IndieHackers, HackerNoon and Medium.
 - [x] 26+ Topics to follow: Android, Kotlin, Java, JavaScript, TypeScript ...
 - [x] Profile-aware onboarding (Mobile / Frontend / Backend / Data / Fullstack).
-- [x] Unified **Today** multi-source feed with per-source rail filtering.
-- [x] Searchable Bookmarks with swipe-to-delete and grouping (All / By source / By date).
-- [x] Theme override: Light · Dark · System.
-- [x] Post-onboarding coachmark sequence on first launch.
+- [x] **Today** feed with a per-source rail and inline topic filtering, pull-to-refresh and
+      long-press card actions (Save · Share · Open in browser).
+- [x] Searchable Bookmarks with swipe-to-delete, grouping (All / By source / By date) and
+      read/unread indicators.
+- [x] Appearance customization: Light · Dark · System theme, 6 color palettes and 4 fonts —
+      all switch live, no restart.
+- [x] Post-onboarding guided tour anchored to the real layout, replayable from Settings → About.
 - [x] Configure which sources / topics to follow.
-- [x] Contact support by email.
+- [x] About screen: send feedback by email, source code, privacy policy, rate us.
 - [x] Support large screens (Tablet & iPad) with adaptive NavRail + list-detail.
 
 ### What's new in v4
 
 The v4 release is a full visual and structural redesign:
 
-- New Material 3 design system, "terminal-green" brand accent, Geist typography.
+- New Material 3 design system with a shared component library (cards, rails, chips, states)
+  in `core/design`.
 - Bottom-navigation IA replaces the legacy drawer (Today · Bookmarks · Settings).
-- Unified **Today** feed aggregates all enabled sources into a single chronological stream;
-  per-source pills filter inline (Wave 5L: real fan-out, dedup, partial reveal).
+- **Today** feed with a per-source rail, inline topic filtering and pull-to-refresh.
 - Bookmarks tab gains search, swipe actions, group-by chips, and read/unread badges.
-- Appearance setting now overrides system theme (Light · Dark · System default).
-- Profile-aware onboarding flow with three-screen setup → done coachmarks.
+- Appearance screen: Light · Dark · System theme, 6 color palettes (brand default, amber, cyan,
+  violet, orange, emerald) and 4 fonts (Geist, Inter, Nunito, JetBrains Mono) — persisted and
+  applied live.
+- Profile-aware onboarding flow with a guided tour on first feed visit, replayable from
+  Settings → About.
+- Functional About screen: send feedback, source code, privacy policy, rate us.
 - Long-press action sheet on cards: Save · Share · Open in browser.
-- WCAG 2.1 AA accessibility pass (Wave 6M).
-- Tablet adaptive layout (Wave 6N).
-
-Screenshots in `imgs/` will be refreshed post-merge for v4.0.
-
-### Development
-
-- [ ] Add offline first support
-- [ ] v4.1: dedicated profile-change flow, reduced-motion CMP plumbing
-      (`expect`/`actual` provider), dynamic-color (Material You) on Android 12+
+- WCAG 2.1 AA accessibility pass and adaptive tablet layout.
 
 ## 🧩 Requirements
 
