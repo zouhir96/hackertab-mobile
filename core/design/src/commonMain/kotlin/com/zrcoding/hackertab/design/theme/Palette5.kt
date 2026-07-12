@@ -24,7 +24,7 @@ private val P5DarkSurface = Color(0xFF13201B)
 private val P5DarkSurfaceVariant = Color(0xFF1A2620)
 private val P5DarkOnSurfaceMuted = Color(0xFF9AAFA4)
 
-val Pallete5LightColors: ColorScheme = lightColorScheme(
+val Palette5LightColors: ColorScheme = lightColorScheme(
     primary = P5Primary,
     onPrimary = P5OnPrimary,
     primaryContainer = P5Primary,
@@ -51,7 +51,7 @@ val Pallete5LightColors: ColorScheme = lightColorScheme(
     scrim = P5Neutral950,
 )
 
-val Pallete5DarkColors: ColorScheme = darkColorScheme(
+val Palette5DarkColors: ColorScheme = darkColorScheme(
     primary = P5Primary,
     onPrimary = P5OnPrimary,
     primaryContainer = P5PrimaryPressed,

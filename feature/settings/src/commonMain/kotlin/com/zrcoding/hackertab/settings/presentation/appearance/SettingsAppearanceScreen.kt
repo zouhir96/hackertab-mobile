@@ -13,7 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.HorizontalDivider
@@ -36,6 +39,13 @@ import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.settings_appearance_dark
 import com.zrcoding.hackertab.design.resources.settings_appearance_description
 import com.zrcoding.hackertab.design.resources.settings_appearance_light
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_amber
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_cyan
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_default
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_emerald
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_orange
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_title
+import com.zrcoding.hackertab.design.resources.settings_appearance_palette_violet
 import com.zrcoding.hackertab.design.resources.settings_appearance_system
 import com.zrcoding.hackertab.design.resources.settings_appearance_title
 import com.zrcoding.hackertab.design.theme.DarkBg
@@ -46,7 +56,9 @@ import com.zrcoding.hackertab.design.theme.LightSurface
 import com.zrcoding.hackertab.design.theme.Neutral400
 import com.zrcoding.hackertab.design.theme.Neutral900
 import com.zrcoding.hackertab.design.theme.dimension
+import com.zrcoding.hackertab.design.theme.toLightColorScheme
 import com.zrcoding.hackertab.domain.models.ThemeMode
+import com.zrcoding.hackertab.domain.models.ThemePalette
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -57,10 +69,13 @@ fun SettingsAppearanceRoute(
     viewModel: SettingsAppearanceViewModel = koinViewModel(),
 ) {
     val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
+    val themePalette by viewModel.themePalette.collectAsStateWithLifecycle()
 
     SettingsAppearanceScreen(
         selectedMode = themeMode,
         onSelectMode = viewModel::setThemeMode,
+        selectedPalette = themePalette,
+        onSelectPalette = viewModel::setThemePalette,
     )
     TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.SETTINGS_APPEARANCE)
 }
@@ -69,11 +84,15 @@ fun SettingsAppearanceRoute(
 internal fun SettingsAppearanceScreen(
     selectedMode: ThemeMode,
     onSelectMode: (ThemeMode) -> Unit,
+    selectedPalette: ThemePalette,
+    onSelectPalette: (ThemePalette) -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal),
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = MaterialTheme.dimension.screenPaddingHorizontal)
+            .padding(bottom = MaterialTheme.dimension.space20),
     ) {
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space16))
 
@@ -143,7 +162,91 @@ internal fun SettingsAppearanceScreen(
                 onClick = { onSelectMode(ThemeMode.SYSTEM) },
             )
         }
+
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
+
+        Text(
+            text = stringResource(Res.string.settings_appearance_palette_title),
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space12))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
+        ) {
+            ThemePalette.entries.forEach { palette ->
+                PaletteSwatch(
+                    modifier = Modifier.weight(1f),
+                    palette = palette,
+                    isSelected = palette == selectedPalette,
+                    onClick = { onSelectPalette(palette) },
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
     }
+}
+
+@Composable
+private fun PaletteSwatch(
+    modifier: Modifier = Modifier,
+    palette: ThemePalette,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+) {
+    val swatchColors = palette.toLightColorScheme()
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(MaterialTheme.dimension.space8))
+            .clickable(role = Role.RadioButton, onClick = onClick)
+            .semantics { selected = isSelected }
+            .padding(vertical = MaterialTheme.dimension.space8),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6),
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .border(
+                    width = if (isSelected) 2.dp else 1.dp,
+                    color = if (isSelected) {
+                        MaterialTheme.colorScheme.onBackground
+                    } else {
+                        MaterialTheme.colorScheme.outlineVariant
+                    },
+                    shape = CircleShape,
+                )
+                .background(swatchColors.primary),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (isSelected) {
+                Icon(
+                    imageVector = Icons.Outlined.Check,
+                    contentDescription = null,
+                    tint = swatchColors.onPrimary,
+                    modifier = Modifier.size(MaterialTheme.dimension.space20),
+                )
+            }
+        }
+        Text(
+            text = stringResource(palette.labelRes()),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onBackground,
+            maxLines = 1,
+        )
+    }
+}
+
+private fun ThemePalette.labelRes(): StringResource = when (this) {
+    ThemePalette.DEFAULT -> Res.string.settings_appearance_palette_default
+    ThemePalette.AMBER -> Res.string.settings_appearance_palette_amber
+    ThemePalette.CYAN -> Res.string.settings_appearance_palette_cyan
+    ThemePalette.VIOLET -> Res.string.settings_appearance_palette_violet
+    ThemePalette.ORANGE -> Res.string.settings_appearance_palette_orange
+    ThemePalette.EMERALD -> Res.string.settings_appearance_palette_emerald
 }
 
 @Composable
@@ -260,6 +363,8 @@ private fun SettingsAppearanceScreenLightPreview() {
         SettingsAppearanceScreen(
             selectedMode = ThemeMode.LIGHT,
             onSelectMode = {},
+            selectedPalette = ThemePalette.DEFAULT,
+            onSelectPalette = {},
         )
     }
 }
@@ -271,6 +376,8 @@ private fun SettingsAppearanceScreenDarkPreview() {
         SettingsAppearanceScreen(
             selectedMode = ThemeMode.DARK,
             onSelectMode = {},
+            selectedPalette = ThemePalette.DEFAULT,
+            onSelectPalette = {},
         )
     }
 }

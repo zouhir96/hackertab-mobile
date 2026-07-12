@@ -2,6 +2,7 @@ package com.zrcoding.hackertab.domain.repositories
 
 import com.zrcoding.hackertab.domain.models.Profile
 import com.zrcoding.hackertab.domain.models.ThemeMode
+import com.zrcoding.hackertab.domain.models.ThemePalette
 import com.zrcoding.hackertab.domain.models.Topic
 import kotlinx.coroutines.flow.Flow
 
@@ -34,6 +35,10 @@ interface SettingRepository {
     fun observeThemeMode(): Flow<ThemeMode>
 
     suspend fun setThemeMode(mode: ThemeMode)
+
+    fun observeThemePalette(): Flow<ThemePalette>
+
+    suspend fun setThemePalette(palette: ThemePalette)
 
     fun observeCoachmarksSeen(): Flow<Boolean>
 

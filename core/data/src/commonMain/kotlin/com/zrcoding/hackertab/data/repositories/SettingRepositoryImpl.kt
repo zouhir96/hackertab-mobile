@@ -8,6 +8,7 @@ import com.zrcoding.hackertab.data.datastore.SettingsKeys
 import com.zrcoding.hackertab.data.resources.Res
 import com.zrcoding.hackertab.domain.models.Profile
 import com.zrcoding.hackertab.domain.models.ThemeMode
+import com.zrcoding.hackertab.domain.models.ThemePalette
 import com.zrcoding.hackertab.domain.models.Topic
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import kotlinx.coroutines.flow.Flow
@@ -99,6 +100,21 @@ class SettingRepositoryImpl(
 
     override suspend fun setThemeMode(mode: ThemeMode) {
         dataStore.edit { it[SettingsKeys.KEY_THEME_MODE] = mode.name }
+    }
+
+    override fun observeThemePalette(): Flow<ThemePalette> {
+        return dataStore.data.map { prefs ->
+            val raw = prefs[SettingsKeys.KEY_THEME_PALETTE]
+            if (raw != null) {
+                runCatching { ThemePalette.valueOf(raw) }.getOrDefault(ThemePalette.DEFAULT)
+            } else {
+                ThemePalette.DEFAULT
+            }
+        }
+    }
+
+    override suspend fun setThemePalette(palette: ThemePalette) {
+        dataStore.edit { it[SettingsKeys.KEY_THEME_PALETTE] = palette.name }
     }
 
     override fun observeCoachmarksSeen(): Flow<Boolean> {

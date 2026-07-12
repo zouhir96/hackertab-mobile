@@ -41,7 +41,10 @@ fun HackertabApp(
             LocalAnalyticsHelper provides analyticsHelper,
             LocalKamelConfig provides customKamelConfig
         ) {
-            HackertabTheme(themeMode = viewState.themeMode) {
+            HackertabTheme(
+                themeMode = viewState.themeMode,
+                palette = viewState.themePalette,
+            ) {
                 MainNavHost(
                     modifier = Modifier
                         .background(MaterialTheme.colorScheme.background)

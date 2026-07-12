@@ -70,6 +70,13 @@
     <string name="settings_appearance_light">Light</string>
     <string name="settings_appearance_dark">Dark</string>
     <string name="settings_appearance_system">System default</string>
+    <string name="settings_appearance_palette_title">Color palette</string>
+    <string name="settings_appearance_palette_default">Default</string>
+    <string name="settings_appearance_palette_amber">Amber</string>
+    <string name="settings_appearance_palette_cyan">Cyan</string>
+    <string name="settings_appearance_palette_violet">Violet</string>
+    <string name="settings_appearance_palette_orange">Orange</string>
+    <string name="settings_appearance_palette_emerald">Emerald</string>
 
     <!-- Settings v4 — about screen -->
     <string name="settings_about_title">About</string>

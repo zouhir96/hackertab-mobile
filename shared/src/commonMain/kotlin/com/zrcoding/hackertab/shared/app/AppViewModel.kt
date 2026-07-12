@@ -27,5 +27,10 @@ class AppViewModel(
                 _viewState.update { state -> state.copy(themeMode = it) }
             }
         }
+        viewModelScope.launch {
+            settingRepository.observeThemePalette().collectLatest {
+                _viewState.update { state -> state.copy(themePalette = it) }
+            }
+        }
     }
 }
