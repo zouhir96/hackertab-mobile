@@ -362,7 +362,12 @@ fun MainNavHost(
                                     onBackClick = { backStack.removeLastOrNull() },
                                     title = stringResource(Res.string.settings_about_title),
                                     screen = {
-                                        SettingsAboutRoute()
+                                        SettingsAboutRoute(
+                                            onNavigateToWebView = { url ->
+                                                backStack.removeAll { it is WebViewScreen }
+                                                backStack.add(WebViewScreen(url))
+                                            },
+                                        )
                                     }
                                 )
                             }

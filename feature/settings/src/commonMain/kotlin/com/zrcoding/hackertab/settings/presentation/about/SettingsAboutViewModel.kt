@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 data class SettingsAboutUiState(
+    val appVersion: String = "",
     val tourResetDone: Boolean = false,
 )
 

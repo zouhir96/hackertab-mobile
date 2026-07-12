@@ -18,4 +18,7 @@ class AppConfigImpl: AppConfig {
     @OptIn(ExperimentalNativeApi::class)
     override val isDebug: Boolean
         get() = Platform.isDebugBinary
+
+    override val storeUrl: String
+        get() = "https://apps.apple.com/us/app/hackertab/id6746347807"
 }

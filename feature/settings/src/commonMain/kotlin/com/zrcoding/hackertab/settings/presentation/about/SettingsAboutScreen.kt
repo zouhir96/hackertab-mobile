@@ -31,12 +31,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.Role
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.components.states.HackertabSnackbarHost
 import com.zrcoding.hackertab.design.resources.Res
+import com.zrcoding.hackertab.design.resources.common_ok
 import com.zrcoding.hackertab.design.resources.settings_about_app_name
 import com.zrcoding.hackertab.design.resources.settings_about_row_feedback
 import com.zrcoding.hackertab.design.resources.settings_about_row_privacy
@@ -45,26 +47,50 @@ import com.zrcoding.hackertab.design.resources.settings_about_row_show_tour
 import com.zrcoding.hackertab.design.resources.settings_about_row_source_code
 import com.zrcoding.hackertab.design.resources.settings_about_tour_reset_confirmation
 import com.zrcoding.hackertab.design.resources.settings_about_version
+import com.zrcoding.hackertab.design.resources.support_device_model
+import com.zrcoding.hackertab.design.resources.support_device_os_version
+import com.zrcoding.hackertab.design.resources.support_email
+import com.zrcoding.hackertab.design.resources.support_email_subject
+import com.zrcoding.hackertab.design.resources.support_no_apps_description
+import com.zrcoding.hackertab.design.resources.support_no_apps_title
+import com.zrcoding.hackertab.design.resources.support_support_footer_message
 import com.zrcoding.hackertab.design.theme.BrandPrimary
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
+import com.zrcoding.hackertab.domain.common.AppConfig
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+
+private const val SOURCE_CODE_URL = "https://github.com/zouhir96/hackertab-mobile"
+private const val PRIVACY_POLICY_URL =
+    "https://shining-brian-b1d.notion.site/Hackertab-mobile-Privacy-Policy-174032fc1bdf80478101edcb6e86e782"
 
 @Composable
 fun SettingsAboutRoute(
-    viewModel: SettingsAboutViewModel = koinViewModel(),
-    appVersion: String = "",
-    onSendFeedback: () -> Unit = {},
-    onOpenSourceCode: () -> Unit = {},
-    onOpenPrivacy: () -> Unit = {},
-    onRateApp: () -> Unit = {},
+    onNavigateToWebView: (String) -> Unit,
+    viewModel: SettingsAboutViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val tourResetMessage = stringResource(Res.string.settings_about_tour_reset_confirmation)
+
+    val contactSupport: ContactSupport = koinInject()
+    val appConfig: AppConfig = koinInject()
+    val uriHandler = LocalUriHandler.current
+    val contactSupportData = ContactSupportData(
+        email = stringResource(Res.string.support_email),
+        subject = stringResource(Res.string.support_email_subject),
+        footerMessage = stringResource(Res.string.support_support_footer_message),
+        osVersion = stringResource(Res.string.support_device_os_version),
+        deviceModel = stringResource(Res.string.support_device_model),
+        appVersion = appConfig.versionName,
+        noAppFoundTitle = stringResource(Res.string.support_no_apps_title),
+        noAppFoundDescription = stringResource(Res.string.support_no_apps_description),
+        noAppFoundOk = stringResource(Res.string.common_ok),
+    )
 
     LaunchedEffect(uiState.tourResetDone) {
         if (uiState.tourResetDone) {
@@ -75,11 +101,11 @@ fun SettingsAboutRoute(
 
     Box(modifier = Modifier.fillMaxSize()) {
         SettingsAboutScreen(
-            appVersion = appVersion,
-            onSendFeedback = onSendFeedback,
-            onOpenSourceCode = onOpenSourceCode,
-            onOpenPrivacy = onOpenPrivacy,
-            onRateApp = onRateApp,
+            appVersion = appConfig.versionName,
+            onSendFeedback = { contactSupport.invoke(data = contactSupportData) },
+            onOpenSourceCode = { uriHandler.openUri(SOURCE_CODE_URL) },
+            onOpenPrivacy = { onNavigateToWebView(PRIVACY_POLICY_URL) },
+            onRateApp = { uriHandler.openUri(appConfig.storeUrl) },
             onShowTourAgain = viewModel::resetCoachmarks,
         )
         HackertabSnackbarHost(

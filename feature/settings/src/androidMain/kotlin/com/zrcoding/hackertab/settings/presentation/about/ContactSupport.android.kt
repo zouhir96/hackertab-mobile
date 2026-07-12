@@ -1,4 +1,4 @@
-package com.zrcoding.hackertab.home.presentation.utils
+package com.zrcoding.hackertab.settings.presentation.about
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -7,7 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 
-class AndroidContactSupport(private val context: Activity) : ContactSupport{
+class AndroidContactSupport(private val context: Activity) : ContactSupport {
 
     override fun invoke(data: ContactSupportData) {
         try {

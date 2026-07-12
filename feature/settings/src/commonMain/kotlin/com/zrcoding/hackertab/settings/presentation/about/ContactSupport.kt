@@ -1,4 +1,4 @@
-package com.zrcoding.hackertab.home.presentation.utils
+package com.zrcoding.hackertab.settings.presentation.about
 
 data class ContactSupportData(
     val email: String,
