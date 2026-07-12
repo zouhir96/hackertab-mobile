@@ -1,6 +1,7 @@
 package com.zrcoding.hackertab.domain.repositories
 
 import com.zrcoding.hackertab.domain.models.Profile
+import com.zrcoding.hackertab.domain.models.ThemeFont
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import com.zrcoding.hackertab.domain.models.ThemePalette
 import com.zrcoding.hackertab.domain.models.Topic
@@ -39,6 +40,10 @@ interface SettingRepository {
     fun observeThemePalette(): Flow<ThemePalette>
 
     suspend fun setThemePalette(palette: ThemePalette)
+
+    fun observeThemeFont(): Flow<ThemeFont>
+
+    suspend fun setThemeFont(font: ThemeFont)
 
     fun observeCoachmarksSeen(): Flow<Boolean>
 

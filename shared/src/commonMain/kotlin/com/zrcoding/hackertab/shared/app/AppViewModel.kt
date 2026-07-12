@@ -32,5 +32,10 @@ class AppViewModel(
                 _viewState.update { state -> state.copy(themePalette = it) }
             }
         }
+        viewModelScope.launch {
+            settingRepository.observeThemeFont().collectLatest {
+                _viewState.update { state -> state.copy(themeFont = it) }
+            }
+        }
     }
 }

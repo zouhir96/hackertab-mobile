@@ -44,6 +44,7 @@ fun HackertabApp(
             HackertabTheme(
                 themeMode = viewState.themeMode,
                 palette = viewState.themePalette,
+                font = viewState.themeFont,
             ) {
                 MainNavHost(
                     modifier = Modifier

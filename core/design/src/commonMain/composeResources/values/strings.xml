@@ -77,6 +77,12 @@
     <string name="settings_appearance_palette_violet">Violet</string>
     <string name="settings_appearance_palette_orange">Orange</string>
     <string name="settings_appearance_palette_emerald">Emerald</string>
+    <string name="settings_appearance_font_title">Font</string>
+    <string name="settings_appearance_font_sample">Aa</string>
+    <string name="settings_appearance_font_geist">Geist</string>
+    <string name="settings_appearance_font_inter">Inter</string>
+    <string name="settings_appearance_font_nunito">Nunito</string>
+    <string name="settings_appearance_font_jetbrains_mono">JetBrains Mono</string>
 
     <!-- Settings v4 — about screen -->
     <string name="settings_about_title">About</string>

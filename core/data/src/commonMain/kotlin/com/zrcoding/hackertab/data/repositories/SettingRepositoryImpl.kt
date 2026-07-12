@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.zrcoding.hackertab.data.datastore.SettingsKeys
 import com.zrcoding.hackertab.data.resources.Res
 import com.zrcoding.hackertab.domain.models.Profile
+import com.zrcoding.hackertab.domain.models.ThemeFont
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import com.zrcoding.hackertab.domain.models.ThemePalette
 import com.zrcoding.hackertab.domain.models.Topic
@@ -115,6 +116,21 @@ class SettingRepositoryImpl(
 
     override suspend fun setThemePalette(palette: ThemePalette) {
         dataStore.edit { it[SettingsKeys.KEY_THEME_PALETTE] = palette.name }
+    }
+
+    override fun observeThemeFont(): Flow<ThemeFont> {
+        return dataStore.data.map { prefs ->
+            val raw = prefs[SettingsKeys.KEY_THEME_FONT]
+            if (raw != null) {
+                runCatching { ThemeFont.valueOf(raw) }.getOrDefault(ThemeFont.GEIST)
+            } else {
+                ThemeFont.GEIST
+            }
+        }
+    }
+
+    override suspend fun setThemeFont(font: ThemeFont) {
+        dataStore.edit { it[SettingsKeys.KEY_THEME_FONT] = font.name }
     }
 
     override fun observeCoachmarksSeen(): Flow<Boolean> {

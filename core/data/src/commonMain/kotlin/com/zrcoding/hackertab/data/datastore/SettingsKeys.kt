@@ -12,6 +12,7 @@ object SettingsKeys {
 
     val KEY_THEME_MODE = stringPreferencesKey("theme_mode")
     val KEY_THEME_PALETTE = stringPreferencesKey("theme_palette")
+    val KEY_THEME_FONT = stringPreferencesKey("theme_font")
     val KEY_COACHMARKS_SEEN = booleanPreferencesKey("coachmarks_seen")
     val KEY_LAST_VISITED_AT = longPreferencesKey("last_visited_at")
 }

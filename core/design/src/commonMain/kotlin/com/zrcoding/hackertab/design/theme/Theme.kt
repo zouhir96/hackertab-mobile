@@ -4,6 +4,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import com.zrcoding.hackertab.domain.models.ThemeFont
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import com.zrcoding.hackertab.domain.models.ThemePalette
 
@@ -29,6 +30,7 @@ fun ThemePalette.toDarkColorScheme(): ColorScheme = when (this) {
 fun HackertabTheme(
     themeMode: ThemeMode = ThemeMode.SYSTEM,
     palette: ThemePalette = ThemePalette.DEFAULT,
+    font: ThemeFont = ThemeFont.GEIST,
     content: @Composable () -> Unit,
 ) {
     val darkTheme = when (themeMode) {
@@ -40,7 +42,7 @@ fun HackertabTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = font.toTypography(),
         shapes = Shapes,
         content = content,
     )

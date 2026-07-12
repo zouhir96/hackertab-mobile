@@ -2,6 +2,7 @@ package com.zrcoding.hackertab.settings.presentation.appearance
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zrcoding.hackertab.domain.models.ThemeFont
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import com.zrcoding.hackertab.domain.models.ThemePalette
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
@@ -28,6 +29,13 @@ class SettingsAppearanceViewModel(
             initialValue = ThemePalette.DEFAULT,
         )
 
+    val themeFont: StateFlow<ThemeFont> = settingRepository.observeThemeFont()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = ThemeFont.GEIST,
+        )
+
     fun setThemeMode(mode: ThemeMode) {
         viewModelScope.launch {
             settingRepository.setThemeMode(mode)
@@ -37,6 +45,12 @@ class SettingsAppearanceViewModel(
     fun setThemePalette(palette: ThemePalette) {
         viewModelScope.launch {
             settingRepository.setThemePalette(palette)
+        }
+    }
+
+    fun setThemeFont(font: ThemeFont) {
+        viewModelScope.launch {
+            settingRepository.setThemeFont(font)
         }
     }
 }

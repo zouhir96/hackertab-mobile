@@ -38,6 +38,12 @@ import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.settings_appearance_dark
 import com.zrcoding.hackertab.design.resources.settings_appearance_description
+import com.zrcoding.hackertab.design.resources.settings_appearance_font_geist
+import com.zrcoding.hackertab.design.resources.settings_appearance_font_inter
+import com.zrcoding.hackertab.design.resources.settings_appearance_font_jetbrains_mono
+import com.zrcoding.hackertab.design.resources.settings_appearance_font_nunito
+import com.zrcoding.hackertab.design.resources.settings_appearance_font_sample
+import com.zrcoding.hackertab.design.resources.settings_appearance_font_title
 import com.zrcoding.hackertab.design.resources.settings_appearance_light
 import com.zrcoding.hackertab.design.resources.settings_appearance_palette_amber
 import com.zrcoding.hackertab.design.resources.settings_appearance_palette_cyan
@@ -56,7 +62,9 @@ import com.zrcoding.hackertab.design.theme.LightSurface
 import com.zrcoding.hackertab.design.theme.Neutral400
 import com.zrcoding.hackertab.design.theme.Neutral900
 import com.zrcoding.hackertab.design.theme.dimension
+import com.zrcoding.hackertab.design.theme.toFontFamily
 import com.zrcoding.hackertab.design.theme.toLightColorScheme
+import com.zrcoding.hackertab.domain.models.ThemeFont
 import com.zrcoding.hackertab.domain.models.ThemeMode
 import com.zrcoding.hackertab.domain.models.ThemePalette
 import org.jetbrains.compose.resources.StringResource
@@ -70,12 +78,15 @@ fun SettingsAppearanceRoute(
 ) {
     val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
     val themePalette by viewModel.themePalette.collectAsStateWithLifecycle()
+    val themeFont by viewModel.themeFont.collectAsStateWithLifecycle()
 
     SettingsAppearanceScreen(
         selectedMode = themeMode,
         onSelectMode = viewModel::setThemeMode,
         selectedPalette = themePalette,
         onSelectPalette = viewModel::setThemePalette,
+        selectedFont = themeFont,
+        onSelectFont = viewModel::setThemeFont,
     )
     TrackScreenViewEvent(screenName = AnalyticsEvent.ScreensNames.SETTINGS_APPEARANCE)
 }
@@ -86,6 +97,8 @@ internal fun SettingsAppearanceScreen(
     onSelectMode: (ThemeMode) -> Unit,
     selectedPalette: ThemePalette,
     onSelectPalette: (ThemePalette) -> Unit,
+    selectedFont: ThemeFont,
+    onSelectFont: (ThemeFont) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -186,7 +199,88 @@ internal fun SettingsAppearanceScreen(
         }
 
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
+
+        Text(
+            text = stringResource(Res.string.settings_appearance_font_title),
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space12))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(MaterialTheme.dimension.space12))
+                .background(MaterialTheme.colorScheme.surface),
+        ) {
+            ThemeFont.entries.forEachIndexed { index, font ->
+                if (index > 0) {
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        modifier = Modifier.padding(horizontal = MaterialTheme.dimension.space16),
+                    )
+                }
+                FontOptionRow(
+                    font = font,
+                    isSelected = font == selectedFont,
+                    onClick = { onSelectFont(font) },
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(MaterialTheme.dimension.space24))
     }
+}
+
+@Composable
+private fun FontOptionRow(
+    font: ThemeFont,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+) {
+    val fontFamily = font.toFontFamily()
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(role = Role.RadioButton, onClick = onClick)
+            .semantics { selected = isSelected }
+            .padding(
+                horizontal = MaterialTheme.dimension.space16,
+                vertical = MaterialTheme.dimension.space16,
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(font.labelRes()),
+            style = MaterialTheme.typography.bodyMedium.copy(fontFamily = fontFamily),
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
+        ) {
+            Text(
+                text = stringResource(Res.string.settings_appearance_font_sample),
+                style = MaterialTheme.typography.titleLarge.copy(fontFamily = fontFamily),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            if (isSelected) {
+                Icon(
+                    imageVector = Icons.Outlined.Check,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(MaterialTheme.dimension.space20),
+                )
+            }
+        }
+    }
+}
+
+private fun ThemeFont.labelRes(): StringResource = when (this) {
+    ThemeFont.GEIST -> Res.string.settings_appearance_font_geist
+    ThemeFont.INTER -> Res.string.settings_appearance_font_inter
+    ThemeFont.NUNITO -> Res.string.settings_appearance_font_nunito
+    ThemeFont.JETBRAINS_MONO -> Res.string.settings_appearance_font_jetbrains_mono
 }
 
 @Composable
@@ -365,6 +459,8 @@ private fun SettingsAppearanceScreenLightPreview() {
             onSelectMode = {},
             selectedPalette = ThemePalette.DEFAULT,
             onSelectPalette = {},
+            selectedFont = ThemeFont.GEIST,
+            onSelectFont = {},
         )
     }
 }
@@ -378,6 +474,8 @@ private fun SettingsAppearanceScreenDarkPreview() {
             onSelectMode = {},
             selectedPalette = ThemePalette.DEFAULT,
             onSelectPalette = {},
+            selectedFont = ThemeFont.GEIST,
+            onSelectFont = {},
         )
     }
 }
