@@ -130,9 +130,11 @@
     <string name="home_empty_no_sources_body">You haven\'t followed any source yet. Add some to start your feed.</string>
     <string name="home_empty_no_sources_cta">Add sources</string>
     <string name="home_empty_filter_title">Nothing here yet</string>
-    <string name="home_empty_filter_body">No items match your current filter. Try clearing the filter or switching to a different source.</string>
-    <string name="home_empty_filter_cta_see_all">See all sources</string>
+    <string name="home_empty_filter_body">No items match your current filter. Try clearing the filter.</string>
     <string name="home_empty_filter_cta_clear">Clear filter</string>
+    <string name="home_empty_no_topics_title">No topics enabled</string>
+    <string name="home_empty_no_topics_body">This source tailors its feed by topic. Enable at least one topic to start seeing articles.</string>
+    <string name="home_empty_no_topics_cta">Enable topics</string>
 
     <!-- Long-press action sheet + WebView bottom bar -->
     <string name="action_share">Share</string>

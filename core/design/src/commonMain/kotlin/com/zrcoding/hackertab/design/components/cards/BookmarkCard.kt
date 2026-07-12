@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.BookmarkRemove
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -39,7 +39,7 @@ import org.jetbrains.compose.resources.painterResource
 fun BookmarkCard(
     bookmark: BookmarkedArticle,
     onClick: () -> Unit,
-    onMoreClick: () -> Unit,
+    onRemove: () -> Unit,
     modifier: Modifier = Modifier,
     isUnread: Boolean = true,
 ) {
@@ -115,14 +115,14 @@ fun BookmarkCard(
                 )
             }
             IconButton(
-                onClick = onMoreClick,
+                onClick = onRemove,
                 modifier = Modifier.size(MaterialTheme.dimension.space48),
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.MoreVert,
+                    imageVector = Icons.Outlined.BookmarkRemove,
                     contentDescription = "More actions",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(MaterialTheme.dimension.space16),
+                    modifier = Modifier.size(MaterialTheme.dimension.space24),
                 )
             }
         }

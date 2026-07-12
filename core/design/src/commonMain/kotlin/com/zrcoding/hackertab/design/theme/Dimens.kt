@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 data class Dimens(
+    val none: Dp = 0.dp,
     val space2: Dp = 2.dp,
     val space4: Dp = 4.dp,
     val space6: Dp = 6.dp,
@@ -17,58 +18,4 @@ data class Dimens(
     val space48: Dp = 48.dp,
     val space64: Dp = 64.dp,
     val screenPaddingHorizontal: Dp = 20.dp,
-) {
-    @Deprecated(
-        message = "Wave 1 migration: use space0 == 0.dp directly.",
-        replaceWith = ReplaceWith("0.dp", "androidx.compose.ui.unit.dp"),
-    )
-    val none: Dp get() = 0.dp
-
-    @Deprecated(
-        message = "Wave 1 migration: use space2.",
-        replaceWith = ReplaceWith("space2"),
-    )
-    val tiny: Dp get() = space2
-
-    @Deprecated(
-        message = "Wave 1 migration: use space4.",
-        replaceWith = ReplaceWith("space4"),
-    )
-    val small: Dp get() = space4
-
-    @Deprecated(
-        message = "Wave 1 migration: use space8.",
-        replaceWith = ReplaceWith("space8"),
-    )
-    val medium: Dp get() = space8
-
-    @Deprecated(
-        message = "Wave 1 migration: use space12.",
-        replaceWith = ReplaceWith("space12"),
-    )
-    val large: Dp get() = space12
-
-    @Deprecated(
-        message = "Wave 1 migration: use space16.",
-        replaceWith = ReplaceWith("space16"),
-    )
-    val default: Dp get() = space16
-
-    @Deprecated(
-        message = "Wave 1 migration: use space20.",
-        replaceWith = ReplaceWith("space20"),
-    )
-    val big: Dp get() = space20
-
-    @Deprecated(
-        message = "Wave 1 migration: use space24.",
-        replaceWith = ReplaceWith("space24"),
-    )
-    val bigger: Dp get() = space24
-
-    @Deprecated(
-        message = "Wave 1 migration: use space40.",
-        replaceWith = ReplaceWith("space40"),
-    )
-    val extraBig: Dp get() = space40
-}
+)

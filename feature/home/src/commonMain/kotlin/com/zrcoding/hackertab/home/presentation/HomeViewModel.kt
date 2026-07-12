@@ -13,19 +13,15 @@ import com.zrcoding.hackertab.domain.models.NetworkErrors
 import com.zrcoding.hackertab.domain.models.ProductHunt
 import com.zrcoding.hackertab.domain.models.Resource
 import com.zrcoding.hackertab.domain.models.Source
-import com.zrcoding.hackertab.domain.models.SourceLoadState
 import com.zrcoding.hackertab.domain.models.Topic
-import com.zrcoding.hackertab.domain.repositories.AggregatedArticleRepository
-import com.zrcoding.hackertab.domain.repositories.AggregatedFeedResult
 import com.zrcoding.hackertab.domain.repositories.ArticleRepository
 import com.zrcoding.hackertab.domain.repositories.BookmarkRepository
 import com.zrcoding.hackertab.domain.repositories.SettingRepository
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedSourcesUseCase
 import com.zrcoding.hackertab.domain.usecases.ObserveSelectedTopicsUseCase
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -40,21 +36,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
     private val observeSelectedSourcesUseCase: ObserveSelectedSourcesUseCase,
     private val observeSelectedTopicsUseCase: ObserveSelectedTopicsUseCase,
     private val bookmarkRepository: BookmarkRepository,
     private val articleRepository: ArticleRepository,
     private val settingRepository: SettingRepository,
-    private val aggregatedArticleRepository: AggregatedArticleRepository,
     private val analyticsHelper: AnalyticsHelper,
 ) : ViewModel() {
 
@@ -77,10 +66,11 @@ class HomeViewModel(
                             else -> null
                         }
                         val newActiveSourceId = when {
-                            state.activeSourceId == "all" -> "all"
                             sources.any { it.id == state.activeSourceId } -> state.activeSourceId
-                            else -> "all"
+                            else -> sources.minByOrNull { it.ordinal }?.id.orEmpty()
                         }
+                        val nothingToFetch = sources.isEmpty() ||
+                            (requiresTopic(newActiveSourceId) && topics.isEmpty())
                         state.copy(
                             activeSourceId = newActiveSourceId,
                             enabledSources = sources.toPersistentList(),
@@ -88,10 +78,8 @@ class HomeViewModel(
                             enabledTopics = topics.toPersistentList(),
                             selectedTopic = newSelectedTopic,
                             canAddTopic = topics.size < settingRepository.getTopics().size,
-                            articlesByDay = if (sources.isEmpty() || topics.isEmpty()) {
-                                kotlinx.collections.immutable.persistentMapOf()
-                            } else state.articlesByDay,
-                            isLoading = false,
+                            articles = if (nothingToFetch) persistentListOf() else state.articles,
+                            isLoading = if (nothingToFetch) false else state.isLoading,
                         )
                     }
                 }
@@ -106,58 +94,43 @@ class HomeViewModel(
             ) { _, sourceId, topic, sources ->
                 FetchParams(sourceId, topic, sources)
             }.flatMapLatest { params ->
-                if (params.sources.isEmpty() ||
-                    (params.sourceId != "all" && params.topic == null)
-                ) {
+                val needsTopicButNone = requiresTopic(params.sourceId) && params.topic == null
+                if (params.sources.isEmpty() || needsTopicButNone) {
                     _viewState.update {
                         it.copy(
-                            isLoading = false,
-                            perSourceLoadState = persistentMapOf(),
-                            isPartialReveal = false,
+                            error = null,
+                            isLoading = if (needsTopicButNone) false else it.isLoading,
                         )
                     }
-                    return@flatMapLatest flow { emit(emptyList<BaseArticle>()) }
+                    return@flatMapLatest flow { emit(emptyList()) }
                 }
 
                 _viewState.update {
-                    it.copy(
-                        isLoading = true,
-                        error = null,
-                        perSourceLoadState = persistentMapOf(),
-                        isPartialReveal = params.sourceId == "all",
-                    )
+                    it.copy(isLoading = true, error = null)
                 }
 
-                if (params.sourceId == "all") {
-                    observeAggregatedFlow(params.sources, params.topic)
-                } else {
-                    flow {
-                        when (val result = fetchSingleSource(params.sourceId, params.topic)) {
-                            is FetchResult.Success -> {
-                                _viewState.update { state ->
-                                    state.copy(
-                                        isLoading = false,
-                                        error = if (result.articles.isEmpty()) {
-                                            "No items found, try adjusting your filter or choosing a different source."
-                                        } else null,
-                                        canRefresh = false,
-                                        isPartialReveal = false,
-                                    )
-                                }
-                                emit(result.articles)
+                flow {
+                    when (val result = fetchSingleSource(params.sourceId, params.topic)) {
+                        is FetchResult.Success -> {
+                            _viewState.update { state ->
+                                state.copy(
+                                    isLoading = false,
+                                    error = null,
+                                    canRefresh = false,
+                                )
                             }
-                            is FetchResult.Failure -> {
-                                _viewState.update {
-                                    it.copy(
-                                        articlesByDay = persistentMapOf(),
-                                        isLoading = false,
-                                        error = "Something went wrong, please verify your internet connection and try again.",
-                                        canRefresh = true,
-                                        isPartialReveal = false,
-                                    )
-                                }
-                                emit(emptyList())
+                            emit(result.articles)
+                        }
+                        is FetchResult.Failure -> {
+                            _viewState.update {
+                                it.copy(
+                                    articles = persistentListOf(),
+                                    isLoading = false,
+                                    error = "Something went wrong, please verify your internet connection and try again.",
+                                    canRefresh = true,
+                                )
                             }
+                            emit(emptyList())
                         }
                     }
                 }
@@ -173,9 +146,7 @@ class HomeViewModel(
                         patchBookmarkFlag(article, bookmarked)
                     }
                     _viewState.update { state ->
-                        state.copy(
-                            articlesByDay = groupByDay(patched),
-                        )
+                        state.copy(articles = patched.toPersistentList())
                     }
                 }
         }
@@ -186,41 +157,6 @@ class HomeViewModel(
         val topic: Topic?,
         val sources: PersistentList<Source>,
     )
-
-    private fun observeAggregatedFlow(
-        sources: PersistentList<Source>,
-        topic: Topic?,
-    ): Flow<List<BaseArticle>> = aggregatedArticleRepository.observeAggregatedFeed(
-        sources = sources,
-        topic = topic,
-    ).map { result: AggregatedFeedResult ->
-        val allDone = result.perSourceState.values.none { it is SourceLoadState.Loading }
-        val anySucceeded = result.perSourceState.values.any { it is SourceLoadState.Loaded }
-        val allFailed = result.perSourceState.values.all {
-            it is SourceLoadState.Failed || it is SourceLoadState.Idle
-        } && result.perSourceState.isNotEmpty()
-
-        _viewState.update { state ->
-            state.copy(
-                isLoading = !allDone,
-                isPartialReveal = result.isPartialReveal,
-                perSourceLoadState = result.perSourceState.toPersistentMap(),
-                error = when {
-                    allDone && allFailed -> "Something went wrong, please verify your internet connection and try again."
-                    allDone && result.articles.isEmpty() && anySucceeded -> "No items found, try adjusting your filter or choosing a different source."
-                    else -> null
-                },
-                canRefresh = allDone && allFailed,
-            )
-        }
-
-        if (allDone && result.articles.isNotEmpty()) {
-            settingRepository.setLastVisitedAt(
-                Clock.System.now().toEpochMilliseconds(),
-            )
-        }
-        result.articles
-    }
 
     fun onSourceSelected(sourceId: String) {
         if (_viewState.value.activeSourceId == sourceId) return
@@ -246,12 +182,7 @@ class HomeViewModel(
             if (isBookmarked) {
                 bookmarkRepository.removeBookmark(article.id)
             } else {
-                val source = when {
-                    _viewState.value.isAllSourcesMode -> {
-                        (article as? Article)?.source?.name ?: "unknown"
-                    }
-                    else -> _viewState.value.activeSource?.name ?: return@launch
-                }
+                val source = _viewState.value.activeSource?.name ?: return@launch
                 bookmarkRepository.bookmarkArticle(article, source)
             }
         }
@@ -280,6 +211,9 @@ class HomeViewModel(
         _viewState.update { it.copy(longPressedArticle = null) }
     }
 
+    private fun requiresTopic(sourceId: String): Boolean =
+        Source.fromId(sourceId)?.supportsFilters == true
+
     private sealed interface FetchResult {
         data class Success(val articles: List<BaseArticle>) : FetchResult
         data object Failure : FetchResult
@@ -306,40 +240,6 @@ class HomeViewModel(
             Source.CONFERENCES -> articleRepository.getConferences(topicValue)
             Source.PRODUCTHUNT -> articleRepository.getProductHuntProducts()
             else -> articleRepository.getSourceArticles(source, topicValue)
-        }
-    }
-
-    @OptIn(ExperimentalTime::class)
-    private fun groupByDay(
-        articles: List<BaseArticle>,
-    ): kotlinx.collections.immutable.PersistentMap<DayBucket, PersistentList<BaseArticle>> {
-        val tz = TimeZone.currentSystemDefault()
-        val now = Clock.System.now().toLocalDateTime(tz)
-
-        return DayBucket.entries.associateWith { bucket ->
-            articles
-                .filter { article -> bucket == bucketOf(article, now, tz) }
-                .toPersistentList()
-        }.filter { (_, v) -> v.isNotEmpty() }.toPersistentMap()
-    }
-
-    @OptIn(ExperimentalTime::class)
-    private fun bucketOf(
-        article: BaseArticle,
-        now: LocalDateTime,
-        tz: TimeZone,
-    ): DayBucket {
-        val publishedAt = (article as? Article)?.publishedAt ?: return DayBucket.OLDER
-
-        val nowInstant = now.toInstant(tz)
-        val articleInstant = publishedAt.toInstant(tz)
-        val diffDays = (nowInstant - articleInstant).inWholeDays
-
-        return when {
-            diffDays < 1 -> DayBucket.TODAY
-            diffDays < 2 -> DayBucket.YESTERDAY
-            diffDays < 7 -> DayBucket.EARLIER_THIS_WEEK
-            else -> DayBucket.OLDER
         }
     }
 

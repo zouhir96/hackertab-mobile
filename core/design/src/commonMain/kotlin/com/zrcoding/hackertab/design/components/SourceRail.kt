@@ -10,7 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,15 +46,12 @@ import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-const val ALL_SOURCES_ID: String = "all"
-
 @Composable
 fun SourceRail(
     sources: ImmutableList<Source>,
     activeSourceId: String,
     onSelect: (String) -> Unit,
     modifier: Modifier = Modifier,
-    showAllPseudoSource: Boolean = true,
 ) {
     LazyRow(
         modifier = modifier.fillMaxWidth(),
@@ -67,14 +63,6 @@ fun SourceRail(
             bottom = MaterialTheme.dimension.space12,
         ),
     ) {
-        if (showAllPseudoSource) {
-            item(key = ALL_SOURCES_ID) {
-                AllPill(
-                    selected = activeSourceId == ALL_SOURCES_ID,
-                    onClick = { onSelect(ALL_SOURCES_ID) },
-                )
-            }
-        }
         items(sources, key = { it.id }) { source ->
             SourcePill(
                 source = source,
@@ -82,59 +70,6 @@ fun SourceRail(
                 onClick = { onSelect(source.id) },
             )
         }
-    }
-}
-
-@Composable
-private fun AllPill(selected: Boolean, onClick: () -> Unit) {
-    val containerColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.primary
-        else Color.Transparent,
-        animationSpec = spring(
-            stiffness = 380f,
-            dampingRatio = 0.5f,
-        ),
-    )
-    val contentColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.onPrimary
-        else MaterialTheme.colorScheme.onSurface,
-        animationSpec = spring(
-            stiffness = 380f,
-            dampingRatio = 0.5f,
-        ),
-    )
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-
-    Box(
-        modifier = Modifier
-            .height(MaterialTheme.dimension.space40)
-            .scale(if (isPressed) 0.97f else 1f)
-            .clip(CircleShape)
-            .background(containerColor)
-            .let {
-                if (selected) it
-                else it.border(pillBorder(), CircleShape)
-            }
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = onClick,
-            )
-            .padding(horizontal = MaterialTheme.dimension.space12)
-            .semantics {
-                role = Role.Tab
-                this.selected = selected
-                contentDescription = if (selected) "All sources, selected" else "All sources, tap to select"
-            },
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = "All",
-            style = MaterialTheme.typography.labelLarge,
-            color = contentColor,
-            fontWeight = if (selected) FontWeight.W600 else FontWeight.W700,
-        )
     }
 }
 
@@ -229,7 +164,7 @@ private fun SourceRailDark() {
             sources = persistentListOf(
                 Source.GITHUB, Source.HACKER_NEWS, Source.DEVTO, Source.REDDIT, Source.PRODUCTHUNT,
             ),
-            activeSourceId = ALL_SOURCES_ID,
+            activeSourceId = "github",
             onSelect = {},
         )
     }

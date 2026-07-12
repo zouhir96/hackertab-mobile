@@ -123,7 +123,7 @@ fun SetupTopicsScreen(
 
         LazyColumn(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.medium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
         ) {
             state.topics.forEach { (category, chips) ->
                 val isExpanded = expandedCategory == category

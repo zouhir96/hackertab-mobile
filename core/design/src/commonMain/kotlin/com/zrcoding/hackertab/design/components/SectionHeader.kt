@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.design.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +28,7 @@ fun SectionHeader(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
             .padding(
                 top = MaterialTheme.dimension.space20,
                 bottom = MaterialTheme.dimension.space8,

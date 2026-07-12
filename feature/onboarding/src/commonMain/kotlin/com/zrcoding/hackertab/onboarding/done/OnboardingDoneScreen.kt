@@ -111,7 +111,6 @@ fun OnboardingDoneScreen(
             text = stringResource(Res.string.onboarding_done_cta),
             onClick = onOpenFeedClicked,
             modifier = Modifier.fillMaxWidth(),
-            size = ButtonSize.Large,
         )
         Spacer(modifier = Modifier.height(MaterialTheme.dimension.space20))
     }

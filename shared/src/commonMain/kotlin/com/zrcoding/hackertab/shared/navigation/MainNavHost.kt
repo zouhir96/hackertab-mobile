@@ -478,7 +478,8 @@ private fun ScreenWithBackButton(
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.background
-            )
+            ),
+            windowInsets = WindowInsets()
         )
         screen()
     }

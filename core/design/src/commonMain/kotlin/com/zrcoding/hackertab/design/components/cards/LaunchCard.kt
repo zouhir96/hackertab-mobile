@@ -44,9 +44,7 @@ import io.kamel.image.asyncPainterResource
 @Composable
 fun LaunchCard(
     product: ProductHunt,
-    timeAgo: String,
     isBookmarked: Boolean,
-    isFresh: Boolean = false,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onBookmarkClick: () -> Unit,
@@ -54,16 +52,13 @@ fun LaunchCard(
     modifier: Modifier = Modifier,
 ) {
     CardShell(
-        isFresh = isFresh,
         onClick = onClick,
         onLongClick = onLongClick,
         modifier = modifier.semantics(mergeDescendants = true) {
             contentDescription = "${product.title}. ${product.description}. " +
-                "${product.reactions} upvotes, ${product.commentsCount} comments. $timeAgo."
+                "${product.reactions} upvotes, ${product.commentsCount} comments"
         },
     ) {
-        SourceTag(source = Source.PRODUCTHUNT, timeAgo = timeAgo, isFresh = isFresh)
-        Spacer(Modifier.height(MaterialTheme.dimension.space12))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
@@ -143,28 +138,15 @@ fun LaunchCard(
         }
         Spacer(Modifier.height(MaterialTheme.dimension.space12))
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
-        Spacer(Modifier.height(MaterialTheme.dimension.space8))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space12),
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4),
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.ChatBubbleOutline,
-                    contentDescription = "comments",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(MaterialTheme.dimension.space12),
-                )
-                Text(
-                    text = "${product.commentsCount}",
-                    style = codeSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            MetaIconText(
+                icon = Icons.Outlined.ChatBubbleOutline,
+                text = "${product.commentsCount}"
+            )
             Spacer(Modifier.weight(1f))
             CardActions(
                 isBookmarked = isBookmarked,

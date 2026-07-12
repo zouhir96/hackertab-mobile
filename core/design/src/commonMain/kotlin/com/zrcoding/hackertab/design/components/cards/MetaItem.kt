@@ -1,4 +1,4 @@
-package com.zrcoding.hackertab.home.presentation.cards
+package com.zrcoding.hackertab.design.components.cards
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,13 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.zrcoding.hackertab.design.theme.codeSmall
 import com.zrcoding.hackertab.design.theme.dimension
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-internal fun MetaIconText(
+fun MetaIconText(
     icon: DrawableResource,
     text: String,
     color: Color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -41,7 +42,28 @@ internal fun MetaIconText(
 }
 
 @Composable
-internal fun MetaDotText(
+fun MetaIconText(
+    icon: ImageVector,
+    text: String,
+    color: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    iconTint: Color = color,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space4),
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = iconTint,
+            modifier = Modifier.size(MaterialTheme.dimension.space12),
+        )
+        Text(text = text, style = codeSmall, color = color)
+    }
+}
+
+@Composable
+fun MetaDotText(
     text: String,
     color: Color,
 ) {

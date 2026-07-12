@@ -80,7 +80,7 @@ fun BookmarkedArticleEntity.toBookmarkedArticle() = BookmarkedArticle(
     url = url,
     savedAt = Instant.fromEpochMilliseconds(savedAt)
         .toLocalDateTime(TimeZone.currentSystemDefault()),
-    source = source,
+    source = Source.valueOf(source).label,
     read = read,
 )
 

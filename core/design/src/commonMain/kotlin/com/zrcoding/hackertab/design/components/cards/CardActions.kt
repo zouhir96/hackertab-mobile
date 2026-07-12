@@ -42,7 +42,7 @@ fun CardActions(
                 imageVector = Icons.Outlined.MoreHoriz,
                 contentDescription = "More actions",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(MaterialTheme.dimension.space16),
+                modifier = Modifier.size(MaterialTheme.dimension.space24),
             )
         }
     }
@@ -72,7 +72,7 @@ private fun BookmarkButton(isBookmarked: Boolean, onClick: () -> Unit) {
             contentDescription = if (isBookmarked) "Remove bookmark" else "Bookmark",
             tint = tint,
             modifier = Modifier
-                .size(MaterialTheme.dimension.space16)
+                .size(MaterialTheme.dimension.space24)
                 .scale(pulse.value),
         )
     }

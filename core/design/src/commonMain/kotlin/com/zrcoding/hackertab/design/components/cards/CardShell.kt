@@ -30,8 +30,6 @@ import com.zrcoding.hackertab.design.theme.dimension
 
 @Composable
 fun CardShell(
-    isFresh: Boolean = false,
-    isRead: Boolean = false,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {},
     modifier: Modifier = Modifier,
@@ -54,7 +52,6 @@ fun CardShell(
             .padding(bottom = MaterialTheme.dimension.space8)
             .fillMaxWidth()
             .scale(scale)
-            .alpha(if (isRead) 0.78f else 1f)
             .combinedClickable(
                 interactionSource = interactionSource,
                 indication = null,
@@ -66,30 +63,11 @@ fun CardShell(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
-        Box {
-            if (isFresh) {
-                FreshAccentBar()
-            }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = MaterialTheme.dimension.space16, end = MaterialTheme.dimension.space16, top = MaterialTheme.dimension.space12, bottom = MaterialTheme.dimension.space12),
-                content = content,
-            )
-        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = MaterialTheme.dimension.space16, end = MaterialTheme.dimension.space16, top = MaterialTheme.dimension.space12, bottom = MaterialTheme.dimension.space12),
+            content = content,
+        )
     }
-}
-
-@Composable
-private fun FreshAccentBar() {
-    Box(
-        modifier = Modifier
-            .padding(top = MaterialTheme.dimension.space12)
-            .width(MaterialTheme.dimension.space2)
-            .height(MaterialTheme.dimension.space16)
-            .background(
-                color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(topEnd = MaterialTheme.dimension.space2, bottomEnd = MaterialTheme.dimension.space2),
-            ),
-    )
 }

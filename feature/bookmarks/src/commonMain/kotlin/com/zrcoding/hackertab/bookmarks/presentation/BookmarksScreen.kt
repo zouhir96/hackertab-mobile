@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zrcoding.hackertab.analytics.TrackScreenViewEvent
 import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
@@ -170,7 +171,7 @@ private fun BookmarksList(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = MaterialTheme.dimension.space40),
+        contentPadding = PaddingValues(bottom = 80.dp),
     ) {
         if (viewState.groupBy == GroupBy.ALL) {
             val items = viewState.groupedBookmarks.values
@@ -245,7 +246,7 @@ private fun SwipeToDismissBookmark(
             BookmarkCard(
                 bookmark = bookmark,
                 onClick = onClick,
-                onMoreClick = onRemove,
+                onRemove = onRemove,
                 isUnread = !bookmark.read,
             )
         }

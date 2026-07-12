@@ -10,10 +10,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.MoreHoriz
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,28 +40,22 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun ArticleCard(
     article: Article,
-    timeAgo: String,
     isBookmarked: Boolean,
-    isFresh: Boolean = false,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onBookmarkClick: () -> Unit,
     onMoreClick: () -> Unit = {},
-    metaContent: @Composable RowScope.() -> Unit = {},
+    metaContent: @Composable () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val source = requireNotNull(article.source) { "ArticleCard requires Article.source" }
     CardShell(
-        isFresh = isFresh,
-        isRead = false,
         onClick = onClick,
         onLongClick = onLongClick,
         modifier = modifier.semantics(mergeDescendants = true) {
-            contentDescription = "${article.title}. ${source.label}, $timeAgo. Tap to read."
+            contentDescription = "${article.title}. ${source.label}"
         },
     ) {
-        SourceTag(source = source, timeAgo = timeAgo, isFresh = isFresh)
-        Spacer(Modifier.height(MaterialTheme.dimension.space8))
         Text(
             text = article.title,
             style = MaterialTheme.typography.titleLarge,
@@ -64,22 +65,23 @@ fun ArticleCard(
         )
         if (article.tags.isNotEmpty()) {
             Spacer(Modifier.height(MaterialTheme.dimension.space8))
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6)) {
-                article.tags.take(6).forEach { tag ->
-                    Text(
-                        text = "#$tag",
-                        style = codeSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier
-                            .padding(bottom = MaterialTheme.dimension.space4)
-                            .clip(RoundedCornerShape(MaterialTheme.dimension.space6))
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
-                            .padding(horizontal = MaterialTheme.dimension.space6, vertical = MaterialTheme.dimension.space2),
-                    )
+            CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides MaterialTheme.dimension.none) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space6)) {
+                    article.tags.take(6).forEach { tag ->
+                        Text(
+                            text = "#$tag",
+                            style = codeSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier
+                                .padding(bottom = MaterialTheme.dimension.space4)
+                                .clip(RoundedCornerShape(MaterialTheme.dimension.space6))
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
+                                .padding(horizontal = MaterialTheme.dimension.space6, vertical = MaterialTheme.dimension.space2),
+                        )
+                    }
                 }
             }
         }
-        Spacer(Modifier.height(MaterialTheme.dimension.space12))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -114,9 +116,7 @@ private fun ArticleCardPreview(){
                 imageUrl = "https://search.yahoo.com/search?p=ridiculus",
                 source = Source.DEVTO
             ),
-            timeAgo = "nonumes",
             isBookmarked = false,
-            isFresh = false,
             onClick = {},
             onLongClick = {},
             onBookmarkClick = {},

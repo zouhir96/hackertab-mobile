@@ -138,7 +138,7 @@ fun BookmarksSearchScreen(
                         BookmarkCard(
                             bookmark = bookmark.withHighlightedTitle(query),
                             onClick = { onResultClick(bookmark) },
-                            onMoreClick = { onRemoveBookmark(bookmark) },
+                            onRemove = { onRemoveBookmark(bookmark) },
                             isUnread = !bookmark.read,
                         )
                     }
