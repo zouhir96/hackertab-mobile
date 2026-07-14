@@ -1,5 +1,6 @@
 package com.zrcoding.hackertab.settings.presentation.about
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +40,7 @@ import com.zrcoding.hackertab.analytics.models.AnalyticsEvent
 import com.zrcoding.hackertab.design.components.states.HackertabSnackbarHost
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.common_ok
+import com.zrcoding.hackertab.design.resources.img_logo
 import com.zrcoding.hackertab.design.resources.settings_about_app_name
 import com.zrcoding.hackertab.design.resources.settings_about_row_feedback
 import com.zrcoding.hackertab.design.resources.settings_about_row_privacy
@@ -54,11 +56,11 @@ import com.zrcoding.hackertab.design.resources.support_email_subject
 import com.zrcoding.hackertab.design.resources.support_no_apps_description
 import com.zrcoding.hackertab.design.resources.support_no_apps_title
 import com.zrcoding.hackertab.design.resources.support_support_footer_message
-import com.zrcoding.hackertab.design.theme.BrandPrimary
 import com.zrcoding.hackertab.design.theme.HackertabTheme
 import com.zrcoding.hackertab.design.theme.dimension
 import com.zrcoding.hackertab.domain.common.AppConfig
 import com.zrcoding.hackertab.domain.models.ThemeMode
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
@@ -147,13 +149,10 @@ internal fun SettingsAboutScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.space8),
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(MaterialTheme.dimension.space24)
-                            .background(
-                                color = BrandPrimary,
-                                shape = RoundedCornerShape(MaterialTheme.dimension.space6),
-                            )
+                    Image(
+                        modifier = Modifier.size(MaterialTheme.dimension.space24),
+                        painter = painterResource(Res.drawable.img_logo),
+                        contentDescription = null
                     )
                     Text(
                         text = stringResource(Res.string.settings_about_app_name),

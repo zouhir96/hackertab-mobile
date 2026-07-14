@@ -66,7 +66,8 @@ import kotlin.time.toDuration
 @Composable
 fun BookmarksRoute(
     onNavigateToWebView: (String) -> Unit,
-    onNavigateToSearch: () -> Unit = {},
+    onNavigateToSearch: () -> Unit,
+    onNavigateToHome: () -> Unit,
     viewModel: BookmarksViewModel = org.koin.compose.viewmodel.koinViewModel(),
 ) {
     val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
@@ -79,6 +80,7 @@ fun BookmarksRoute(
         onRemoveBookmark = viewModel::removeBookmark,
         onGroupByChanged = viewModel::onGroupByChanged,
         onSearchClick = onNavigateToSearch,
+        onBrowsClick = onNavigateToHome,
     )
 
     val isTabletSize = LocalIsTabletSize.current
@@ -97,6 +99,7 @@ fun BookmarksScreen(
     onRemoveBookmark: (String) -> Unit,
     onGroupByChanged: (GroupBy) -> Unit,
     onSearchClick: () -> Unit,
+    onBrowsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val groupOptions = persistentListOf(
@@ -146,7 +149,7 @@ fun BookmarksScreen(
                     body = stringResource(Res.string.bookmarks_empty_body),
                     primaryCta = EmptyStateCta(
                         label = stringResource(Res.string.bookmarks_empty_cta),
-                        onClick = {},
+                        onClick = onBrowsClick,
                     ),
                 )
             }
@@ -317,6 +320,7 @@ private fun BookmarksScreenLightPreview() {
             onRemoveBookmark = {},
             onGroupByChanged = {},
             onSearchClick = {},
+            onBrowsClick = {},
         )
     }
 }
@@ -335,6 +339,7 @@ private fun BookmarksScreenDarkPreview() {
             onRemoveBookmark = {},
             onGroupByChanged = {},
             onSearchClick = {},
+            onBrowsClick = {},
         )
     }
 }
@@ -349,6 +354,7 @@ private fun BookmarksScreenEmptyLightPreview() {
             onRemoveBookmark = {},
             onGroupByChanged = {},
             onSearchClick = {},
+            onBrowsClick = {},
         )
     }
 }
@@ -363,6 +369,7 @@ private fun BookmarksScreenLoadingDarkPreview() {
             onRemoveBookmark = {},
             onGroupByChanged = {},
             onSearchClick = {},
+            onBrowsClick = {},
         )
     }
 }
