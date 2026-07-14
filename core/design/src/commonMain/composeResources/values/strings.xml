@@ -136,7 +136,7 @@
     <string name="bookmarks_group_by_date">By date</string>
     <string name="bookmarks_empty_title">No bookmarks yet</string>
     <string name="bookmarks_empty_body">Tap the bookmark icon on any card to save it here.</string>
-    <string name="bookmarks_empty_cta">Browse Today</string>
+    <string name="bookmarks_empty_cta">Browse articles</string>
 
     <!-- Home v4 — empty / error states -->
     <string name="home_empty_no_sources_title">No sources selected</string>

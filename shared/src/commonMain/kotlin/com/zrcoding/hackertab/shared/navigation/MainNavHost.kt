@@ -1,5 +1,9 @@
 package com.zrcoding.hackertab.shared.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,9 +50,9 @@ import com.zrcoding.hackertab.bookmarks.presentation.BookmarksSearchRoute
 import com.zrcoding.hackertab.design.adaptive.LocalIsTabletSize
 import com.zrcoding.hackertab.design.components.BottomNavItem
 import com.zrcoding.hackertab.design.components.CoachmarkAnchors
-import com.zrcoding.hackertab.design.components.LocalCoachmarkAnchors
 import com.zrcoding.hackertab.design.components.HackertabBottomNav
 import com.zrcoding.hackertab.design.components.HackertabNavRail
+import com.zrcoding.hackertab.design.components.LocalCoachmarkAnchors
 import com.zrcoding.hackertab.design.components.WebViewRoute
 import com.zrcoding.hackertab.design.resources.Res
 import com.zrcoding.hackertab.design.resources.settings_about_title
@@ -404,6 +408,7 @@ fun MainNavHost(
                                     onNavigateToSearch = {
                                         backStack.add(BookmarksSearchScreen)
                                     },
+                                    onNavigateToHome = { switchTab("today") }
                                 )
                             }
                             entry<BookmarksSearchScreen> {
@@ -429,6 +434,15 @@ fun MainNavHost(
                                     )
                                 }
                             }
+                        },
+                        transitionSpec = {
+                            fadeIn(tween(300)) togetherWith fadeOut(tween(300))
+                        },
+                        popTransitionSpec = {
+                            fadeIn(tween(300)) togetherWith fadeOut(tween(300))
+                        },
+                        predictivePopTransitionSpec = {
+                            fadeIn(tween(300)) togetherWith fadeOut(tween(300))
                         }
                     )
                     if (isTopLevel && !isTabletSize) {
@@ -439,7 +453,7 @@ fun MainNavHost(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
                                 .windowInsetsPadding(WindowInsets())
-                                .padding(bottom = MaterialTheme.dimension.space16)
+                                .padding(bottom = MaterialTheme.dimension.space20)
                         )
                     }
                 }
